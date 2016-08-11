@@ -1,13 +1,12 @@
 library(stringr)
 library(R6)
-library(RUnit)
 
 # A terminal node in the Abstract Syntax Tree
 ASTNode <- R6Class("ASTNode",
   public = list(
     symbol = "character",
     value  = "character",
-    initialize = function(symbol, value) 
+    initialize = function(symbol, value)
     {
       self$symbol <- symbol
       self$value  <- value
@@ -15,6 +14,24 @@ ASTNode <- R6Class("ASTNode",
     elements = function() {return(self$value)}
   )
 )
+
+# A terminal node in the Abstract Syntax Tree
+ASTVariable <- R6Class("ASTVariable",
+  inherit = ASTNode,
+  public = list(
+    format = "character",
+    type   = "character",
+    initialize = function(identifier, format, type)
+    {
+      self$symbol <- "variable"
+      self$value  <- identifier
+      self$format <- format
+      self$type   <- type
+    },
+    elements = function() {return(self$value)}
+  )
+)
+
 
 # A branch node in the Abstract Syntax Tree, may contain a value
 ASTBranch <- R6Class("ASTBranch",
@@ -31,19 +48,19 @@ ASTBranch <- R6Class("ASTBranch",
     },
     elements = function()
     {
-      if(self$symbol == "plus") 
+      if(self$symbol == "plus")
       {
         return(c(self$left$elements(), self$right$elements()))
       }
-      
-      return(self$name()) 
+
+      return(self$name())
     },
     name = function() {return (self$value)} # What to call other stuff?
   )
 )
 
-# A branch node in the Abstract Syntax Tree, may contain a value
-ASTTable <- R6Class("ASTTable",
+# The top level table
+ASTTableFormula <- R6Class("ASTTableFormula",
   inherit = ASTBranch,
   public = list(
     left  = "ASTNode",
@@ -78,7 +95,7 @@ Token <- R6Class("Token",
 )
 
 # The parser for the table formulas
-Parser <- R6Class("Parser", 
+Parser <- R6Class("Parser",
   public  = list(
     input = "character",
     pos   = "numeric",
@@ -105,39 +122,60 @@ Parser <- R6Class("Parser",
        self$pos <- self$pos - nchar(nt$name) # Push the token back
        return(nt$id)
     },
+    eat_whitespace = function()
+    {
+      while(substr(self$input, self$pos, self$pos) %in% c(" ","\t") &&
+            self$pos < self$len)
+      {
+        self$pos = self$pos + 1
+      }
+    },
     # Next Token, returns and consumes the next lexical token in the input stream
     nextToken = function()
     {
+      self$eat_whitespace()
+
       # The end?
       if (self$pos == (self$len+1)) {return(Token$new("EOF"))}
       # The parser kept asking for tokens when it shouldn't have
       if (self$pos > self$len)    { stop("Internal Error. No remaining input") }
-  
+
       x <- substr(self$input, self$pos, self$pos)
       self$pos <- self$pos + 1
-  
+
       # Look for reserved characters
-      if (x == '*')  {return(Token$new("TIMES",  "*") )}
-      if (x == '+')  {return(Token$new("PLUS",   "+") )}
-      if (x == '(')  {return(Token$new("LPAREN", "(") )}
-      if (x == ')')  {return(Token$new("RPAREN", ")") )}
-      if (x == '~')  {return(Token$new("TILDE",  "~") )}
-  
-      # Scan for Name 
+      if (x == '*')  {return(Token$new("TIMES",   "*") )}
+      if (x == '+')  {return(Token$new("PLUS",    "+") )}
+      if (x == '(')  {return(Token$new("LPAREN",  "(") )}
+      if (x == ')')  {return(Token$new("RPAREN",  ")") )}
+      if (x == '~')  {return(Token$new("TILDE",   "~") )}
+      if (x == ':')  {return(Token$new("COLON",   ":") )}
+      if (x == '[')  {return(Token$new("LBRACKET","[") )}
+      if (x == ']')  {return(Token$new("RBRACKET","]") )}
+
+      # Scan for Name
       #   A syntactically valid name consists of letters, numbers and the dot
       #   or underline characters and starts with a letter or the dot not
-      #   followed by a number. 
+      #   followed by a number.
       match <- str_match(substr(self$input,self$pos-1,self$len),
                          "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*")
-  
+
       if(is.na(match[1,1]))
       {
         stop(paste("Unparseable input starting at",substr(self$input,self$pos-1,self$pos+10),sep=""))
       }
-  
+
       self$pos <- self$pos + nchar(match[1,1]) - 1
-  
-      return(Token$new("NAME", match[1,1]))
+
+      return(Token$new("IDENTIFIER", match[1,1]))
+    },
+    format = function()
+    {
+      match <- str_match(substr(self$input, self$pos, self$len), "[^\\]]*")
+      starting <- self$pos
+      self$pos <- self$pos + nchar(match[1,1])
+
+      return(match[1,1])
     },
     r_expression = function()
     {
@@ -157,68 +195,88 @@ Parser <- R6Class("Parser",
 
       return(ASTNode$new("r_expr", substr(self$input, starting, self$pos-1)))
     },
-    expression = function()
+    factor = function()
     {
       nt <- self$nextToken()
       if(nt$id == "LPAREN")
       {
-        tf <- self$tableFormula()
+        expr <- self$expression()
         self$expect("RPAREN")
-        return(tf)
+        return(expr)
       }
-      if(nt$id != "NAME") # An expression starts with either a name or a '('
+      if(nt$id != "IDENTIFIER") # An factor starts with either an identifier or a '('
       {
         stop(paste("Unrecognized token",nt$name,"before",substr(self$input,self$pos,self$len)))
       }
-      if(nt$name == "I") # R-expression
-      {
-        self$expect("LPAREN")
-        r_expr <- self$r_expression()
-        self$expect("RPAREN") 
-        return(r_expr)
-      }
+
       pk <- self$peek() # What follows the name determines next grammar element
-      if(pk == "TIMES")
-      {
-        self$expect("TIMES")
-        expr <- self$expression()
-        return(ASTBranch$new("permute", ASTNode$new("name", nt$name), expr))
-      }
+
+      # function-name -- with r-expression
       if(pk == "LPAREN")
       {
         self$expect("LPAREN")
-        expr <- self$expression()
+        r_expr <- self$r_expression()
         self$expect("RPAREN")
-        return(ASTBranch$new("transform", expr, NA, nt$name))
+        return(ASTBranch$new("function", r_expr, NA, nt$name))
       }
-      # Else it's just a name
-      return(ASTNode$new("name",nt$name))
+
+      # Only valid thing left is a variable, check for additional specifiers on variable
+      format <- NA
+      if(pk == "LBRACKET")
+      {
+        self$expect("LBRACKET")
+        format <- self$format()
+        self$expect("RBRACKET")
+        pk <- self$peek()
+      }
+
+      type_override <- NA
+      if(pk == "COLON")
+      {
+        self$expect("COLON")
+        self$expect("COLON")
+        nt2 <- self$nextToken()
+        if(nt2$id != "IDENTIFIER") # Type override must be an identifier
+        {
+          stop(paste("Unrecognized token",nt$name,"before",substr(self$input,self$pos,self$len)))
+        }
+
+        type_override <- nt2$name
+      }
+      return(ASTVariable$new(nt$name, format, type_override))
+
     },
-    formula = function()
+    term = function()
     {
-      l_expr  <- self$expression()
+      l_term <- self$factor()
+      if(self$peek() == "TIMES")
+      {
+        self$expect("TIMES")
+        r_term <- self$term()
+        return(ASTBranch$new("multiply", l_term, r_term))
+      }
+
+      return(l_term)
+    },
+    expression = function()
+    {
+      l_expr  <- self$term()
       if(self$peek() == "PLUS")
       {
         self$expect("PLUS")
-        r_expr <- self$formula()
+        r_expr <- self$expression()
         return(ASTBranch$new("plus", l_expr, r_expr))
       }
 
-      return(l_expr)   
-    },
-    columnSpecification = function() {
-      self$formula()
-    },
-    rowSpecification    = function() {
-      self$formula()
+      return(l_expr)
     },
     tableFormula = function()
     {
-      cs <- self$columnSpecification()      
-      self$expect("TILDE") 
-      rs <- self$rowSpecification()
-      
-      return(ASTTable$new(cs, rs))
+      cs <- self$expression()
+      self$expect("TILDE")
+      rs <- self$expression()
+
+      return(ASTTableFormula$new(cs, rs))
     },
     run       = function(x)
     {
@@ -227,10 +285,9 @@ Parser <- R6Class("Parser",
         y <- as.character(x)
         x <- paste(x[2], x[1], x[3])
       }
-      self$input <- str_replace_all(x, "[[:space:]]", "")
-      self$pos   <- 1    
+      self$pos   <- 1
       self$len   <- nchar(self$input)
-   
+
       tf <- self$tableFormula()
       self$expect("EOF")
       return(tf)

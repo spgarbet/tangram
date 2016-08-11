@@ -136,9 +136,10 @@ Note that the first term is consistent across each row, and the second term is c
     <table-formula>        ::= <expression> "~" <expression> 
     <expression>           ::= <term> "+" <expression> | <term> 
     <term>                 ::= <factor> "\*" <term> | <factor> 
-    <factor>               ::= <variable>                             |
-                                "(" <expression>" ")"                  |
-                                <function-name> "(" <r-expression> ")" | 
+    <factor>               ::=  "(" <expression>" ")"                   |
+                                <variable>                              |
+                                <function-name> "(" <r-expression> ")"
+    <function-name>        ::= <identifier>
     <variable>             ::= <identifier>
                                 ( "["  ( <integer>  | '"' <format> '"' "]" )
                                 ( "::" <identifier> )
