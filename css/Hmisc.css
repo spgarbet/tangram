@@ -1,0 +1,79 @@
+
+body {
+	font-family: "Computer Modern Serif", serif;
+}
+
+.figure  {  margin-left:  auto;
+			margin-right: auto;
+         }
+
+.caption { text-align:   center;
+	       margin-left:  auto;
+	       margin-right: auto;
+	       padding: 1.5em 0em 1.5em 0em;
+	     }
+
+.figbody {
+		   text-align:   center;
+	       margin-left:  auto;
+	       margin-right: auto;
+	       border-style: double none solid none;
+	       border-width: 3pt 0 1pt 0;
+	       width:        80%;
+         }
+
+.figbody td {
+				padding: 0.2em 0.5em 0.2em 0.5em;
+             }
+
+.summaryM {
+	border-spacing: 0;
+}
+
+.summaryM thead { 
+                }
+
+.subheader    { font-size: small; } 
+.subheader tr { border-collapse: collapse; }
+.subheader td { border-bottom: 1pt solid black; }
+
+.quantile {
+	font-size: smaller;
+}
+
+.quantile b {
+	font-size: larger;
+}
+
+.variable {
+	float:      left;
+	text-align: left;
+}
+
+.units {
+	float:      right;
+	font-size:  x-small;
+	text-align: right;
+	padding-left: 1em;
+	vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+sub { font-size: x-small; }
+sup { font-size: x-small; }
+
+td .align{
+	display: inline-block;
+	margin: 0 auto;
+}
+
+.nobr {
+   white-space: nowrap;
+}
+.supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: 70%;
+   text-align: left;
+}

@@ -1,0 +1,94 @@
+
+body {
+	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+  font-size: 75%;
+}
+
+.summaryM thead tr td
+{
+    font-weight: bold;
+}
+
+.figure  {  margin-left:  auto;
+			      margin-right: auto;
+			
+	          border: 2px solid black;
+         }
+
+.caption { text-align:   left;
+           text-indent: 2em;
+	         margin-left:  auto;
+	         margin-right: auto;
+	         padding: 0.5em 0 0.5em 0;
+	         border-bottom: 2px solid black;
+	         font-weight: bold;
+	         background-color: #f7f4ef;
+	     }
+
+.figbody {
+		   text-align:   center;
+	       margin-left:  auto;
+	       margin-right: auto;
+	       width:        100%;
+         }
+
+.figbody td {
+				padding: 0.2em 0.5em 0.2em 0.5em;
+             }
+
+.summaryM {
+	border-spacing: 0;
+}
+
+.summaryM thead { 
+                }
+.summaryM tbody tr:nth-child(odd) {background: #fffbed;}
+
+.subheader    { font-size: small; } 
+.subheaderrow tr { border-collapse: collapse; }
+.subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
+.subheader:before { content: "("; }
+.subheader:after  { content: ")"; }
+
+.subheader em {font-style: normal;}
+
+.quantile {
+	font-size: smaller;
+}
+
+.quantile b {
+	font-size: larger;
+}
+
+.variable {
+	float:      left;
+	text-align: left;
+}
+
+.units {
+	float:      right;
+	font-size:  x-small;
+	text-align: right;
+	padding-left: 1em;
+	vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+sub { font-size: x-small; }
+sup { font-size: x-small; }
+
+td .align{
+	display: inline-block;
+	margin: 0 auto;
+}
+
+.nobr {
+   white-space: nowrap;
+}
+.supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: 70%;
+   text-align: left;
+}
