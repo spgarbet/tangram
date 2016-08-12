@@ -11,11 +11,13 @@ ASTNode <- R6Class("ASTNode",
       self$symbol <- symbol
       self$value  <- value
     },
-    elements = function() {return(self$value)}
+    elements   = function() {return(self$value)},
+    distribute = function() {return(self)},
+    cat        = function() {cat(self$symbol)}
   )
 )
 
-# A terminal node in the Abstract Syntax Tree
+# A variable in the Abstract Syntax Tree (terminal node)
 ASTVariable <- R6Class("ASTVariable",
   inherit = ASTNode,
   public = list(
@@ -47,15 +49,76 @@ ASTBranch <- R6Class("ASTBranch",
       self$value  <- value
     },
     elements = function()
-    {
-      if(self$symbol == "plus")
-      {
-        return(c(self$left$elements(), self$right$elements()))
-      }
-
+    { 
       return(self$name())
     },
+    distribute = function()
+    {
+      if(inherits(self$left,  "ASTNode"))
+      {
+        self$left <- self$left$distribute()
+      }
+      if(inherits(self$right, "ASTNode"))
+      { 
+        self$right <- self$right$distribute()
+      }
+      
+      return(self)
+    },
     name = function() {return (self$value)} # What to call other stuff?
+  )
+)
+
+ASTPlus <- R6Class("ASTPlus",
+  inherit = ASTBranch,
+  public = list (
+    left = "ASTNode",
+    right = "ASTNode",
+    initialize = function(left, right)
+    {
+      self$symbol <- "plus"
+      self$left   <- left
+      self$right  <- right
+      self$value  <- ""
+    },
+    elements = function()
+    {
+      return(c(self$left$elements(), self$right$elements()))
+    }
+  )
+)
+
+ASTMultiply <- R6Class("ASTMultiply",
+  inherit = ASTBranch,
+  public = list (
+    left  = "ASTNode",
+    right = "ASTNode",
+    initialize = function(left, right)
+    {
+      self$symbol <- "multiply"
+      self$left   <- left
+      self$right  <- right
+      self$value  <- ""
+    },
+    distribute = function()
+    {
+      super$distribute() # Depth-first is required
+      if(inherits(self$left, "ASTPlus"))
+      {
+        return(ASTPlus$new(
+          ASTMultiply$new(self$left$left , self$right$clone())$distribute(),
+          ASTMultiply$new(self$left$right, self$right        )$distribute()
+        ))
+      }
+      if(inherits(self$right, "ASTPlus"))
+      {
+        return(ASTPlus$new(
+          ASTMultiply$new(self$left$clone(), self$right$left )$distribute(),
+          ASTMultiply$new(self$left,         self$right$right)$distribute()
+        ))
+      }
+      return(self)
+    }
   )
 )
 
@@ -253,7 +316,7 @@ Parser <- R6Class("Parser",
       {
         self$expect("TIMES")
         r_term <- self$term()
-        return(ASTBranch$new("multiply", l_term, r_term))
+        return(ASTMultiply$new(l_term, r_term))
       }
 
       return(l_term)
@@ -265,7 +328,7 @@ Parser <- R6Class("Parser",
       {
         self$expect("PLUS")
         r_expr <- self$expression()
-        return(ASTBranch$new("plus", l_expr, r_expr))
+        return(ASTPlus$new(l_expr, r_expr))
       }
 
       return(l_expr)
@@ -291,7 +354,7 @@ Parser <- R6Class("Parser",
 
       tf <- self$tableFormula()
       self$expect("EOF")
-      return(tf)
+      return(tf$distribute())
     }
   )
 )
