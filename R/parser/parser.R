@@ -13,7 +13,7 @@ ASTNode <- R6Class("ASTNode",
     },
     elements   = function() {return(self$value)},
     distribute = function() {return(self)},
-    cat        = function() {cat(self$value)}
+    cat        = function() {return(self$value)}
   )
 )
 
@@ -31,7 +31,14 @@ ASTVariable <- R6Class("ASTVariable",
       self$type   <- type
     },
     elements = function() {return(self$value)},
-    cat      = function() {cat(self$value)}
+    string   = function()
+    {
+      fmt <- ""
+      typ <- ""  
+      if(!is.na(self$format)) {fmt <- paste("[",self$format,"]",sep='')}
+      if(!is.na(self$type))   {typ <- paste("::",self$type,sep='')}
+      paste(self$value, fmt, typ, sep="")
+    }
   )
 )
 
@@ -82,11 +89,9 @@ ASTFunction <- R6Class("ASTFunction",
       self$right  <- right
       self$value  <- value
     },
-    cat = function()
+    string = function()
     { 
-      cat(self$value, "(", sep="")
-      cat(self$left$cat() )
-      cat(")")
+      paste(self$value, "(", self$left$string(), ")", sep="")
     }
   )
 )
@@ -107,11 +112,9 @@ ASTPlus <- R6Class("ASTPlus",
     {
       return(c(self$left$elements(), self$right$elements()))
     },
-    cat = function()
+    string = function()
     { 
-      self$left$cat()
-      cat("+")
-      self$right$cat()
+      paste(self$left$string(), "+", self$right$string(), sep="")
     }
   )
 )
@@ -147,11 +150,9 @@ ASTMultiply <- R6Class("ASTMultiply",
       }
       return(self)
     },
-    cat = function()
+    string = function()
     { 
-      self$left$cat()
-      cat("*")
-      self$right$cat()
+      paste(self$left$string(), "*", self$right$string(), sep="")
     }
   )
 )
@@ -173,12 +174,9 @@ ASTTableFormula <- R6Class("ASTTableFormula",
     {
       list(self$left$elements(), self$right$elements())
     },
-    cat = function()
+    string = function()
     { 
-      self$left$cat()
-      cat("~")
-      self$right$cat()
-      cat("\n")
+      paste(self$left$string(), " ~ ", self$right$string(), sep="")
     }
   )
 )
