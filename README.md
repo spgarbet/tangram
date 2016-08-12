@@ -173,31 +173,8 @@ Instead of focusing on machine representation as type, what if statistical type 
 * Vector of any of the above
 * Matrix of any of the above
 
-This information defines what operations and tests can be done on data far better than worrying about the number of bits in the storage format. 
+This information defines what operations and tests can be done on data far better than worrying about the number of bits in the storage format. The type could define exactly what tests are allowed on data.
 
-## Dustbin of history 
-
-#### Backus-Naur Form (BNF) for formula syntax
-
-       <table-formula>        ::= <column-specification> "~" <row-specification>
-       <column-specification> ::= <formula>
-       <row-specification>    ::= <formula>
-       <formula>              ::= <expression> "+" <formula> | <expression>
-       <expression>           ::= <data-name> "*" <expression>          | 
-                                  <data-name>                           |
-                                  "(" <table-formula> ")"               | 
-                                  <transform-name> "(" <expression> ")" |
-                                  "I(" <r-expression> ")"
-
-The "+" operator denotes major spilts in row / column designations.
-
-The "*" operator denotes factorial combinations of expressions.
-
-Data-name is the name of a column (_or row_) in the given data set.
-
-The recursive descent into another table formula would be a possible 2-D representation mentioned in design. Not for development in Phase I. 
-
-The r-expression is the last attempt at resolving a formula reference. The contents will be evaluated in the current R context, and the results will be used as the data column (_or row_).
 
 
 

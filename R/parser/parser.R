@@ -90,7 +90,7 @@ Token <- R6Class("Token",
     {
       self$id   <- id
       self$name <- name
-#cat("Token[",id,",",name,"]\n")
+cat("Token[",id,",",name,"]\n")
     })
 )
 
@@ -117,7 +117,7 @@ Parser <- R6Class("Parser",
     # Peek returns the next token id in the input without consuming it
     peek = function()
     {
-#cat("peeking at...")
+cat("peeking at...")
        nt       <- self$nextToken()
        self$pos <- self$pos - nchar(nt$name) # Push the token back
        return(nt$id)
@@ -159,7 +159,7 @@ Parser <- R6Class("Parser",
       #   followed by a number.
       match <- str_match(substr(self$input,self$pos-1,self$len),
                          "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*")
-
+cat("Match[1,1]=",match[1,1],"\n")
       if(is.na(match[1,1]))
       {
         stop(paste("Unparseable input starting at",substr(self$input,self$pos-1,self$pos+10),sep=""))
@@ -285,6 +285,7 @@ Parser <- R6Class("Parser",
         y <- as.character(x)
         x <- paste(x[2], x[1], x[3])
       }
+      self$input <- x
       self$pos   <- 1
       self$len   <- nchar(self$input)
 
