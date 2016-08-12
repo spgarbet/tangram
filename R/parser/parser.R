@@ -13,7 +13,7 @@ ASTNode <- R6Class("ASTNode",
     },
     elements   = function() {return(self$value)},
     distribute = function() {return(self)},
-    cat        = function() {cat(self$symbol)}
+    cat        = function() {cat(self$value)}
   )
 )
 
@@ -30,7 +30,8 @@ ASTVariable <- R6Class("ASTVariable",
       self$format <- format
       self$type   <- type
     },
-    elements = function() {return(self$value)}
+    elements = function() {return(self$value)},
+    cat      = function() {cat(self$value)}
   )
 )
 
@@ -69,6 +70,27 @@ ASTBranch <- R6Class("ASTBranch",
   )
 )
 
+ASTFunction <- R6Class("ASTFunction",
+  inherit = ASTBranch,
+  public  = list(
+    left  = "ASTNode",
+    right = "ASTNode",
+    initialize = function(left, right, value)
+    {
+      self$symbol <- "function"
+      self$left   <- left
+      self$right  <- right
+      self$value  <- value
+    },
+    cat = function()
+    { 
+      cat(self$value, "(", sep="")
+      cat(self$left$cat() )
+      cat(")")
+    }
+  )
+)
+
 ASTPlus <- R6Class("ASTPlus",
   inherit = ASTBranch,
   public = list (
@@ -84,6 +106,12 @@ ASTPlus <- R6Class("ASTPlus",
     elements = function()
     {
       return(c(self$left$elements(), self$right$elements()))
+    },
+    cat = function()
+    { 
+      self$left$cat()
+      cat("+")
+      self$right$cat()
     }
   )
 )
@@ -118,6 +146,12 @@ ASTMultiply <- R6Class("ASTMultiply",
         ))
       }
       return(self)
+    },
+    cat = function()
+    { 
+      self$left$cat()
+      cat("*")
+      self$right$cat()
     }
   )
 )
@@ -138,6 +172,13 @@ ASTTableFormula <- R6Class("ASTTableFormula",
     elements = function()
     {
       list(self$left$elements(), self$right$elements())
+    },
+    cat = function()
+    { 
+      self$left$cat()
+      cat("~")
+      self$right$cat()
+      cat("\n")
     }
   )
 )
@@ -280,7 +321,7 @@ Parser <- R6Class("Parser",
         self$expect("LPAREN")
         r_expr <- self$r_expression()
         self$expect("RPAREN")
-        return(ASTBranch$new("function", r_expr, NA, nt$name))
+        return(ASTFunction$new(r_expr, NA, nt$name))
       }
 
       # Only valid thing left is a variable, check for additional specifiers on variable
