@@ -107,3 +107,11 @@ test_that("type specifier information is extracted correctly.",
 
 })
 
+test_that("multiplication distributes correctly",
+{
+  expect_equal(
+    Parser$new()$run("(a+b)*(c+d)~e*f*(g+h)*i")$string(),
+    "a*c+a*d+b*c+b*d ~ e*f*g*i+e*f*h*i"
+  )
+})
+
