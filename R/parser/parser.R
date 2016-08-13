@@ -1,7 +1,20 @@
 library(stringr)
 library(R6)
 
-# A terminal node in the Abstract Syntax Tree
+#' A Node in an Abstract Syntax Tree (AST)
+#'
+#' This is the root R6 class of any term of the AST which is created
+#' when parsing a table formula.
+#'
+#' @field symbol A string which tells what this node in the AST represents.
+#' @field value  A string of addtional information contained by the node.
+#'
+#' @examples
+#'
+#' ASTNode$new("r_expr", "2+4")
+#' ASTNode$new("r_expr", "2+4")$string()
+#' ASTNode$new("r_expr", "2+4")$terms()
+#'
 ASTNode <- R6Class("ASTNode",
   public = list(
     symbol = "character",
@@ -11,13 +24,24 @@ ASTNode <- R6Class("ASTNode",
       self$symbol <- symbol
       self$value  <- value
     },
-    elements   = function() {return(self$value)},
-    distribute = function() {return(self)},
-    cat        = function() {return(self$value)}
+    terms      = function() { "Return terms of AST below this node"; return(self$value) },
+    distribute = function() { "Distribute multiplication right";     return(self)       },
+    string     = function() { "String representation of this node";  return(self$value) }
   )
 )
 
-# A variable in the Abstract Syntax Tree (terminal node)
+#' A Variable in an Abstract Syntax Tree (AST)
+#'
+#' This node represents a variable of interest in the AST
+#'
+#' @field value  A string containing the variable identifier
+#'
+#' @examples
+#'
+#' ASTNode$new("r_expr", "2+4")
+#' ASTNode$new("r_expr", "2+4")$string()
+#' ASTNode$new("r_expr", "2+4")$terms()
+#'
 ASTVariable <- R6Class("ASTVariable",
   inherit = ASTNode,
   public = list(
@@ -30,7 +54,7 @@ ASTVariable <- R6Class("ASTVariable",
       self$format <- format
       self$type   <- type
     },
-    elements = function() {return(self$value)},
+    terms = function() {return(self$value)},
     string   = function()
     {
       fmt <- ""
@@ -56,7 +80,7 @@ ASTBranch <- R6Class("ASTBranch",
       self$right  <- right
       self$value  <- value
     },
-    elements = function()
+    terms = function()
     { 
       return(self$name())
     },
@@ -108,9 +132,9 @@ ASTPlus <- R6Class("ASTPlus",
       self$right  <- right
       self$value  <- ""
     },
-    elements = function()
+    terms = function()
     {
-      return(c(self$left$elements(), self$right$elements()))
+      return(c(self$left$terms(), self$right$terms()))
     },
     string = function()
     { 
@@ -133,7 +157,7 @@ ASTMultiply <- R6Class("ASTMultiply",
     },
     distribute = function()
     {
-      super$distribute() # Depth-first is required
+      super$distribute() # Depth-first is required, allows lower changes to bubble up
       if(inherits(self$left, "ASTPlus"))
       {
         return(ASTPlus$new(
@@ -170,9 +194,9 @@ ASTTableFormula <- R6Class("ASTTableFormula",
       self$right  <- right
       self$value  <- ""
     },
-    elements = function()
+    terms = function()
     {
-      list(self$left$elements(), self$right$elements())
+      list(self$left$terms(), self$right$terms())
     },
     string = function()
     { 
@@ -205,7 +229,7 @@ Parser <- R6Class("Parser",
     initialize = function()
     {
     },
-    # Expect is a function that requires the next element in the grammar to be the given id
+    # Expect is a function that requires the next term in the grammar to be the given id
     expect = function(id)
     {
       t <- self$nextToken()
@@ -311,7 +335,7 @@ Parser <- R6Class("Parser",
         stop(paste("Unrecognized token",nt$name,"before",substr(self$input,self$pos,self$len)))
       }
 
-      pk <- self$peek() # What follows the name determines next grammar element
+      pk <- self$peek() # What follows the name determines next grammar term
 
       # function-name -- with r-expression
       if(pk == "LPAREN")
