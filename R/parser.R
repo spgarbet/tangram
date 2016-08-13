@@ -4,7 +4,8 @@ library(R6)
 #' A Node in an Abstract Syntax Tree (AST)
 #'
 #' This is the root R6 class of any term of the AST which is created
-#' when parsing a table formula.
+#' when parsing a table formula. This should only be used as a base class
+#' as the class information carries the semantic meaning of a given node.
 #'
 #' @field symbol A string which tells what this node in the AST represents.
 #' @field value  A string of addtional information contained by the node.
@@ -18,23 +19,24 @@ library(R6)
 ASTNode <- R6Class("ASTNode",
   public = list(
     value  = "character",
-    initialize = function(value)
-    {
-      self$value  <- value
-    },
     terms      = function() { "Return terms of AST below this node"; return(self$value) },
-    distribute = function() { "Distribute multiplication right";     return(self)       },
+    distribute = function() { "Distribute multiplication right. This returns self, since a terminal node needs no distribution.";     return(self)       },
     string     = function() { "String representation of this node";  return(self$value) }
   )
 )
 
 #' A Variable in an Abstract Syntax Tree (AST)
 #'
-#' This node represents a variable of interest in the AST
+#' This node represents a variable of interest in the AST. A variable's name
+#' is recorded in the value field, and must conform to the rules of identifiers
+#' in R. 
 #'
 #' @field value  A string containing the variable identifier
+#' @field format A format string that is either a string containing a number representing significant digits for output, or a C-style printf string.
+#' @field type A string that represents the type specifier for that variable
 #'
 #' @examples
+#' ASTVariable$new("x", "2", "Continuous")$string()
 #'
 ASTVariable <- R6Class("ASTVariable",
   inherit = ASTNode,
@@ -59,32 +61,24 @@ ASTVariable <- R6Class("ASTVariable",
   )
 )
 
-ASTRExpr <- R6Class("ASTRExpr",
-  inherit = ASTNode,
-  public  = list(
-    initialize = function(r_expr) { self$value <- r_expr }
-  )
-)
-
-
-# A branch node in the Abstract Syntax Tree, may contain a value
+#' A left/right branch in an Abstract Syntrax Tree. This inherits from ASTNode, and
+#' is intended to be a base class as well. Should never be instantiated directly
+#' as once again the semantic information is contained in the class name.
+#'
+#' @field left A pointer to the left node below this one
+#' @field right A pointer to the right node below this one
+#'
+#' @examples
+#' ASTBranch$new(ASTNode$new(""), ASTNode$new(""))
+#'
 ASTBranch <- R6Class("ASTBranch",
   inherit = ASTNode,
   public = list(
     left  = "ASTNode",
     right = "ASTNode",
-    initialize = function(left, right, value="")
-    {
-      self$left   <- left
-      self$right  <- right
-      self$value  <- value
-    },
-    terms = function()
-    { 
-      return(self$name())
-    },
     distribute = function()
     {
+      "The distribute function does a depth first call, reassigning pointers from the result of the distribute function."
       if(inherits(self$left,  "ASTNode"))
       {
         self$left <- self$left$distribute()
@@ -95,25 +89,30 @@ ASTBranch <- R6Class("ASTBranch",
       }
       
       return(self)
-    },
-    name = function() {return (self$value)} # What to call other stuff?
+    }
   )
 )
 
+#' A requested function call.
+#'
+#' @field value  A string containing the function name.
+#' @field r_expr A string containing the raw r expression.
+#'
+#' @examples
+#' ASTBranch$new(ASTNode$new(""), ASTNode$new(""))
+#'
 ASTFunction <- R6Class("ASTFunction",
-  inherit = ASTBranch,
-  public  = list(
-    left  = "ASTNode",
-    right = "ASTNode",
-    initialize = function(left, right, value)
+  inherit = ASTNode,
+  public   = list(
+    r_expr = "character",
+    initialize = function(value, r_expr)
     {
-      self$left   <- left
-      self$right  <- right
       self$value  <- value
+      self$r_expr <- r_expr
     },
     string = function()
     { 
-      paste(self$value, "(", self$left$string(), ")", sep="")
+      paste(self$value, "(", self$r_expr, ")", sep="")
     }
   )
 )
@@ -311,10 +310,10 @@ Parser <- R6Class("Parser",
         rexpr <- self$r_expression()
         self$expect("RPAREN")
         rexpr <- self$r_expression() # Continue the r_expr
-        return(ASTRExpr$new(substr(self$input, starting, self$pos-1)))
+        return(substr(self$input, starting, self$pos-1))
       }
 
-      return(ASTRExpr$new(substr(self$input, starting, self$pos-1)))
+      return(substr(self$input, starting, self$pos-1))
     },
     factor = function()
     {
@@ -338,7 +337,7 @@ Parser <- R6Class("Parser",
         self$expect("LPAREN")
         r_expr <- self$r_expression()
         self$expect("RPAREN")
-        return(ASTFunction$new(r_expr, NA, nt$name))
+        return(ASTFunction$new(nt$name, r_expr))
       }
 
       # Only valid thing left is a variable, check for additional specifiers on variable
