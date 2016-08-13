@@ -11,17 +11,15 @@ library(R6)
 #'
 #' @examples
 #'
-#' ASTNode$new("r_expr", "2+4")
-#' ASTNode$new("r_expr", "2+4")$string()
-#' ASTNode$new("r_expr", "2+4")$terms()
+#' ASTNode$new("some information")
+#' ASTNode$new("some information")$string()
+#' ASTNode$new("some information")$terms()
 #'
 ASTNode <- R6Class("ASTNode",
   public = list(
-    symbol = "character",
     value  = "character",
-    initialize = function(symbol, value)
+    initialize = function(value)
     {
-      self$symbol <- symbol
       self$value  <- value
     },
     terms      = function() { "Return terms of AST below this node"; return(self$value) },
@@ -38,18 +36,13 @@ ASTNode <- R6Class("ASTNode",
 #'
 #' @examples
 #'
-#' ASTNode$new("r_expr", "2+4")
-#' ASTNode$new("r_expr", "2+4")$string()
-#' ASTNode$new("r_expr", "2+4")$terms()
-#'
 ASTVariable <- R6Class("ASTVariable",
   inherit = ASTNode,
-  public = list(
+  public  = list(
     format = "character",
     type   = "character",
     initialize = function(identifier, format, type)
     {
-      self$symbol <- "variable"
       self$value  <- identifier
       self$format <- format
       self$type   <- type
@@ -66,6 +59,13 @@ ASTVariable <- R6Class("ASTVariable",
   )
 )
 
+ASTRExpr <- R6Class("ASTRExpr",
+  inherit = ASTNode,
+  public  = list(
+    initialize = function(r_expr) { self$value <- r_expr }
+  )
+)
+
 
 # A branch node in the Abstract Syntax Tree, may contain a value
 ASTBranch <- R6Class("ASTBranch",
@@ -73,9 +73,8 @@ ASTBranch <- R6Class("ASTBranch",
   public = list(
     left  = "ASTNode",
     right = "ASTNode",
-    initialize = function(symbol, left, right, value="")
+    initialize = function(left, right, value="")
     {
-      self$symbol <- symbol
       self$left   <- left
       self$right  <- right
       self$value  <- value
@@ -108,7 +107,6 @@ ASTFunction <- R6Class("ASTFunction",
     right = "ASTNode",
     initialize = function(left, right, value)
     {
-      self$symbol <- "function"
       self$left   <- left
       self$right  <- right
       self$value  <- value
@@ -127,7 +125,6 @@ ASTPlus <- R6Class("ASTPlus",
     right = "ASTNode",
     initialize = function(left, right)
     {
-      self$symbol <- "plus"
       self$left   <- left
       self$right  <- right
       self$value  <- ""
@@ -150,7 +147,6 @@ ASTMultiply <- R6Class("ASTMultiply",
     right = "ASTNode",
     initialize = function(left, right)
     {
-      self$symbol <- "multiply"
       self$left   <- left
       self$right  <- right
       self$value  <- ""
@@ -189,7 +185,6 @@ ASTTableFormula <- R6Class("ASTTableFormula",
     right = "ASTNode",
     initialize = function(left, right)
     {
-      self$symbol <- "table"
       self$left   <- left
       self$right  <- right
       self$value  <- ""
@@ -316,10 +311,10 @@ Parser <- R6Class("Parser",
         rexpr <- self$r_expression()
         self$expect("RPAREN")
         rexpr <- self$r_expression() # Continue the r_expr
-        return(ASTNode$new("r_expr", substr(self$input, starting, self$pos-1)))
+        return(ASTRExpr$new(substr(self$input, starting, self$pos-1)))
       }
 
-      return(ASTNode$new("r_expr", substr(self$input, starting, self$pos-1)))
+      return(ASTRExpr$new(substr(self$input, starting, self$pos-1)))
     },
     factor = function()
     {
