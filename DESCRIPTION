@@ -2,9 +2,18 @@ Package: tg
 Title: The Grammar of Tables
 Version: 0.0.0.9000
 Authors@R: person("Shawn", "Garbett", email = "shawn.garbett@vanderbilt.edu", role = c("aut", "cre"))
-Description: Provides an extensible formula system to quickly and easily create production quality tables. Each step of the process (with the exception of the grammar itself) is easily override by user functions. One can chose to override the generation of table elements, and bundles to achive New England Journal of Medicine and Hmisc behaviors are provided. Further rendering into a format is a separate step that can be override by a user as well, the package contains rendering for HTML5, LaTeX, Rmarkdown and an index format.
-Depends: R (>= 3.2.3)
+Description: Provides an extensible formula system to quickly and easily create
+    production quality tables. Each step of the process (with the exception of the
+    grammar itself) is easily override by user functions. One can chose to override
+    the generation of table elements, and bundles to achive New England Journal of
+    Medicine and Hmisc behaviors are provided. Further rendering into a format is
+    a separate step that can be override by a user as well, the package contains
+    rendering for HTML5, LaTeX, Rmarkdown and an index format.
+Depends:
+    R (>= 3.2.3)
 License: GPL=2
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
+Suggests:
+    testthat
+RoxygenNote: 5.0.1

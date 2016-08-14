@@ -7,8 +7,9 @@ library(R6)
 #' when parsing a table formula. This should only be used as a base class
 #' as the class information carries the semantic meaning of a given node.
 #'
-#' @field symbol A string which tells what this node in the AST represents.
-#' @field value  A string of addtional information contained by the node.
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
 #'
 #' @examples
 #'
@@ -16,12 +17,21 @@ library(R6)
 #' ASTNode$new("some information")$string()
 #' ASTNode$new("some information")$terms()
 #'
+#' @field symbol A string which tells what this node in the AST represents.
+#' @field value  A string of addtional information contained by the node.
+#'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
+#'   \item{\code{string()}}{Returns the string formula of the node}
+#' }
 ASTNode <- R6Class("ASTNode",
   public = list(
     value  = "character",
-    terms      = function() { "Return terms of AST below this node"; return(self$value) },
-    distribute = function() { "Distribute multiplication right. This returns self, since a terminal node needs no distribution.";     return(self)       },
-    string     = function() { "String representation of this node";  return(self$value) }
+    terms      = function() { return(self$value) },
+    distribute = function() { return(self)       },
+    string     = function() { return(self$value) }
   )
 )
 
@@ -29,15 +39,27 @@ ASTNode <- R6Class("ASTNode",
 #'
 #' This node represents a variable of interest in the AST. A variable's name
 #' is recorded in the value field, and must conform to the rules of identifiers
-#' in R. 
+#' in R. This class inherits from \code{\link{ASTNode}}.
+#'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
+#'
+#' @examples
+#' ASTVariable$new("x", "2", "Continuous")$string()
 #'
 #' @field value  A string containing the variable identifier
 #' @field format A format string that is either a string containing a number representing significant digits for output, or a C-style printf string.
 #' @field type A string that represents the type specifier for that variable
 #'
-#' @examples
-#' ASTVariable$new("x", "2", "Continuous")$string()
-#'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(identifier, format=NA, type=NA)}}{This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.}
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
+#'   \item{\code{string()}}{Returns the string formula of the node}
+#' }
 ASTVariable <- R6Class("ASTVariable",
   inherit = ASTNode,
   public  = list(
@@ -65,12 +87,22 @@ ASTVariable <- R6Class("ASTVariable",
 #' is intended to be a base class as well. Should never be instantiated directly
 #' as once again the semantic information is contained in the class name.
 #'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
 #' @field left A pointer to the left node below this one
 #' @field right A pointer to the right node below this one
 #'
 #' @examples
 #' ASTBranch$new(ASTNode$new(""), ASTNode$new(""))
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{string()}}{Returns the string formula of the node}
+#' }
 ASTBranch <- R6Class("ASTBranch",
   inherit = ASTNode,
   public = list(
@@ -78,7 +110,6 @@ ASTBranch <- R6Class("ASTBranch",
     right = "ASTNode",
     distribute = function()
     {
-      "The distribute function does a depth first call, reassigning pointers from the result of the distribute function."
       if(inherits(self$left,  "ASTNode"))
       {
         self$left <- self$left$distribute()
@@ -93,14 +124,26 @@ ASTBranch <- R6Class("ASTBranch",
   )
 )
 
-#' A specified function call.
+#' A specified function call as an ASTNode
 #'
-#' @field value  A string containing the function name.
-#' @field r_expr A string containing the raw r expression.
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
+#' 
+#' @field value  The name of the function.
+#' @field r_expr A string containing the raw r expression from inside the parenthesis
 #'
 #' @examples
 #' ASTFunction$new("log", "x+2")$string()
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(value, r_expr)}}{Create one with the given value and r_expr}
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
+#'   \item{\code{string()}}{Returns the string formula of the node}
+#' }
 ASTFunction <- R6Class("ASTFunction",
   inherit = ASTNode,
   public   = list(
@@ -117,7 +160,12 @@ ASTFunction <- R6Class("ASTFunction",
   )
 )
 
-#' The addition of two terms.
+#' The addition of two terms, in an ASTNode.
+#'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
 #'
 #' @field left  The AST tree to the left.
 #' @field right The AST tree to the right.
@@ -125,6 +173,13 @@ ASTFunction <- R6Class("ASTFunction",
 #' @examples
 #' ASTPlus$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
+#'   \item{\code{string()}}{Returns the string formula of the node}
+#' }
 ASTPlus <- R6Class("ASTPlus",
   inherit = ASTBranch,
   public  = list (
@@ -147,7 +202,12 @@ ASTPlus <- R6Class("ASTPlus",
   )
 )
 
-#' The multiplication of two factors
+#' The multiplication of two terms, as an ASTNode.
+#'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
 #'
 #' @field left  The AST tree to the left.
 #' @field right The AST tree to the right.
@@ -155,6 +215,13 @@ ASTPlus <- R6Class("ASTPlus",
 #' @examples
 #' ASTMultiply$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
+#'   \item{\code{string()}}{Returns the string formula of the node}
+#' }
 ASTMultiply <- R6Class("ASTMultiply",
   inherit = ASTBranch,
   public = list (
@@ -168,7 +235,6 @@ ASTMultiply <- R6Class("ASTMultiply",
     },
     distribute = function()
     {
-      "This is the workhorse of applying the distributive property."
       super$distribute() 
       if(inherits(self$left, "ASTPlus"))
       {
@@ -193,14 +259,26 @@ ASTMultiply <- R6Class("ASTMultiply",
   )
 )
 
-#' The root node of a formula.
+#' The root ASTNode of a formula.
 #'
-#' @field left  The AST tree for the columns. 
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
+#'
+#' @field left  The AST tree for the columns.
 #' @field right The AST tree for the rows.
 #'
 #' @examples
 #' ASTTableFormula$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
+#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
+#'   \item{\code{string()}}{Returns the string representation of the formula}
+#' }
 ASTTableFormula <- R6Class("ASTTableFormula",
   inherit = ASTBranch,
   public = list(
@@ -223,7 +301,16 @@ ASTTableFormula <- R6Class("ASTTableFormula",
   )
 )
 
+
+
+
+
 #' A token in the formula grammar
+#'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
 #'
 #' @field id    The token identifier, E.g. "LPAREN"
 #' @field name  Information about the token, useful with IDENTIFIERs.
@@ -232,6 +319,10 @@ ASTTableFormula <- R6Class("ASTTableFormula",
 #' Token$new("PLUS", "+")
 #' Token$new("IDENTIFIER", "albumin")
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new(id, name="")}}{Create a new token in the grammar.}
+#' }
 Token <- R6Class("Token",
   public = list(
     id         = "character",
@@ -244,7 +335,12 @@ Token <- R6Class("Token",
     })
 )
 
-#' The grand parser itself
+#' The parser class for generating abstract syntax trees for given table formulas.
+#'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @keywords data
+#' @format \code{\link{R6Class}} object.
 #'
 #' @field input Storage for input string of a formula
 #' @field pos   The current parsing position
@@ -253,6 +349,25 @@ Token <- R6Class("Token",
 #' @examples
 #' Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")
 #'
+#' @section Methods:
+#' \describe{
+#'   \item{\code{new()}}{Create a parser.}
+#'   \item{\code{expect(id)}}{Require the next token parsed to have the specified id and consume it.}
+#'   \item{\code{peek()}}{Return the next token parsed without consuming it.}
+#'   \item{\code{eat_whitespace()}}{Consume any spaces or tabs in input. }
+#'   \item{\code{next_token()}}{Return the next token parsed and consume it.}
+#'   \item{\code{format()}}{ Parse a format class and return it's string.}
+#'   \item{\code{r_expression()}}{Parse an R expression class and return it's string. }
+#'   \item{\code{factor()}}{Parse a factor class and return it's AST Node.}
+#'   \item{\code{term()}}{Parse a term class and return it's AST Node.}
+#'   \item{\code{expression()}}{Parse an expression class and return it's AST Node.}
+#'   \item{\code{table_formula()}}{Parse a table formula class and return it's AST Node.}
+#'   \item{\code{run(input)}}{Run the parser on the given input, and return an AST}
+#' }
+#' @section References:
+#' \describe{
+#'      Aho, A. V., Lam, M. S., Sethi, R., and Ullman, J. D. (2006) \emph{Compilers: Principles, Techniques, and Tools}, 2nd edition. Addison Wesley.
+#' }
 Parser <- R6Class("Parser",
   public  = list(
     input = "character",
@@ -318,7 +433,6 @@ Parser <- R6Class("Parser",
       #   followed by a number.
       match <- str_match(substr(self$input,self$pos-1,self$len),
                          "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*")
-#cat("Match[1,1]=",match[1,1],"\n")
       if(is.na(match[1,1]))
       {
         stop(paste("Unparseable input starting at",substr(self$input,self$pos-1,self$pos+10),sep=""))
@@ -438,7 +552,7 @@ Parser <- R6Class("Parser",
 
       return(l_expr)
     },
-    tableFormula = function()
+    table_formula = function()
     {
       "Parse a complete formula"
       
@@ -460,7 +574,7 @@ Parser <- R6Class("Parser",
       self$pos   <- 1
       self$len   <- nchar(self$input)
 
-      tf <- self$tableFormula()
+      tf <- self$table_formula()
       self$expect("EOF")
       return(tf$distribute())
     }
