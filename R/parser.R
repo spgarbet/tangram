@@ -43,7 +43,7 @@ ASTVariable <- R6Class("ASTVariable",
   public  = list(
     format = "character",
     type   = "character",
-    initialize = function(identifier, format, type)
+    initialize = function(identifier, format=NA, type=NA)
     {
       self$value  <- identifier
       self$format <- format
@@ -93,13 +93,13 @@ ASTBranch <- R6Class("ASTBranch",
   )
 )
 
-#' A requested function call.
+#' A specified function call.
 #'
 #' @field value  A string containing the function name.
 #' @field r_expr A string containing the raw r expression.
 #'
 #' @examples
-#' ASTBranch$new(ASTNode$new(""), ASTNode$new(""))
+#' ASTFunction$new("log", "x+2")$string()
 #'
 ASTFunction <- R6Class("ASTFunction",
   inherit = ASTNode,
@@ -117,11 +117,19 @@ ASTFunction <- R6Class("ASTFunction",
   )
 )
 
+#' The addition of two terms.
+#'
+#' @field left  The AST tree to the left.
+#' @field right The AST tree to the right.
+#'
+#' @examples
+#' ASTPlus$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
+#'
 ASTPlus <- R6Class("ASTPlus",
   inherit = ASTBranch,
-  public = list (
-    left = "ASTNode",
-    right = "ASTNode",
+  public  = list (
+    left   = "ASTNode",
+    right  = "ASTNode",
     initialize = function(left, right)
     {
       self$left   <- left
@@ -139,6 +147,14 @@ ASTPlus <- R6Class("ASTPlus",
   )
 )
 
+#' The multiplication of two factors
+#'
+#' @field left  The AST tree to the left.
+#' @field right The AST tree to the right.
+#'
+#' @examples
+#' ASTMultiply$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
+#'
 ASTMultiply <- R6Class("ASTMultiply",
   inherit = ASTBranch,
   public = list (
@@ -152,7 +168,8 @@ ASTMultiply <- R6Class("ASTMultiply",
     },
     distribute = function()
     {
-      super$distribute() # Depth-first is required, allows lower changes to bubble up
+      "This is the workhorse of applying the distributive property."
+      super$distribute() 
       if(inherits(self$left, "ASTPlus"))
       {
         return(ASTPlus$new(
@@ -176,7 +193,14 @@ ASTMultiply <- R6Class("ASTMultiply",
   )
 )
 
-# The top level table
+#' The root node of a formula.
+#'
+#' @field left  The AST tree for the columns. 
+#' @field right The AST tree for the rows.
+#'
+#' @examples
+#' ASTTableFormula$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
+#'
 ASTTableFormula <- R6Class("ASTTableFormula",
   inherit = ASTBranch,
   public = list(
@@ -186,7 +210,7 @@ ASTTableFormula <- R6Class("ASTTableFormula",
     {
       self$left   <- left
       self$right  <- right
-      self$value  <- ""
+      self$value  <- NA
     },
     terms = function()
     {
@@ -199,9 +223,15 @@ ASTTableFormula <- R6Class("ASTTableFormula",
   )
 )
 
-# A token in the grammar
-# Composed of an id (e.g. "PLUS", "LPAREN")
-# and a name, the actual contents of it, in case of long tokens
+#' A token in the formula grammar
+#'
+#' @field id    The token identifier, E.g. "LPAREN"
+#' @field name  Information about the token, useful with IDENTIFIERs.
+#'
+#' @examples
+#' Token$new("PLUS", "+")
+#' Token$new("IDENTIFIER", "albumin")
+#'
 Token <- R6Class("Token",
   public = list(
     id         = "character",
@@ -214,7 +244,15 @@ Token <- R6Class("Token",
     })
 )
 
-# The parser for the table formulas
+#' The grand parser itself
+#'
+#' @field input Storage for input string of a formula
+#' @field pos   The current parsing position
+#' @field len   The length of the input
+#'
+#' @examples
+#' Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")
+#'
 Parser <- R6Class("Parser",
   public  = list(
     input = "character",
@@ -223,10 +261,10 @@ Parser <- R6Class("Parser",
     initialize = function()
     {
     },
-    # Expect is a function that requires the next term in the grammar to be the given id
     expect = function(id)
     {
-      t <- self$nextToken()
+      "Expect requires the next term in the parse to be the specified id"
+      t <- self$next_token()
       if(t$id != id)
       {
         stop(paste("Expecting",id,"before '",substr(self$input,self$pos,self$len),"'",sep=""))
@@ -234,25 +272,26 @@ Parser <- R6Class("Parser",
 
       t
     },
-    # Peek returns the next token id in the input without consuming it
     peek = function()
     {
+      "Peek returns the next token in the input without consuming it"
 #cat("peeking at...")
-       nt       <- self$nextToken()
+       nt       <- self$next_token()
        self$pos <- self$pos - nchar(nt$name) # Push the token back
        return(nt$id)
     },
     eat_whitespace = function()
     {
+      "Consume any spaces or tabs"
       while(substr(self$input, self$pos, self$pos) %in% c(" ","\t") &&
             self$pos < self$len)
       {
         self$pos = self$pos + 1
       }
     },
-    # Next Token, returns and consumes the next lexical token in the input stream
-    nextToken = function()
+    next_token = function()
     {
+      "Returns the next token in the input stream"
       self$eat_whitespace()
 
       # The end?
@@ -291,6 +330,7 @@ Parser <- R6Class("Parser",
     },
     format = function()
     {
+      "Parse a format."
       match <- str_match(substr(self$input, self$pos, self$len), "[^\\]]*")
       starting <- self$pos
       self$pos <- self$pos + nchar(match[1,1])
@@ -299,6 +339,8 @@ Parser <- R6Class("Parser",
     },
     r_expression = function()
     {
+      "Parse an R expression."
+      
       match <- str_match(substr(self$input, self$pos, self$len), "^[^\\(\\)]*")
       starting <- self$pos
       self$pos <- self$pos + nchar(match[1,1])
@@ -317,7 +359,9 @@ Parser <- R6Class("Parser",
     },
     factor = function()
     {
-      nt <- self$nextToken()
+      "Parse a factor."
+      
+      nt <- self$next_token()
       if(nt$id == "LPAREN")
       {
         expr <- self$expression()
@@ -355,7 +399,7 @@ Parser <- R6Class("Parser",
       {
         self$expect("COLON")
         self$expect("COLON")
-        nt2 <- self$nextToken()
+        nt2 <- self$next_token()
         if(nt2$id != "IDENTIFIER") # Type override must be an identifier
         {
           stop(paste("Unrecognized token",nt$name,"before",substr(self$input,self$pos,self$len)))
@@ -368,6 +412,8 @@ Parser <- R6Class("Parser",
     },
     term = function()
     {
+      "Parse a grammar term."
+      
       l_term <- self$factor()
       if(self$peek() == "TIMES")
       {
@@ -380,6 +426,8 @@ Parser <- R6Class("Parser",
     },
     expression = function()
     {
+      "Parse a grammar expression."
+      
       l_expr  <- self$term()
       if(self$peek() == "PLUS")
       {
@@ -392,6 +440,8 @@ Parser <- R6Class("Parser",
     },
     tableFormula = function()
     {
+      "Parse a complete formula"
+      
       cs <- self$expression()
       self$expect("TILDE")
       rs <- self$expression()
@@ -400,6 +450,7 @@ Parser <- R6Class("Parser",
     },
     run       = function(x)
     {
+      "This runs the parser and returns the AST."
       if(class(x) == "formula")
       {
         y <- as.character(x)
