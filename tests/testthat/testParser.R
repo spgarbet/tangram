@@ -96,7 +96,7 @@ test_that("type specifier information is extracted correctly.",
 
   expect_true(inherits(ast$right$left, "ASTVariable"))
   expect_equal(ast$right$left$value,  "d")
-  expect_equal(ast$right$left$format, "\"%03.2g\"")
+  expect_equal(ast$right$left$format, "%03.2g")
   expect_identical(ast$right$left$type, NA)
 
   expect_true(inherits(ast$right$right, "ASTVariable"))

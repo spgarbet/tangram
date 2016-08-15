@@ -301,10 +301,6 @@ ASTTableFormula <- R6Class("ASTTableFormula",
   )
 )
 
-
-
-
-
 #' A token in the formula grammar
 #'
 #' @docType class
@@ -378,7 +374,6 @@ Parser <- R6Class("Parser",
     },
     expect = function(id)
     {
-      "Expect requires the next term in the parse to be the specified id"
       t <- self$next_token()
       if(t$id != id)
       {
@@ -389,7 +384,6 @@ Parser <- R6Class("Parser",
     },
     peek = function()
     {
-      "Peek returns the next token in the input without consuming it"
 #cat("peeking at...")
        nt       <- self$next_token()
        self$pos <- self$pos - nchar(nt$name) # Push the token back
@@ -397,7 +391,6 @@ Parser <- R6Class("Parser",
     },
     eat_whitespace = function()
     {
-      "Consume any spaces or tabs"
       while(substr(self$input, self$pos, self$pos) %in% c(" ","\t") &&
             self$pos < self$len)
       {
@@ -406,7 +399,6 @@ Parser <- R6Class("Parser",
     },
     next_token = function()
     {
-      "Returns the next token in the input stream"
       self$eat_whitespace()
 
       # The end?
@@ -444,17 +436,14 @@ Parser <- R6Class("Parser",
     },
     format = function()
     {
-      "Parse a format."
-      match <- str_match(substr(self$input, self$pos, self$len), "[^\\]]*")
+      match <- str_match(substr(self$input, self$pos, self$len), "\"?([^\\]\"]*)\"?")
       starting <- self$pos
       self$pos <- self$pos + nchar(match[1,1])
-
-      return(match[1,1])
+      
+      return(match[1,2])
     },
     r_expression = function()
     {
-      "Parse an R expression."
-      
       match <- str_match(substr(self$input, self$pos, self$len), "^[^\\(\\)]*")
       starting <- self$pos
       self$pos <- self$pos + nchar(match[1,1])
@@ -473,8 +462,6 @@ Parser <- R6Class("Parser",
     },
     factor = function()
     {
-      "Parse a factor."
-      
       nt <- self$next_token()
       if(nt$id == "LPAREN")
       {
@@ -526,8 +513,6 @@ Parser <- R6Class("Parser",
     },
     term = function()
     {
-      "Parse a grammar term."
-      
       l_term <- self$factor()
       if(self$peek() == "TIMES")
       {
@@ -540,8 +525,6 @@ Parser <- R6Class("Parser",
     },
     expression = function()
     {
-      "Parse a grammar expression."
-      
       l_expr  <- self$term()
       if(self$peek() == "PLUS")
       {
@@ -554,8 +537,6 @@ Parser <- R6Class("Parser",
     },
     table_formula = function()
     {
-      "Parse a complete formula"
-      
       cs <- self$expression()
       self$expect("TILDE")
       rs <- self$expression()
@@ -564,7 +545,6 @@ Parser <- R6Class("Parser",
     },
     run       = function(x)
     {
-      "This runs the parser and returns the AST."
       if(class(x) == "formula")
       {
         y <- as.character(x)
