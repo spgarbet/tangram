@@ -17,3 +17,10 @@ LazyData: true
 Suggests:
     testthat
 RoxygenNote: 5.0.1
+Collate:
+    'S3-Cell.R'
+    'hmisc.R'
+    'html5.R'
+    'parser.R'
+    'main.R'
+    'summary.R'

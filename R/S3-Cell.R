@@ -44,7 +44,7 @@ cols.tg_cell <- function(object)
 }
 
 
-
+#' @export
 tg_table <- function(rows, cols, embedded=FALSE)
 {
   nt <- sapply(1:rows, FUN=function(x) list(sapply(1:cols, FUN=function(x) tg_cell())))

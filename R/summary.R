@@ -3,7 +3,7 @@
 
 summary.tg_cell <- function(object) ""
 
-summary.tg_label <- function(object) 
+summary.tg_label <- function(object)
 {
   if(is.na(object$units))
     object$label
@@ -16,21 +16,22 @@ summary.tg_quantile <- function(object)
   paste(sigfig(object$q25), " *", sigfig(object$q50), "* ", sigfig(object$q75), sep="")
 }
 
+#' @export
 summary.tg_table <- function(object)
 {
   nrows <- rows(object)
   ncols <- cols(object)
-  
+
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
-  
+
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       text[row,col] <<- summary(object[[row]][[col]])
     })
   })
-  
+
   maxwidths <- apply(text, 2, FUN=function(x) max(nchar(x), na.rm=TRUE))
-  
+
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(col == 1)
@@ -43,7 +44,7 @@ summary.tg_table <- function(object)
       }
     })
   })
-  
+
   pasty <- apply(text, 1, function(x) paste(x, collapse="  "))
 
   cat(paste(rep("=",nchar(pasty[1])),collapse=''),'\n')
@@ -53,7 +54,13 @@ summary.tg_table <- function(object)
     if(row == pasty[2]) cat(paste(rep("-",nchar(pasty[1])),collapse=''),'\n') # FIXME: This is hardcoded at 2!!!!
   }
   cat(paste(rep("=",nchar(pasty[1])),collapse=''),'\n')
-  
+
+}
+
+#' @export
+show.tg_table <- function(object)
+{
+  summary.tg_table(tg_table)
 }
 
 summary.tg_estimate <- function(object)

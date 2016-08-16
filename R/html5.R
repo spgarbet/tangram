@@ -1,14 +1,15 @@
 #######
 # Given the compiled tree of data, render as a text html5
 
-html5 <- function(x, ...) 
+#' @export
+html5 <- function(x, ...)
 {
   UseMethod("html5", x)
 }
 
 
 # This is the default, do nothing -- probably should be warning()
-html5.tg_cell <- function(object) "<td></td>" 
+html5.tg_cell <- function(object) "<td></td>"
 
 html5.tg_subheader <- function(object)
 {
@@ -26,7 +27,7 @@ html5.tg_header <- function(object)
         sep="")
 }
 
-html5.tg_label <- function(object) 
+html5.tg_label <- function(object)
 {
   if(is.na(object$units))
       paste("<td class=\"label\">",
@@ -47,7 +48,7 @@ html5.tg_label <- function(object)
             sep="")
 }
 
-
+#' @export
 html5.tg_table <- function(object, css="Hmisc.css", caption="Figure")
 {
   header <- paste("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">",
@@ -59,13 +60,13 @@ html5.tg_table <- function(object, css="Hmisc.css", caption="Figure")
 		              "<div class=\"figbody\">",
 			            "<table class=\"summaryM\">",
                   sep="")
-  
+
   footer <- "</table></div></div></body></html>"
-  
+
   nrows <- rows(object)
   ncols <- cols(object)
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
-  
+
   # Render it all
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
@@ -81,7 +82,7 @@ html5.tg_table <- function(object, css="Hmisc.css", caption="Figure")
     "<tr class=\"subheaderrow\">",pasty[2],"</tr>",
     sep=""
   )
-  
+
   tableBdy <- paste(
     "<tbody>",
     paste("<tr>",pasty[3:length(pasty)], "</tr>",collapse=""),
@@ -100,7 +101,7 @@ html5.tg_estimate <- function(object)
           object$low,
           "</b></td>",
           sep="")
-  else      
+  else
     paste("<td class=\"estimate\"><b>",
           object$low,
           "</b>",
@@ -142,7 +143,7 @@ html5.tg_fraction <- function(object)
   x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
   den <- as.character(object$denominator)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
-  
+
   paste("<td class=\"percent\">",
         x,
         "<div class=\"align\">%</div> ",

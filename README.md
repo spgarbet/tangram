@@ -32,19 +32,19 @@ For example, one may wish for summary tables which match the New England Journal
 
 ## Table 9 Example
 
-_Statistical Tables and Plots using S and LaTeX_ by FE Harrell, has an example table Table 9, that will be used as the first example.
+_Statistical Tables and Plots using S and LaTeX_ by FE Harrell, has an example, *Table 9*, that will be used for demonstration.
 
 ```R
 library(Hmisc)
 
 getHdata(pbc)
 
-table <- summaryTG(drug ~ bili + albumin + stage + protime + sex + age + spiders, 
-                   data    = pbc)
+table <- summary_table(drug ~ bili + albumin + stage + protime + sex + age + spiders, data = pbc)
 
-summary(table)
+table
 html5(table)
 latex(table)
+index(table)
 ```
 
 ## Grammar Definition

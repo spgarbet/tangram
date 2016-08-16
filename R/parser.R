@@ -75,7 +75,7 @@ ASTVariable <- R6Class("ASTVariable",
     string   = function()
     {
       fmt <- ""
-      typ <- ""  
+      typ <- ""
       if(!is.na(self$format)) {fmt <- paste("[",self$format,"]",sep='')}
       if(!is.na(self$type))   {typ <- paste("::",self$type,sep='')}
       paste(self$value, fmt, typ, sep="")
@@ -115,10 +115,10 @@ ASTBranch <- R6Class("ASTBranch",
         self$left <- self$left$distribute()
       }
       if(inherits(self$right, "ASTNode"))
-      { 
+      {
         self$right <- self$right$distribute()
       }
-      
+
       return(self)
     }
   )
@@ -130,7 +130,7 @@ ASTBranch <- R6Class("ASTBranch",
 #' @importFrom R6 R6Class
 #' @keywords data
 #' @format \code{\link{R6Class}} object.
-#' 
+#'
 #' @field value  The name of the function.
 #' @field r_expr A string containing the raw r expression from inside the parenthesis
 #'
@@ -154,7 +154,7 @@ ASTFunction <- R6Class("ASTFunction",
       self$r_expr <- r_expr
     },
     string = function()
-    { 
+    {
       paste(self$value, "(", self$r_expr, ")", sep="")
     }
   )
@@ -196,7 +196,7 @@ ASTPlus <- R6Class("ASTPlus",
       return(c(self$left$terms(), self$right$terms()))
     },
     string = function()
-    { 
+    {
       paste(self$left$string(), "+", self$right$string(), sep="")
     }
   )
@@ -235,7 +235,7 @@ ASTMultiply <- R6Class("ASTMultiply",
     },
     distribute = function()
     {
-      super$distribute() 
+      super$distribute()
       if(inherits(self$left, "ASTPlus"))
       {
         return(ASTPlus$new(
@@ -253,7 +253,7 @@ ASTMultiply <- R6Class("ASTMultiply",
       return(self)
     },
     string = function()
-    { 
+    {
       paste(self$left$string(), "*", self$right$string(), sep="")
     }
   )
@@ -295,7 +295,7 @@ ASTTableFormula <- R6Class("ASTTableFormula",
       list(self$left$terms(), self$right$terms())
     },
     string = function()
-    { 
+    {
       paste(self$left$string(), " ~ ", self$right$string(), sep="")
     }
   )
@@ -439,7 +439,7 @@ Parser <- R6Class("Parser",
       match <- str_match(substr(self$input, self$pos, self$len), "\"?([^\\]\"]*)\"?")
       starting <- self$pos
       self$pos <- self$pos + nchar(match[1,1])
-      
+
       return(match[1,2])
     },
     r_expression = function()
