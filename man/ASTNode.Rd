@@ -23,7 +23,7 @@ as the class information carries the semantic meaning of a given node.
 \section{Methods}{
 
 \describe{
-  \item{\code{terms()}}{Returns the node as a term vector}
+  \item{\code{terms()}}{Returns the node itself}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
 }

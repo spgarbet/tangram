@@ -12,7 +12,10 @@ test_table <- summary_table(drug ~ bili + albumin + stage + protime + sex + age 
 test_table
 
 x <- html5(test_table, caption="Table 9: Descriptive Statistics by drug", css="nejm.css");
-write(x, "tg/test.html")
+write(x, "test-nejm.html")
+
+x <- html5(test_table, caption="Table 9: Descriptive Statistics by drug", css="hmisc.css");
+write(x, "test-hmisc.html")
 
 # TODO
 #index(table)

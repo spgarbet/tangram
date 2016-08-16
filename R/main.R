@@ -133,17 +133,21 @@ tg_create_table <- function(ast, data, transforms)
   tbl    <- tg_table(height, width)
 
   sapply(1:width, FUN=function(col_idx) {
-    column <- elements[[1]][col_idx]
+    column <- elements[[1]][[col_idx]]
+
+    cat("col",col_idx,"\n")
 
     sapply(1:height, FUN=function(row_idx) {
-      row <- elements[[2]][row_idx]
+      row <- elements[[2]][[row_idx]]
 
-      rowtype <- transforms[["Type"]](data[,row])
-      coltype <- transforms[["Type"]](data[,column])
+      cat("** row", row_idx,"\n")
+
+      rowtype <- transforms[["Type"]](data[,row$value])
+      coltype <- transforms[["Type"]](data[,column$value])
 
       transform <- transforms[[rowtype]][[coltype]]
 
-      tbl[[row_idx]][[col_idx]] <<- transform(data, row, column)
+      tbl[[row_idx]][[col_idx]] <<- transform(data, row$value, column$value)
     })
   })
 

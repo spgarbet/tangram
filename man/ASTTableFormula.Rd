@@ -22,7 +22,7 @@ The root ASTNode of a formula.
 
 \describe{
   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-  \item{\code{terms()}}{Returns the node as a term vector}
+  \item{\code{terms()}}{Returns the a list of the left hand terms and right hand terms}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
   \item{\code{string()}}{Returns the string representation of the formula}
 }

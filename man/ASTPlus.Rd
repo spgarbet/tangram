@@ -22,7 +22,7 @@ The addition of two terms, in an ASTNode.
 
 \describe{
   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-  \item{\code{terms()}}{Returns the node as a term vector}
+  \item{\code{terms()}}{Returns the left and right branches terms}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
 }

@@ -241,7 +241,12 @@ summarize_spearman <- function(data, row, column)
 }
 
 #'
-#' Style Bundle for Hmisc defaults
+#' Style Bundle for Hmisc defaults.
+#'
+#' List of lists, should contain a "Type" entry with a function to determine type of vector passed in.
+#' Next entries are keyed off returned types from function, and represent the type of a row.
+#' The returned list should contain the same list of types, and represents the type of a column. Thus it now returns
+#' a function to process the intersection of those two types.
 #'
 #' @keywords data
 #' @export

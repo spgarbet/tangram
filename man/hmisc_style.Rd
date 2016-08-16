@@ -3,13 +3,16 @@
 \docType{data}
 \name{hmisc_style}
 \alias{hmisc_style}
-\title{Style Bundle for Hmisc defaults}
+\title{Style Bundle for Hmisc defaults.}
 \format{An object of class \code{list} of length 4.}
 \usage{
 hmisc_style
 }
 \description{
-Style Bundle for Hmisc defaults
+List of lists, should contain a "Type" entry with a function to determine type of vector passed in.
+Next entries are keyed off returned types from function, and represent the type of a row.
+The returned list should contain the same list of types, and represents the type of a column. Thus it now returns
+a function to process the intersection of those two types.
 }
 \keyword{data}
 

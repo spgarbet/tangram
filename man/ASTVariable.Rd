@@ -26,7 +26,7 @@ in R. This class inherits from \code{\link{ASTNode}}.
 
 \describe{
   \item{\code{new(identifier, format=NA, type=NA)}}{This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.}
-  \item{\code{terms()}}{Returns the node as a term vector}
+  \item{\code{terms()}}{Returns the node}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
 }

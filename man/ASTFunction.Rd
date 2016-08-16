@@ -22,7 +22,7 @@ A specified function call as an ASTNode
 
 \describe{
   \item{\code{new(value, r_expr)}}{Create one with the given value and r_expr}
-  \item{\code{terms()}}{Returns the node as a term vector}
+  \item{\code{terms()}}{Returns the node}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
 }

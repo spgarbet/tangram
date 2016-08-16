@@ -8,6 +8,7 @@ library(R6)
 #' as the class information carries the semantic meaning of a given node.
 #'
 #' @docType class
+#' @importFrom stringr str_match
 #' @importFrom R6 R6Class
 #' @keywords data
 #'
@@ -22,14 +23,14 @@ library(R6)
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{terms()}}{Returns the node itself}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #' }
 ASTNode <- R6Class("ASTNode",
   public = list(
     value  = "character",
-    terms      = function() { return(self$value) },
+    terms      = function() { return(c(self))    },
     distribute = function() { return(self)       },
     string     = function() { return(self$value) }
   )
@@ -56,7 +57,7 @@ ASTNode <- R6Class("ASTNode",
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new(identifier, format=NA, type=NA)}}{This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.}
-#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #' }
@@ -71,7 +72,6 @@ ASTVariable <- R6Class("ASTVariable",
       self$format <- format
       self$type   <- type
     },
-    terms = function() {return(self$value)},
     string   = function()
     {
       fmt <- ""
@@ -100,7 +100,7 @@ ASTVariable <- R6Class("ASTVariable",
 #' @section Methods:
 #' \describe{
 #'   \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
-#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #' }
 ASTBranch <- R6Class("ASTBranch",
@@ -140,7 +140,7 @@ ASTBranch <- R6Class("ASTBranch",
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new(value, r_expr)}}{Create one with the given value and r_expr}
-#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #' }
@@ -176,7 +176,7 @@ ASTFunction <- R6Class("ASTFunction",
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{terms()}}{Returns the left and right branches terms}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #' }
@@ -275,7 +275,7 @@ ASTMultiply <- R6Class("ASTMultiply",
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-#'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{terms()}}{Returns the a list of the left hand terms and right hand terms}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
 #'   \item{\code{string()}}{Returns the string representation of the formula}
 #' }
@@ -336,6 +336,7 @@ Token <- R6Class("Token",
 #' @docType class
 #' @importFrom R6 R6Class
 #' @keywords data
+#' @export
 #' @format \code{\link{R6Class}} object.
 #'
 #' @field input Storage for input string of a formula

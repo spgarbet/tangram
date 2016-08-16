@@ -26,7 +26,7 @@ as once again the semantic information is contained in the class name.
 
 \describe{
   \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
-  \item{\code{terms()}}{Returns the node as a term vector}
+  \item{\code{terms()}}{Returns the node}
   \item{\code{string()}}{Returns the string formula of the node}
 }
 }
