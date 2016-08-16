@@ -1,5 +1,6 @@
 #######
 # Given the compiled tree of data, render as a text summary
+#' @include S3-Cell.R
 
 summary.tg_cell <- function(object) ""
 
@@ -58,10 +59,7 @@ summary.tg_table <- function(object)
 }
 
 #' @export
-show.tg_table <- function(object)
-{
-  summary.tg_table(tg_table)
-}
+print.tg_table <- function(object) {summary(object)}
 
 summary.tg_estimate <- function(object)
 {

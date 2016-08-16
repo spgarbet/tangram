@@ -43,7 +43,6 @@ cols.tg_cell <- function(object)
   }
 }
 
-
 #' @export
 tg_table <- function(rows, cols, embedded=FALSE)
 {
@@ -55,7 +54,6 @@ tg_table <- function(rows, cols, embedded=FALSE)
 
   tbl
 }
-
 
 tg_label <- function(text, units=NA)
 {

@@ -7,12 +7,14 @@
 # output:  outvec    vector of numeric rounded to N sigfig
 sigfig <- function(vec, n=3)
 {
-  formatC(signif(vec,digits=n), digits=n, format="g", flag="#")
+  #formatC(signif(vec,digits=n), digits=n, format="g", flag="#")
+  sprintf(paste("%1.", n, "g", sep=""), vec)
 }
 
 roundfig <- function(vec, n=3)
 {
-  formatC(round(vec,digits=n), digits=n, format="f", flag="#")
+  #formatC(round(vec,digits=n), digits=n, format="f", flag="#")
+  sprintf(paste("%1.", n, "f", sep=""), vec)
 }
 
 tg_flatten <- function(table)

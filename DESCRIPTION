@@ -21,6 +21,7 @@ Collate:
     'S3-Cell.R'
     'hmisc.R'
     'html5.R'
+    'index.R'
     'parser.R'
     'main.R'
     'summary.R'
