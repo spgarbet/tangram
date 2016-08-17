@@ -157,7 +157,7 @@ tg_create_table <- function(ast, data, transforms)
 #' @export
 summary_table <- function(formula, data, transforms=hmisc_style)
 {
-  tg_create_table(Parser$new()$run(formula),
-                 data,
-                 transforms)
+  tg_create_table(Parser$new()$run(formula)$distribute(),
+                  data,
+                  transforms)
 }
