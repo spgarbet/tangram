@@ -557,7 +557,7 @@ Parser <- R6Class("Parser",
 
       tf <- self$table_formula()
       self$expect("EOF")
-      return(tf$distribute())
+      return(tf)
     }
   )
 )
