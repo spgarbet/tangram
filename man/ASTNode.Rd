@@ -26,6 +26,7 @@ as the class information carries the semantic meaning of a given node.
   \item{\code{terms()}}{Returns the node itself}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
+  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
 \examples{

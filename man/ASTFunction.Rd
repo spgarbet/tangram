@@ -23,8 +23,10 @@ A specified function call as an ASTNode
 \describe{
   \item{\code{new(value, r_expr)}}{Create one with the given value and r_expr}
   \item{\code{terms()}}{Returns the node}
+  \item{\code{factors()}}{Returns self as a factor}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
+  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
 \examples{

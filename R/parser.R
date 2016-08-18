@@ -77,6 +77,7 @@ ASTVariable <- R6Class("ASTVariable",
       self$type   <- type
       self$data   <- NA
     },
+    factors    = function()     { return(c(self))    },
     string   = function()
     {
       fmt <- ""
@@ -159,6 +160,7 @@ ASTBranch <- R6Class("ASTBranch",
 #' \describe{
 #'   \item{\code{new(value, r_expr)}}{Create one with the given value and r_expr}
 #'   \item{\code{terms()}}{Returns the node}
+#'   \item{\code{factors()}}{Returns self as a factor}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
@@ -172,6 +174,7 @@ ASTFunction <- R6Class("ASTFunction",
       self$value  <- value
       self$r_expr <- r_expr
     },
+    factors    = function()     { return(c(self))    },
     string = function()
     {
       paste(self$value, "(", self$r_expr, ")", sep="")
@@ -256,6 +259,7 @@ ASTPlus <- R6Class("ASTPlus",
 #' \describe{
 #'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
 #'   \item{\code{terms()}}{Returns the node as a term vector}
+#'   \item{\code{factors()}}{Returns all terminal nodes under this as a list}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
 #'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
@@ -289,6 +293,10 @@ ASTMultiply <- R6Class("ASTMultiply",
         ))
       }
       return(self)
+    },
+    factors = function()
+    {
+      return(c(self$left$terms(), self$right$terms()))
     },
     string = function()
     {

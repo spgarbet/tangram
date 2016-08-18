@@ -28,6 +28,7 @@ as once again the semantic information is contained in the class name.
   \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
   \item{\code{terms()}}{Returns the node}
   \item{\code{string()}}{Returns the string formula of the node}
+  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
 \examples{
