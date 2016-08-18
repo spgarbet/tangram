@@ -56,12 +56,12 @@ test_that("functions with nested parenthesis and r-expression characters are par
   ast <- Parser$new()$run("x+func_.123(10^23/([[rough]]~2)+3) ~ y")
 
   expect_true(inherits(ast, "ASTTableFormula"))
-  
+
   expect_true(inherits(ast$left, "ASTPlus"))
-  
+
   expect_true(inherits(ast$left$left, "ASTVariable"))
   expect_equal(ast$left$left$value, "x")
-  
+
   expect_true(inherits(ast$left$right, "ASTFunction"))
   expect_equal(ast$left$right$value, "func_.123")
   expect_equal(ast$left$right$r_expr, "10^23/([[rough]]~2)+3")
@@ -109,7 +109,7 @@ test_that("type specifier information is extracted correctly.",
 test_that("multiplication distributes correctly",
 {
   expect_equal(
-    Parser$new()$run("(a+b)*(c+d)~e*f*(g+h)*i")$string(),
+    Parser$new()$run("(a+b)*(c+d)~e*f*(g+h)*i")$distribute()$string(),
     "a*c+a*d+b*c+b*d ~ e*f*g*i+e*f*h*i"
   )
 })
