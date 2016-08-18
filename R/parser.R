@@ -26,13 +26,15 @@ library(R6)
 #'   \item{\code{terms()}}{Returns the node itself}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTNode <- R6Class("ASTNode",
   public = list(
     value  = "character",
-    terms      = function() { return(c(self))    },
-    distribute = function() { return(self)       },
-    string     = function() { return(self$value) }
+    terms      = function()     { return(c(self))    },
+    distribute = function()     { return(self)       },
+    string     = function()     { return(self$value) },
+    reduce     = function(data) { return(self)       }
   )
 )
 
@@ -60,17 +62,20 @@ ASTNode <- R6Class("ASTNode",
 #'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTVariable <- R6Class("ASTVariable",
   inherit = ASTNode,
   public  = list(
     format = "character",
     type   = "character",
+    data   = "data.frame",
     initialize = function(identifier, format=NA, type=NA)
     {
       self$value  <- identifier
       self$format <- format
       self$type   <- type
+      self$data   <- NA
     },
     string   = function()
     {
@@ -79,6 +84,13 @@ ASTVariable <- R6Class("ASTVariable",
       if(!is.na(self$format)) {fmt <- paste("[",self$format,"]",sep='')}
       if(!is.na(self$type))   {typ <- paste("::",self$type,sep='')}
       paste(self$value, fmt, typ, sep="")
+    },
+    reduce   = function(d)
+    {
+      df <- data.frame(data[,self$value])
+      names(df) <- self$value
+      self$data <- df
+      self
     }
   )
 )
@@ -102,6 +114,7 @@ ASTVariable <- R6Class("ASTVariable",
 #'   \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
 #'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTBranch <- R6Class("ASTBranch",
   inherit = ASTNode,
@@ -112,7 +125,7 @@ ASTBranch <- R6Class("ASTBranch",
     {
       if(inherits(self$left,  "ASTNode"))
       {
-        self$left <- self$left$distribute()
+        self$left  <- self$left$distribute()
       }
       if(inherits(self$right, "ASTNode"))
       {
@@ -120,6 +133,11 @@ ASTBranch <- R6Class("ASTBranch",
       }
 
       return(self)
+    },
+    reduce = function(df)
+    {
+      self$left  <- self$left$reduce(df)
+      self$right <- self$right$reduce(df)
     }
   )
 )
@@ -143,6 +161,7 @@ ASTBranch <- R6Class("ASTBranch",
 #'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTFunction <- R6Class("ASTFunction",
   inherit = ASTNode,
@@ -156,6 +175,23 @@ ASTFunction <- R6Class("ASTFunction",
     string = function()
     {
       paste(self$value, "(", self$r_expr, ")", sep="")
+    },
+    reduce = function(data)
+    {
+      expr <- paste(self$value,"(",self$r_expr,")", sep='')
+      x <- eval(parse(text=paste("with(data,",expr,")",sep='')))
+      if(inherits(x, "ASTNode")) {return(x)}
+      
+      name <- expr
+      try({
+        l2 <- label(x)
+        if(nchar(l2)>0) {name<-l2}
+      })
+
+      var <- ASTVariable$new(name)
+      var$data <- x
+
+      var
     }
   )
 )
@@ -179,6 +215,7 @@ ASTFunction <- R6Class("ASTFunction",
 #'   \item{\code{terms()}}{Returns the left and right branches terms}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTPlus <- R6Class("ASTPlus",
   inherit = ASTBranch,
@@ -221,6 +258,7 @@ ASTPlus <- R6Class("ASTPlus",
 #'   \item{\code{terms()}}{Returns the node as a term vector}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTMultiply <- R6Class("ASTMultiply",
   inherit = ASTBranch,
@@ -278,6 +316,7 @@ ASTMultiply <- R6Class("ASTMultiply",
 #'   \item{\code{terms()}}{Returns the a list of the left hand terms and right hand terms}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
 #'   \item{\code{string()}}{Returns the string representation of the formula}
+#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the entire AST.}
 #' }
 ASTTableFormula <- R6Class("ASTTableFormula",
   inherit = ASTBranch,
