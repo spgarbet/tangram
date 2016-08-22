@@ -88,7 +88,7 @@ ASTVariable <- R6Class("ASTVariable",
     },
     reduce   = function(d)
     {
-      df <- data.frame(data[,self$value])
+      df <- data.frame(d[,self$value])
       names(df) <- self$value
       self$data <- df
       self
@@ -184,7 +184,7 @@ ASTFunction <- R6Class("ASTFunction",
       expr <- paste(self$value,"(",self$r_expr,")", sep='')
       x <- eval(parse(text=paste("with(data,",expr,")",sep='')))
       if(inherits(x, "ASTNode")) {return(x)}
-      
+
       name <- expr
       try({
         l2 <- label(x)
