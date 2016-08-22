@@ -139,6 +139,8 @@ ASTBranch <- R6Class("ASTBranch",
     {
       self$left  <- self$left$reduce(df)
       self$right <- self$right$reduce(df)
+
+      self
     }
   )
 )
