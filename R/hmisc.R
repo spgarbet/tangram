@@ -60,32 +60,42 @@ derive_label <- function(node)
 
 summarize_kruskal_horz <- function(row, column)
 {
-  categories <- levels(data[,column])
-  if (is.null(categories)) {unique(data[,row])}
+  datar <- row$data[,1]
+  datac <- column$data[,1]
+
+  if(!inherits(datac, "factor"))
+  {
+    lbl_c <- label(datac)
+    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
+    label(datac) <- lbl_c
+  }
+
+  categories <- levels(datac)
+  if (is.null(categories)) {unique(datar)}
 
   # 1 X (n + no. categories + test statistic)
   tbl <- tg_table(1, length(categories) + 2, TRUE)
 
   # Label for the table cell
-  row_lbl <- derive_label(data, row)
+  row_lbl <- derive_label(row)
   col_lbl <- tg_table(2, 2+length(categories))
   col_lbl[[1]][[1]] <- tg_header("N")
   col_lbl[[1]][[length(categories)+2]] <- tg_header("Test Statistic")
 
   # N value
-  N <- sum(!is.na(data[,row]))
+  N <- sum(!is.na(datar))
   tbl[[1]][[1]] <- tg_label(as.character(N))
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
-    x <- data[data[,column] == categories[category], row]
+    x <- datar[datac == categories[category]]
     tbl[[1]][[category+1]] <<- tg_quantile(quantile(x, na.rm=TRUE))
     col_lbl[[1]][[category+1]] <<- tg_header(categories[category])
     col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",sum(!is.na(x)),sep=''))
   })
 
   # Kruskal-Wallis via F-distribution
-  test <- spearman2(data[,column], data[,row], na.action=na.retain)
+  test <- spearman2(datac, datar, na.action=na.retain)
 
   tbl[[1]][[length(categories)+2]] <- tg_fstat(test['F'], test['df1'], test['df2'], test['P'])
 
@@ -97,29 +107,36 @@ summarize_kruskal_horz <- function(row, column)
 
 summarize_kruskal_vert <- function(row, column)
 {
-  categories <- levels(data[,row])
-  if (is.null(categories)) {unique(data[,row])}
+  if(!inherits(datar, "factor"))
+  {
+    lbl_r <- label(datar)
+    datar <- factor(datar, levels=unique(datar[!is.na(datar)]))
+    label(datar) <- lbl_r
+  }
+
+  categories <- levels(datar)
+  if (is.null(categories)) {unique(datar)}
 
   # Label for the table cell
   col_lbl <- tg_table(1, 3)
   row_lbl <- tg_table(length(categories), 1)
 
   col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[2]] <- derive_label(data, column)
+  col_lbl[[1]][[2]] <- derive_label(column)
   col_lbl[[1]][[3]] <- tg_header("Test Statistic")
 
   tbl <- tg_table(length(categories), 3, TRUE) # no. categories X 3
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
-    x <- data[data[,row] == categories[category], column]
+    x <- datac[datar == categories[category]]
     tbl[[category]][[1]] <<- tg_label(as.character(length(x)))
     tbl[[category]][[2]] <<- tg_quantile(quantile(x, na.rm=TRUE))
     row_lbl[[category]][[1]] <<- tg_label(category)
   })
 
   # Kruskal-Wallis via F-distribution
-  test <- spearman2(data[,row], data[,column], na.action=na.retain)
+  test <- spearman2(datar, datac, na.action=na.retain)
 
   tbl[[1]][[3]] <- tg_fstat(test['F'], test['df1'], test['df2'], test['P'])
 
