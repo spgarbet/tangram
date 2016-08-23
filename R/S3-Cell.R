@@ -75,9 +75,9 @@ tg_quantile <- function(quantiles)
   structure(tg_cell(list(q25=quantiles[2], q50=quantiles[3], q75=quantiles[4])), class=c("tg_quantile", "tg_cell"))
 }
 
-tg_estimate <- function(value, low=NA, high=NA, conf.level=0.95)
+tg_estimate <- function(value, low=NA, high=NA, conf.level=0.95, format=NA)
 {
-  structure(tg_cell(list(value=value, low=low, high=high, width=width)), class=c("tg_estimate", "tg_cell"))
+  structure(tg_cell(list(value=value, low=low, high=high, width=width, format=format)), class=c("tg_estimate", "tg_cell"))
 }
 
 tg_fstat <- function(f, n1, n2, p)

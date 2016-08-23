@@ -26,9 +26,7 @@ summary.tg_table <- function(object)
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
   sapply(1:nrows, FUN=function(row) {
-    cat("ROW ", row, " * ")
     sapply(1:ncols, FUN=function(col) {
-      cat("col ",col,"\n")
       text[row,col] <<- summary(object[[row]][[col]])
     })
   })
@@ -65,10 +63,14 @@ print.tg_table <- function(object) {summary(object)}
 
 summary.tg_estimate <- function(object)
 {
+  fmt <- if(is.na(object$format)) "%0.03g" else object$format
+
   if(is.na(object$low))
-    as.character(object$value)
+    sprintf(fmt, object$value)
   else
-    paste(object$value, " (",object$low,",",object$high,")")
+    paste(sprintf(fmt, object$value),
+          " (",sprintf(fmt, object$low),",",
+          sprintf(fmt,object$high),")")
 }
 
 summary.tg_fstat <- function(object)
@@ -89,4 +91,10 @@ summary.tg_fraction <- function(object)
 summary.tg_chi2 <- function(object)
 {
   paste("    X^2_",object$df,"=",roundfig(object$chi2,2),", P=",roundfig(object$p,3),sep="")
+}
+
+summary.tg_studentt <- function(object)
+{
+  list(t=t, df=df, p=p
+  paste("T_",object$df,"=",sprintf("%0.03g", object$t), ", P=",roundfig(object$p, 3), sep="")
 }
