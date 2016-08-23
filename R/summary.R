@@ -26,7 +26,9 @@ summary.tg_table <- function(object)
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
   sapply(1:nrows, FUN=function(row) {
+    cat("ROW ", row, " * ")
     sapply(1:ncols, FUN=function(col) {
+      cat("col ",col,"\n")
       text[row,col] <<- summary(object[[row]][[col]])
     })
   })

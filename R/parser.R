@@ -1,6 +1,3 @@
-library(stringr)
-library(R6)
-
 #' A Node in an Abstract Syntax Tree (AST)
 #'
 #' This is the root R6 class of any term of the AST which is created
@@ -46,6 +43,8 @@ ASTNode <- R6Class("ASTNode",
 #'
 #' @docType class
 #' @importFrom R6 R6Class
+#' @importFrom dplyr select
+#' @importFrom dplyr matches
 #' @keywords data
 #' @format \code{\link{R6Class}} object.
 #'
@@ -88,9 +87,7 @@ ASTVariable <- R6Class("ASTVariable",
     },
     reduce   = function(d)
     {
-      df <- data.frame(d[,self$value])
-      names(df) <- self$value
-      self$data <- df
+      self$data <- d %>% select(one_of(c(self$value)))
       self
     }
   )
@@ -275,6 +272,7 @@ ASTMultiply <- R6Class("ASTMultiply",
     {
       self$left   <- left
       self$right  <- right
+      self$type   <- "Factors"
       self$value  <- ""
     },
     distribute = function()

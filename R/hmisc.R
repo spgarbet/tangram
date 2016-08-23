@@ -1,11 +1,6 @@
 #' @import stringr
 #' @include S3-Cell.R
 
-summarize_ordinal_lr <- function(data, row, column)
-{
-  tg_table(1, 1, TRUE)
-}
-
 is.categorical <- function(x, threshold=NA)
 {
   is.factor(x) ||
@@ -35,17 +30,18 @@ is.binomial <- function(x, threshold=NA)
 #'
 hmisc_data_type <- function(x, category_threshold=NA)
 {
+  x <- x[,1]
   if(is.binomial(x,category_threshold))          "Binomial"
   else if(is.categorical(x,category_threshold))  "Categorical"
   else if(is.numeric(x))                         "Numerical"
   else                   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
 }
 
-derive_label <- function(data, column)
+derive_label <- function(node)
 {
-  l <- column
+  l <- node$string()
   try({
-        l2 <- label(data[column])
+        l2 <- label(node$data)
         if(nchar(l2)>0) {l<-l2}
   })
 
@@ -208,22 +204,27 @@ summarize_chisq <- function(data, row, column)
   tbl
 }
 
-summarize_spearman <- function(data, row, column)
+summarize_spearman <- function(row, column)
 {
   tbl <- tg_table(1, 3, TRUE)
 
+  datar <- row$data[,1]
+  datac <- column$data[,1]
+
   # Label for the table cell
-  col_lbl <- tg_table(1, 3)
+  col_lbl <- tg_table(2, 3)
   col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[2]] <- derive_label(data, column)
+  col_lbl[[1]][[2]] <- derive_label(column)
   col_lbl[[1]][[3]] <- tg_header("Test Statistic")
+  col_lbl[[2]][[1]] <- tg_subheader("")
+  col_lbl[[2]][[2]] <- tg_subheader("")
+  col_lbl[[2]][[3]] <- tg_subheader("")
 
-  row_lbl <- derive_label(data, row)
+  row_lbl <- derive_label(row)
 
-  # FIXME? MAYBE, this should use pvrank if it can
-  test <- cor.test(data[,row], data[,column], alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
+  test <- cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
 
-  n <- length(data[!is.na(data[,row]) & !is.na(data[,column])  ,row])
+  n <- sum(!is.na(datar) & !is.na(datac))
 
   tbl[[1]][[1]] <- tg_label(as.character(n))
 
@@ -238,6 +239,11 @@ summarize_spearman <- function(data, row, column)
   attr(tbl, "row_label") <- row_lbl
   attr(tbl, "col_label") <- col_lbl
   tbl
+}
+
+apply_factors <- function(row, column)
+{
+  stop("Not Implemented")
 }
 
 #'
@@ -256,16 +262,25 @@ hmisc_style <- list(
   Numerical   = list(
                   Numerical   = summarize_spearman,
                   Categorical = summarize_kruskal_horz,
-                  Binomial    = summarize_kruskal_horz
+                  Binomial    = summarize_kruskal_horz,
+                  Factors     = apply_factors
             ),
   Categorical = list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq,
-                  Binomial    = summarize_chisq
+                  Binomial    = summarize_chisq,
+                  Factors     = apply_factors
             ),
   Binomial    = list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq,
-                  Binomial    = summarize_chisq
+                  Binomial    = summarize_chisq,
+                  Factors     = apply_factors
+            ),
+  Factors     = list(
+                  Numerical   = apply_factors,
+                  Categorical = apply_factors,
+                  Binomial    = apply_factors,
+                  Factors     = apply_factors
             )
 )
