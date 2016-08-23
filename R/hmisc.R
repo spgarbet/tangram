@@ -144,7 +144,7 @@ summarize_chisq <- function(row, column)
   if(!inherits(datac, "factor"))
   {
     lbl_c <- label(datac)
-    datac <- factor(datac, levels=unique(datar[!is.na(datac)]))
+    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
     label(datac) <- lbl_c
   }
 
@@ -194,7 +194,7 @@ summarize_chisq <- function(row, column)
     col_lbl[[2]][[col_category+1]] <<- tg_subheader(paste("N=",sum(!is.na(c_x)),sep=''))
   })
 
-  y <- table(data[,row],data[,column], useNA="no")
+  y <- table(datar,datac, useNA="no")
   y <- y[,which(!apply(y,2,FUN = function(x){all(x == 0)}))]
   y <- y[which(!apply(y,1,FUN = function(x){all(x == 0)})),]
 
