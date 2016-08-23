@@ -1,8 +1,9 @@
 data(pbc)
 
-#f <- formula(drug ~ bili)
-f <- formula(albumin ~ age)
-#f <- formula(drug ~ stage::Categorical)
+f <- formula(drug ~ bili)
+
+#f <- formula(albumin ~ age)
+f <- formula(drug ~ stage::Categorical)
 #f <- formula(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)
 
 #lbl_stage <- label(pbc["stage"])

@@ -75,7 +75,7 @@ summary.tg_estimate <- function(object)
 
 summary.tg_fstat <- function(object)
 {
-  paste("F_{",object$n1,",",object$n2,"}=",roundfig(object$f,2),", P=",roundfig(object$p,3),sep="")
+  paste("F_{",object$n1,",",object$n2,"}=",roundfig(object$f,2),", P=",sprintf("%0.03g",object$p),sep="")
 }
 
 summary.tg_fraction <- function(object)
@@ -90,11 +90,10 @@ summary.tg_fraction <- function(object)
 
 summary.tg_chi2 <- function(object)
 {
-  paste("    X^2_",object$df,"=",roundfig(object$chi2,2),", P=",roundfig(object$p,3),sep="")
+  paste("    X^2_",object$df,"=",roundfig(object$chi2,2),", P=",sprintf("%0.03g",object$p),sep="")
 }
 
 summary.tg_studentt <- function(object)
 {
-  list(t=t, df=df, p=p
-  paste("T_",object$df,"=",sprintf("%0.03g", object$t), ", P=",roundfig(object$p, 3), sep="")
+  paste("T_",object$df,"=",sprintf("%0.03g", object$t), ", P=",sprintf("%0.03g",object$p), sep="")
 }

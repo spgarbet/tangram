@@ -58,7 +58,7 @@ derive_label <- function(node)
   }
 }
 
-summarize_kruskal_horz <- function(data, row, column)
+summarize_kruskal_horz <- function(row, column)
 {
   categories <- levels(data[,column])
   if (is.null(categories)) {unique(data[,row])}
@@ -95,7 +95,7 @@ summarize_kruskal_horz <- function(data, row, column)
   tbl
 }
 
-summarize_kruskal_vert <- function(data, row, column)
+summarize_kruskal_vert <- function(row, column)
 {
   categories <- levels(data[,row])
   if (is.null(categories)) {unique(data[,row])}
@@ -129,20 +129,37 @@ summarize_kruskal_vert <- function(data, row, column)
   tbl
 }
 
-summarize_chisq <- function(data, row, column)
+summarize_chisq <- function(row, column)
 {
-  row_categories <- levels(data[,row])
-  if (is.null(row_categories)) {unique(data[,row])}
+  datar <- row$data[,1]
+  datac <- column$data[,1]
 
-  col_categories <- levels(data[,column])
-  if (is.null(col_categories)) {unique(data[,column])}
+  if(!inherits(datar, "factor"))
+  {
+    lbl_r <- label(datar)
+    datar <- factor(datar, levels=unique(datar[!is.na(datar)]))
+    label(datar) <- lbl_r
+  }
+
+  if(!inherits(datac, "factor"))
+  {
+    lbl_c <- label(datac)
+    datac <- factor(datac, levels=unique(datar[!is.na(datac)]))
+    label(datac) <- lbl_c
+  }
+
+  row_categories <- levels(datar)
+  if (is.null(row_categories)) {unique(datar)}
+
+  col_categories <- levels(datac)
+  if (is.null(col_categories)) {unique(datac)}
 
   n <- length(row_categories)
   m <- length(col_categories)
 
   # Label for the table cell
   row_lbl <- tg_table(length(row_categories), 1)
-  row_lbl[[1]][[1]] <- derive_label(data, row)
+  row_lbl[[1]][[1]] <- derive_label(row)
   row_lbl[[1]][[1]]$label <- paste(row_lbl[[1]][[1]]$label,":", row_categories[1])
   sapply(2:length(row_categories), FUN=function(level){
     row_lbl[[level]][[1]] <<- tg_label(paste("  ", row_categories[level]))
@@ -154,17 +171,18 @@ summarize_chisq <- function(data, row, column)
   # N X (M+2)
   tbl <- tg_table(n, m+2, TRUE)
 
-  N <- length(data[!is.na(data[,row]) & !is.na(data[,column]),row])
+  N <- sum(!is.na(datar) & !is.na(datac))
+
   tbl[[1]][[1]] <- tg_label(as.character(N))
 
   # The fractions by category intersection
   sapply(1:length(col_categories), FUN=function(col_category) {
-    c_x <- data[data[,column] == col_categories[col_category], column]
+    c_x <- datac[datac == col_categories[col_category]]
     c_x <- c_x[!is.na(c_x)]
     denominator <- length(c_x)
     sapply(1:length(row_categories), FUN=function(row_category) {
-      c_xy <- data[data[,column] == col_categories[col_category] &
-                   data[,row]    == row_categories[row_category], column]
+      c_xy <- datac[datac == col_categories[col_category] &
+                    datar == row_categories[row_category]]
       c_xy <- c_xy[!is.na(c_xy)]
       numerator <- length(c_xy)
       if(numerator > 0)
@@ -194,7 +212,7 @@ summarize_chisq <- function(data, row, column)
 
     # Redo labeling as well
     row_lbl[[2]]      <- NULL
-    row_lbl[[1]][[1]] <- derive_label(data, row)
+    row_lbl[[1]][[1]] <- derive_label(row)
     row_lbl[[1]][[1]] <- tg_label(paste(row_lbl[[1]][[1]]$label,":", row_categories[2]))
   }
 
