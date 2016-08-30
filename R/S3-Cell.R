@@ -55,47 +55,47 @@ tg_table <- function(rows, cols, embedded=FALSE)
   tbl
 }
 
-tg_label <- function(text, units=NA)
+tg_label <- function(text, units=NA, src=NA)
 {
-  structure(tg_cell(list(label=as.character(text), units=as.character(units))), class = c("tg_label", "tg_cell"))
+  structure(tg_cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("tg_label", "tg_cell"))
 }
 
-tg_header <- function(text, units=NA)
+tg_header <- function(text, units=NA, src=NA)
 {
-  structure(tg_cell(list(label=as.character(text), units=as.character(units))), class = c("tg_header", "tg_label", "tg_cell"))
+  structure(tg_cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("tg_header", "tg_label", "tg_cell"))
 }
 
-tg_subheader <- function(text, units=NA)
+tg_subheader <- function(text, units=NA, src=NA)
 {
-  structure(tg_cell(list(label=as.character(text), units=as.character(units))), class = c("tg_subheader", "tg_header", "tg_label", "tg_cell"))
+  structure(tg_cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("tg_subheader", "tg_header", "tg_label", "tg_cell"))
 }
 
-tg_quantile <- function(quantiles)
+tg_quantile <- function(quantiles, src=NA)
 {
-  structure(tg_cell(list(q25=quantiles[2], q50=quantiles[3], q75=quantiles[4])), class=c("tg_quantile", "tg_cell"))
+  structure(tg_cell(list(q25=quantiles[2], q50=quantiles[3], q75=quantiles[4], src=src)), class=c("tg_quantile", "tg_cell"))
 }
 
-tg_estimate <- function(value, low=NA, high=NA, conf.level=0.95)
+tg_estimate <- function(value, low=NA, high=NA, conf.level=0.95, src=NA)
 {
-  structure(tg_cell(list(value=value, low=low, high=high, width=width)), class=c("tg_estimate", "tg_cell"))
+  structure(tg_cell(list(value=value, low=low, high=high, width=width, src=src)), class=c("tg_estimate", "tg_cell"))
 }
 
-tg_fstat <- function(f, n1, n2, p)
+tg_fstat <- function(f, n1, n2, p, src=NA)
 {
-  structure(tg_cell(list(f=f, n1=n1, n2=n2, p=p)), class=c("tg_fstat","tg_cell"))
+  structure(tg_cell(list(f=f, n1=n1, n2=n2, p=p, src=src)), class=c("tg_fstat","tg_cell"))
 }
 
-tg_fraction <- function(numerator, denominator)
+tg_fraction <- function(numerator, denominator, src=NA)
 {
-  structure(tg_cell(list(numerator=numerator, denominator=denominator)), class=c("tg_fraction","tg_cell"))
+  structure(tg_cell(list(numerator=numerator, denominator=denominator, src=src)), class=c("tg_fraction","tg_cell"))
 }
 
-tg_chi2 <- function(chi2, df, p)
+tg_chi2 <- function(chi2, df, p, src=NA)
 {
-  structure(tg_cell(list(chi2=chi2, df=df, p=p)), class=c("tg_chi2", "tg_cell"))
+  structure(tg_cell(list(chi2=chi2, df=df, p=p, src=src)), class=c("tg_chi2", "tg_cell"))
 }
 
-tg_studentt <- function(t, df, p)
+tg_studentt <- function(t, df, p, src=NA)
 {
-  structure(tg_cell(list(t=t, df=df, p=p)), class=c("tg_studentt", "tg_cell"))
+  structure(tg_cell(list(t=t, df=df, p=p, src=src)), class=c("tg_studentt", "tg_cell"))
 }
