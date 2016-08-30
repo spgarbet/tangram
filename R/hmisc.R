@@ -71,7 +71,7 @@ summarize_kruskal_horz <- function(row, column)
   }
 
   categories <- levels(datac)
-  if (is.null(categories)) {unique(datar)}
+  if (is.null(categories)) {categories <- unique(datar)}
 
   # 1 X (n + no. categories + test statistic)
   tbl <- tg_table(1, length(categories) + 2, TRUE)
@@ -90,10 +90,10 @@ summarize_kruskal_horz <- function(row, column)
   sapply(1:length(categories), FUN=function(category) {
     x <- datar[datac == categories[category]]
     tbl[[1]][[category+1]] <<- tg_quantile(quantile(x, na.rm=TRUE),
-        src=paste(row, ":", column,"[",category,"]",sep=''))
+        src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
     col_lbl[[1]][[category+1]] <<- tg_header(categories[category])
     col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",sum(!is.na(x)),sep=''),
-        src=paste(row, ":", column,":N",sep=''))
+        src=paste(row$value, ":", column$value,":N",sep=''))
   })
 
   # Kruskal-Wallis via F-distribution
@@ -101,7 +101,7 @@ summarize_kruskal_horz <- function(row, column)
 
   tbl[[1]][[length(categories)+2]] <-
     tg_fstat(test['F'], test['df1'], test['df2'], test['P'],
-      src=paste(row, ":", column,":KruskalWallis",sep=''))
+      src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_label") <- row_lbl
   attr(tbl, "col_label") <- col_lbl
@@ -135,9 +135,9 @@ summarize_kruskal_vert <- function(row, column)
   sapply(1:length(categories), FUN=function(category) {
     x <- datac[datar == categories[category]]
     tbl[[category]][[1]] <<- tg_label(as.character(length(x)),
-      src=paste(row, ":", column,":N",sep=''))
+      src=paste(row$value, ":", column$value,":N",sep=''))
     tbl[[category]][[2]] <<- tg_quantile(quantile(x, na.rm=TRUE),
-      src=paste(row, ":", column,"[",category,"]",sep=''))
+      src=paste(row$value, ":", column$value,"[",category,"]",sep=''))
     row_lbl[[category]][[1]] <<- tg_label(category)
   })
 
@@ -145,7 +145,7 @@ summarize_kruskal_vert <- function(row, column)
   test <- spearman2(datar, datac, na.action=na.retain)
 
   tbl[[1]][[3]] <- tg_fstat(test['F'], test['df1'], test['df2'], test['P'],
-      src=paste(row, ":", column,":KruskalWallis",sep=''))
+      src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_label") <- row_lbl
   attr(tbl, "col_label") <- col_lbl
@@ -217,7 +217,7 @@ summarize_chisq <- function(row, column)
     })
     col_lbl[[1]][[col_category+1]] <<- tg_header(col_categories[col_category])
     col_lbl[[2]][[col_category+1]] <<- tg_subheader(paste("N=",sum(!is.na(c_x)),sep=''),
-      src=paste(row, ":", column,":N",sep=''))
+      src=paste(row$value, ":", column$value,":N",sep=''))
   })
 
   y <- table(datar,datac, useNA="no")
@@ -227,7 +227,7 @@ summarize_chisq <- function(row, column)
   test <- chisq.test(y, correct=FALSE)
 
   tbl[[1]][[m+2]] <- tg_chi2(test$statistic, test$parameter, test$p.value,
-    src=paste(row, ":", column,":Chi^2",sep=''))
+    src=paste(row$value, ":", column$value,":Chi^2",sep=''))
 
   # Throw out first if length is 2
   if(length(tbl) == 2)
@@ -274,14 +274,14 @@ summarize_spearman <- function(row, column)
   tbl[[1]][[1]] <- tg_label(as.character(n))
 
   tbl[[1]][[2]] <- tg_estimate(test$estimate, format="%0.03g",
-    src=paste(row, ":", column,sep=''))
+    src=paste(row$value, ":", column$value,sep=''))
 
   # Reversed engineered from cor.test for spearman
   r <- test$estimate
   statistic <- r/sqrt((1 - r^2)/(n - 2))
 
   tbl[[1]][[3]] <- tg_studentt(statistic, n-2, test$p.value,
-    src=paste(row, ":", column,":ttest",sep=''))
+    src=paste(row$value, ":", column$value,":ttest",sep=''))
 
   attr(tbl, "row_label") <- row_lbl
   attr(tbl, "col_label") <- col_lbl
