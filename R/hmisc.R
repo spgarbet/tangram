@@ -1,11 +1,6 @@
 #' @import stringr
 #' @include S3-Cell.R
 
-summarize_ordinal_lr <- function(data, row, column)
-{
-  tg_table(1, 1, TRUE)
-}
-
 is.categorical <- function(x, threshold=NA)
 {
   is.factor(x) ||
@@ -35,17 +30,18 @@ is.binomial <- function(x, threshold=NA)
 #'
 hmisc_data_type <- function(x, category_threshold=NA)
 {
+  x <- x[,1]
   if(is.binomial(x,category_threshold))          "Binomial"
   else if(is.categorical(x,category_threshold))  "Categorical"
   else if(is.numeric(x))                         "Numerical"
   else                   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
 }
 
-derive_label <- function(data, column)
+derive_label <- function(node)
 {
-  l <- column
+  l <- node$string()
   try({
-        l2 <- label(data[column])
+        l2 <- label(node$data)
         if(nchar(l2)>0) {l<-l2}
   })
 
@@ -62,34 +58,44 @@ derive_label <- function(data, column)
   }
 }
 
-summarize_kruskal_horz <- function(data, row, column)
+summarize_kruskal_horz <- function(row, column)
 {
-  categories <- levels(data[,column])
-  if (is.null(categories)) {unique(data[,row])}
+  datar <- row$data[,1]
+  datac <- column$data[,1]
+
+  if(!inherits(datac, "factor"))
+  {
+    lbl_c <- label(datac)
+    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
+    label(datac) <- lbl_c
+  }
+
+  categories <- levels(datac)
+  if (is.null(categories)) {unique(datar)}
 
   # 1 X (n + no. categories + test statistic)
   tbl <- tg_table(1, length(categories) + 2, TRUE)
 
   # Label for the table cell
-  row_lbl <- derive_label(data, row)
+  row_lbl <- derive_label(row)
   col_lbl <- tg_table(2, 2+length(categories))
   col_lbl[[1]][[1]] <- tg_header("N")
   col_lbl[[1]][[length(categories)+2]] <- tg_header("Test Statistic")
 
   # N value
-  N <- sum(!is.na(data[,row]))
+  N <- sum(!is.na(datar))
   tbl[[1]][[1]] <- tg_label(as.character(N))
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
-    x <- data[data[,column] == categories[category], row]
+    x <- datar[datac == categories[category]]
     tbl[[1]][[category+1]] <<- tg_quantile(quantile(x, na.rm=TRUE))
     col_lbl[[1]][[category+1]] <<- tg_header(categories[category])
     col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",sum(!is.na(x)),sep=''))
   })
 
   # Kruskal-Wallis via F-distribution
-  test <- spearman2(data[,column], data[,row], na.action=na.retain)
+  test <- spearman2(datac, datar, na.action=na.retain)
 
   tbl[[1]][[length(categories)+2]] <- tg_fstat(test['F'], test['df1'], test['df2'], test['P'])
 
@@ -99,31 +105,38 @@ summarize_kruskal_horz <- function(data, row, column)
   tbl
 }
 
-summarize_kruskal_vert <- function(data, row, column)
+summarize_kruskal_vert <- function(row, column)
 {
-  categories <- levels(data[,row])
-  if (is.null(categories)) {unique(data[,row])}
+  if(!inherits(datar, "factor"))
+  {
+    lbl_r <- label(datar)
+    datar <- factor(datar, levels=unique(datar[!is.na(datar)]))
+    label(datar) <- lbl_r
+  }
+
+  categories <- levels(datar)
+  if (is.null(categories)) {unique(datar)}
 
   # Label for the table cell
   col_lbl <- tg_table(1, 3)
   row_lbl <- tg_table(length(categories), 1)
 
   col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[2]] <- derive_label(data, column)
+  col_lbl[[1]][[2]] <- derive_label(column)
   col_lbl[[1]][[3]] <- tg_header("Test Statistic")
 
   tbl <- tg_table(length(categories), 3, TRUE) # no. categories X 3
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
-    x <- data[data[,row] == categories[category], column]
+    x <- datac[datar == categories[category]]
     tbl[[category]][[1]] <<- tg_label(as.character(length(x)))
     tbl[[category]][[2]] <<- tg_quantile(quantile(x, na.rm=TRUE))
     row_lbl[[category]][[1]] <<- tg_label(category)
   })
 
   # Kruskal-Wallis via F-distribution
-  test <- spearman2(data[,row], data[,column], na.action=na.retain)
+  test <- spearman2(datar, datac, na.action=na.retain)
 
   tbl[[1]][[3]] <- tg_fstat(test['F'], test['df1'], test['df2'], test['P'])
 
@@ -133,20 +146,37 @@ summarize_kruskal_vert <- function(data, row, column)
   tbl
 }
 
-summarize_chisq <- function(data, row, column)
+summarize_chisq <- function(row, column)
 {
-  row_categories <- levels(data[,row])
-  if (is.null(row_categories)) {unique(data[,row])}
+  datar <- row$data[,1]
+  datac <- column$data[,1]
 
-  col_categories <- levels(data[,column])
-  if (is.null(col_categories)) {unique(data[,column])}
+  if(!inherits(datar, "factor"))
+  {
+    lbl_r <- label(datar)
+    datar <- factor(datar, levels=unique(datar[!is.na(datar)]))
+    label(datar) <- lbl_r
+  }
+
+  if(!inherits(datac, "factor"))
+  {
+    lbl_c <- label(datac)
+    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
+    label(datac) <- lbl_c
+  }
+
+  row_categories <- levels(datar)
+  if (is.null(row_categories)) {unique(datar)}
+
+  col_categories <- levels(datac)
+  if (is.null(col_categories)) {unique(datac)}
 
   n <- length(row_categories)
   m <- length(col_categories)
 
   # Label for the table cell
   row_lbl <- tg_table(length(row_categories), 1)
-  row_lbl[[1]][[1]] <- derive_label(data, row)
+  row_lbl[[1]][[1]] <- derive_label(row)
   row_lbl[[1]][[1]]$label <- paste(row_lbl[[1]][[1]]$label,":", row_categories[1])
   sapply(2:length(row_categories), FUN=function(level){
     row_lbl[[level]][[1]] <<- tg_label(paste("  ", row_categories[level]))
@@ -158,17 +188,18 @@ summarize_chisq <- function(data, row, column)
   # N X (M+2)
   tbl <- tg_table(n, m+2, TRUE)
 
-  N <- length(data[!is.na(data[,row]) & !is.na(data[,column]),row])
+  N <- sum(!is.na(datar) & !is.na(datac))
+
   tbl[[1]][[1]] <- tg_label(as.character(N))
 
   # The fractions by category intersection
   sapply(1:length(col_categories), FUN=function(col_category) {
-    c_x <- data[data[,column] == col_categories[col_category], column]
+    c_x <- datac[datac == col_categories[col_category]]
     c_x <- c_x[!is.na(c_x)]
     denominator <- length(c_x)
     sapply(1:length(row_categories), FUN=function(row_category) {
-      c_xy <- data[data[,column] == col_categories[col_category] &
-                   data[,row]    == row_categories[row_category], column]
+      c_xy <- datac[datac == col_categories[col_category] &
+                    datar == row_categories[row_category]]
       c_xy <- c_xy[!is.na(c_xy)]
       numerator <- length(c_xy)
       if(numerator > 0)
@@ -180,7 +211,7 @@ summarize_chisq <- function(data, row, column)
     col_lbl[[2]][[col_category+1]] <<- tg_subheader(paste("N=",sum(!is.na(c_x)),sep=''))
   })
 
-  y <- table(data[,row],data[,column], useNA="no")
+  y <- table(datar,datac, useNA="no")
   y <- y[,which(!apply(y,2,FUN = function(x){all(x == 0)}))]
   y <- y[which(!apply(y,1,FUN = function(x){all(x == 0)})),]
 
@@ -198,7 +229,7 @@ summarize_chisq <- function(data, row, column)
 
     # Redo labeling as well
     row_lbl[[2]]      <- NULL
-    row_lbl[[1]][[1]] <- derive_label(data, row)
+    row_lbl[[1]][[1]] <- derive_label(row)
     row_lbl[[1]][[1]] <- tg_label(paste(row_lbl[[1]][[1]]$label,":", row_categories[2]))
   }
 
@@ -208,26 +239,31 @@ summarize_chisq <- function(data, row, column)
   tbl
 }
 
-summarize_spearman <- function(data, row, column)
+summarize_spearman <- function(row, column)
 {
   tbl <- tg_table(1, 3, TRUE)
 
+  datar <- row$data[,1]
+  datac <- column$data[,1]
+
   # Label for the table cell
-  col_lbl <- tg_table(1, 3)
+  col_lbl <- tg_table(2, 3)
   col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[2]] <- derive_label(data, column)
+  col_lbl[[1]][[2]] <- derive_label(column)
   col_lbl[[1]][[3]] <- tg_header("Test Statistic")
+  col_lbl[[2]][[1]] <- tg_subheader("")
+  col_lbl[[2]][[2]] <- tg_subheader("")
+  col_lbl[[2]][[3]] <- tg_subheader("")
 
-  row_lbl <- derive_label(data, row)
+  row_lbl <- derive_label(row)
 
-  # FIXME? MAYBE, this should use pvrank if it can
-  test <- cor.test(data[,row], data[,column], alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
+  test <- cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
 
-  n <- length(data[!is.na(data[,row]) & !is.na(data[,column])  ,row])
+  n <- sum(!is.na(datar) & !is.na(datac))
 
   tbl[[1]][[1]] <- tg_label(as.character(n))
 
-  tbl[[1]][[2]] <- tg_estimate(test$estimate)
+  tbl[[1]][[2]] <- tg_estimate(test$estimate, format="%0.03g")
 
   # Reversed engineered from cor.test for spearman
   r <- test$estimate
@@ -238,6 +274,11 @@ summarize_spearman <- function(data, row, column)
   attr(tbl, "row_label") <- row_lbl
   attr(tbl, "col_label") <- col_lbl
   tbl
+}
+
+apply_factors <- function(row, column)
+{
+  stop("Not Implemented")
 }
 
 #'
@@ -256,16 +297,25 @@ hmisc_style <- list(
   Numerical   = list(
                   Numerical   = summarize_spearman,
                   Categorical = summarize_kruskal_horz,
-                  Binomial    = summarize_kruskal_horz
+                  Binomial    = summarize_kruskal_horz,
+                  Factors     = apply_factors
             ),
   Categorical = list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq,
-                  Binomial    = summarize_chisq
+                  Binomial    = summarize_chisq,
+                  Factors     = apply_factors
             ),
   Binomial    = list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq,
-                  Binomial    = summarize_chisq
+                  Binomial    = summarize_chisq,
+                  Factors     = apply_factors
+            ),
+  Factors     = list(
+                  Numerical   = apply_factors,
+                  Categorical = apply_factors,
+                  Binomial    = apply_factors,
+                  Factors     = apply_factors
             )
 )

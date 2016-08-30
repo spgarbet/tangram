@@ -1,13 +1,16 @@
-library(Hmisc)
-getHdata(pbc)
+data(pbc)
 
-lbl_stage <- label(pbc["stage"])
-pbc$stage <- factor(pbc$stage, levels=1:4, ordered=TRUE) # Make a factor, instead of guessing
-label(pbc$stage) <- lbl_stage
+f <- formula(drug ~ bili)
 
-test_table <- summary_table(drug ~ bili + albumin + stage + protime + sex + age + spiders, pbc)
-#test_table <- tg_summary(drug ~ bili, pbc)
-#test_table <- tg_summary(drug ~ bili + albumin + protime + age, pbc)
+#f <- formula(albumin ~ age)
+#f <- formula(drug ~ stage::Categorical)
+f <- formula(drug + log(age) ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)
+
+#lbl_stage <- label(pbc["stage"])
+#pbc$stage <- factor(pbc$stage, levels=1:4, ordered=TRUE) # Make a factor, instead of guessing
+#label(pbc$stage) <- lbl_stage
+
+test_table <- summary_table(f, pbc)
 
 test_table
 

@@ -124,7 +124,7 @@ tg_flatten <- function(table)
   new_tbl
 }
 
-tg_create_table <- function(ast, data, transforms)
+tg_create_table <- function(ast, transforms)
 {
   elements <- ast$terms()
 
@@ -135,19 +135,15 @@ tg_create_table <- function(ast, data, transforms)
   sapply(1:width, FUN=function(col_idx) {
     column <- elements[[1]][[col_idx]]
 
-    cat("col",col_idx,"\n")
-
     sapply(1:height, FUN=function(row_idx) {
       row <- elements[[2]][[row_idx]]
 
-      cat("** row", row_idx,"\n")
-
-      rowtype <- transforms[["Type"]](data[,row$value])
-      coltype <- transforms[["Type"]](data[,column$value])
+      rowtype <- if(is.na(row$type))    transforms[["Type"]](row$data)    else row$type
+      coltype <- if(is.na(column$type)) transforms[["Type"]](column$data) else column$type
 
       transform <- transforms[[rowtype]][[coltype]]
 
-      tbl[[row_idx]][[col_idx]] <<- transform(data, row$value, column$value)
+      tbl[[row_idx]][[col_idx]] <<- transform(row, column)
     })
   })
 
@@ -157,7 +153,6 @@ tg_create_table <- function(ast, data, transforms)
 #' @export
 summary_table <- function(formula, data, transforms=hmisc_style)
 {
-  tg_create_table(Parser$new()$run(formula)$distribute(),
-                  data,
+  tg_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
                   transforms)
 }
