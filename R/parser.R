@@ -187,11 +187,16 @@ ASTFunction <- R6Class("ASTFunction",
       name <- expr
       try({
         l2 <- label(x)
-        if(nchar(l2)>0) {name<-l2}
+        if(nchar(l2)>0)
+        {
+          name <- paste(self$value,"(",l2,")",sep='')
+        }
       })
 
       var <- ASTVariable$new(name)
-      var$data <- x
+      var$data <- data.frame(x)
+      colnames(var$data) <- c(name)
+      label(var$data[,1]) <- name
 
       var
     }
@@ -268,6 +273,7 @@ ASTMultiply <- R6Class("ASTMultiply",
   public = list (
     left  = "ASTNode",
     right = "ASTNode",
+    type   = "character",
     initialize = function(left, right)
     {
       self$left   <- left
