@@ -84,7 +84,8 @@ summarize_kruskal_horz <- function(row, column)
 
   # N value
   N <- sum(!is.na(datar))
-  tbl[[1]][[1]] <- tg_label(as.character(N))
+  tbl[[1]][[1]] <- tg_label(as.character(N),
+    src=paste(row$value, ":", column$value,":N",sep=''))
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
@@ -93,7 +94,7 @@ summarize_kruskal_horz <- function(row, column)
         src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
     col_lbl[[1]][[category+1]] <<- tg_header(categories[category])
     col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",sum(!is.na(x)),sep=''),
-        src=paste(row$value, ":", column$value,":N",sep=''))
+        src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
   })
 
   # Kruskal-Wallis via F-distribution
@@ -135,9 +136,9 @@ summarize_kruskal_vert <- function(row, column)
   sapply(1:length(categories), FUN=function(category) {
     x <- datac[datar == categories[category]]
     tbl[[category]][[1]] <<- tg_label(as.character(length(x)),
-      src=paste(row$value, ":", column$value,":N",sep=''))
+      src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
     tbl[[category]][[2]] <<- tg_quantile(quantile(x, na.rm=TRUE),
-      src=paste(row$value, ":", column$value,"[",category,"]",sep=''))
+      src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
     row_lbl[[category]][[1]] <<- tg_label(category)
   })
 
@@ -197,7 +198,8 @@ summarize_chisq <- function(row, column)
 
   N <- sum(!is.na(datar) & !is.na(datac))
 
-  tbl[[1]][[1]] <- tg_label(as.character(N))
+  tbl[[1]][[1]] <- tg_label(as.character(N), 
+    src=paste(row$value, ":", column$value,":N",sep=''))
 
   # The fractions by category intersection
   sapply(1:length(col_categories), FUN=function(col_category) {
@@ -217,7 +219,7 @@ summarize_chisq <- function(row, column)
     })
     col_lbl[[1]][[col_category+1]] <<- tg_header(col_categories[col_category])
     col_lbl[[2]][[col_category+1]] <<- tg_subheader(paste("N=",sum(!is.na(c_x)),sep=''),
-      src=paste(row$value, ":", column$value,":N",sep=''))
+      src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
   })
 
   y <- table(datar,datac, useNA="no")
@@ -271,7 +273,8 @@ summarize_spearman <- function(row, column)
 
   n <- sum(!is.na(datar) & !is.na(datac))
 
-  tbl[[1]][[1]] <- tg_label(as.character(n))
+  tbl[[1]][[1]] <- tg_label(as.character(n),
+    src=paste(row$value, ":", column$value,":N",sep=''))
 
   tbl[[1]][[2]] <- tg_estimate(test$estimate, format="%0.03g",
     src=paste(row$value, ":", column$value,sep=''))
