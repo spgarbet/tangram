@@ -13,6 +13,7 @@ f <- formula(drug ~ bili)
 #f <- formula(albumin ~ age)
 #f <- formula(drug ~ stage::Categorical)
 #f <- formula(drug + log(age) ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)
+f <- formula(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)
 
 #lbl_stage <- label(pbc["stage"])
 #pbc$stage <- factor(pbc$stage, levels=1:4, ordered=TRUE) # Make a factor, instead of guessing
