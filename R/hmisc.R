@@ -214,12 +214,12 @@ summarize_chisq <- function(row, column)
       if(numerator > 0)
       {
         tbl[[row_category]][[col_category+1]] <<- tg_fraction(numerator, denominator,
-          src=paste(row$value,"[",row_category,"]:",column$value,"[",col_category,"]", sep=''))
+          src=paste(row$value,"[",row_categories[row_category],"]:",column$value,"[",col_categories[col_category],"]", sep=''))
       }
     })
     col_lbl[[1]][[col_category+1]] <<- tg_header(col_categories[col_category])
     col_lbl[[2]][[col_category+1]] <<- tg_subheader(paste("N=",sum(!is.na(c_x)),sep=''),
-      src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
+      src=paste(row$value, ":", column$value,"[",col_categories[col_category],"]",":N",sep=''))
   })
 
   y <- table(datar,datac, useNA="no")
