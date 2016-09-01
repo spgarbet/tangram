@@ -12,7 +12,8 @@ index.tg_cell <- function(object,caption)
   if(!("src" %in% names(object))) return(NULL)
   if(is.na(object$src)) return(NULL)
   src <- paste(caption, object$src, sep=":")
-  sapply(names(object),
+  nms <- names(object)
+  sapply(nms[!nms %in% c('label','src','units')],
          function(y) paste(paste(src, y, sep=':'), object[[y]], sep=","))
 }
 
