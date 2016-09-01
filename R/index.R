@@ -7,24 +7,13 @@ index <- function(x, ...)
   UseMethod("index", x)
 }
 
-index.tg_cell <- function(object,caption) NULL
-
-index.tg_label <- function(object, caption)
+index.tg_cell <- function(object,caption)
 {
+  if(!("src" %in% names(object))) return(NULL)
   if(is.na(object$src)) return(NULL)
-
-  paste(paste(caption, object$src, sep=":"), object$label, sep=",")
-}
-
-index.tg_fstat <- function(object, caption)
-{
   src <- paste(caption, object$src, sep=":")
-  c(
-    paste(paste(src, "F",  sep=':'), object$f,  sep=","),
-    paste(paste(src, "n1", sep=':'), object$n1, sep=","),
-    paste(paste(src, "n2", sep=':'), object$n2, sep=","),
-    paste(paste(src, "p",  sep=':'), object$p,  sep=",")
-  )
+  sapply(names(object),
+         function(y) paste(paste(src, y, sep=':'), object[[y]], sep=","))
 }
 
 #' @export
