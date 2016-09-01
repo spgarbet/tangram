@@ -276,7 +276,7 @@ summarize_spearman <- function(row, column)
   tbl[[1]][[1]] <- tg_label(as.character(n),
     src=paste(row$value, ":", column$value,":N",sep=''))
 
-  tbl[[1]][[2]] <- tg_estimate(test$estimate, format="%0.03g",
+  tbl[[1]][[2]] <- tg_estimate(test$estimate,
     src=paste(row$value, ":", column$value,sep=''))
 
   # Reversed engineered from cor.test for spearman
