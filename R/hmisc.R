@@ -214,7 +214,7 @@ summarize_chisq <- function(row, column)
       if(numerator > 0)
       {
         tbl[[row_category]][[col_category+1]] <<- tg_fraction(numerator, denominator,
-          src=paste(row,"[",row_category,"]:",column,"[",col_category,"]", sep=''))
+          src=paste(row$value,"[",row_category,"]:",column$value,"[",col_category,"]", sep=''))
       }
     })
     col_lbl[[1]][[col_category+1]] <<- tg_header(col_categories[col_category])
