@@ -1,22 +1,6 @@
 #' @include S3-Cell.R
 #' @include parser.R
 
-### function to round values to N significant digits
-# input:   vec       vector of numeric
-#          n         integer is the required sigfig
-# output:  outvec    vector of numeric rounded to N sigfig
-sigfig <- function(vec, n=3)
-{
-  #formatC(signif(vec,digits=n), digits=n, format="g", flag="#")
-  sprintf(paste("%1.", n, "g", sep=""), vec)
-}
-
-roundfig <- function(vec, n=3)
-{
-  #formatC(round(vec,digits=n), digits=n, format="f", flag="#")
-  sprintf(paste("%1.", n, "f", sep=""), vec)
-}
-
 tg_flatten <- function(table)
 {
   # Compute final size of table

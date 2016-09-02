@@ -113,11 +113,11 @@ html5.tg_estimate <- function(object)
 html5.tg_quantile <- function(object)
 {
   paste("<td class=\"quantile\">",
-        sigfig(object$q25),
+        object$q25,
         " <b>",
-        sigfig(object$q50),
+        object$q50,
         "</b> ",
-        sigfig(object$q75),
+        object$q75,
         "</td>",
         sep="")
 }
@@ -129,9 +129,9 @@ html5.tg_fstat <- function(object)
     "<td class=\"statistic\">",
     "<em>F</em>",
     "<sub>",object$n1,",",object$n2,"</sub> = ",
-    roundfig(object$f,2),
+    object$f,
     ", <em>P</em> = ",
-    roundfig(object$p,3),
+    object$p,
     "<sup>1</sup>",
     "</td>",
     sep=""
@@ -163,9 +163,9 @@ html5.tg_chi2 <- function(object)
         object$df,
         "</span></span>",
         " = ",
-        roundfig(object$chi2,2),
+        object$chi2,
         ", <em>P</em> = ",
-        roundfig(object$p,3),
+        object$p,
         "<sup>2</sup>",
         "</td>",
         sep=""

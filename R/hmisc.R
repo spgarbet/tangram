@@ -191,7 +191,7 @@ summarize_kruskal_vert <- function(row, column)
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datar, datac, na.action=na.retain)
 
-  tbl[[1]][[3]] <- tg_fstat(test['F'], test['df1'], test['df2'], test['P'],
+  tbl[[1]][[3]] <- tg_fstat(round(test['F'],2), test['df1'], test['df2'], round(test['P'],3),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_label") <- row_lbl

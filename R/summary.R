@@ -14,7 +14,7 @@ summary.tg_label <- function(object)
 
 summary.tg_quantile <- function(object)
 {
-  paste(sigfig(object$q25), " *", sigfig(object$q50), "* ", sigfig(object$q75), sep="")
+  paste(object$q25, " *", object$q50, "* ", object$q75, sep="")
 }
 
 #' @export
@@ -63,19 +63,15 @@ print.tg_table <- function(object) {summary(object)}
 
 summary.tg_estimate <- function(object)
 {
-  fmt <- if(is.na(object$format)) "%0.03g" else object$format
-
   if(is.na(object$low))
-    sprintf(fmt, object$value)
+    as.character(object$value)
   else
-    paste(sprintf(fmt, object$value),
-          " (",sprintf(fmt, object$low),",",
-          sprintf(fmt,object$high),")")
+    paste(object$value," (",object$low,",",object$high,")")
 }
 
 summary.tg_fstat <- function(object)
 {
-  paste("F_{",object$n1,",",object$n2,"}=",roundfig(object$f,2),", P=",sprintf("%0.03g",object$p),sep="")
+  paste("F_{",object$n1,",",object$n2,"}=",object$f,", P=",object$p,sep="")
 }
 
 summary.tg_fraction <- function(object)
@@ -90,10 +86,10 @@ summary.tg_fraction <- function(object)
 
 summary.tg_chi2 <- function(object)
 {
-  paste("    X^2_",object$df,"=",roundfig(object$chi2,2),", P=",sprintf("%0.03g",object$p),sep="")
+  paste("    X^2_",object$df,"=",object$chi2,", P=",object$p,sep="")
 }
 
 summary.tg_studentt <- function(object)
 {
-  paste("T_",object$df,"=",sprintf("%0.03g", object$t), ", P=",sprintf("%0.03g",object$p), sep="")
+  paste("T_",object$df,"=",object$t, ", P=",object$p, sep="")
 }
