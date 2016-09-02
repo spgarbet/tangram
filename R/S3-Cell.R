@@ -8,6 +8,22 @@ cols <- function(x)
   UseMethod("cols", x)
 }
 
+tg_format <- function(format, x)
+{
+  if(is.na(format)) format <- 3
+
+  if(is.numeric(format))
+  {
+    withCallingHandlers(formatC(signif(as.numeric(x), digits=format), digits=format,format="fg", flag="#"),
+      warning = function(w) {}
+    )
+  }
+  else
+  {
+    sprintf(format, x)
+  }
+}
+
 tg_cell <- function(contents=NA)
 {
   if(inherits(contents,"list"))

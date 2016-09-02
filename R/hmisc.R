@@ -136,7 +136,7 @@ summarize_kruskal_horz <- function(row, column)
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
     x <- datar[datac == categories[category]]
-    tbl[[1]][[category+1]] <<- tg_quantile(quantile(x, na.rm=TRUE),
+    tbl[[1]][[category+1]] <<- tg_quantile(tg_format(row$format, quantile(x, na.rm=TRUE)),
         src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
     col_lbl[[1]][[category+1]] <<- tg_header(categories[category])
     col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",sum(!is.na(x)),sep=''),
@@ -147,7 +147,7 @@ summarize_kruskal_horz <- function(row, column)
   test <- spearman2(datac, datar, na.action=na.retain)
 
   tbl[[1]][[length(categories)+2]] <-
-    tg_fstat(test['F'], test['df1'], test['df2'], test['P'],
+    tg_fstat(round(test['F'],2), test['df1'], test['df2'], round(test['P'],3),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_label") <- row_lbl
@@ -183,7 +183,7 @@ summarize_kruskal_vert <- function(row, column)
     x <- datac[datar == categories[category]]
     tbl[[category]][[1]] <<- tg_label(as.character(length(x)),
       src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
-    tbl[[category]][[2]] <<- tg_quantile(quantile(x, na.rm=TRUE),
+    tbl[[category]][[2]] <<- tg_quantile(tg_format(column$format,quantile(x, na.rm=TRUE)),
       src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
     row_lbl[[category]][[1]] <<- tg_label(category)
   })
@@ -274,7 +274,7 @@ summarize_chisq <- function(row, column)
 
   test <- chisq.test(y, correct=FALSE)
 
-  tbl[[1]][[m+2]] <- tg_chi2(test$statistic, test$parameter, test$p.value,
+  tbl[[1]][[m+2]] <- tg_chi2(round(test$statistic, 2), test$parameter, round(test$p.value,3),
     src=paste(row$value, ":", column$value,":Chi^2",sep=''))
 
   # Throw out first if length is 2
@@ -329,7 +329,7 @@ summarize_spearman <- function(row, column)
   r <- test$estimate
   statistic <- r/sqrt((1 - r^2)/(n - 2))
 
-  tbl[[1]][[3]] <- tg_studentt(statistic, n-2, test$p.value,
+  tbl[[1]][[3]] <- tg_studentt(round(statistic,2), n-2, round(test$p.value,3),
     src=paste(row$value, ":", column$value,":ttest",sep=''))
 
   attr(tbl, "row_label") <- row_lbl
