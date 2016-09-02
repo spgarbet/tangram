@@ -147,7 +147,7 @@ summarize_kruskal_horz <- function(row, column)
   test <- spearman2(datac, datar, na.action=na.retain)
 
   tbl[[1]][[length(categories)+2]] <-
-    tg_fstat(round(test['F'],2), test['df1'], test['df2'], round(test['P'],3),
+    tg_fstat(tg_format("%.2f", test['F']), test['df1'], test['df2'], tg_format("%1.3f", test['P']),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_label") <- row_lbl
@@ -191,7 +191,7 @@ summarize_kruskal_vert <- function(row, column)
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datar, datac, na.action=na.retain)
 
-  tbl[[1]][[3]] <- tg_fstat(round(test['F'],2), test['df1'], test['df2'], round(test['P'],3),
+  tbl[[1]][[3]] <- tg_fstat(tg_format("%.2f", test['F']), test['df1'], test['df2'], tg_format("%1.3f",test['P']),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_label") <- row_lbl

@@ -11,6 +11,7 @@ cols <- function(x)
 tg_format <- function(format, x)
 {
   if(is.na(format)) format <- 3
+  if(is.character(format) && substr(format, 1, 1) != "%") format <- as.numeric(format)
 
   if(is.numeric(format))
   {
