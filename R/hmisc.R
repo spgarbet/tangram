@@ -1,12 +1,43 @@
 #' @import stringr
 #' @include S3-Cell.R
 
+
+#' Determine if a vector is categorical or not
+#'
+#' @param x Vector to determine type of
+#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
+#'
+#' @return A Boolean: TRUE / FALSE
+#' @export
+#'
+#' @examples
+#'
+#' is.categorical(c(1,2,3))
+#' is.categorical(factor(c("A","B","C")))
+#' is.categorical(factor(c("A","B","B","A")))
+#' is.categorical(factor(c(TRUE, FALSE, TRUE, FALSE)))
+#'
 is.categorical <- function(x, threshold=NA)
 {
   is.factor(x) ||
   (!is.na(threshold) && length(unique(x[! is.na(x)])) < threshold)
 }
 
+#' Determine if a vector is binomial or not
+#'
+#' @param x Vector to determine type of
+#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
+#'
+#' @return a Boolean: TRUE / FALSE
+#' @export
+#'
+#' @examples
+#'
+#' is.binomial(c(1,2,3))
+#' is.binomial(factor(c("A","B","C")))
+#' is.binomial(factor(c("A","B","B","A")))
+#' is.binomial(factor(c(TRUE, FALSE, TRUE, FALSE)))
+#' is.binomial(c('M', 'F', 'M', 'F'), 10)
 is.binomial <- function(x, threshold=NA)
 {
   (is.factor(x) && length(levels(x)) == 2) ||
@@ -37,25 +68,40 @@ hmisc_data_type <- function(x, category_threshold=NA)
   else                   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
 }
 
+#' Determine the label of a given AST node. Should have data attached via reduce before calling.
+#'
+#' @param node Abstract syntax tree node.
+#'
+#' @return A string with a label for the node
+#' @export
+#'
+#' @examples
+#'
+#' hmisc_data_type(c(1,2,3))
+#' hmisc_data_type(factor(c("A","B","C")))
+#' hmisc_data_type(factor(c("A","B","B","A")))
+#' hmisc_data_type(factor(c(TRUE, FALSE, TRUE, FALSE)))
+#'
 derive_label <- function(node)
 {
   l <- node$string()
   try({
-        l2 <- label(node$data)
+        l2 <- label(node$data, units=FALSE)
         if(nchar(l2)>0) {l<-l2}
   })
 
   # Find units if they exist
-  x <- strsplit(l, "\\s*\\(")
+  x <- strsplit(l, "\\s+\\(")[[1]]
+  l <- x[1]
 
-  if(length(x[[1]]) <= 1)
-  {
-    tg_label(l)
-  }
-  else
-  {
-    tg_label(x[[1]][1], strsplit(x[[1]][2], "\\)")[[1]][1])
-  }
+  units <- NA
+  if(length(x) > 1) units <- strsplit(x[2], "\\)")[1]
+  try({
+        u2 <- units(node$data)
+        if(nchar(u2)>0) {units<-u2}
+  })
+
+  tg_label(l, units)
 }
 
 summarize_kruskal_horz <- function(row, column)
@@ -198,7 +244,7 @@ summarize_chisq <- function(row, column)
 
   N <- sum(!is.na(datar) & !is.na(datac))
 
-  tbl[[1]][[1]] <- tg_label(as.character(N), 
+  tbl[[1]][[1]] <- tg_label(as.character(N),
     src=paste(row$value, ":", column$value,":N",sep=''))
 
   # The fractions by category intersection
