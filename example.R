@@ -39,11 +39,10 @@ write(x, "test-hmisc.html")
 #index(table)
 #latex(table)
 
-# Try nesting...
-
 ### Make up data
 n  <- 1000
 df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
+label(df$id) <- "ID"
 
 ### Now create custom function for counting events with a category
 summarize_count <- function(row, column)
@@ -91,16 +90,7 @@ summarize_count <- function(row, column)
   tbl
 }
 
-
-counter <- list(
-  Type = function(x) {"Data"},
-  Data = list(
-    Data = summarize_count
-  )
-)
-
-tbl <- summary_table(event ~ id["%1.0f"],df, counter)
-tbl
+summary_table(event ~ id["%1.0f"],df, summarize_count)
 
 # Contrast with
 summaryM(id ~ event, data=df, test=TRUE)
