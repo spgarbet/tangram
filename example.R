@@ -42,63 +42,38 @@ write(x, "test-hmisc.html")
 # Try nesting...
 
 ### Make up data
-n <- 1000
+n  <- 1000
 df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
 
-key <- function(row, col, label, subrow=NA, subcol=NA)
-{
-  rv <- if(is.na(subrow)) row$value else paste(row$value, '[',subrow,']',sep='')
-  cv <- if(is.na(subcol)) col$value else paste(col$value, '[',subcol,']',sep='')
-  paste(rv,":",cv,":",label,sep='')
-}
-
-### Now create custom function
+### Now create custom function for counting events with a category
 summarize_count <- function(row, column)
 {
   ### Getting Data
-    datar <- row$data[,1]
-    datac <- column$data[,1]
+  datar <- row$data[,1]
+  datac <- column$data[,1]
 
-### Grabbing categories
+  ### Grabbing categories
   col_categories <- levels(datac)
 
-  n <- 1
-  m <- length(col_categories)
-
-############# LABELLING-- SIMPLFY
-  # Label for the table cell
-  row_lbl <- tg_table(1, 1)
-  row_lbl[[1]][[1]] <- derive_label(row)
-
-  col_lbl <- tg_table(2, 2+length(col_categories))
-  col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[length(col_categories)+2]] <- tg_header("Test Statistic")
-
   # 1 X (M+2)
+  m <- length(col_categories)
   tbl <- tg_table(1, m+2, TRUE)
 
+  tbl[[1]][[1]] <- tg_n(length(unique(datar)), src=key(row, column, "N"))
 
-#### Needs to be an tg_n column type!!!
-  N <- length(unique(datar))
-
-  tbl[[1]][[1]] <- tg_label(as.character(N),
-    src=paste(row$value, ":", column$value,":N",sep=''))
-
-#### This is the real thing
   # The quantiles by category
   y <- rep(NA, length(col_categories))
-  sapply(1:length(col_categories), FUN=function(category) {
+  n_labels <- lapply(1:length(col_categories), FUN=function(category) {
     cat_name <- col_categories[category]
-    x <- datar[datac == col_categories[category]]
+    x <- datar[datac == cat_name]
     xx <- aggregate(x, by=list(x), FUN=length)$x
 
     tbl[[1]][[category+1]] <<- tg_quantile(
         tg_format(row$format, quantile(xx, na.rm=TRUE)),
-        src=key(row, column, 'quant', subcol=cat_name))
-### Labeling AGAIN
-    col_lbl[[1]][[category+1]] <<- tg_header(cat_name)
-    col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",length(unique(x)),sep=''),
-        src=key(row, column, "N", subcol=cat_name))
+        src=key(row, column, subcol=cat_name))
+
+    # For labeling
+    tg_n(length(unique(x)), src=key(row, column, "N", subcol=cat_name))
   })
 
   test <- summary(aov(glm(x ~ treatment, aggregate(datar, by=list(id=datar, treatment=datac), FUN=length), family=poisson)))[[1]]
@@ -109,21 +84,23 @@ summarize_count <- function(row, column)
                               p   = tg_format("%1.3f", test$'Pr(>F)'[1]),
                               src = key(row, column, "F"))
 
-##### LABELING SIMPLFY
-  attr(tbl, "row_label") <- row_lbl
-  attr(tbl, "col_label") <- col_lbl
+  row_header(tbl) <- derive_label(row)
+  col_header(tbl) <- list(c("N", col_categories, "Test Statistic"),
+                          c(NA,  n_labels,       NA)              )
 
   tbl
 }
 
 
-counter <- hmisc_style <- list(
+counter <- list(
   Type = function(x) {"Data"},
   Data = list(
     Data = summarize_count
   )
 )
 
-tbl <- summary_table(f, df, counter)
-
+tbl <- summary_table(event ~ id["%1.0f"],df, counter)
 tbl
+
+# Contrast with
+summaryM(id ~ event, data=df, test=TRUE)

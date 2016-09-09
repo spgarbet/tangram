@@ -52,7 +52,7 @@ summary.tg_table <- function(object)
   for(row in pasty)
   {
     cat(row,'\n')
-    if(row == pasty[2]) cat(paste(rep("-",nchar(pasty[1])),collapse=''),'\n') # FIXME: This is hardcoded at 2!!!!
+    if(length(pasty) >= 2 && row == pasty[2]) cat(paste(rep("-",nchar(pasty[1])),collapse=''),'\n') # FIXME: This is hardcoded at 2!!!!
   }
   cat(paste(rep("=",nchar(pasty[1])),collapse=''),'\n')
 
@@ -92,4 +92,12 @@ summary.tg_chi2 <- function(object)
 summary.tg_studentt <- function(object)
 {
   paste("T_",object$df,"=",object$t, ", P=",object$p, sep="")
+}
+
+summary.tg_n <- function(object)
+{
+  if (inherits(object, "tg_header"))
+    paste("(N=",as.character(object$n),")",sep='')
+  else
+    as.character(object$n)
 }

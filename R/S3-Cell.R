@@ -117,3 +117,82 @@ tg_studentt <- function(t, df, p, src=NA)
 {
   structure(tg_cell(list(t=t, df=df, p=p, src=src)), class=c("tg_studentt", "tg_cell"))
 }
+
+tg_n <- function(n, src=NA)
+{
+  structure(tg_cell(list(n=n, src=src)), class=c("tg_n", "tg_cell"))
+}
+
+
+#' Key derivation helper function
+#' @export
+key <- function(row, col, label=NA, subrow=NA, subcol=NA)
+{
+  rv <- if(is.na(subrow)) row$value else paste(row$value, '[',subrow,']',sep='')
+  cv <- if(is.na(subcol)) col$value else paste(col$value, '[',subcol,']',sep='')
+  if(is.na(label)) paste(rv,":",cv,sep='') else paste(rv,":",cv,":",label,sep='')
+}
+
+#' Internal help to prepare header
+prepare_header <- function(value)
+{
+  # Convert to list of lists if not already
+  if(!inherits(value, "list"))
+  {
+    value <- if(inherits(value, "tg_cell"))
+    {
+      list(list(value))
+    } else
+    {
+      lapply(as.list(value), FUN=as.list)
+    }
+  }
+  if(!inherits(value[[1]], "list"))
+  {
+    value <- lapply(value, FUN=as.list)
+  }
+
+  value <- lapply(value, FUN=function(row){
+    lapply(row, FUN=function(col){
+      col <- if(inherits(col, "tg_cell"))
+      {
+        col
+      } else if(is.na(col))
+      {
+        tg_cell()
+      } else
+      {
+        tg_label(col)
+      }
+      attr(col,"class") <- c("tg_header", attr(col,"class"))
+      col
+    })
+  })
+
+  attr(value, "class")    <- c("tg_table", "tg_cell")
+  attr(value, "embedded") <- FALSE
+
+  value
+}
+
+## Row labeling helper functions
+
+#' @export
+row_header <- function(tbl) attr(tbl, "row_header")
+
+#' @export
+"row_header<-" <- function(tbl, value)
+{
+  attr(tbl, "row_header") <- prepare_header(value)
+  tbl
+}
+
+#' @export
+col_header <- function(tbl) attr(tbl, "col_header")
+
+#' @export
+"col_header<-" <- function(tbl, value)
+{
+  attr(tbl, "col_header") <- prepare_header(value)
+  tbl
+}

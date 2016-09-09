@@ -23,8 +23,8 @@ tg_flatten <- function(table)
 
 
   # Grab labels
-  row_label <- attr(table[[1]][[1]], "row_header")
-  col_label <- attr(table[[1]][[1]], "col_header")
+  row_label <- row_header(table[[1]][[1]])
+  col_label <- col_header(table[[1]][[1]])
 
   # Set aside additional for labeling
   label_rows <- rows(col_label)
@@ -36,7 +36,7 @@ tg_flatten <- function(table)
   # Fill in row labels
   output_row <- label_rows + 1
   sapply(1:rows(table), FUN=function(row){
-    rlabel <- attr(table[[row]][[1]], "row_label") # Only take row labels from column 1
+    rlabel <- attr(table[[row]][[1]], "row_header") # Only take row labels from column 1
 
     if(inherits(rlabel, "tg_table")) {
       sapply(1:rows(rlabel), FUN=function(inner_row) {
@@ -56,7 +56,7 @@ tg_flatten <- function(table)
   # Fill in col labels
   output_col <- label_cols + 1
   sapply(1:cols(table), FUN=function(col){
-    rlabel <- attr(table[[1]][[col]], "col_label") # Only take col labels from row 1
+    rlabel <- attr(table[[1]][[col]], "col_header") # Only take col labels from row 1
 
     if(inherits(rlabel, "tg_table")) {
       sapply(1:cols(rlabel), FUN=function(inner_col) {
@@ -114,7 +114,7 @@ tg_create_table <- function(ast, transforms)
 
   width  <- length(elements[[1]])
   height <- length(elements[[2]])
-  tbl    <- tg_table(height, width)
+  tbl    <- tg_table(height, width, FALSE)
 
   sapply(1:width, FUN=function(col_idx) {
     column <- elements[[1]][[col_idx]]
