@@ -25,8 +25,10 @@ summary.tg_table <- function(object)
 
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
+  last_header_row <- 0 # Current Header Row
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
+      if(last_header_row == 0 && !inherits(object[[row]][[col]], "tg_header")) last_header_row <<- row
       text[row,col] <<- summary(object[[row]][[col]])
     })
   })
@@ -52,7 +54,12 @@ summary.tg_table <- function(object)
   for(row in pasty)
   {
     cat(row,'\n')
-    if(length(pasty) >= 2 && row == pasty[2]) cat(paste(rep("-",nchar(pasty[1])),collapse=''),'\n') # FIXME: This is hardcoded at 2!!!!
+    if(last_header_row > 0              &&
+       length(pasty) >= last_header_row &&
+       row == pasty[last_header_row])
+    {
+      cat(paste(rep("-",nchar(pasty[1])),collapse=''),'\n')
+    }
   }
   cat(paste(rep("=",nchar(pasty[1])),collapse=''),'\n')
 
