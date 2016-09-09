@@ -137,6 +137,17 @@ tg_create_table <- function(ast, transforms)
 #' @export
 summary_table <- function(formula, data, transforms=hmisc_style)
 {
+  # Helper function for single conversion function
+  if(!inherits(transforms, "list"))
+  {
+    transforms <- list(
+      Type = function(x) {"Data"},
+      Data = list(
+        Data = transforms
+      )
+    )
+  }
+
   tg_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
                   transforms)
 }
