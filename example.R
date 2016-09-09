@@ -40,31 +40,30 @@ write(x, "test-hmisc.html")
 #latex(table)
 
 # Try nesting...
-n <- 1000
-df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = rep(c("A", "B","C"), n))
-f <- formula(event ~ id)
 
+### Make up data
+n <- 1000
+df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
+
+key <- function(row, col, label, subrow=NA, subcol=NA)
+{
+  rv <- if(is.na(subrow)) row$value else paste(row$value, '[',subrow,']',sep='')
+  cv <- if(is.na(subcol)) col$value else paste(col$value, '[',subcol,']',sep='')
+  paste(rv,":",cv,":",label,sep='')
+}
+
+### Now create custom function
 summarize_count <- function(row, column)
 {
-### Getting Data
-  datar <- row$data[,1]
-  datac <- column$data[,1]
-
-### Munging Data
-  if(!inherits(datac, "factor"))
-  {
-    lbl_c <- label(datac)
-    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
-    label(datac) <- lbl_c
-  }
+  ### Getting Data
+    datar <- row$data[,1]
+    datac <- column$data[,1]
 
 ### Grabbing categories
   col_categories <- levels(datac)
-  if (is.null(col_categories)) {unique(datac)}
 
   n <- 1
   m <- length(col_categories)
-
 
 ############# LABELLING-- SIMPLFY
   # Label for the table cell
@@ -89,15 +88,17 @@ summarize_count <- function(row, column)
   # The quantiles by category
   y <- rep(NA, length(col_categories))
   sapply(1:length(col_categories), FUN=function(category) {
+    cat_name <- col_categories[category]
     x <- datar[datac == col_categories[category]]
     xx <- aggregate(x, by=list(x), FUN=length)$x
 
-    tbl[[1]][[category+1]] <<- tg_quantile(tg_format(row$format, quantile(xx, na.rm=TRUE)),
-        src=paste(row$value, ":", column$value,"[",col_categories[category],"]",sep=''))
+    tbl[[1]][[category+1]] <<- tg_quantile(
+        tg_format(row$format, quantile(xx, na.rm=TRUE)),
+        src=key(row, column, 'quant', subcol=cat_name))
 ### Labeling AGAIN
-    col_lbl[[1]][[category+1]] <<- tg_header(col_categories[category])
+    col_lbl[[1]][[category+1]] <<- tg_header(cat_name)
     col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",length(unique(x)),sep=''),
-        src=paste(row$value, ":", column$value,"[",col_categories[category],"]",":N",sep=''))
+        src=key(row, column, "N", subcol=cat_name))
   })
 
   test <- summary(aov(glm(x ~ treatment, aggregate(datar, by=list(id=datar, treatment=datac), FUN=length), family=poisson)))[[1]]
@@ -106,7 +107,7 @@ summarize_count <- function(row, column)
                               n1  = test$Df[1],
                               n2  = test$Df[2],
                               p   = tg_format("%1.3f", test$'Pr(>F)'[1]),
-                              src = paste(row$value, ":", column$value,":F",sep=''))
+                              src = key(row, column, "F"))
 
 ##### LABELING SIMPLFY
   attr(tbl, "row_label") <- row_lbl
