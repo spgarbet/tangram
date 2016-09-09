@@ -74,6 +74,7 @@ tg_table <- function(rows, cols, embedded=FALSE)
 
 tg_label <- function(text, units=NA, src=NA)
 {
+  if(!inherits(text, "character")) text <- as.character(text)
   structure(tg_cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("tg_label", "tg_cell"))
 }
 
