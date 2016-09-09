@@ -150,8 +150,8 @@ summarize_kruskal_horz <- function(row, column)
     tg_fstat(tg_format("%.2f", test['F']), test['df1'], test['df2'], tg_format("%1.3f", test['P']),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
-  attr(tbl, "row_label") <- row_lbl
-  attr(tbl, "col_label") <- col_lbl
+  attr(tbl, "row_header") <- row_lbl
+  attr(tbl, "col_header") <- col_lbl
 
   tbl
 }
@@ -194,8 +194,8 @@ summarize_kruskal_vert <- function(row, column)
   tbl[[1]][[3]] <- tg_fstat(tg_format("%.2f", test['F']), test['df1'], test['df2'], tg_format("%1.3f",test['P']),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
-  attr(tbl, "row_label") <- row_lbl
-  attr(tbl, "col_label") <- col_lbl
+  attr(tbl, "row_header") <- row_lbl
+  attr(tbl, "col_header") <- col_lbl
 
   tbl
 }
@@ -291,8 +291,8 @@ summarize_chisq <- function(row, column)
     row_lbl[[1]][[1]] <- tg_label(paste(row_lbl[[1]][[1]]$label,":", row_categories[2]))
   }
 
-  attr(tbl, "row_label") <- row_lbl
-  attr(tbl, "col_label") <- col_lbl
+  attr(tbl, "row_header") <- row_lbl
+  attr(tbl, "col_header") <- col_lbl
 
   tbl
 }
@@ -332,8 +332,8 @@ summarize_spearman <- function(row, column)
   tbl[[1]][[3]] <- tg_studentt(round(statistic,2), n-2, round(test$p.value,3),
     src=paste(row$value, ":", column$value,":ttest",sep=''))
 
-  attr(tbl, "row_label") <- row_lbl
-  attr(tbl, "col_label") <- col_lbl
+  attr(tbl, "row_header") <- row_lbl
+  attr(tbl, "col_header") <- col_lbl
   tbl
 }
 

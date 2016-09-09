@@ -18,7 +18,7 @@ index.tg_cell <- function(object,caption)
 }
 
 #' @export
-index.tg_table <- function(object, caption="Figure")
+index.tg_table <- function(object, caption="Table")
 {
   nrows <- rows(object)
   ncols <- cols(object)

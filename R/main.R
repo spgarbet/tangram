@@ -23,8 +23,8 @@ tg_flatten <- function(table)
 
 
   # Grab labels
-  row_label <- attr(table[[1]][[1]], "row_label")
-  col_label <- attr(table[[1]][[1]], "col_label")
+  row_label <- attr(table[[1]][[1]], "row_header")
+  col_label <- attr(table[[1]][[1]], "col_header")
 
   # Set aside additional for labeling
   label_rows <- rows(col_label)
