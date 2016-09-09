@@ -57,7 +57,7 @@ summarize_count <- function(row, column)
 
   # 1 X (M+2)
   m <- length(col_categories)
-  tbl <- tg_table(1, m+2, TRUE)
+  tbl <- tg_table(1, m+2)
 
   tbl[[1]][[1]] <- tg_n(length(unique(datar)), src=key(row, column, "N"))
 
