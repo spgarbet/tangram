@@ -16,7 +16,7 @@ summarize_count <- function(table, datar, datac)
   })
 
   # Begin table construction, ala Wickham Style (monadic continuation)
-  table %>%
+  table                                         %>%
   row_header(derive_label(row))                 %>%  # Name of the row
   col_header("N", levels(dc), "Test Statistic") %>%  # Main header
   col_header(NA,  N(subN),    NA)               %>%  # Subheader is N values

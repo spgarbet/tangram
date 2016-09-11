@@ -1,0 +1,39 @@
+---
+title: "A Grammar of Tables"
+author: "Shawn Garbett"
+date: "September 11, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+data(pbc)
+
+library(Hmisc)
+library(stringr)
+library(R6)
+library(dplyr)
+devtools::load_all()
+data(pbc)
+```
+
+## A Grammar of Tables
+
+This package is meant to implement the concept of a grammar of tables. It allows for a simple formula expression and a data frame to create a rich summary table in a variety of formats. It is designed for extensibility at each step of the process, so that one is not limited by the authors choice of table statistics, output format. The grammar however is an integral part of the package, and as such is not modifiable.
+
+Here's some basic examples of what's possible.
+
+
+```{r pbc}
+summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
