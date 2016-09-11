@@ -47,7 +47,7 @@ label(df$id) <- "ID"
 ### Now create custom function for counting events with a category
 summarize_count <- function(row, column)
 {
-  ### Getting Data
+  ### Getting Data for row column ast nodes, assuming no factors
   datar <- row$data[,1]
   datac <- column$data[,1]
 
@@ -58,31 +58,35 @@ summarize_count <- function(row, column)
   m <- length(col_categories)
   tbl <- tg_table(1, m+2)
 
+  # Create N value in upper left corner
   tbl[[1]][[1]] <- tg_n(length(unique(datar)), src=key(row, column, "N"))
 
   # The quantiles by category
-  y <- rep(NA, length(col_categories))
   n_labels <- lapply(1:length(col_categories), FUN=function(category) {
     cat_name <- col_categories[category]
     x <- datar[datac == cat_name]
     xx <- aggregate(x, by=list(x), FUN=length)$x
 
+    # Fill in the quantiles shifted one to the right
     tbl[[1]][[category+1]] <<- tg_quantile(
         tg_format(row$format, quantile(xx, na.rm=TRUE)),
         src=key(row, column, subcol=cat_name))
 
-    # For labeling
+    # For the sub header of, the columns
     tg_n(length(unique(x)), src=key(row, column, "N", subcol=cat_name))
   })
 
+  # Test a poisson model
   test <- summary(aov(glm(x ~ treatment, aggregate(datar, by=list(id=datar, treatment=datac), FUN=length), family=poisson)))[[1]]
 
+  # Create the f statistics column, in the last far right place
   tbl[[1]][[m+2]] <- tg_fstat(f   = tg_format("%.2f", test$'F value'[1]),
                               n1  = test$Df[1],
                               n2  = test$Df[2],
                               p   = tg_format("%1.3f", test$'Pr(>F)'[1]),
                               src = key(row, column, "F"))
 
+# Create the headers
   row_header(tbl) <- derive_label(row)
   col_header(tbl) <- list(c("N", col_categories, "Test Statistic"),
                           c(NA,  n_labels,       NA)              )
