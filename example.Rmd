@@ -5,6 +5,19 @@ date: "September 11, 2016"
 output: html_document
 ---
 
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 11px
+}
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 data(pbc)
@@ -21,12 +34,29 @@ data(pbc)
 
 This package is meant to implement the concept of a grammar of tables. It allows for a simple formula expression and a data frame to create a rich summary table in a variety of formats. It is designed for extensibility at each step of the process, so that one is not limited by the authors choice of table statistics, output format. The grammar however is an integral part of the package, and as such is not modifiable.
 
-Here's some basic examples of what's possible.
+Here's an example similary to summaryM from Hmisc to get us started:
 
 
-```{r pbc}
+```{r pbc, comment=""}
 summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
 ```
+
+Notice that stage in the formula wasn't stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.
+
+It also supports HTML5.
+```{r, results="asis"}
+html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc), fragment=TRUE, id="fig1")
+```
+
+The Hmisc default style recognizes 3 types: Categorical, Bionimial, and Numerical. Then for each product of these two, a function is provided to generate the corresponding rows and columns. As mentioned before, the user can declare any type in a formula, and one is not limited to the Hmisc defaults. This is completely customizable, which will be covered later.
+
+Let's cover the phases of table generations.
+
+1. Syntax. The formula is parsed into an abstract syntax tree (AST), and factors are right distributed, and the data frame is split into appropriate pieces attached to each node in the AST. The syntax and parser are the only portions of this library that are fixed, and not customizable. The grammar may expand with time, but cautiously as to not create an overly verbose set of possibilites to interpret. The goal is to create a clean grammar that describes the bold areas of a table to fill in.
+2. Semantics. The elements of the AST are examined, and passed to compilation functions. The compilation function function is chosen by determining the type of the row variable, and the type of column variable. For example, `drug ~ stage::Categorical`, is a Categorical$\cross$Categorical which references the `summarize_chisq` for compiling. One can easily specify different compilers for a formula and get very different results inside a formula. Note: the application of multiplication `*` cannot be done in the previous phase, because this involves semantic meaning of what multiplication means. In one context it might be an interaction, in another simple multiplication. Handling multiplicative terms can be tricky. Once compiling is finished a table object composed of cells (list of lists) which are one of a variety of S3 types is the result.
+3. Rendering. With a compiled table object in memory, the final stage is conversion to an output format which could be plain text, HTML5, LaTeX or anything. These are overrideable via S3 classes representing the different possible types of cells that are present inside a table. User specified rendering is possible as well. 
+
+
 
 ## Including Plots
 
