@@ -43,12 +43,12 @@ tg.default <- function(x, row, column, ...)
 
 tg.aov <- function(model, row, column, ...)
 {
-  test <- summary(model)
+  test <- summary(model)[[1]]
   tg_fstat(f   = tg_format("%.2f", test$'F value'[1]),
            n1  = test$Df[1],
            n2  = test$Df[2],
            p   = tg_format("%1.3f", test$'Pr(>F)'[1]),
-           src = key(row, column, "F"))
+           src = key(row, column, "aov"))
 }
 
 
@@ -171,10 +171,8 @@ add_each <- function(table_builder, values, func)
 
 add_col <- function(table_builder, object)
 {
-  with(table_builder, {
-    ncol <- ncol+1
-    table[[nrow]][[ncol]] <- tg(object, src=key(row, col))
-  })
+  table_builder$ncol <- table_builder$ncol+1
+  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- tg(object, table_builder$row, table_builder$col)
   table_builder
 }
 
