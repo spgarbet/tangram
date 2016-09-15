@@ -104,20 +104,33 @@ derive_label <- function(node)
   cell_label(l, units)
 }
 
+#' Convert data type to a factor if it's not already
+#'
+#' @param x Data to convert to factor
+#'
+#' @return Data as a factor
+#' @export
+#'
+#' @examples
+#'
+#' as.categorical(1:3)
+#'
+as.categorical <- function(x)
+{
+  if(!inherits(x, "factor"))
+  {
+    lbl <- label(x)
+    x <- factor(x, levels=sort(unique(x[!is.na(x)])))
+    label(x) <- lbl
+  }
+  x
+}
+
 summarize_kruskal_horz <- function(row, column)
 {
-  datar <- row$data[,1]
-  datac <- column$data[,1]
-
-  if(!inherits(datac, "factor"))
-  {
-    lbl_c <- label(datac)
-    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
-    label(datac) <- lbl_c
-  }
-
+  datar      <- row$data[,1]
+  datac      <- as.categorical(column$data[,1])
   categories <- levels(datac)
-  if (is.null(categories)) {categories <- unique(datar)}
 
   # 1 X (n + no. categories + test statistic)
   tbl <- cell_table(1, length(categories) + 2, TRUE)
@@ -158,15 +171,9 @@ summarize_kruskal_horz <- function(row, column)
 
 summarize_kruskal_vert <- function(row, column)
 {
-  if(!inherits(datar, "factor"))
-  {
-    lbl_r <- label(datar)
-    datar <- factor(datar, levels=unique(datar[!is.na(datar)]))
-    label(datar) <- lbl_r
-  }
-
+  datar      <- as.categorical(row$data[,1])
+  datac      <- column$data[,1]
   categories <- levels(datar)
-  if (is.null(categories)) {unique(datar)}
 
   # Label for the table cell
   col_lbl <- cell_table(1, 3)
@@ -202,31 +209,14 @@ summarize_kruskal_vert <- function(row, column)
 
 summarize_chisq <- function(row, column)
 {
-  datar <- row$data[,1]
-  datac <- column$data[,1]
-
-  if(!inherits(datar, "factor"))
-  {
-    lbl_r <- label(datar)
-    datar <- factor(datar, levels=unique(datar[!is.na(datar)]))
-    label(datar) <- lbl_r
-  }
-
-  if(!inherits(datac, "factor"))
-  {
-    lbl_c <- label(datac)
-    datac <- factor(datac, levels=unique(datac[!is.na(datac)]))
-    label(datac) <- lbl_c
-  }
+  datar          <- as.categorical(row$data[,1])
+  datac          <- as.categorical(column$data[,1])
 
   row_categories <- levels(datar)
-  if (is.null(row_categories)) {unique(datar)}
-
   col_categories <- levels(datac)
-  if (is.null(col_categories)) {unique(datac)}
 
-  n <- length(row_categories)
-  m <- length(col_categories)
+  n              <- length(row_categories)
+  m              <- length(col_categories)
 
   # Label for the table cell
   row_lbl <- cell_table(length(row_categories), 1)
