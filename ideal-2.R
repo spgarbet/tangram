@@ -147,6 +147,8 @@ tg_quantile <- function(table_builder, data, subcol=NA, subrow=NA, ...)
 
 
 ### Now create custom function for counting events with a category
+n  <- 1000
+df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
 summarize_count <- function(table, row, column)
 {
   # Assume no factors
@@ -178,8 +180,7 @@ summarize_count <- function(table, row, column)
   add_col(test)                                      # AOV results
 }
 
-n  <- 1000
-df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
+
 
 ast    <- Parser$new()$run(event ~ id)$reduce(df)
 row    <- ast$right
