@@ -2,7 +2,7 @@
 # Given the compiled tree of data, render as a text summary
 #' @include S3-Cell.R
 
-summary.defaultl <- function(object) ""
+summary.default <- function(object) ""
 
 summary.cell_label <- function(object)
 {
