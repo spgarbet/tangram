@@ -41,6 +41,11 @@ tg.default <- function(x, row, column, ...)
   cell_label(as.character(x))
 }
 
+tg.cell <- function(x, row, column, ...)
+{
+  x
+}
+
 tg.aov <- function(model, row, column, ...)
 {
   test <- summary(model)[[1]]
@@ -172,7 +177,6 @@ summarize_count <- function(table, row, column)
   })                                            %>%
   add_col(test)                                      # AOV results
 }
-
 
 n  <- 1000
 df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
