@@ -6,7 +6,7 @@ library(Hmisc)
 library(stringr)
 library(R6)
 library(dplyr)
-library(purrr)
+#library(purrr)
 devtools::load_all()
 
 

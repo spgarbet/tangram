@@ -7,7 +7,7 @@ index <- function(x, ...)
   UseMethod("index", x)
 }
 
-index.tg_cell <- function(object,caption)
+index.default <- function(object,caption)
 {
   if(!("src" %in% names(object))) return(NULL)
   if(is.na(object$src)) return(NULL)
@@ -18,7 +18,7 @@ index.tg_cell <- function(object,caption)
 }
 
 #' @export
-index.tg_table <- function(object, caption="Table")
+index.cell_table <- function(object, caption="Table")
 {
   nrows <- rows(object)
   ncols <- cols(object)

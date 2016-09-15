@@ -101,7 +101,7 @@ derive_label <- function(node)
         if(nchar(u2)>0) {units<-u2}
   })
 
-  tg_label(l, units)
+  cell_label(l, units)
 }
 
 summarize_kruskal_horz <- function(row, column)
@@ -120,26 +120,26 @@ summarize_kruskal_horz <- function(row, column)
   if (is.null(categories)) {categories <- unique(datar)}
 
   # 1 X (n + no. categories + test statistic)
-  tbl <- tg_table(1, length(categories) + 2, TRUE)
+  tbl <- cell_table(1, length(categories) + 2, TRUE)
 
   # Label for the table cell
   row_lbl <- derive_label(row)
-  col_lbl <- tg_table(2, 2+length(categories))
-  col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[length(categories)+2]] <- tg_header("Test Statistic")
+  col_lbl <- cell_table(2, 2+length(categories))
+  col_lbl[[1]][[1]] <- cell_header("N")
+  col_lbl[[1]][[length(categories)+2]] <- cell_header("Test Statistic")
 
   # N value
   N <- sum(!is.na(datar))
-  tbl[[1]][[1]] <- tg_label(as.character(N),
+  tbl[[1]][[1]] <- cell_label(as.character(N),
     src=paste(row$value, ":", column$value,":N",sep=''))
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
     x <- datar[datac == categories[category]]
-    tbl[[1]][[category+1]] <<- tg_quantile(tg_format(row$format, quantile(x, na.rm=TRUE)),
+    tbl[[1]][[category+1]] <<- cell_quantile(cell_format(row$format, quantile(x, na.rm=TRUE)),
         src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
-    col_lbl[[1]][[category+1]] <<- tg_header(categories[category])
-    col_lbl[[2]][[category+1]] <<- tg_subheader(paste("N=",sum(!is.na(x)),sep=''),
+    col_lbl[[1]][[category+1]] <<- cell_header(categories[category])
+    col_lbl[[2]][[category+1]] <<- cell_subheader(paste("N=",sum(!is.na(x)),sep=''),
         src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
   })
 
@@ -147,7 +147,7 @@ summarize_kruskal_horz <- function(row, column)
   test <- spearman2(datac, datar, na.action=na.retain)
 
   tbl[[1]][[length(categories)+2]] <-
-    tg_fstat(tg_format("%.2f", test['F']), test['df1'], test['df2'], tg_format("%1.3f", test['P']),
+    cell_fstat(cell_format("%.2f", test['F']), test['df1'], test['df2'], cell_format("%1.3f", test['P']),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_header") <- row_lbl
@@ -169,29 +169,29 @@ summarize_kruskal_vert <- function(row, column)
   if (is.null(categories)) {unique(datar)}
 
   # Label for the table cell
-  col_lbl <- tg_table(1, 3)
-  row_lbl <- tg_table(length(categories), 1)
+  col_lbl <- cell_table(1, 3)
+  row_lbl <- cell_table(length(categories), 1)
 
-  col_lbl[[1]][[1]] <- tg_header("N")
+  col_lbl[[1]][[1]] <- cell_header("N")
   col_lbl[[1]][[2]] <- derive_label(column)
-  col_lbl[[1]][[3]] <- tg_header("Test Statistic")
+  col_lbl[[1]][[3]] <- cell_header("Test Statistic")
 
-  tbl <- tg_table(length(categories), 3, TRUE) # no. categories X 3
+  tbl <- cell_table(length(categories), 3, TRUE) # no. categories X 3
 
   # The quantiles by category
   sapply(1:length(categories), FUN=function(category) {
     x <- datac[datar == categories[category]]
-    tbl[[category]][[1]] <<- tg_label(as.character(length(x)),
+    tbl[[category]][[1]] <<- cell_label(as.character(length(x)),
       src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
-    tbl[[category]][[2]] <<- tg_quantile(tg_format(column$format,quantile(x, na.rm=TRUE)),
+    tbl[[category]][[2]] <<- cell_quantile(cell_format(column$format,quantile(x, na.rm=TRUE)),
       src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
-    row_lbl[[category]][[1]] <<- tg_label(category)
+    row_lbl[[category]][[1]] <<- cell_label(category)
   })
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datar, datac, na.action=na.retain)
 
-  tbl[[1]][[3]] <- tg_fstat(tg_format("%.2f", test['F']), test['df1'], test['df2'], tg_format("%1.3f",test['P']),
+  tbl[[1]][[3]] <- cell_fstat(cell_format("%.2f", test['F']), test['df1'], test['df2'], cell_format("%1.3f",test['P']),
       src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
 
   attr(tbl, "row_header") <- row_lbl
@@ -229,22 +229,22 @@ summarize_chisq <- function(row, column)
   m <- length(col_categories)
 
   # Label for the table cell
-  row_lbl <- tg_table(length(row_categories), 1)
+  row_lbl <- cell_table(length(row_categories), 1)
   row_lbl[[1]][[1]] <- derive_label(row)
   row_lbl[[1]][[1]]$label <- paste(row_lbl[[1]][[1]]$label,":", row_categories[1])
   sapply(2:length(row_categories), FUN=function(level){
-    row_lbl[[level]][[1]] <<- tg_label(paste("  ", row_categories[level]))
+    row_lbl[[level]][[1]] <<- cell_label(paste("  ", row_categories[level]))
   })
-  col_lbl <- tg_table(2, 2+length(col_categories))
-  col_lbl[[1]][[1]] <- tg_header("N")
-  col_lbl[[1]][[length(col_categories)+2]] <- tg_header("Test Statistic")
+  col_lbl <- cell_table(2, 2+length(col_categories))
+  col_lbl[[1]][[1]] <- cell_header("N")
+  col_lbl[[1]][[length(col_categories)+2]] <- cell_header("Test Statistic")
 
   # N X (M+2)
-  tbl <- tg_table(n, m+2, TRUE)
+  tbl <- cell_table(n, m+2, TRUE)
 
   N <- sum(!is.na(datar) & !is.na(datac))
 
-  tbl[[1]][[1]] <- tg_label(as.character(N),
+  tbl[[1]][[1]] <- cell_label(as.character(N),
     src=paste(row$value, ":", column$value,":N",sep=''))
 
   # The fractions by category intersection
@@ -259,12 +259,12 @@ summarize_chisq <- function(row, column)
       numerator <- length(c_xy)
       if(numerator > 0)
       {
-        tbl[[row_category]][[col_category+1]] <<- tg_fraction(numerator, denominator,
+        tbl[[row_category]][[col_category+1]] <<- cell_fraction(numerator, denominator,
           src=paste(row$value,"[",row_categories[row_category],"]:",column$value,"[",col_categories[col_category],"]", sep=''))
       }
     })
-    col_lbl[[1]][[col_category+1]] <<- tg_header(col_categories[col_category])
-    col_lbl[[2]][[col_category+1]] <<- tg_subheader(paste("N=",sum(!is.na(c_x)),sep=''),
+    col_lbl[[1]][[col_category+1]] <<- cell_header(col_categories[col_category])
+    col_lbl[[2]][[col_category+1]] <<- cell_subheader(paste("N=",sum(!is.na(c_x)),sep=''),
       src=paste(row$value, ":", column$value,"[",col_categories[col_category],"]",":N",sep=''))
   })
 
@@ -274,7 +274,7 @@ summarize_chisq <- function(row, column)
 
   test <- chisq.test(y, correct=FALSE)
 
-  tbl[[1]][[m+2]] <- tg_chi2(round(test$statistic, 2), test$parameter, round(test$p.value,3),
+  tbl[[1]][[m+2]] <- cell_chi2(round(test$statistic, 2), test$parameter, round(test$p.value,3),
     src=paste(row$value, ":", column$value,":Chi^2",sep=''))
 
   # Throw out first if length is 2
@@ -288,7 +288,7 @@ summarize_chisq <- function(row, column)
     # Redo labeling as well
     row_lbl[[2]]      <- NULL
     row_lbl[[1]][[1]] <- derive_label(row)
-    row_lbl[[1]][[1]] <- tg_label(paste(row_lbl[[1]][[1]]$label,":", row_categories[2]))
+    row_lbl[[1]][[1]] <- cell_label(paste(row_lbl[[1]][[1]]$label,":", row_categories[2]))
   }
 
   attr(tbl, "row_header") <- row_lbl
@@ -299,19 +299,19 @@ summarize_chisq <- function(row, column)
 
 summarize_spearman <- function(row, column)
 {
-  tbl <- tg_table(1, 3, TRUE)
+  tbl <- cell_table(1, 3, TRUE)
 
   datar <- row$data[,1]
   datac <- column$data[,1]
 
   # Label for the table cell
-  col_lbl <- tg_table(2, 3)
-  col_lbl[[1]][[1]] <- tg_header("N")
+  col_lbl <- cell_table(2, 3)
+  col_lbl[[1]][[1]] <- cell_header("N")
   col_lbl[[1]][[2]] <- derive_label(column)
-  col_lbl[[1]][[3]] <- tg_header("Test Statistic")
-  col_lbl[[2]][[1]] <- tg_subheader("")
-  col_lbl[[2]][[2]] <- tg_subheader("")
-  col_lbl[[2]][[3]] <- tg_subheader("")
+  col_lbl[[1]][[3]] <- cell_header("Test Statistic")
+  col_lbl[[2]][[1]] <- cell_subheader("")
+  col_lbl[[2]][[2]] <- cell_subheader("")
+  col_lbl[[2]][[3]] <- cell_subheader("")
 
   row_lbl <- derive_label(row)
 
@@ -319,17 +319,17 @@ summarize_spearman <- function(row, column)
 
   n <- sum(!is.na(datar) & !is.na(datac))
 
-  tbl[[1]][[1]] <- tg_label(as.character(n),
+  tbl[[1]][[1]] <- cell_label(as.character(n),
     src=paste(row$value, ":", column$value,":N",sep=''))
 
-  tbl[[1]][[2]] <- tg_estimate(test$estimate,
+  tbl[[1]][[2]] <- cell_estimate(test$estimate,
     src=paste(row$value, ":", column$value,sep=''))
 
   # Reversed engineered from cor.test for spearman
   r <- test$estimate
   statistic <- r/sqrt((1 - r^2)/(n - 2))
 
-  tbl[[1]][[3]] <- tg_studentt(round(statistic,2), n-2, round(test$p.value,3),
+  tbl[[1]][[3]] <- cell_studentt(round(statistic,2), n-2, round(test$p.value,3),
     src=paste(row$value, ":", column$value,":ttest",sep=''))
 
   attr(tbl, "row_header") <- row_lbl
