@@ -1,7 +1,7 @@
 #' @include S3-Cell.R
 #' @include parser.R
 
-cell_flatten <- function(table)
+table_flatten <- function(table)
 {
   # Compute final size of table
   final_rows    <- 0
@@ -23,8 +23,8 @@ cell_flatten <- function(table)
 
 
   # Grab labels
-  row_label <- row_header(table[[1]][[1]])
-  col_label <- col_header(table[[1]][[1]])
+  row_label <- attr(table[[1]][[1]], "row_header")
+  col_label <- attr(table[[1]][[1]], "col_header")
 
   # Set aside additional for labeling
   label_rows <- rows(col_label)
@@ -131,7 +131,7 @@ cell_create_table <- function(ast, transforms)
     })
   })
 
-  cell_flatten(tbl)
+  table_flatten(tbl)
 }
 
 #' @export
