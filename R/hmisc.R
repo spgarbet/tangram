@@ -1,47 +1,121 @@
 #' @import stringr
 #' @include S3-Cell.R
+#' @include typing.R
 
-
-#' Determine if a vector is categorical or not
-#'
-#' @param x Vector to determine type of
-#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
-#'
-#' @return A Boolean: TRUE / FALSE
-#' @export
-#'
-#' @examples
-#'
-#' is.categorical(c(1,2,3))
-#' is.categorical(factor(c("A","B","C")))
-#' is.categorical(factor(c("A","B","B","A")))
-#' is.categorical(factor(c(TRUE, FALSE, TRUE, FALSE)))
-#'
-is.categorical <- function(x, threshold=NA)
+# 1 X (n + no. categories + test statistic)
+summarize_kruskal_horz <- function(table, row, column)
 {
-  is.factor(x) ||
-  (!is.na(threshold) && length(unique(x[! is.na(x)])) < threshold)
+  datar      <- row$data[,1]
+  datac      <- as.categorical(column$data[,1])
+  categories <- levels(datac)
+
+  # Kruskal-Wallis via F-distribution
+  test <- spearman2(datac, datar, na.action=na.retain)
+
+  table                                          %>%
+  row_header(derive_label(row))                  %>%
+  col_header("N", categories, "Test Statistics") %>%
+  col_header(NA,  N(subN),    NA               ) %>%
+  add_col(N(sum(!is.na(datar))))                 %>%
+  table_builder_apply(categories, function(tbl, category) {
+     x <- datar[datac == category]
+
+     tbl %>% add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
+  })                                             %>%
+  add_col(test)
 }
 
-#' Determine if a vector is binomial or not
-#'
-#' @param x Vector to determine type of
-#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
-#'
-#' @return a Boolean: TRUE / FALSE
-#' @export
-#'
-#' @examples
-#'
-#' is.binomial(c(1,2,3))
-#' is.binomial(factor(c("A","B","C")))
-#' is.binomial(factor(c("A","B","B","A")))
-#' is.binomial(factor(c(TRUE, FALSE, TRUE, FALSE)))
-#' is.binomial(c('M', 'F', 'M', 'F'), 10)
-is.binomial <- function(x, threshold=NA)
+# no. categories X 3
+summarize_kruskal_vert <- function(table, row, column)
 {
-  (is.factor(x) && length(levels(x)) == 2) ||
-  (!is.na(threshold) && length(unique(x[! is.na(x)])) == 2)
+  datar      <- as.categorical(row$data[,1])
+  datac      <- column$data[,1]
+  categories <- levels(datar)
+
+  # Kruskal-Wallis via F-distribution
+  test <- spearman2(datar, datac, na.action=na.retain)
+
+  table                                                             %>%
+  col_header("N", derive_label(column), "Test Statistic")           %>%
+  table_builder_apply(categories, FUN=function(tbl, category) {
+    x <- datac[datar == categories[category]]
+
+    tbl                                                  %>%
+    row_header(category)                                 %>%
+    add_col(N(length(x)))                                %>%
+    add_col(tg_quantile(x, na.rm=TRUE), subrow=category) %>%
+    new_line()
+  })                                                                %>%
+  cursor_pos(1, 3)                                                  %>%
+  add_col(test)
+}
+
+# N X (M+2)
+summarize_chisq <- function(table, row, column)
+{
+  datar          <- as.categorical(row$data[,1])
+  datac          <- as.categorical(column$data[,1])
+
+  row_categories <- levels(datar)
+  col_categories <- levels(datac)
+
+  # If it's binomial, then don't display the first value
+  if(length(row_categories) == 2) {row_categories <- last(row_categories)}
+
+  # Compute N values for each category
+  subN <- lapply(levels(dc), FUN=function(cat){
+    length(datac[datac == col_category & !is.na(datac)])
+  })
+
+  # Chi^2 test
+  y    <- table(datar,datac, useNA="no")
+  y    <- y[,which(!apply(y,2,FUN = function(x){all(x == 0)}))]
+  y    <- y[which(!apply(y,1,FUN = function(x){all(x == 0)})),]
+  test <- chisq.test(y, correct=FALSE)
+
+  # First row label is different
+  first_row_lbl <- derive_label(row)
+  first_row_lbl$label <- paste(first_row_lbl$label,":", row_categories[1])
+
+  # Now construct the table by add rows to each column
+  table                                                      %>%
+  col_header("N", col_categories, "Test Statistic")          %>%
+  col_header(NA, tg_N(subN), NA)                             %>%
+  row_header(first_row_lbl, paste("  ", row_categories[-1])) %>%
+  add_col(N(sum(!is.na(datar) & !is.na(datac))))             %>%
+  table_builder_apply(col_categories, FUN=function(table, col_category) {
+    denominator <- length(datac[datac == col_category & !is.na(datac)])
+
+    table              %>%
+    table_builder_apply(row_categories, FUN=function(table, row_category) {
+      numerator <- length(datac[datac == col_category & datar == row_category & !is.na(datac)])
+      table %>% add_col(tg_fraction(numerator, denominator), subcol=col_category, subrow=row_category)
+    })                 %>%
+    new_col()
+  }) %>%
+  add_col(test)
+}
+
+# 1 X 3
+summarize_spearman <- function(table, row, column)
+{
+  datar <- row$data[,1]
+  datac <- column$data[,1]
+
+  test  <- cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
+
+  table %>%
+  row_header(derive_label(row)) %>%
+  col_header("N", derive_label(column), "Test Statistic") %>%
+  col_header(NA, NA, NA) %>%
+  add_col(N(sum(!is.na(datar) & !is.na(datac)))) %>%
+  add_col(test$estimate) %>%
+  add_col(test)
+}
+
+apply_factors <- function(row, column)
+{
+  stop("Not Implemented")
 }
 
 #' Determine data type of a vector loosely consistent with Hmisc.
@@ -66,270 +140,6 @@ hmisc_data_type <- function(x, category_threshold=NA)
   else if(is.categorical(x,category_threshold))  "Categorical"
   else if(is.numeric(x))                         "Numerical"
   else                   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
-}
-
-#' Determine the label of a given AST node. Should have data attached via reduce before calling.
-#'
-#' @param node Abstract syntax tree node.
-#'
-#' @return A string with a label for the node
-#' @export
-#'
-#' @examples
-#'
-#' hmisc_data_type(c(1,2,3))
-#' hmisc_data_type(factor(c("A","B","C")))
-#' hmisc_data_type(factor(c("A","B","B","A")))
-#' hmisc_data_type(factor(c(TRUE, FALSE, TRUE, FALSE)))
-#'
-derive_label <- function(node)
-{
-  l <- node$string()
-  try({
-        l2 <- label(node$data, units=FALSE)
-        if(nchar(l2)>0) {l<-l2}
-  })
-
-  # Find units if they exist
-  x <- strsplit(l, "\\s+\\(")[[1]]
-  l <- x[1]
-
-  units <- NA
-  if(length(x) > 1) units <- strsplit(x[2], "\\)")[1]
-  try({
-        u2 <- units(node$data)
-        if(nchar(u2)>0) {units<-u2}
-  })
-
-  cell_label(l, units)
-}
-
-#' Convert data type to a factor if it's not already
-#'
-#' @param x Data to convert to factor
-#'
-#' @return Data as a factor
-#' @export
-#'
-#' @examples
-#'
-#' as.categorical(1:3)
-#'
-as.categorical <- function(x)
-{
-  if(!inherits(x, "factor"))
-  {
-    lbl <- label(x)
-    x <- factor(x, levels=sort(unique(x[!is.na(x)])))
-    label(x) <- lbl
-  }
-  x
-}
-
-summarize_kruskal_horz <- function(row, column)
-{
-  datar      <- row$data[,1]
-  datac      <- as.categorical(column$data[,1])
-  categories <- levels(datac)
-
-  # 1 X (n + no. categories + test statistic)
-  tbl <- cell_table(1, length(categories) + 2, TRUE)
-
-  # Label for the table cell
-  row_lbl <- derive_label(row)
-  col_lbl <- cell_table(2, 2+length(categories))
-  col_lbl[[1]][[1]] <- cell_header("N")
-  col_lbl[[1]][[length(categories)+2]] <- cell_header("Test Statistic")
-
-  # N value
-  N <- sum(!is.na(datar))
-  tbl[[1]][[1]] <- cell_label(as.character(N),
-    src=paste(row$value, ":", column$value,":N",sep=''))
-
-  # The quantiles by category
-  sapply(1:length(categories), FUN=function(category) {
-    x <- datar[datac == categories[category]]
-    tbl[[1]][[category+1]] <<- cell_quantile(cell_format(row$format, quantile(x, na.rm=TRUE)),
-        src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
-    col_lbl[[1]][[category+1]] <<- cell_header(categories[category])
-    col_lbl[[2]][[category+1]] <<- cell_subheader(paste("N=",sum(!is.na(x)),sep=''),
-        src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
-  })
-
-  # Kruskal-Wallis via F-distribution
-  test <- spearman2(datac, datar, na.action=na.retain)
-
-  tbl[[1]][[length(categories)+2]] <-
-    cell_fstat(cell_format("%.2f", test['F']), test['df1'], test['df2'], cell_format("%1.3f", test['P']),
-      src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
-
-  attr(tbl, "row_header") <- row_lbl
-  attr(tbl, "col_header") <- col_lbl
-
-  tbl
-}
-
-summarize_kruskal_vert <- function(row, column)
-{
-  datar      <- as.categorical(row$data[,1])
-  datac      <- column$data[,1]
-  categories <- levels(datar)
-
-  # Label for the table cell
-  col_lbl <- cell_table(1, 3)
-  row_lbl <- cell_table(length(categories), 1)
-
-  col_lbl[[1]][[1]] <- cell_header("N")
-  col_lbl[[1]][[2]] <- derive_label(column)
-  col_lbl[[1]][[3]] <- cell_header("Test Statistic")
-
-  tbl <- cell_table(length(categories), 3, TRUE) # no. categories X 3
-
-  # The quantiles by category
-  sapply(1:length(categories), FUN=function(category) {
-    x <- datac[datar == categories[category]]
-    tbl[[category]][[1]] <<- cell_label(as.character(length(x)),
-      src=paste(row$value, ":", column$value,"[",categories[category],"]",":N",sep=''))
-    tbl[[category]][[2]] <<- cell_quantile(cell_format(column$format,quantile(x, na.rm=TRUE)),
-      src=paste(row$value, ":", column$value,"[",categories[category],"]",sep=''))
-    row_lbl[[category]][[1]] <<- cell_label(category)
-  })
-
-  # Kruskal-Wallis via F-distribution
-  test <- spearman2(datar, datac, na.action=na.retain)
-
-  tbl[[1]][[3]] <- cell_fstat(cell_format("%.2f", test['F']), test['df1'], test['df2'], cell_format("%1.3f",test['P']),
-      src=paste(row$value, ":", column$value,":KruskalWallis",sep=''))
-
-  attr(tbl, "row_header") <- row_lbl
-  attr(tbl, "col_header") <- col_lbl
-
-  tbl
-}
-
-summarize_chisq <- function(row, column)
-{
-  datar          <- as.categorical(row$data[,1])
-  datac          <- as.categorical(column$data[,1])
-
-  row_categories <- levels(datar)
-  col_categories <- levels(datac)
-
-  n              <- length(row_categories)
-  m              <- length(col_categories)
-
-  # Label for the table cell
-  row_lbl <- cell_table(length(row_categories), 1)
-  row_lbl[[1]][[1]] <- derive_label(row)
-  row_lbl[[1]][[1]]$label <- paste(row_lbl[[1]][[1]]$label,":", row_categories[1])
-  sapply(2:length(row_categories), FUN=function(level){
-    row_lbl[[level]][[1]] <<- cell_label(paste("  ", row_categories[level]))
-  })
-  col_lbl <- cell_table(2, 2+length(col_categories))
-  col_lbl[[1]][[1]] <- cell_header("N")
-  col_lbl[[1]][[length(col_categories)+2]] <- cell_header("Test Statistic")
-
-  # N X (M+2)
-  tbl <- cell_table(n, m+2, TRUE)
-
-  N <- sum(!is.na(datar) & !is.na(datac))
-
-  tbl[[1]][[1]] <- cell_label(as.character(N),
-    src=paste(row$value, ":", column$value,":N",sep=''))
-
-  # The fractions by category intersection
-  sapply(1:length(col_categories), FUN=function(col_category) {
-    c_x <- datac[datac == col_categories[col_category]]
-    c_x <- c_x[!is.na(c_x)]
-    denominator <- length(c_x)
-    sapply(1:length(row_categories), FUN=function(row_category) {
-      c_xy <- datac[datac == col_categories[col_category] &
-                    datar == row_categories[row_category]]
-      c_xy <- c_xy[!is.na(c_xy)]
-      numerator <- length(c_xy)
-      if(numerator > 0)
-      {
-        tbl[[row_category]][[col_category+1]] <<- cell_fraction(numerator, denominator,
-          src=paste(row$value,"[",row_categories[row_category],"]:",column$value,"[",col_categories[col_category],"]", sep=''))
-      }
-    })
-    col_lbl[[1]][[col_category+1]] <<- cell_header(col_categories[col_category])
-    col_lbl[[2]][[col_category+1]] <<- cell_subheader(paste("N=",sum(!is.na(c_x)),sep=''),
-      src=paste(row$value, ":", column$value,"[",col_categories[col_category],"]",":N",sep=''))
-  })
-
-  y <- table(datar,datac, useNA="no")
-  y <- y[,which(!apply(y,2,FUN = function(x){all(x == 0)}))]
-  y <- y[which(!apply(y,1,FUN = function(x){all(x == 0)})),]
-
-  test <- chisq.test(y, correct=FALSE)
-
-  tbl[[1]][[m+2]] <- cell_chi2(round(test$statistic, 2), test$parameter, round(test$p.value,3),
-    src=paste(row$value, ":", column$value,":Chi^2",sep=''))
-
-  # Throw out first if length is 2
-  if(length(tbl) == 2)
-  {
-    tbl[[2]][[m+2]] <- tbl[[1]][[m+2]]
-    tbl[[2]][[1]]   <- tbl[[1]][[1]]
-    tbl[[1]]        <- tbl[[2]]
-    tbl[[2]]        <- NULL
-
-    # Redo labeling as well
-    row_lbl[[2]]      <- NULL
-    row_lbl[[1]][[1]] <- derive_label(row)
-    row_lbl[[1]][[1]] <- cell_label(paste(row_lbl[[1]][[1]]$label,":", row_categories[2]))
-  }
-
-  attr(tbl, "row_header") <- row_lbl
-  attr(tbl, "col_header") <- col_lbl
-
-  tbl
-}
-
-summarize_spearman <- function(row, column)
-{
-  tbl <- cell_table(1, 3, TRUE)
-
-  datar <- row$data[,1]
-  datac <- column$data[,1]
-
-  # Label for the table cell
-  col_lbl <- cell_table(2, 3)
-  col_lbl[[1]][[1]] <- cell_header("N")
-  col_lbl[[1]][[2]] <- derive_label(column)
-  col_lbl[[1]][[3]] <- cell_header("Test Statistic")
-  col_lbl[[2]][[1]] <- cell_subheader("")
-  col_lbl[[2]][[2]] <- cell_subheader("")
-  col_lbl[[2]][[3]] <- cell_subheader("")
-
-  row_lbl <- derive_label(row)
-
-  test <- cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
-
-  n <- sum(!is.na(datar) & !is.na(datac))
-
-  tbl[[1]][[1]] <- cell_label(as.character(n),
-    src=paste(row$value, ":", column$value,":N",sep=''))
-
-  tbl[[1]][[2]] <- cell_estimate(test$estimate,
-    src=paste(row$value, ":", column$value,sep=''))
-
-  # Reversed engineered from cor.test for spearman
-  r <- test$estimate
-  statistic <- r/sqrt((1 - r^2)/(n - 2))
-
-  tbl[[1]][[3]] <- cell_studentt(round(statistic,2), n-2, round(test$p.value,3),
-    src=paste(row$value, ":", column$value,":ttest",sep=''))
-
-  attr(tbl, "row_header") <- row_lbl
-  attr(tbl, "col_header") <- col_lbl
-  tbl
-}
-
-apply_factors <- function(row, column)
-{
-  stop("Not Implemented")
 }
 
 #'

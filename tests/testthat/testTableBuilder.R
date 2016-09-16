@@ -1,0 +1,210 @@
+test_that("New Table Builder returns an empty 1x1 table",
+{
+  tb <- new_table_builder("A", "B")
+
+  expect_true(inherits(tb$table, "cell_table"))
+  expect_equal(length(tb$table), 1)
+  expect_equal(length(tb$table[[1]]), 1)
+  expect_equal(class(tb$table[[1]][[1]]), "cell")
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 1)
+  expect_equal(tb$row, "A")
+  expect_equal(tb$col, "B")
+})
+
+test_that("home moves the cursor to 1,1", {
+  tb <- new_table_builder("A", "B") %>% cursor_down() %>% cursor_right() %>% home()
+
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 1)
+})
+
+test_that("cursor_right moves the cursor 1 to the right", {
+  tb <- new_table_builder("A", "B") %>% cursor_right()
+
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 2)
+})
+
+test_that("cursor_right moves the cursor n to the right", {
+  tb <- new_table_builder("A", "B") %>% cursor_right(23)
+
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 24)
+
+  # And allow for crazy negative usage
+  tb <- tb %>% cursor_right(-2)
+  expect_equal(tb$ncol, 22)
+})
+
+test_that("cursor_right errors when request to move beyond left most column via a negative value", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+
+  expect_error(cursor_right(tb, -10))
+  expect_error(home(tb) %>% cursor_right(-1))
+})
+
+test_that("cursor_down moves the cursor 1 down", {
+  tb <- new_table_builder("A", "B") %>% cursor_down()
+
+  expect_equal(tb$nrow, 2)
+  expect_equal(tb$ncol, 1)
+})
+
+test_that("cursor_down moves the cursor n down", {
+  tb <- new_table_builder("A", "B") %>% cursor_down(23)
+
+  expect_equal(tb$nrow, 24)
+  expect_equal(tb$ncol, 1)
+
+  # And allow for crazy negative usage
+  tb <- tb %>% cursor_down(-2)
+  expect_equal(tb$nrow, 22)
+})
+
+test_that("cursor_down errors when requested to move above top row via a negative value", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+
+  expect_error(cursor_down(tb, -10))
+  expect_error(home(tb) %>% cursor_down(-1))
+})
+
+
+test_that("cursor_left moves the cursor 1 to the left", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_left()
+
+  expect_equal(tb$nrow, 10)
+  expect_equal(tb$ncol, 9)
+})
+
+test_that("cursor_left moves the cursor n to the left", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_left(5)
+
+  expect_equal(tb$nrow, 10)
+  expect_equal(tb$ncol, 5)
+})
+
+test_that("cursor_left errors when request to move beyond left most column", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+
+  expect_error(cursor_left(tb, 10))
+  expect_error(home(tb) %>% cursor_left(1))
+})
+
+test_that("cursor_up moves the cursor 1 up", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_up()
+
+  expect_equal(tb$nrow, 9)
+  expect_equal(tb$ncol, 10)
+})
+
+test_that("cursor_up moves the cursor n up", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_up(5)
+
+  expect_equal(tb$nrow, 5)
+  expect_equal(tb$ncol, 10)
+})
+
+test_that("cursor_up errors when request to move beyond top most column", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+
+  expect_error(cursor_up(tb, 10))
+  expect_error(home(tb) %>% cursor_up(1))
+})
+
+test_that("cursor_pos positions cursor correctly and doesn't allow negative values", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+
+  expect_equal(tb$nrow, 10)
+  expect_equal(tb$ncol, 10)
+
+  expect_error(cursor_pos(tb, -1, 10))
+  expect_error(cursor_pos(tb, 10, -1))
+})
+
+test_that("carriage return goes to first column without advancing row", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% carriage_return()
+
+  expect_equal(tb$nrow, 10)
+  expect_equal(tb$ncol, 1)
+})
+
+test_that("line_feed moves the cursor 1 down", {
+  tb <- new_table_builder("A", "B") %>% line_feed()
+
+  expect_equal(tb$nrow, 2)
+  expect_equal(tb$ncol, 1)
+})
+
+test_that("line_feed moves the cursor n down", {
+  tb <- new_table_builder("A", "B") %>% line_feed(23)
+
+  expect_equal(tb$nrow, 24)
+  expect_equal(tb$ncol, 1)
+})
+
+test_that("new_line both moves down a line and returns to first column", {
+  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% new_line()
+
+  expect_equal(tb$nrow, 11)
+  expect_equal(tb$ncol, 1)
+})
+
+test_that("new_row opens a new row at the bottom", {
+   tb <- new_table_builder("A", "B") %>% cursor_right()
+
+   tb$table[[1]] <- list("A", "B")
+   tb$table[[3]] <- list("C")
+
+   tb <- tb %>% new_row()
+
+   expect_equal(tb$nrow, 4)
+   expect_equal(tb$ncol, 1)
+})
+
+test_that("new_col opens a new col at right of the top most defined col", {
+   tb <- new_table_builder("A", "B") %>% cursor_down(2)
+
+   tb$table[[1]] <- list("A", "B")
+   tb$table[[3]] <- list("C")
+
+   tb <- tb %>% new_col()
+
+   expect_equal(tb$nrow, 1)
+   expect_equal(tb$ncol, 3)
+})
+
+test_that("table_builder_apply works over a vector", {
+   tb <- new_table_builder("A", "B") %>%
+         table_builder_apply(1:3, FUN=function(tbl, x) {
+           tbl %>% cursor_down(x) %>% cursor_right(x)
+         })
+
+   expect_equal(tb$nrow, 7)
+   expect_equal(tb$ncol, 7)
+})
+
+test_that("write_cell writes to table with key info",
+{
+  tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
+          write_cell(tg_N(2), subrow="S", subcol="T")
+  cell <- tb$table[[1]][[1]]
+
+  expect_true(inherits(cell, "cell_n"))
+  expect_true(inherits(cell, "cell"))
+  expect_equal(cell$src, "A[S]:B[T]:N")
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 1)
+  expect_equal(length(tb$table), 1)
+  expect_equal(length(tb$table[[1]]), 1)
+})
+
+test_that("add_col will add a single column", {
+  tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
+          add_col(tg_N(2), subrow="S", subcol="T")
+
+  expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:N")
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 2)
+})
+

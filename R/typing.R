@@ -1,0 +1,63 @@
+#' Determine if a vector is categorical or not
+#'
+#' @param x Vector to determine type of
+#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
+#'
+#' @return A Boolean: TRUE / FALSE
+#' @export
+#'
+#' @examples
+#'
+#' is.categorical(c(1,2,3))
+#' is.categorical(factor(c("A","B","C")))
+#' is.categorical(factor(c("A","B","B","A")))
+#' is.categorical(factor(c(TRUE, FALSE, TRUE, FALSE)))
+#'
+is.categorical <- function(x, threshold=NA)
+{
+  is.factor(x) ||
+  (!is.na(threshold) && length(unique(x[! is.na(x)])) < threshold)
+}
+
+#' Determine if a vector is binomial or not
+#'
+#' @param x Vector to determine type of
+#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
+#'
+#' @return a Boolean: TRUE / FALSE
+#' @export
+#'
+#' @examples
+#'
+#' is.binomial(c(1,2,3))
+#' is.binomial(factor(c("A","B","C")))
+#' is.binomial(factor(c("A","B","B","A")))
+#' is.binomial(factor(c(TRUE, FALSE, TRUE, FALSE)))
+#' is.binomial(c('M', 'F', 'M', 'F'), 10)
+is.binomial <- function(x, threshold=NA)
+{
+  (is.factor(x) && length(levels(x)) == 2) ||
+  (!is.na(threshold) && length(unique(x[! is.na(x)])) == 2)
+}
+
+#' Convert data type to a factor if it's not already
+#'
+#' @param x Data to convert to factor
+#'
+#' @return Data as a factor
+#' @export
+#'
+#' @examples
+#'
+#' as.categorical(1:3)
+#'
+as.categorical <- function(x)
+{
+  if(!inherits(x, "factor"))
+  {
+    lbl <- label(x)
+    x <- factor(x, levels=sort(unique(x[!is.na(x)])))
+    label(x) <- lbl
+  }
+  x
+}

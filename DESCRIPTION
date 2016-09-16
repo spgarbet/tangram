@@ -19,9 +19,11 @@ Suggests:
 RoxygenNote: 5.0.1
 Collate:
     'S3-Cell.R'
+    'typing.R'
     'hmisc.R'
     'html5.R'
     'index.R'
     'parser.R'
     'main.R'
     'summary.R'
+    'table_builder.R'
