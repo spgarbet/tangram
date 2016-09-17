@@ -201,10 +201,28 @@ test_that("write_cell writes to table with key info",
 
 test_that("add_col will add a single column", {
   tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
-          add_col(tg_N(2), subrow="S", subcol="T")
+          add_col(tg_quantile(rnorm(50)), subrow="S", subcol="T")
 
-  expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:N")
+  expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:quantile")
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 2)
+})
+
+test_that("add_col will add multiple columns as cells", {
+  tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
+    add_col(tg_quantile(rnorm(50)),
+            N(4),
+            tg_fraction(1,2),
+            aov(y ~ x, data=data.frame(x=rnorm(10), y=rnorm(10))),
+            t.test(rnorm(10)),
+            subrow="S", subcol="T")
+
+  expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:quantile")
+  expect_equal(tb$table[[1]][[2]]$src, "A[S]:B[T]:N")
+  expect_equal(tb$table[[1]][[3]]$src, "A[S]:B[T]:fraction")
+  expect_equal(tb$table[[1]][[4]]$src, "A[S]:B[T]:aov")
+  expect_equal(tb$table[[1]][[5]]$src, "A[S]:B[T]:htest")
+  expect_equal(tb$nrow, 1)
+  expect_equal(tb$ncol, 6)
 })
 

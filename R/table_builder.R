@@ -56,17 +56,17 @@ args_flatten <- function(ls)
 
   for(a in ls)
   {
-    if(inherits(a, "cell") || inherits(a, "tg"))
+    if("list" %in% class(a))
     {
-      flat[[el]] <- a
-      el <- el + 1
-    } else {
       for(b in a)
       {
         flat[[el]] <- b
         class(flat[[el]]) <- class(a)
         el <- el+1
       }
+    } else {
+      flat[[el]] <- a
+      el <- el + 1
     }
   }
   flat
@@ -218,7 +218,7 @@ table_builder_apply <- function(table_builder, X, FUN)
 }
 
 #' Add an element in the current cell, and advance to next column
-add_col <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
+add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 {
   # Get flattened args list
   flat <- args_flatten(list(...))
@@ -226,7 +226,7 @@ add_col <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
   table_builder %>%
   table_builder_apply(flat, FUN=function(tbl, object) {
     tbl %>%
-    write_cell(object, label=label, subrow=subrow, subcol=subcol) %>%
+    write_cell(object, subrow=subrow, subcol=subcol) %>%
     cursor_right()
   })
 }
@@ -283,7 +283,7 @@ tg.aov <- function(model, row, column, ...)
 tg.htest <- function(model, row, column, ...)
 {
   cell_studentt(round(model$statistic,2), model$df, round(model$p.value, 3),
-    src=key(row, column, "ttest", ...))
+    src=key(row, column, "htest", ...))
 }
 
 tg.quantile <- function(quantiles, row, column, ...)
@@ -300,7 +300,7 @@ tg.fraction <- function(x, row, column, ...)
   cell_fraction(x[1], x[2],
                   src=key(row    = row,
                           col    = column,
-                          label  = "quantile",
+                          label  = "fraction",
                           ...))
 }
 
@@ -319,6 +319,8 @@ tg_fraction <- function(numerator, denominator)
 tg_quantile <- function(x, ...)
 {
   result <- quantile(x, ...)
+
   class(result) <- c("quantile", "tg", "numeric")
+
   result
 }

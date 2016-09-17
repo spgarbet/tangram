@@ -20,7 +20,9 @@ summarize_kruskal_horz <- function(table, row, column)
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     tbl %>% add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
+     tbl %>%
+     tg_quantile(x, na.rm=TRUE, subcol=category) %>%
+     cursor_right()
   })                                             %>%
   add_col(test)
 }
@@ -80,7 +82,7 @@ summarize_chisq <- function(table, row, column)
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
-  col_header(NA, tg_N(subN), NA)                             %>%
+  col_header(NA, N(subN), NA)                                %>%
   row_header(first_row_lbl, paste("  ", row_categories[-1])) %>%
   add_col(N(sum(!is.na(datar) & !is.na(datac))))             %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
