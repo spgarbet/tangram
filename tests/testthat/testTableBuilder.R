@@ -1,3 +1,38 @@
+test_that("Flattening arguments works for embedded vectors of numbers",
+{
+  fl <- args_flatten(NA, c(1,2,3), NA)
+
+  expect_equal(length(fl), 5)
+  expect_true(is.na(fl[[1]]))
+  expect_equal(fl[[2]], 1)
+  expect_equal(fl[[3]], 2)
+  expect_equal(fl[[4]], 3)
+  expect_true(is.na(fl[[5]]))
+})
+
+test_that("Flattening arguments works for basic list",
+{
+  fl <- args_flatten(NA, list(1, 2, 3), NA)
+
+  expect_equal(length(fl), 5)
+  expect_true(is.na(fl[[1]]))
+  expect_equal(fl[[2]], 1)
+  expect_equal(fl[[3]], 2)
+  expect_equal(fl[[4]], 3)
+  expect_true(is.na(fl[[5]]))
+})
+
+test_that("Flattening arguments does not flatten cells",
+{
+   fl <- args_flatten(cell_label("abc", units="alpha"))
+
+   expect_equal(length(fl), 1)
+})
+
+test_that("preparing headers", {
+
+})
+
 test_that("New Table Builder returns an empty 1x1 table",
 {
   tb <- new_table_builder("A", "B")

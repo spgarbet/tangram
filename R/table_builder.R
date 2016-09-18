@@ -47,21 +47,27 @@ derive_label <- function(node)
  ##
 ## Helper functions for adding headers
 
-#' Special flatten list, that doesn't flatten cells.
-#' Helper for dealing with ... arguments.
-args_flatten <- function(ls)
+#' Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)
+#'
+#' @param ... variable arguments
+#' @return a list of the arguments, with vectors and lists flattened
+#'
+#' @examples
+#' args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
+args_flatten <- function(...)
 {
+  ls   <- list(...)
   flat <- list()
   el   <- 1
 
   for(a in ls)
   {
-    if("list" %in% class(a))
+    if("list" %in% class(a) || is.vector(a))
     {
       for(b in a)
       {
         flat[[el]] <- b
-        class(flat[[el]]) <- class(a)
+        if(!"list" %in% class(a)) class(flat[[el]]) <- class(a)
         el <- el+1
       }
     } else {
@@ -72,39 +78,37 @@ args_flatten <- function(ls)
   flat
 }
 
-prepare_header_row <- function(row, col, additional_class, ...)
-{
-  # Get flattened args list
-  flat <- args_flatten(list(...))
-
-  # Convert every element to an appropriate cell
-  lapply(flat, FUN=function(cell){
-    value <- if(inherits(cell, "cell")) cell              else
-             if(is.na(cell))            cell()            else
-                                        tg(cell, row, col)
-    attr(value, "class") <- c(additional_class, attr(value,"class"))
-    value
-  })
-}
-
+#' Function to append a header object to a given attribute. Will create
+#' a new header if one doesn't exit, or append to existing
+#'
+#' @param table_builder The table builder object to modify
+#' @param attribute The header attribute name, i.e. row_header or col_header
+#' @param ... All the header elements to add
+#' @return the modified table_builder
+#'
 new_header <- function(table_builder, attribute, ...)
 {
-  old_hdr <- attr(table_builder$table, attribute)
+  # Grab old header if it exists
+  old_hdr   <- attr(table_builder$table, attribute)
 
-  new_hdr <- prepare_header_row(table_builder$row,
-                                table_builder$col,
-                                ifelse(is.null(old_hdr),
-                                       c("cell_header"),
-                                       c("cell_subheader", "cell_header")),
-                                ...)
+  # Either a header or subheader
+  hdr_class <- if (is.null(old_hdr)) "cell_header" else c("cell_subheader", "cell_header")
 
+  # Convert every element to an appropriate cell from request
+  new_hdr   <- lapply(args_flatten(...), FUN=function(cell) {
+    value <- tg(cell, table_builder$row, table_builder$col)
+    attr(value, "class") <- c(hdr_class, attr(value,"class"))
+    value
+  })
+
+  # If the old header is null, then create one
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
     header <- list(new_hdr)
     attr(header, "class")    <- c("cell_table", "cell")
     attr(header, "embedded") <- FALSE
     header
-  } else {
+  } else { # extend existing
     old_hdr[[length(old_hdr)+1]] <- new_hdr
     old_hdr
   }
@@ -113,7 +117,24 @@ new_header <- function(table_builder, attribute, ...)
   table_builder
 }
 
+#' Function to append a column header to a table being built. The first call creates
+#' a column header, subsequent calls add sub headers to existing column header
+#'
+#' @param table_builder The table builder object to modify
+#' @param ... All the column header elements to add
+#' @return the modified table_builder
+#' @export
+#'
 col_header <- function(table_builder, ...) new_header(table_builder, "col_header", ...)
+
+#' Function to append a row header to a table being built. The first call creates
+#' a row header, subsequent calls add sub headers to existing row header
+#'
+#' @param table_builder The table builder object to modify
+#' @param ... All the row header elements to add
+#' @return the modified table_builder
+#' @export
+#'
 row_header <- function(table_builder, ...) new_header(table_builder, "row_header", ...)
 
   #############################################################################
@@ -221,7 +242,7 @@ table_builder_apply <- function(table_builder, X, FUN)
 add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 {
   # Get flattened args list
-  flat <- args_flatten(list(...))
+  flat <- args_flatten(...)
 
   table_builder %>%
   table_builder_apply(flat, FUN=function(tbl, object) {
@@ -235,7 +256,7 @@ add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 add_row <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
 {
   # Get flattened args list
-  flat <- args_flatten(list(...))
+  flat <- args_flatten(...)
 
   table_builder %>%
   table_builder_apply(flat, FUN=function(tbl, object) {
@@ -254,6 +275,8 @@ tg <- function(x, row, column, ...)
 {
   UseMethod("tg", x)
 }
+
+tg.na <- function(...) { cell() }
 
 tg.default <- function(x, row, column, ...)
 {
@@ -313,14 +336,14 @@ tg_N <- function(...)
 
 tg_fraction <- function(numerator, denominator)
 {
-  structure(c(numerator, denominator), class=c("fraction", "tg", "numeric"))
+  structure(c(numerator, denominator), class=c("fraction", "numeric"))
 }
 
 tg_quantile <- function(x, ...)
 {
   result <- quantile(x, ...)
 
-  class(result) <- c("quantile", "tg", "numeric")
+  class(result) <- c("quantile", "numeric")
 
   result
 }
