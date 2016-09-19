@@ -137,11 +137,10 @@ apply_factors <- function(row, column)
 #'
 hmisc_data_type <- function(x, category_threshold=NA)
 {
-  x <- x[,1]
-  if(is.binomial(x,category_threshold))          "Binomial"
-  else if(is.categorical(x,category_threshold))  "Categorical"
-  else if(is.numeric(x))                         "Numerical"
-  else                   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
+  x <- x[,1] # FIXME: Need to deal with factors
+  if(is.categorical(x,category_threshold))  "Categorical" else
+  if(is.numeric(x))                         "Numerical"   else
+  stop(paste("Unsupported class/type - ",class(x), typeof(x)))
 }
 
 #'
@@ -160,25 +159,16 @@ hmisc_style <- list(
   Numerical   = list(
                   Numerical   = summarize_spearman,
                   Categorical = summarize_kruskal_horz,
-                  Binomial    = summarize_kruskal_horz,
                   Factors     = apply_factors
             ),
   Categorical = list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq,
-                  Binomial    = summarize_chisq,
-                  Factors     = apply_factors
-            ),
-  Binomial    = list(
-                  Numerical   = summarize_kruskal_vert,
-                  Categorical = summarize_chisq,
-                  Binomial    = summarize_chisq,
                   Factors     = apply_factors
             ),
   Factors     = list(
                   Numerical   = apply_factors,
                   Categorical = apply_factors,
-                  Binomial    = apply_factors,
                   Factors     = apply_factors
             )
 )

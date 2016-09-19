@@ -37,12 +37,15 @@ test_that("row_header creates a new header of class cell_header only", {
 
   expect_equal(class(x), c("cell_table", "cell"))
   expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
-  expect_equal(as.numeric(x[[1]][[2]]$n), 1)
+
+  expect_true(x[[1]][[2]]$n == 1)
   expect_equal(x[[1]][[2]]$src, "A:B:N")
-  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
-  expect_equal(as.numeric(x[[1]][[3]]$n), 2)
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_n", "cell"))
+
+  expect_true(x[[1]][[3]]$n == 2)
   expect_equal(x[[1]][[3]]$src, "A:B:N")
-  expect_equal(as.numeric(x[[1]][[4]]$n), 3)
+
+  expect_true(x[[1]][[4]]$n == 3)
   expect_equal(x[[1]][[4]]$src, "A:B:N")
 })
 
@@ -259,7 +262,7 @@ test_that("add_col will add a single column", {
 test_that("add_col will add multiple columns as cells", {
   tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
     add_col(tg_quantile(rnorm(50)),
-            N(4),
+            tg_N(4),
             tg_fraction(1,2),
             aov(y ~ x, data=data.frame(x=rnorm(10), y=rnorm(10))),
             t.test(rnorm(10)),

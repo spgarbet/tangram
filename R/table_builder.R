@@ -62,7 +62,7 @@ args_flatten <- function(...)
 
   for(a in ls)
   {
-    if("list" %in% class(a) || is.vector(a))
+    if("list" %in% class(a) || is.vector(a) || "N" %in% class(a))
     {
       for(b in a)
       {
