@@ -241,11 +241,8 @@ table_builder_apply <- function(table_builder, X, FUN)
 #' Add an element in the current cell, and advance to next column
 add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 {
-  # Get flattened args list
-  flat <- args_flatten(...)
-
   table_builder %>%
-  table_builder_apply(flat, FUN=function(tbl, object) {
+  table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
     tbl %>%
     write_cell(object, subrow=subrow, subcol=subcol) %>%
     cursor_right()
@@ -256,10 +253,8 @@ add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 add_row <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
 {
   # Get flattened args list
-  flat <- args_flatten(...)
-
   table_builder %>%
-  table_builder_apply(flat, FUN=function(tbl, object) {
+  table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
     tbl %>%
     write_cell(object, label=label, subrow=subrow, subcol=subcol) %>%
     cursor_down()
