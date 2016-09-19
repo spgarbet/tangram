@@ -448,29 +448,86 @@ add_row <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
  ##
 ## Table Cell generation functions
 
+#' Base S3 function to allow for constructing table cells. The main purpose
+#' of this layer is to append additional traceability information, and convert
+#' to internal cell type for later rendering decisions.
+#'
+#' @param x element to convert
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell
 #' @export
+#'
+#' @examples
+#' tg(NA)
 tg <- function(x, row, column, ...)
 {
   UseMethod("tg", x)
 }
 
+#' Construct a cell from NA
+#'
+#' @param ... arguments are ignored.
+#' @return an S3 rendereable cell
+#' @export
+#'
+#' @examples
+#' tg(NA)
 tg.na <- function(...) { cell() }
 
+#' Construct a cell. This is the default fallback, it creates a label cell
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell label
+#'
+#' @examples
+#' tg("Joe")
 tg.default <- function(x, row, column, ...)
 {
   cell_label(as.character(x))
 }
 
+#' Construct a cell from a cell. This is essentially an identity function.
+#' I.e., if a user has constructed a cell and passed it in do nothing.
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell label
+#'
+#' @examples
+#' tg(tg("Joe"))
 tg.cell <- function(x, row, column, ...)
 {
   x
 }
 
+#' Construct a cell from an N value.
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell label
+#'
+#' @examples
+#' tg(tg_N("Joe"))
 tg.N <- function(n, row, column, ...)
 {
   cell_n(n, src=key(row, column, "N", ...))
 }
 
+#' Construct a cell from an analysis of variance model
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell that is an F-statistic
+#'
+#' @examples
+#' tg(aov(rnorm(10) ~ rnorm(10)))
 tg.aov <- function(model, row, column, ...)
 {
   test <- summary(model)[[1]]
@@ -481,12 +538,30 @@ tg.aov <- function(model, row, column, ...)
            src = key(row, column, "aov", ...))
 }
 
+#' Construct a cell from a hypothesis test
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell that is a hypothesis test
+#'
+#' @examples
+#' tg(t.test(rnorm(10),rnorm(10)))
 tg.htest <- function(model, row, column, ...)
 {
   cell_studentt(round(model$statistic,2), model$df, round(model$p.value, 3),
     src=key(row, column, "htest", ...))
 }
 
+#' Construct a cell from a tg_quantile
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell that is a hypothesis test
+#'
+#' @examples
+#' tg(tg_quantile(rnorm(10))))
 tg.quantile <- function(quantiles, row, column, ...)
 {
   cell_quantile(quantiles,
@@ -496,6 +571,15 @@ tg.quantile <- function(quantiles, row, column, ...)
                           ...))
 }
 
+#' Construct a cell from a tg_fraction
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell that is a hypothesis test
+#'
+#' @examples
+#' tg(tg_quantile(rnorm(10))))
 tg.fraction <- function(x, row, column, ...)
 {
   cell_fraction(x[1], x[2],
@@ -505,6 +589,13 @@ tg.fraction <- function(x, row, column, ...)
                           ...))
 }
 
+#' Create a vector of N values that are convertable to a cell
+#'
+#' @param ... the N values
+#' @return an S3 rendereable cell that is a hypothesis test
+#'
+#' @examples
+#' tg_N(1, 2, 3)
 tg_N <- function(...)
 {
   v <- c(...)
@@ -512,11 +603,26 @@ tg_N <- function(...)
   v
 }
 
+#' Create a fraction that is convertible to a cell
+#'
+#' @param ... the N values
+#' @return an S3 rendereable cell that is a hypothesis test
+#'
+#' @examples
+#' tg_fraction(1, 2)
 tg_fraction <- function(numerator, denominator)
 {
   structure(c(numerator, denominator), class=c("fraction", "numeric"))
 }
 
+#' Create a quantile that is convertible to a cell
+#'
+#' @param x the data passed to the {base}quantile function
+#' @param ... all arguments that are passed to the {base}quantile function
+#' @return an S3 rendereable cell that is a hypothesis test
+#'
+#' @examples
+#' tg_fraction(1, 2)
 tg_quantile <- function(x, ...)
 {
   result <- quantile(x, ...)
