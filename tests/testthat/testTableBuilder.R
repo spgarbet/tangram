@@ -29,7 +29,7 @@ test_that("Flattening arguments does not flatten cells",
   expect_equal(length(fl), 1)
 })
 
-test_that("row_header creates a new header of class cell_header only", {
+test_that("row_header creates a new header with class cell_header in elements for first call", {
   tb <- new_table_builder(list(value="A"), list(value="B")) %>%
         row_header(NA, tg_N(1,2,3))
 
@@ -47,6 +47,68 @@ test_that("row_header creates a new header of class cell_header only", {
 
   expect_true(x[[1]][[4]]$n == 3)
   expect_equal(x[[1]][[4]]$src, "A:B:N")
+})
+
+
+test_that("col_header creates a new header with class cell_header in elements for first call", {
+  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
+        col_header("Jim", tg_N(1,2,3))
+
+  x <- attr(tb$table, "col_header")
+
+  expect_equal(class(x), c("cell_table", "cell"))
+  expect_equal(x[[1]][[1]]$label, "Jim")
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+
+  expect_true(x[[1]][[2]]$n == 1)
+  expect_equal(x[[1]][[2]]$src, "A:B:N")
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_n", "cell"))
+
+  expect_true(x[[1]][[3]]$n == 2)
+  expect_equal(x[[1]][[3]]$src, "A:B:N")
+
+  expect_true(x[[1]][[4]]$n == 3)
+  expect_equal(x[[1]][[4]]$src, "A:B:N")
+})
+
+test_that("row_header creates a new header with class cell_subheader in elements for later call", {
+  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
+        row_header("First", NA) %>%
+        row_header("Second", tg_quantile(rnorm(20)))
+
+  x <- attr(tb$table, "row_header")
+
+  expect_equal(class(x), c("cell_table", "cell"))
+  expect_equal(length(x), 2)
+  expect_equal(length(x[[1]]), 2)
+  expect_equal(length(x[[2]]), 2)
+
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(class(x[[2]][[1]]), c("cell_subheader", "cell_header", "cell_label", "cell"))
+  expect_equal(class(x[[2]][[2]]), c("cell_subheader", "cell_header", "cell_quantile", "cell"))
+
+  expect_equal(x[[2]][[2]]$src, "A:B:quantile")
+})
+
+test_that("col_header creates a new header with class cell_subheader in elements for later call", {
+  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
+        col_header("First", NA) %>%
+        col_header("Second", tg_quantile(rnorm(20)))
+
+  x <- attr(tb$table, "col_header")
+
+  expect_equal(class(x), c("cell_table", "cell"))
+  expect_equal(length(x), 2)
+  expect_equal(length(x[[1]]), 2)
+  expect_equal(length(x[[2]]), 2)
+
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(class(x[[2]][[1]]), c("cell_subheader", "cell_header", "cell_label", "cell"))
+  expect_equal(class(x[[2]][[2]]), c("cell_subheader", "cell_header", "cell_quantile", "cell"))
+
+  expect_equal(x[[2]][[2]]$src, "A:B:quantile")
 })
 
 test_that("New Table Builder returns an empty 1x1 table",
