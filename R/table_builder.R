@@ -320,7 +320,16 @@ carriage_return <- function(table_builder)
 #'
 line_feed <- cursor_down
 
-#' Return to 1st column, and advance to next line
+#' Return table_builder to 1st column, and advance to next line
+#'
+#' @param table_builder The table builder to work on
+#' @return a table builder with the cursor at the first column on a new line
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% new_line()
+#'
 new_line <- function(table_builder)
 {
   table_builder     %>%
@@ -363,16 +372,44 @@ new_col <- function(table_builder)
   cursor_right(length(table_builder$table[[1]]) )
 }
 
-#' Nest table continuation inside apply
-table_builder_apply <- function(table_builder, X, FUN)
+#' Run a continuation function over a list of items.
+#' Similar to a foldl in ML
+#'
+#' @param table_builder The table builder to work on
+#' @param X list or vector of items to iterate
+#' @param FUN the function to iterate over
+#' @param ... additional arguments to pass to FUN
+#' @return a table builder with the cursor at the last position of the apply
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>%
+#' table_builder_apply(1:3, FUN=function(tb, x) {
+#'   tb %>% write_cell(tg_N(x)) %>% cursor_right()
+#' })
+#'
+table_builder_apply <- function(table_builder, X, FUN, ...)
 {
   sapply(X, FUN=function(x) {
-    table_builder <<- FUN(table_builder, x)
+    table_builder <<- FUN(table_builder, x, ...)
   })
   table_builder
 }
 
-#' Add an element in the current cell, and advance to next column
+#' Add all elements specified and advance to the next column after each addition
+#'
+#' @param table_builder The table builder to work on
+#' @param subrow optional additional specifier for sub element of AST row for traceabililty
+#' @param subcol optional additional specifier for sub element of AST col for traceabililty
+#' @param ... elements to add columnwise
+#' @return a table builder with the cursor at the column past the last addition
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>%
+#' add_col(tg_N(1:3))
 add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 {
   table_builder %>%
@@ -383,7 +420,19 @@ add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
   })
 }
 
-#' Add an element in the current cell, and advance down to the next row
+#' Add all elements specified and advance to the next row after each addition
+#'
+#' @param table_builder The table builder to work on
+#' @param subrow optional additional specifier for sub element of AST row for traceabililty
+#' @param subcol optional additional specifier for sub element of AST col for traceabililty
+#' @param ... elements to add rowwise
+#' @return a table builder with the cursor at the row past the last addition
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>%
+#' add_row(tg_N(1:3))
 add_row <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
 {
   # Get flattened args list

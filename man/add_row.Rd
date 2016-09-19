@@ -2,11 +2,28 @@
 % Please edit documentation in R/table_builder.R
 \name{add_row}
 \alias{add_row}
-\title{Add an element in the current cell, and advance down to the next row}
+\title{Add all elements specified and advance to the next row after each addition}
 \usage{
 add_row(table_builder, label = NA, subrow = NA, subcol = NA, ...)
 }
+\arguments{
+\item{table_builder}{The table builder to work on}
+
+\item{subrow}{optional additional specifier for sub element of AST row for traceabililty}
+
+\item{subcol}{optional additional specifier for sub element of AST col for traceabililty}
+
+\item{...}{elements to add rowwise}
+}
+\value{
+a table builder with the cursor at the row past the last addition
+}
 \description{
-Add an element in the current cell, and advance down to the next row
+Add all elements specified and advance to the next row after each addition
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\%
+add_row(tg_N(1:3))
 }
 

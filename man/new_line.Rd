@@ -2,11 +2,22 @@
 % Please edit documentation in R/table_builder.R
 \name{new_line}
 \alias{new_line}
-\title{Return to 1st column, and advance to next line}
+\title{Return table_builder to 1st column, and advance to next line}
 \usage{
 new_line(table_builder)
 }
+\arguments{
+\item{table_builder}{The table builder to work on}
+}
+\value{
+a table builder with the cursor at the first column on a new line
+}
 \description{
-Return to 1st column, and advance to next line
+Return table_builder to 1st column, and advance to next line
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\% new_line()
+
 }
 

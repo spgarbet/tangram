@@ -2,11 +2,33 @@
 % Please edit documentation in R/table_builder.R
 \name{table_builder_apply}
 \alias{table_builder_apply}
-\title{Nest table continuation inside apply}
+\title{Run a continuation function over a list of items.
+Similar to a foldl in ML}
 \usage{
-table_builder_apply(table_builder, X, FUN)
+table_builder_apply(table_builder, X, FUN, ...)
+}
+\arguments{
+\item{table_builder}{The table builder to work on}
+
+\item{X}{list or vector of items to iterate}
+
+\item{FUN}{the function to iterate over}
+
+\item{...}{additional arguments to pass to FUN}
+}
+\value{
+a table builder with the cursor at the last position of the apply
 }
 \description{
-Nest table continuation inside apply
+Run a continuation function over a list of items.
+Similar to a foldl in ML
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\%
+table_builder_apply(1:3, FUN=function(tb, x) {
+  tb \%>\% write_cell(tg_N(x)) \%>\% cursor_right()
+})
+
 }
 
