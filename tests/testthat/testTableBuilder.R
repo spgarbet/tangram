@@ -24,13 +24,26 @@ test_that("Flattening arguments works for basic list",
 
 test_that("Flattening arguments does not flatten cells",
 {
-   fl <- args_flatten(cell_label("abc", units="alpha"))
+  fl <- args_flatten(cell_label("abc", units="alpha"))
 
-   expect_equal(length(fl), 1)
+  expect_equal(length(fl), 1)
 })
 
-test_that("preparing headers", {
+test_that("row_header creates a new header of class cell_header only", {
+  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
+        row_header(NA, tg_N(1,2,3))
 
+  x <- attr(tb$table, "row_header")
+
+  expect_equal(class(x), c("cell_table", "cell"))
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(as.numeric(x[[1]][[2]]$n), 1)
+  expect_equal(x[[1]][[2]]$src, "A:B:N")
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(as.numeric(x[[1]][[3]]$n), 2)
+  expect_equal(x[[1]][[3]]$src, "A:B:N")
+  expect_equal(as.numeric(x[[1]][[4]]$n), 3)
+  expect_equal(x[[1]][[4]]$src, "A:B:N")
 })
 
 test_that("New Table Builder returns an empty 1x1 table",
