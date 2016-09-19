@@ -2,11 +2,26 @@
 % Please edit documentation in R/table_builder.R
 \name{carriage_return}
 \alias{carriage_return}
-\title{Goto first column, does not advance to next row}
+\title{Move table builder cursor to the first column, does not advance row}
 \usage{
 carriage_return(table_builder)
 }
+\arguments{
+\item{table_builder}{The table builder to work on}
+
+\item{nrow}{The number of the row to move too}
+
+\item{ncol}{The number of the col to move too}
+}
+\value{
+a table builder with the cursor at the first column
+}
 \description{
-Goto first column, does not advance to next row
+Move table builder cursor to the first column, does not advance row
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% carriage_return()
+
 }
 

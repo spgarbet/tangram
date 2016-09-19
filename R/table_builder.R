@@ -141,17 +141,54 @@ row_header <- function(table_builder, ...) new_header(table_builder, "row_header
  ##
 ## Table cursor, movement and manipulation. Loosely based on VT100
 
+
+#' Function to create a new table builder to use in continuations.
+#' This maintains a cursor state where values are being written to the
+#' table under construction, as well as references to the row and column
+#' for automated tracability when generating indexes.
+#'
+#' @param row The row node from the AST
+#' @param col The col node from the AST
+#' @return a table builder with 1 empty cell at position (1,1)
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y \~ x)
+#' new_table_builder(x$right, x$left)
+#'
 new_table_builder <- function(row, column)
 {
   list(nrow=1, ncol=1, table=cell_table(1,1), row=row, col=column)
 }
 
+#' Function to write a value to the current position in the table builder
+#'
+#' @param table_builder The table builder to work on
+#' @param x the cell to write
+#' @param ... additional attributes to pass for traceback
+#' @return a table builder with the given cell written in the current cursor position
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% write_cell(tg_N(23))
+#'
 write_cell <- function(table_builder, x, ...)
 {
   table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- tg(x, table_builder$row, table_builder$col, ...)
   table_builder
 }
 
+#' Return table builder cursor position to (1,1)
+#'
+#' @param table_builder The table builder to work on
+#' @return a table builder with the cursor at home
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% home()
+#'
 home <- function(table_builder)
 {
   table_builder$ncol <- 1
@@ -159,6 +196,17 @@ home <- function(table_builder)
   table_builder
 }
 
+#' Move table builder cursor up specified value (default 1)
+#'
+#' @param table_builder The table builder to work on
+#' @param n units to move cursor up
+#' @return a table builder with the cursor up n positions
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_up(2)
+#'
 cursor_up <- function(table_builder, n=1)
 {
   table_builder$nrow <- table_builder$nrow - n
@@ -166,6 +214,18 @@ cursor_up <- function(table_builder, n=1)
   table_builder
 }
 
+
+#' Move table builder cursor down specified value (default 1)
+#'
+#' @param table_builder The table builder to work on
+#' @param n units to move cursor down
+#' @return a table builder with the cursor down n positions
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_down(2)
+#'
 cursor_down <- function(table_builder, n=1)
 {
   table_builder$nrow <- table_builder$nrow + n
@@ -173,6 +233,18 @@ cursor_down <- function(table_builder, n=1)
   table_builder
 }
 
+
+#' Move table builder cursor left the specified value (default 1)
+#'
+#' @param table_builder The table builder to work on
+#' @param n units to move cursor left
+#' @return a table builder with the cursor left n positions
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_left(2)
+#'
 cursor_left <- function(table_builder, n=1)
 {
   table_builder$ncol <- table_builder$ncol - n
@@ -180,6 +252,17 @@ cursor_left <- function(table_builder, n=1)
   table_builder
 }
 
+#' Move table builder cursor right the specified value (default 1)
+#'
+#' @param table_builder The table builder to work on
+#' @param n units to move cursor right
+#' @return a table builder with the cursor right n positions
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_right(2)
+#'
 cursor_right <- function(table_builder, n=1)
 {
   table_builder$ncol <- table_builder$ncol + n
@@ -187,6 +270,18 @@ cursor_right <- function(table_builder, n=1)
   table_builder
 }
 
+#' Move table builder cursor to the specified position
+#'
+#' @param table_builder The table builder to work on
+#' @param nrow The number of the row to move too
+#' @param ncol The number of the col to move too
+#' @return a table builder with the cursor at the specified position
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3)
+#'
 cursor_pos <- function(table_builder, nrow, ncol)
 {
   if(nrow <= 0 || ncol <= 0) stop("cursor_pos does not allow negative values")
@@ -195,14 +290,34 @@ cursor_pos <- function(table_builder, nrow, ncol)
   table_builder
 }
 
-#' Goto first column, does not advance to next row
+#' Move table builder cursor to the first column, does not advance row
+#'
+#' @param table_builder The table builder to work on
+#' @param nrow The number of the row to move too
+#' @param ncol The number of the col to move too
+#' @return a table builder with the cursor at the first column
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% carriage_return()
+#'
 carriage_return <- function(table_builder)
 {
   table_builder$ncol <- 1
   table_builder
 }
 
-#' Advance down to next line, does not goto first column
+#' Move table builder cursor to the next line (does not alter column)
+#'
+#' @param table_builder The table builder to work on
+#' @return a table builder with the cursor at the first column
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% line_feed()
+#'
 line_feed <- cursor_down
 
 #' Return to 1st column, and advance to next line
@@ -213,7 +328,17 @@ new_line <- function(table_builder)
   line_feed()
 }
 
-#' Advance to the bottom of all defined rows, and open a new one
+#' Move table builder cursor to the bottom of all defined rows opening a new one
+#' in the first column
+#'
+#' @param table_builder The table builder to work on
+#' @return a table builder with the cursor at the first column
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% new_row()
+#'
 new_row <- function(table_builder)
 {
   table_builder %>%
@@ -221,7 +346,16 @@ new_row <- function(table_builder)
   cursor_down(length(table_builder$table))
 }
 
-#' Advance to the furthest right column on the top row and open a new column
+#' Advance table builder cursor to the furthest right column on the top row and open a new column
+#'
+#' @param table_builder The table builder to work on
+#' @return a table builder with the cursor at the first column
+#' @export
+#'
+#' @examples
+#' x <- Parser$new()$run(y ~ x)
+#' new_table_builder(x$right, x$left) %>% new_col()
+#'
 new_col <- function(table_builder)
 {
   table_builder %>%

@@ -2,11 +2,24 @@
 % Please edit documentation in R/table_builder.R
 \name{new_row}
 \alias{new_row}
-\title{Advance to the bottom of all defined rows, and open a new one}
+\title{Move table builder cursor to the bottom of all defined rows opening a new one
+in the first column}
 \usage{
 new_row(table_builder)
 }
+\arguments{
+\item{table_builder}{The table builder to work on}
+}
+\value{
+a table builder with the cursor at the first column
+}
 \description{
-Advance to the bottom of all defined rows, and open a new one
+Move table builder cursor to the bottom of all defined rows opening a new one
+in the first column
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\% new_row()
+
 }
 

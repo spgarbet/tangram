@@ -2,13 +2,20 @@
 % Please edit documentation in R/table_builder.R
 \name{args_flatten}
 \alias{args_flatten}
-\title{Special flatten list, that doesn't flatten cells.
-Helper for dealing with ... arguments.}
+\title{Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)}
 \usage{
-args_flatten(ls)
+args_flatten(...)
+}
+\arguments{
+\item{...}{variable arguments}
+}
+\value{
+a list of the arguments, with vectors and lists flattened
 }
 \description{
-Special flatten list, that doesn't flatten cells.
-Helper for dealing with ... arguments.
+Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)
+}
+\examples{
+args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
 }
 

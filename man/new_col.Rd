@@ -2,11 +2,22 @@
 % Please edit documentation in R/table_builder.R
 \name{new_col}
 \alias{new_col}
-\title{Advance to the furthest right column on the top row and open a new column}
+\title{Advance table builder cursor to the furthest right column on the top row and open a new column}
 \usage{
 new_col(table_builder)
 }
+\arguments{
+\item{table_builder}{The table builder to work on}
+}
+\value{
+a table builder with the cursor at the first column
+}
 \description{
-Advance to the furthest right column on the top row and open a new column
+Advance table builder cursor to the furthest right column on the top row and open a new column
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\% new_col()
+
 }
 

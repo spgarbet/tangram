@@ -4,7 +4,7 @@
 \alias{add_col}
 \title{Add an element in the current cell, and advance to next column}
 \usage{
-add_col(table_builder, label = NA, subrow = NA, subcol = NA, ...)
+add_col(table_builder, subrow = NA, subcol = NA, ...)
 }
 \description{
 Add an element in the current cell, and advance to next column

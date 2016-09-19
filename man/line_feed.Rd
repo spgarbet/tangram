@@ -2,11 +2,22 @@
 % Please edit documentation in R/table_builder.R
 \name{line_feed}
 \alias{line_feed}
-\title{Advance down to next line, does not goto first column}
+\title{Move table builder cursor to the next line (does not alter column)}
 \usage{
 line_feed(table_builder, n = 1)
 }
+\arguments{
+\item{table_builder}{The table builder to work on}
+}
+\value{
+a table builder with the cursor at the first column
+}
 \description{
-Advance down to next line, does not goto first column
+Move table builder cursor to the next line (does not alter column)
+}
+\examples{
+x <- Parser$new()$run(y ~ x)
+new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% line_feed()
+
 }
 
