@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{table_builder_apply}
 \alias{table_builder_apply}
-\title{Run a continuation function over a list of items.
-Similar to a foldl in ML}
+\title{Apply table building over variable}
 \usage{
 table_builder_apply(table_builder, X, FUN, ...)
 }

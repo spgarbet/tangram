@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{cursor_pos}
 \alias{cursor_pos}
-\title{Move table builder cursor to the specified position}
+\title{Move cursor to position}
 \usage{
 cursor_pos(table_builder, nrow, ncol)
 }

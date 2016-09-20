@@ -44,7 +44,6 @@ ASTNode <- R6Class("ASTNode",
 #' @docType class
 #' @importFrom R6 R6Class
 #' @importFrom dplyr select
-#' @importFrom dplyr matches
 #' @keywords data
 #' @format \code{\link{R6Class}} object.
 #'

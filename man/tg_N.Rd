@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg_N}
 \alias{tg_N}
-\title{Create a vector of N values that are convertable to a cell}
+\title{N values creation}
 \usage{
 tg_N(...)
 }

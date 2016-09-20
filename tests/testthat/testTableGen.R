@@ -1,7 +1,6 @@
 test_that("Categorical versus Numerical generates a table",
 {
-  f <- formula(drug ~ bili)
-  test_table <- summary_table(f, pbc)
+  test_table <- summary_table(drug ~ bili, pbc)
 
   expect_true(inherits(test_table, "cell_table"))
 })

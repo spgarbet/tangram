@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{new_row}
 \alias{new_row}
-\title{Move table builder cursor to the bottom of all defined rows opening a new one
-in the first column}
+\title{Open a new row}
 \usage{
 new_row(table_builder)
 }

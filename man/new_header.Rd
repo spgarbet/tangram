@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{new_header}
 \alias{new_header}
-\title{Function to append a header object to a given attribute. Will create
-a new header if one doesn't exit, or append to existing}
+\title{Create a new header on a table}
 \usage{
 new_header(table_builder, attribute, ...)
 }

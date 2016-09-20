@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{new_col}
 \alias{new_col}
-\title{Advance table builder cursor to the furthest right column on the top row and open a new column}
+\title{Open a new column in 1st row}
 \usage{
 new_col(table_builder)
 }

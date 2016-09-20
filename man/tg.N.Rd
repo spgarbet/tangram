@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.N}
 \alias{tg.N}
-\title{Construct a cell from an N value.}
+\title{N value as cell}
 \usage{
 \method{tg}{N}(n, row, column, ...)
 }

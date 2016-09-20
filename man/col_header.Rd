@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{col_header}
 \alias{col_header}
-\title{Function to append a column header to a table being built. The first call creates
-a column header, subsequent calls add sub headers to existing column header}
+\title{Create a new column header in a table}
 \usage{
 col_header(table_builder, ...)
 }

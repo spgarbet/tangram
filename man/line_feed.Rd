@@ -2,7 +2,8 @@
 % Please edit documentation in R/table_builder.R
 \name{line_feed}
 \alias{line_feed}
-\title{Move table builder cursor to the next line (does not alter column)}
+\title{Move cursor to next line
+Move table builder cursor to the next line (does not alter column)}
 \usage{
 line_feed(table_builder, n = 1)
 }
@@ -13,6 +14,7 @@ line_feed(table_builder, n = 1)
 a table builder with the cursor at the first column
 }
 \description{
+Move cursor to next line
 Move table builder cursor to the next line (does not alter column)
 }
 \examples{

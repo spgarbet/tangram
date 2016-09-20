@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{row_header}
 \alias{row_header}
-\title{Function to append a row header to a table being built. The first call creates
-a row header, subsequent calls add sub headers to existing row header}
+\title{Create a new row header in a table.}
 \usage{
 row_header(table_builder, ...)
 }

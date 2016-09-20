@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.fraction}
 \alias{tg.fraction}
-\title{Construct a cell from a tg_fraction}
+\title{Cell Fraction Conversion}
 \usage{
 \method{tg}{fraction}(x, row, column, ...)
 }

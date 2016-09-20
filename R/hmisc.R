@@ -9,20 +9,24 @@ summarize_kruskal_horz <- function(table, row, column)
   datac      <- as.categorical(column$data[,1])
   categories <- levels(datac)
 
+  # Compute N values for each category
+  subN <- lapply(levels(datac), FUN=function(cat){
+    length(datac[datac == cat & !is.na(datac)])
+  })
+
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
 
   table                                          %>%
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistics") %>%
-  col_header(NA,  N(subN),    NA               ) %>%
-  add_col(N(sum(!is.na(datar))))                 %>%
+  col_header(NA,  tg_N(subN),    NA               ) %>%
+  add_col(tg_N(sum(!is.na(datar))))                 %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
      tbl %>%
-     tg_quantile(x, na.rm=TRUE, subcol=category) %>%
-     cursor_right()
+     add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
   })                                             %>%
   add_col(test)
 }
@@ -41,10 +45,9 @@ summarize_kruskal_vert <- function(table, row, column)
   col_header("N", derive_label(column), "Test Statistic")           %>%
   table_builder_apply(categories, FUN=function(tbl, category) {
     x <- datac[datar == categories[category]]
-
     tbl                                                  %>%
     row_header(category)                                 %>%
-    add_col(N(length(x)))                                %>%
+    add_col(tg_N(length(x)))                             %>%
     add_col(tg_quantile(x, na.rm=TRUE), subrow=category) %>%
     new_line()
   })                                                                %>%
@@ -65,8 +68,8 @@ summarize_chisq <- function(table, row, column)
   if(length(row_categories) == 2) {row_categories <- last(row_categories)}
 
   # Compute N values for each category
-  subN <- lapply(levels(dc), FUN=function(cat){
-    length(datac[datac == col_category & !is.na(datac)])
+  subN <- lapply(levels(datac), FUN=function(cat){
+    length(datac[datac == cat & !is.na(datac)])
   })
 
   # Chi^2 test
@@ -82,9 +85,9 @@ summarize_chisq <- function(table, row, column)
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
-  col_header(NA, N(subN), NA)                                %>%
+  col_header(NA, tg_N(subN), NA)                             %>%
   row_header(first_row_lbl, paste("  ", row_categories[-1])) %>%
-  add_col(N(sum(!is.na(datar) & !is.na(datac))))             %>%
+  add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
 
@@ -110,7 +113,7 @@ summarize_spearman <- function(table, row, column)
   row_header(derive_label(row)) %>%
   col_header("N", derive_label(column), "Test Statistic") %>%
   col_header(NA, NA, NA) %>%
-  add_col(N(sum(!is.na(datar) & !is.na(datac)))) %>%
+  add_col(tg_N(sum(!is.na(datar) & !is.na(datac)))) %>%
   add_col(test$estimate) %>%
   add_col(test)
 }

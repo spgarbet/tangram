@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg_quantile}
 \alias{tg_quantile}
-\title{Create a quantile that is convertible to a cell}
+\title{Quantile creation}
 \usage{
 tg_quantile(x, ...)
 }

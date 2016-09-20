@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.default}
 \alias{tg.default}
-\title{Construct a cell. This is the default fallback, it creates a label cell}
+\title{Default cell is a label}
 \usage{
 \method{tg}{default}(x, row, column, ...)
 }

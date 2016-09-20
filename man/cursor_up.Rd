@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{cursor_up}
 \alias{cursor_up}
-\title{Move table builder cursor up specified value (default 1)}
+\title{Move cursor up}
 \usage{
 cursor_up(table_builder, n = 1)
 }

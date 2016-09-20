@@ -2,6 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{derive_label}
 \alias{derive_label}
+\title{Derive label of AST node.}
 \usage{
 derive_label(node)
 }
@@ -11,12 +12,8 @@ derive_label(node)
 \value{
 A string with a label for the node
 }
-\examples{
-
-hmisc_data_type(c(1,2,3))
-hmisc_data_type(factor(c("A","B","C")))
-hmisc_data_type(factor(c("A","B","B","A")))
-hmisc_data_type(factor(c(TRUE, FALSE, TRUE, FALSE)))
-
+\description{
+Determine the label of a given AST node.
+NOTE: Should have data attached via reduce before calling.
 }
 

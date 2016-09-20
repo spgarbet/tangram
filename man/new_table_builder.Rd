@@ -2,10 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{new_table_builder}
 \alias{new_table_builder}
-\title{Function to create a new table builder to use in continuations.
-This maintains a cursor state where values are being written to the
-table under construction, as well as references to the row and column
-for automated tracability when generating indexes.}
+\title{Create empty table builder.}
 \usage{
 new_table_builder(row, column)
 }

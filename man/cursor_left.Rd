@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{cursor_left}
 \alias{cursor_left}
-\title{Move table builder cursor left the specified value (default 1)}
+\title{Move cursor left}
 \usage{
 cursor_left(table_builder, n = 1)
 }

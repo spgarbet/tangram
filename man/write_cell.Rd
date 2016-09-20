@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{write_cell}
 \alias{write_cell}
-\title{Function to write a value to the current position in the table builder}
+\title{Write a single cell}
 \usage{
 write_cell(table_builder, x, ...)
 }

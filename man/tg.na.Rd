@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.na}
 \alias{tg.na}
-\title{Construct a cell from NA}
+\title{Cell from NA}
 \usage{
 \method{tg}{na}(...)
 }

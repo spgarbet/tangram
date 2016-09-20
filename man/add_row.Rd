@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{add_row}
 \alias{add_row}
-\title{Add all elements specified and advance to the next row after each addition}
+\title{Add rows}
 \usage{
 add_row(table_builder, label = NA, subrow = NA, subcol = NA, ...)
 }

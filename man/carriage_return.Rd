@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{carriage_return}
 \alias{carriage_return}
-\title{Move table builder cursor to the first column, does not advance row}
+\title{Move cursor to first column}
 \usage{
 carriage_return(table_builder)
 }

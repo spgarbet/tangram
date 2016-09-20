@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{args_flatten}
 \alias{args_flatten}
-\title{Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)}
+\title{Flatten variable arguments}
 \usage{
 args_flatten(...)
 }

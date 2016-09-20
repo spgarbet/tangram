@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{cursor_down}
 \alias{cursor_down}
-\title{Move table builder cursor down specified value (default 1)}
+\title{Move cursor down}
 \usage{
 cursor_down(table_builder, n = 1)
 }

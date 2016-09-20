@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{cursor_right}
 \alias{cursor_right}
-\title{Move table builder cursor right the specified value (default 1)}
+\title{Move cursor right}
 \usage{
 cursor_right(table_builder, n = 1)
 }

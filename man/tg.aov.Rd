@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.aov}
 \alias{tg.aov}
-\title{Construct a cell from an analysis of variance model}
+\title{AOV model as cell}
 \usage{
 \method{tg}{aov}(model, row, column, ...)
 }

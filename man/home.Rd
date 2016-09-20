@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{home}
 \alias{home}
-\title{Return table builder cursor position to (1,1)}
+\title{Home the cursor.}
 \usage{
 home(table_builder)
 }

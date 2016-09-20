@@ -2,10 +2,8 @@
  ##
 ## Set of functions to use in building a table, cell by cell
 
-#' @import Hmisc
-#' @include S3-Cell.R
+#' Derive label of AST node.
 #'
-
 #' Determine the label of a given AST node.
 #' NOTE: Should have data attached via reduce before calling.
 #'
@@ -13,14 +11,8 @@
 #'
 #' @return A string with a label for the node
 #' @export
-#'
-#' @examples
-#'
-#' hmisc_data_type(c(1,2,3))
-#' hmisc_data_type(factor(c("A","B","C")))
-#' hmisc_data_type(factor(c("A","B","B","A")))
-#' hmisc_data_type(factor(c(TRUE, FALSE, TRUE, FALSE)))
-#'
+#' @import Hmisc
+#' @include S3-Cell.R
 derive_label <- function(node)
 {
   l <- node$string()
@@ -47,6 +39,8 @@ derive_label <- function(node)
  ##
 ## Helper functions for adding headers
 
+#' Flatten variable arguments
+#'
 #' Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)
 #'
 #' @param ... variable arguments
@@ -78,6 +72,8 @@ args_flatten <- function(...)
   flat
 }
 
+#' Create a new header on a table
+#'
 #' Function to append a header object to a given attribute. Will create
 #' a new header if one doesn't exit, or append to existing
 #'
@@ -117,6 +113,8 @@ new_header <- function(table_builder, attribute, ...)
   table_builder
 }
 
+#' Create a new column header in a table
+#'
 #' Function to append a column header to a table being built. The first call creates
 #' a column header, subsequent calls add sub headers to existing column header
 #'
@@ -127,6 +125,8 @@ new_header <- function(table_builder, attribute, ...)
 #'
 col_header <- function(table_builder, ...) new_header(table_builder, "col_header", ...)
 
+#' Create a new row header in a table.
+#'
 #' Function to append a row header to a table being built. The first call creates
 #' a row header, subsequent calls add sub headers to existing row header
 #'
@@ -142,6 +142,8 @@ row_header <- function(table_builder, ...) new_header(table_builder, "row_header
 ## Table cursor, movement and manipulation. Loosely based on VT100
 
 
+#' Create empty table builder.
+#'
 #' Function to create a new table builder to use in continuations.
 #' This maintains a cursor state where values are being written to the
 #' table under construction, as well as references to the row and column
@@ -161,6 +163,8 @@ new_table_builder <- function(row, column)
   list(nrow=1, ncol=1, table=cell_table(1,1), row=row, col=column)
 }
 
+#' Write a single cell
+#'
 #' Function to write a value to the current position in the table builder
 #'
 #' @param table_builder The table builder to work on
@@ -179,6 +183,8 @@ write_cell <- function(table_builder, x, ...)
   table_builder
 }
 
+#' Home the cursor.
+#'
 #' Return table builder cursor position to (1,1)
 #'
 #' @param table_builder The table builder to work on
@@ -196,6 +202,8 @@ home <- function(table_builder)
   table_builder
 }
 
+#' Move cursor up
+#'
 #' Move table builder cursor up specified value (default 1)
 #'
 #' @param table_builder The table builder to work on
@@ -214,7 +222,8 @@ cursor_up <- function(table_builder, n=1)
   table_builder
 }
 
-
+#' Move cursor down
+#'
 #' Move table builder cursor down specified value (default 1)
 #'
 #' @param table_builder The table builder to work on
@@ -233,7 +242,8 @@ cursor_down <- function(table_builder, n=1)
   table_builder
 }
 
-
+#' Move cursor left
+#'
 #' Move table builder cursor left the specified value (default 1)
 #'
 #' @param table_builder The table builder to work on
@@ -252,6 +262,8 @@ cursor_left <- function(table_builder, n=1)
   table_builder
 }
 
+#' Move cursor right
+#'
 #' Move table builder cursor right the specified value (default 1)
 #'
 #' @param table_builder The table builder to work on
@@ -270,6 +282,8 @@ cursor_right <- function(table_builder, n=1)
   table_builder
 }
 
+#' Move cursor to position
+#'
 #' Move table builder cursor to the specified position
 #'
 #' @param table_builder The table builder to work on
@@ -290,6 +304,8 @@ cursor_pos <- function(table_builder, nrow, ncol)
   table_builder
 }
 
+#' Move cursor to first column
+#'
 #' Move table builder cursor to the first column, does not advance row
 #'
 #' @param table_builder The table builder to work on
@@ -308,6 +324,7 @@ carriage_return <- function(table_builder)
   table_builder
 }
 
+#' Move cursor to next line
 #' Move table builder cursor to the next line (does not alter column)
 #'
 #' @param table_builder The table builder to work on
@@ -320,6 +337,8 @@ carriage_return <- function(table_builder)
 #'
 line_feed <- cursor_down
 
+#' Return to 1st column, next line
+#'
 #' Return table_builder to 1st column, and advance to next line
 #'
 #' @param table_builder The table builder to work on
@@ -337,6 +356,8 @@ new_line <- function(table_builder)
   line_feed()
 }
 
+#' Open a new row
+#'
 #' Move table builder cursor to the bottom of all defined rows opening a new one
 #' in the first column
 #'
@@ -355,6 +376,8 @@ new_row <- function(table_builder)
   cursor_down(length(table_builder$table))
 }
 
+#' Open a new column in 1st row
+#'
 #' Advance table builder cursor to the furthest right column on the top row and open a new column
 #'
 #' @param table_builder The table builder to work on
@@ -372,6 +395,8 @@ new_col <- function(table_builder)
   cursor_right(length(table_builder$table[[1]]) )
 }
 
+#' Apply table building over variable
+#'
 #' Run a continuation function over a list of items.
 #' Similar to a foldl in ML
 #'
@@ -397,6 +422,8 @@ table_builder_apply <- function(table_builder, X, FUN, ...)
   table_builder
 }
 
+#' Add columns
+#'
 #' Add all elements specified and advance to the next column after each addition
 #'
 #' @param table_builder The table builder to work on
@@ -420,6 +447,8 @@ add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
   })
 }
 
+#' Add rows
+#'
 #' Add all elements specified and advance to the next row after each addition
 #'
 #' @param table_builder The table builder to work on
@@ -448,6 +477,8 @@ add_row <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
  ##
 ## Table Cell generation functions
 
+#' Convert to Cell
+#'
 #' Base S3 function to allow for constructing table cells. The main purpose
 #' of this layer is to append additional traceability information, and convert
 #' to internal cell type for later rendering decisions.
@@ -466,6 +497,8 @@ tg <- function(x, row, column, ...)
   UseMethod("tg", x)
 }
 
+#' Cell from NA
+#'
 #' Construct a cell from NA
 #'
 #' @param ... arguments are ignored.
@@ -476,6 +509,8 @@ tg <- function(x, row, column, ...)
 #' tg(NA)
 tg.na <- function(...) { cell() }
 
+#' Default cell is a label
+#'
 #' Construct a cell. This is the default fallback, it creates a label cell
 #'
 #' @param row The AST row of that is generating this cell
@@ -490,6 +525,8 @@ tg.default <- function(x, row, column, ...)
   cell_label(as.character(x))
 }
 
+#' Identity function on cell
+#'
 #' Construct a cell from a cell. This is essentially an identity function.
 #' I.e., if a user has constructed a cell and passed it in do nothing.
 #'
@@ -505,6 +542,8 @@ tg.cell <- function(x, row, column, ...)
   x
 }
 
+#' N value as cell
+#'
 #' Construct a cell from an N value.
 #'
 #' @param row The AST row of that is generating this cell
@@ -519,6 +558,8 @@ tg.N <- function(n, row, column, ...)
   cell_n(n, src=key(row, column, "N", ...))
 }
 
+#' AOV model as cell
+#'
 #' Construct a cell from an analysis of variance model
 #'
 #' @param row The AST row of that is generating this cell
@@ -538,6 +579,8 @@ tg.aov <- function(model, row, column, ...)
            src = key(row, column, "aov", ...))
 }
 
+#' Construct hypothesis test form cell
+#'
 #' Construct a cell from a hypothesis test
 #'
 #' @param row The AST row of that is generating this cell
@@ -571,6 +614,8 @@ tg.quantile <- function(quantiles, row, column, ...)
                           ...))
 }
 
+#' Cell Fraction Conversion
+#'
 #' Construct a cell from a tg_fraction
 #'
 #' @param row The AST row of that is generating this cell
@@ -589,6 +634,8 @@ tg.fraction <- function(x, row, column, ...)
                           ...))
 }
 
+#' N values creation
+#'
 #' Create a vector of N values that are convertable to a cell
 #'
 #' @param ... the N values
@@ -603,6 +650,8 @@ tg_N <- function(...)
   v
 }
 
+#' Fraction values creation
+#'
 #' Create a fraction that is convertible to a cell
 #'
 #' @param ... the N values
@@ -615,6 +664,8 @@ tg_fraction <- function(numerator, denominator)
   structure(c(numerator, denominator), class=c("fraction", "numeric"))
 }
 
+#' Quantile creation
+#'
 #' Create a quantile that is convertible to a cell
 #'
 #' @param x the data passed to the {base}quantile function

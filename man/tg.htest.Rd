@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.htest}
 \alias{tg.htest}
-\title{Construct a cell from a hypothesis test}
+\title{Construct hypothesis test form cell}
 \usage{
 \method{tg}{htest}(model, row, column, ...)
 }

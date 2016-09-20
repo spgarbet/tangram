@@ -2,9 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg}
 \alias{tg}
-\title{Base S3 function to allow for constructing table cells. The main purpose
-of this layer is to append additional traceability information, and convert
-to internal cell type for later rendering decisions.}
+\title{Convert to Cell}
 \usage{
 tg(x, row, column, ...)
 }

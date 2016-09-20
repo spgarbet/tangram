@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg_fraction}
 \alias{tg_fraction}
-\title{Create a fraction that is convertible to a cell}
+\title{Fraction values creation}
 \usage{
 tg_fraction(numerator, denominator)
 }

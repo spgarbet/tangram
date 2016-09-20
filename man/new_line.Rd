@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{new_line}
 \alias{new_line}
-\title{Return table_builder to 1st column, and advance to next line}
+\title{Return to 1st column, next line}
 \usage{
 new_line(table_builder)
 }

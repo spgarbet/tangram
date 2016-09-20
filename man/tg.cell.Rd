@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_builder.R
 \name{tg.cell}
 \alias{tg.cell}
-\title{Construct a cell from a cell. This is essentially an identity function.
-I.e., if a user has constructed a cell and passed it in do nothing.}
+\title{Identity function on cell}
 \usage{
 \method{tg}{cell}(x, row, column, ...)
 }

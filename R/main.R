@@ -127,14 +127,28 @@ cell_create_table <- function(ast, transforms)
 
       transform <- transforms[[rowtype]][[coltype]]
 
-      tbl[[row_idx]][[col_idx]] <<- transform(row, column)
+
+      tbl[[row_idx]][[col_idx]] <<- transform(new_table_builder(row, column), row, column)$table
     })
   })
 
   table_flatten(tbl)
 }
 
+#' Generate a summary table using a specified formula and data frame
+#'
+#' @param formula, the formula to apply for summarization
+#' @param data the data frame to use
+#' @param transforms a list of lists that contain the transformation to apply for summarization
+#' @return the table flattened
 #' @export
+#'
+#' @examples
+#'
+#' tbl <- summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
+#' tbl
+#' html5(tbl)
+#'
 summary_table <- function(formula, data, transforms=hmisc_style)
 {
   # Helper function for single conversion function
