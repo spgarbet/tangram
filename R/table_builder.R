@@ -580,8 +580,11 @@ tg.aov <- function(model, row, column, ...)
 #' tg(t.test(rnorm(10),rnorm(10)))
 tg.htest <- function(model, row, column, ...)
 {
-  cell_studentt(round(model$statistic,2), model$parameter[1], round(model$p.value, 3),
-    src=key(row, column, "htest", ...))
+  ss <- key(row, column, "htest", ...)
+  if(names(model$statistic) == "X-squared")
+    cell_chi2(round(model$statistic,2), model$parameter[1], round(model$p.value, 3), src=ss)
+  else
+    cell_studentt(round(model$statistic,2), model$parameter[1], round(model$p.value, 3), src=ss)
 }
 
 #' Construct a cell from a tg_quantile
