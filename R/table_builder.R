@@ -497,18 +497,6 @@ tg <- function(x, row, column, ...)
   UseMethod("tg", x)
 }
 
-#' Cell from NA
-#'
-#' Construct a cell from NA
-#'
-#' @param ... arguments are ignored.
-#' @return an S3 rendereable cell
-#' @export
-#'
-#' @examples
-#' tg(NA)
-tg.na <- function(...) { cell() }
-
 #' Default cell is a label
 #'
 #' Construct a cell. This is the default fallback, it creates a label cell
@@ -522,7 +510,8 @@ tg.na <- function(...) { cell() }
 #' tg("Joe")
 tg.default <- function(x, row, column, ...)
 {
-  cell_label(as.character(x))
+  if(is.na(x)) cell_label("")
+  else         cell_label(as.character(x))
 }
 
 #' Identity function on cell
