@@ -1,4 +1,8 @@
+library(stringr)
+library(Hmisc)
+
 #' @import stringr
+#' @import Hmisc
 #' @include S3-Cell.R
 #' @include typing.R
 
@@ -17,7 +21,7 @@ summarize_kruskal_horz <- function(table, row, column)
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
 
-  table                                          %>%
+x<-  table                                          %>%
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistics") %>%
   col_header(NA,  tg_N(subN),    NA               ) %>%
@@ -25,8 +29,7 @@ summarize_kruskal_horz <- function(table, row, column)
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     tbl %>%
-     add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
+     tbl %>% add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
   })                                             %>%
   add_col(test)
 }
@@ -69,7 +72,7 @@ summarize_chisq <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    length(datac[datac == cat & !is.na(datac)])
+    length(datac[datac == col_category & !is.na(datac)])
   })
 
   # Chi^2 test

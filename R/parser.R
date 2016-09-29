@@ -1,3 +1,7 @@
+library(R6)
+library(stringr)
+library(dplyr)
+
 #' A Node in an Abstract Syntax Tree (AST)
 #'
 #' This is the root R6 class of any term of the AST which is created

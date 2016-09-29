@@ -437,7 +437,7 @@ table_builder_apply <- function(table_builder, X, FUN, ...)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_col(tg_N(1:3))
-add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
+add_col <- function(table_builder, ..., subrow=NA, subcol=NA)
 {
   table_builder %>%
   table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
@@ -462,7 +462,7 @@ add_col <- function(table_builder, subrow=NA, subcol=NA, ...)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_row(tg_N(1:3))
-add_row <- function(table_builder, label=NA, subrow=NA, subcol=NA, ...)
+add_row <- function(table_builder, ..., label=NA, subrow=NA, subcol=NA)
 {
   # Get flattened args list
   table_builder %>%
@@ -517,7 +517,7 @@ tg.na <- function(...) { cell() }
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell label
-#'
+#' @export
 #' @examples
 #' tg("Joe")
 tg.default <- function(x, row, column, ...)
@@ -534,7 +534,7 @@ tg.default <- function(x, row, column, ...)
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell label
-#'
+#' @export
 #' @examples
 #' tg(tg("Joe"))
 tg.cell <- function(x, row, column, ...)
@@ -550,7 +550,7 @@ tg.cell <- function(x, row, column, ...)
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell label
-#'
+#' @export
 #' @examples
 #' tg(tg_N("Joe"))
 tg.N <- function(n, row, column, ...)
@@ -566,7 +566,7 @@ tg.N <- function(n, row, column, ...)
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is an F-statistic
-#'
+#' @export
 #' @examples
 #' tg(aov(rnorm(10) ~ rnorm(10)))
 tg.aov <- function(model, row, column, ...)
@@ -587,7 +587,7 @@ tg.aov <- function(model, row, column, ...)
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
-#'
+#' @export
 #' @examples
 #' tg(t.test(rnorm(10),rnorm(10)))
 tg.htest <- function(model, row, column, ...)
@@ -602,7 +602,7 @@ tg.htest <- function(model, row, column, ...)
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
-#'
+#' @export
 #' @examples
 #' tg(tg_quantile(rnorm(10))))
 tg.quantile <- function(quantiles, row, column, ...)
@@ -622,7 +622,7 @@ tg.quantile <- function(quantiles, row, column, ...)
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
-#'
+#' @export
 #' @examples
 #' tg(tg_quantile(rnorm(10))))
 tg.fraction <- function(x, row, column, ...)
@@ -640,7 +640,7 @@ tg.fraction <- function(x, row, column, ...)
 #'
 #' @param ... the N values
 #' @return an S3 rendereable cell that is a hypothesis test
-#'
+#' @export
 #' @examples
 #' tg_N(1, 2, 3)
 tg_N <- function(...)
@@ -656,7 +656,7 @@ tg_N <- function(...)
 #'
 #' @param ... the N values
 #' @return an S3 rendereable cell that is a hypothesis test
-#'
+#' @export
 #' @examples
 #' tg_fraction(1, 2)
 tg_fraction <- function(numerator, denominator)
@@ -671,7 +671,7 @@ tg_fraction <- function(numerator, denominator)
 #' @param x the data passed to the {base}quantile function
 #' @param ... all arguments that are passed to the {base}quantile function
 #' @return an S3 rendereable cell that is a hypothesis test
-#'
+#' @export
 #' @examples
 #' tg_fraction(1, 2)
 tg_quantile <- function(x, ...)
