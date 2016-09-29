@@ -98,12 +98,14 @@ summarize_chisq <- function(table, row, column)
   first_row_lbl <- derive_label(row)
   first_row_lbl$label <- paste(first_row_lbl$label,":", row_categories[1])
 
+  labels      <- lapply(row_categories, FUN=function(x) paste("  ", x))
+  labels[[1]] <- first_row_lbl
+
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
   col_header("", tg_N(subN), "")                             %>%
-  row_header(first_row_lbl)                                  %>%
-  table_builder_apply(paste("  ", row_categories[-1]), FUN=
+  table_builder_apply(labels, FUN=
     function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {

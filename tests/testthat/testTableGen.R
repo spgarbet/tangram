@@ -28,16 +28,14 @@ test_that("Categorical versus a Categorical of coerced type generates a table",
 
 test_that("A multiterm expression generates a table",
 {
-  f <- formula(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)
-  test_table <- summary_table(f, pbc)
+  test_table <- summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
 
   expect_true(inherits(test_table, "cell_table"))
 })
 
 test_that("A Numerical versus a Numerical generates a table",
 {
-  f <- formula(age ~ albumin)
-  test_table <- summary_table(f, pbc)
+  test_table <- summary_table(age ~ albumin, pbc)
 
   expect_true(inherits(test_table, "cell_table"))
 })
