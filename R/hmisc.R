@@ -7,6 +7,7 @@ library(Hmisc)
 #' @include typing.R
 
 # 1 X (n + no. categories + test statistic)
+#' @export
 summarize_kruskal_horz <- function(table, row, column)
 {
   datar      <- row$data[,1]
@@ -28,8 +29,8 @@ summarize_kruskal_horz <- function(table, row, column)
 
   table                                          %>%
   row_header(derive_label(row))                  %>%
-  col_header("N", categories, "Test Statistics") %>%
-  col_header(NA,  tg_N(subN),    NA               ) %>%
+  col_header("N", categories, "Test Statistic") %>%
+  col_header("",  tg_N(subN), ""               ) %>%
   add_col(tg_N(sum(!is.na(datar))))                 %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
@@ -40,6 +41,7 @@ summarize_kruskal_horz <- function(table, row, column)
 }
 
 # no. categories X 3
+#' @export
 summarize_kruskal_vert <- function(table, row, column)
 {
   datar      <- as.categorical(row$data[,1])
@@ -69,6 +71,7 @@ summarize_kruskal_vert <- function(table, row, column)
 }
 
 # N X (M+2)
+#' @export
 summarize_chisq <- function(table, row, column)
 {
   datar          <- as.categorical(row$data[,1])
@@ -98,23 +101,30 @@ summarize_chisq <- function(table, row, column)
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
-  col_header(NA, tg_N(subN), NA)                             %>%
-  row_header(first_row_lbl, paste("  ", row_categories[-1])) %>%
+  col_header("", tg_N(subN), "")                             %>%
+  row_header(first_row_lbl)                                  %>%
+  table_builder_apply(paste("  ", row_categories[-1]), FUN=
+    function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
 
-    table              %>%
-    table_builder_apply(row_categories, FUN=function(table, row_category) {
-      numerator <- length(datac[datac == col_category & datar == row_category & !is.na(datac)])
-      table %>% add_col(tg_fraction(numerator, denominator), subcol=col_category, subrow=row_category)
-    })                 %>%
+    table_builder_apply(table, row_categories, FUN=
+      function(table, row_category) {
+          numerator <- length(datac[datac == col_category &
+                                    datar == row_category &
+                                    !is.na(datac)])
+          add_row(table,
+                  tg_fraction(numerator, denominator),
+                  subcol=col_category, subrow=row_category)
+      }) %>%
     new_col()
-  }) %>%
-  add_col(test)
+  })                                                         %>%
+  add_row(test,rep("", length(row_categories)-1))
 }
 
 # 1 X 3
+#' @export
 summarize_spearman <- function(table, row, column)
 {
   datar <- row$data[,1]
@@ -125,7 +135,7 @@ summarize_spearman <- function(table, row, column)
   table %>%
   row_header(derive_label(row)) %>%
   col_header("N", derive_label(column), "Test Statistic") %>%
-  col_header(NA, NA, NA) %>%
+  col_header("", "", "") %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac)))) %>%
   add_col(test$estimate) %>%
   add_col(test)

@@ -22,14 +22,10 @@ derive_label <- function(node)
   })
 
   # Find units if they exist
-  x <- strsplit(l, "\\s+\\(")[[1]]
-  l <- x[1]
-
   units <- NA
-  if(length(x) > 1) units <- strsplit(x[2], "\\)")[1]
   try({
-        u2 <- units(node$data)
-        if(nchar(u2)>0) {units<-u2}
+    u2 <- units(node$data)
+    if(nchar(u2)>0) {units<-u2}
   })
 
   cell_label(l, units)
@@ -179,6 +175,10 @@ new_table_builder <- function(row, column)
 #'
 write_cell <- function(table_builder, x, ...)
 {
+  if(table_builder$nrow > length(table_builder$table))
+  {
+    table_builder$table[[table_builder$nrow]] <- list()
+  }
   table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- tg(x, table_builder$row, table_builder$col, ...)
   table_builder
 }
@@ -462,13 +462,13 @@ add_col <- function(table_builder, ..., subrow=NA, subcol=NA)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_row(tg_N(1:3))
-add_row <- function(table_builder, ..., label=NA, subrow=NA, subcol=NA)
+add_row <- function(table_builder, ..., subrow=NA, subcol=NA)
 {
   # Get flattened args list
   table_builder %>%
   table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
     tbl %>%
-    write_cell(object, label=label, subrow=subrow, subcol=subcol) %>%
+    write_cell(object, subrow=subrow, subcol=subcol) %>%
     cursor_down()
   })
 }
@@ -510,8 +510,7 @@ tg <- function(x, row, column, ...)
 #' tg("Joe")
 tg.default <- function(x, row, column, ...)
 {
-  if(is.na(x)) cell_label("")
-  else         cell_label(as.character(x))
+  cell_label(as.character(x))
 }
 
 #' Identity function on cell

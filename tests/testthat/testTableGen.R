@@ -7,27 +7,21 @@ test_that("Categorical versus Numerical generates a table",
 
 test_that("Categorical versus a function of Numerical generates a table",
 {
-  f <- formula(drug ~ log(bili))
-  test_table <- summary_table(f, pbc)
+  test_table <- summary_table(drug ~ log(bili), pbc)
 
   expect_true(inherits(test_table, "cell_table"))
 })
 
-f <- formula(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)
-
-
 test_that("Categorical versus a Categorical generates a table",
 {
-  f <- formula(drug ~ sex)
-  test_table <- summary_table(f, pbc)
+  test_table <- summary_table(drug ~ sex, pbc)
 
   expect_true(inherits(test_table, "cell_table"))
 })
 
 test_that("Categorical versus a Categorical of coerced type generates a table",
 {
-  f <- formula(drug ~ stage::Categorical)
-  test_table <- summary_table(f, pbc)
+  test_table <- summary_table(drug ~ stage::Categorical, pbc)
 
   expect_true(inherits(test_table, "cell_table"))
 })

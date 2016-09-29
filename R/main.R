@@ -27,8 +27,8 @@ table_flatten <- function(table)
   col_label <- attr(table[[1]][[1]], "col_header")
 
   # Set aside additional for labeling
-  label_rows <- rows(col_label)
-  label_cols <- cols(row_label)
+  label_rows <- rows(col_label) # How many rows in the column header
+  label_cols <- cols(row_label) # How many cols in the row headers
 
   # Allocate final table
   new_tbl <- cell_table(final_rows+label_rows, final_cols+label_cols)

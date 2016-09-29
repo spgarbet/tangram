@@ -4,12 +4,14 @@
 \alias{tg_quantile}
 \title{Quantile creation}
 \usage{
-tg_quantile(x, ...)
+tg_quantile(x, format, ...)
 }
 \arguments{
-\item{x}{the data passed to the {base}quantile function}
+\item{x}{the data passed to the quantile {stats} function}
 
-\item{...}{all arguments that are passed to the {base}quantile function}
+\item{format}{the formatting to be applied (usually comes from AST node)}
+
+\item{...}{all arguments that are passed to the quantile {stats} function}
 }
 \value{
 an S3 rendereable cell that is a hypothesis test

@@ -4,16 +4,16 @@
 \alias{add_col}
 \title{Add columns}
 \usage{
-add_col(table_builder, subrow = NA, subcol = NA, ...)
+add_col(table_builder, ..., subrow = NA, subcol = NA)
 }
 \arguments{
 \item{table_builder}{The table builder to work on}
 
+\item{...}{elements to add columnwise}
+
 \item{subrow}{optional additional specifier for sub element of AST row for traceabililty}
 
 \item{subcol}{optional additional specifier for sub element of AST col for traceabililty}
-
-\item{...}{elements to add columnwise}
 }
 \value{
 a table builder with the cursor at the column past the last addition
