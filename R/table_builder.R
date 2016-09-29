@@ -657,15 +657,16 @@ tg_fraction <- function(numerator, denominator)
 #'
 #' Create a quantile that is convertible to a cell
 #'
-#' @param x the data passed to the {base}quantile function
-#' @param ... all arguments that are passed to the {base}quantile function
+#' @param x the data passed to the quantile {stats} function
+#' @param format the formatting to be applied (usually comes from AST node)
+#' @param ... all arguments that are passed to the quantile {stats} function
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
 #' tg_fraction(1, 2)
-tg_quantile <- function(x, ...)
+tg_quantile <- function(x, format, ...)
 {
-  result <- quantile(x, ...)
+  result <- cell_format(format, quantile(x, ...))
 
   class(result) <- c("quantile", "numeric")
 

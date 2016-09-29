@@ -74,7 +74,7 @@ test_that("col_header creates a new header with class cell_header in elements fo
 test_that("row_header creates a new header with class cell_subheader in elements for later call", {
   tb <- new_table_builder(list(value="A"), list(value="B")) %>%
         row_header("First", NA) %>%
-        row_header("Second", tg_quantile(rnorm(20)))
+        row_header("Second", tg_quantile(rnorm(20),NA))
 
   x <- attr(tb$table, "row_header")
 
@@ -94,7 +94,7 @@ test_that("row_header creates a new header with class cell_subheader in elements
 test_that("col_header creates a new header with class cell_subheader in elements for later call", {
   tb <- new_table_builder(list(value="A"), list(value="B")) %>%
         col_header("First", NA) %>%
-        col_header("Second", tg_quantile(rnorm(20)))
+        col_header("Second", tg_quantile(rnorm(20),NA))
 
   x <- attr(tb$table, "col_header")
 
@@ -314,7 +314,7 @@ test_that("write_cell writes to table with key info",
 
 test_that("add_col will add a single column", {
   tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
-          add_col(tg_quantile(rnorm(50)), subrow="S", subcol="T")
+          add_col(tg_quantile(rnorm(50),NA), subrow="S", subcol="T")
 
   expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:quantile")
   expect_equal(tb$nrow, 1)
@@ -323,7 +323,7 @@ test_that("add_col will add a single column", {
 
 test_that("add_col will add multiple columns as cells", {
   tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
-    add_col(tg_quantile(rnorm(50)),
+    add_col(tg_quantile(rnorm(50),NA),
             tg_N(4),
             tg_fraction(1,2),
             aov(y ~ x, data=data.frame(x=rnorm(10), y=rnorm(10))),

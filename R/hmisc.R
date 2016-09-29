@@ -34,7 +34,7 @@ summarize_kruskal_horz <- function(table, row, column)
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     tbl %>% add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
+     tbl %>% add_col(tg_quantile(x, row$format, na.rm=TRUE), subcol=category)
   })                                             %>%
   add_col(fstat)
 }
@@ -61,7 +61,7 @@ summarize_kruskal_vert <- function(table, row, column)
     tbl                                                  %>%
     row_header(category)                                 %>%
     add_col(tg_N(length(x)))                             %>%
-    add_col(tg_quantile(x, na.rm=TRUE), subrow=category) %>%
+    add_col(tg_quantile(x, column$format, na.rm=TRUE), subrow=category) %>%
     new_line()
   })                                                                %>%
   cursor_pos(1, 3)                                                  %>%
