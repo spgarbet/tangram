@@ -21,7 +21,7 @@ summarize_kruskal_horz <- function(table, row, column)
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
 
-x<-  table                                          %>%
+  table                                          %>%
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistics") %>%
   col_header(NA,  tg_N(subN),    NA               ) %>%
@@ -72,7 +72,7 @@ summarize_chisq <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    length(datac[datac == col_category & !is.na(datac)])
+    length(datac[datac == cat & !is.na(datac)])
   })
 
   # Chi^2 test
