@@ -592,7 +592,7 @@ tg.aov <- function(model, row, column, ...)
 #' tg(t.test(rnorm(10),rnorm(10)))
 tg.htest <- function(model, row, column, ...)
 {
-  cell_studentt(round(model$statistic,2), model$df, round(model$p.value, 3),
+  cell_studentt(round(model$statistic,2), model$parameter[1], round(model$p.value, 3),
     src=key(row, column, "htest", ...))
 }
 

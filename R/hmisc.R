@@ -20,6 +20,11 @@ summarize_kruskal_horz <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
+  fstat <- cell_fstat(f   = cell_format("%.2f", test['F']),
+                      n1  = test['df1'],
+                      n2  = test['df2'],
+                      p   = cell_format("%1.3f", test['P']),
+                      src = key(row, column, "F"))
 
   table                                          %>%
   row_header(derive_label(row))                  %>%
@@ -31,7 +36,7 @@ summarize_kruskal_horz <- function(table, row, column)
 
      tbl %>% add_col(tg_quantile(x, na.rm=TRUE), subcol=category)
   })                                             %>%
-  add_col(test)
+  add_col(fstat)
 }
 
 # no. categories X 3
@@ -43,6 +48,11 @@ summarize_kruskal_vert <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datar, datac, na.action=na.retain)
+  fstat <- cell_fstat(f   = cell_format("%.2f", test['F']),
+                      n1  = test['df1'],
+                      n2  = test['df2'],
+                      p   = cell_format("%1.3f", test['P']),
+                      src = key(row, column, "F"))
 
   table                                                             %>%
   col_header("N", derive_label(column), "Test Statistic")           %>%
@@ -55,7 +65,7 @@ summarize_kruskal_vert <- function(table, row, column)
     new_line()
   })                                                                %>%
   cursor_pos(1, 3)                                                  %>%
-  add_col(test)
+  add_col(fstat)
 }
 
 # N X (M+2)
