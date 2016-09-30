@@ -29,9 +29,9 @@ summarize_kruskal_horz <- function(table, row, column)
 
   table                                          %>%
   row_header(derive_label(row))                  %>%
-  col_header("N", categories, "Test Statistic") %>%
+  col_header("N", categories, "Test Statistic")  %>%
   col_header("",  tg_N(subN), ""               ) %>%
-  add_col(tg_N(sum(!is.na(datar))))                 %>%
+  add_col(tg_N(sum(!is.na(datar))))              %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
@@ -139,7 +139,7 @@ summarize_spearman <- function(table, row, column)
   col_header("N", derive_label(column), "Test Statistic") %>%
   col_header("", "", "") %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac)))) %>%
-  add_col(test$estimate) %>%
+  add_col(round(test$estimate,2)) %>%
   add_col(test)
 }
 

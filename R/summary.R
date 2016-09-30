@@ -101,6 +101,11 @@ summary.cell_studentt <- function(object)
   paste("T_",object$df,"=",object$t, ", P=",object$p, sep="")
 }
 
+summary.cell_spearman <- function(object)
+{
+  paste("S=",object$S,", P=",object$p, sep="")
+}
+
 summary.cell_n <- function(object)
 {
   if (inherits(object, "cell_header"))

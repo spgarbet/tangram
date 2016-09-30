@@ -122,6 +122,11 @@ cell_studentt <- function(t, df, p, src=NA)
   structure(cell(list(t=t, df=df, p=p, src=src)), class=c("cell_studentt", "cell"))
 }
 
+cell_spearman <- function(S, rho, p, src=NA)
+{
+  structure(cell(list(S=S,rho=rho, p=p, src=src)), class=c("cell_spearman", "cell"))
+}
+
 cell_n <- function(n, src=NA)
 {
   structure(cell(list(n=n, src=src)), class=c("cell_n", "cell"))

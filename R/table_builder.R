@@ -57,7 +57,11 @@ args_flatten <- function(...)
       for(b in a)
       {
         flat[[el]] <- b
-        if(!"list" %in% class(a)) class(flat[[el]]) <- class(a)
+        if(!"list" %in% class(a))
+        {
+          class(flat[[el]]) <- class(a)
+          names(flat[[el]]) <- names(a)
+        }
         el <- el+1
       }
     } else {
@@ -513,6 +517,26 @@ tg.default <- function(x, row, column, ...)
   cell_label(as.character(x))
 }
 
+#' Numeric Cell passed in
+#'
+#' Construct a cell from a numeric. This is essentially an identity function.
+#' I.e., if a user has constructed a cell and passed it in do nothing.
+#'
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell
+#' @export
+#' @examples
+#' tg(23.0)
+tg.numeric <- function(x, row, column, ...)
+{
+  if(is.null(names(x)))
+    cell_label(as.character(x), src=key(row, column, ...))
+  else
+    cell_label(paste(names(x),"=",as.character(x),sep=''), src=key(row, column, ...))
+}
+
 #' Identity function on cell
 #'
 #' Construct a cell from a cell. This is essentially an identity function.
@@ -583,6 +607,8 @@ tg.htest <- function(model, row, column, ...)
   ss <- key(row, column, "htest", ...)
   if(names(model$statistic) == "X-squared")
     cell_chi2(round(model$statistic,2), model$parameter[1], round(model$p.value, 3), src=ss)
+  else if(model$method == "Spearman's rank correlation rho")
+    cell_spearman(round(model$statistic,0), model$parameter, round(model$p.value, 3), src=ss)
   else
     cell_studentt(round(model$statistic,2), model$parameter[1], round(model$p.value, 3), src=ss)
 }

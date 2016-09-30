@@ -4,7 +4,7 @@
 \alias{add_row}
 \title{Add rows}
 \usage{
-add_row(table_builder, ..., label = NA, subrow = NA, subcol = NA)
+add_row(table_builder, ..., subrow = NA, subcol = NA)
 }
 \arguments{
 \item{table_builder}{The table builder to work on}
