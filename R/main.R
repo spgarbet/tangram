@@ -21,7 +21,6 @@ table_flatten <- function(table)
       final_cols <<- final_cols + 1
   })
 
-
   # Grab labels
   row_label <- attr(table[[1]][[1]], "row_header")
   col_label <- attr(table[[1]][[1]], "col_header")
@@ -72,6 +71,22 @@ table_flatten <- function(table)
       output_col <<- output_col + 1
     }
   })
+
+  # Put blanks in upper left corner, that represent headers
+  sapply(1:label_rows, FUN=function(row){
+    sapply(1:label_cols, FUN=function(col){
+      # Either a header or subheader
+      hdr_class <- if (inherits(new_tbl[[row]][[label_cols+1]], "cell_subheader"))
+                   {
+                     c("cell_subheader", "cell_header")
+                   } else {
+                     "cell_header"
+                   }
+
+      class(new_tbl[[row]][[col]])  <<- c(hdr_class, class(new_tbl[[row]][[col]]))
+    })
+  })
+
 
   # Main loop to fill final from provided
   output_row <- label_rows + 1

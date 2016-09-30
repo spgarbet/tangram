@@ -28,7 +28,7 @@ summary.cell_table <- function(object)
   last_header_row <- 0 # Current Header Row
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
-      if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row
+      if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
       text[row,col] <<- summary(object[[row]][[col]])
     })
   })
