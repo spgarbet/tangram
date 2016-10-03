@@ -4,7 +4,7 @@
 \alias{tg.aov}
 \title{AOV model as cell}
 \usage{
-\method{tg}{aov}(model, row, column, ...)
+\method{tg}{aov}(x, row, column, ...)
 }
 \arguments{
 \item{row}{The AST row of that is generating this cell}

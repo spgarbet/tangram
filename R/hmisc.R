@@ -1,8 +1,9 @@
-library(stringr)
-library(Hmisc)
-
-#' @import stringr
-#' @import Hmisc
+#' @importFrom Hmisc units
+#' @importFrom Hmisc label
+#' @importFrom Hmisc spearman2
+#' @importFrom Hmisc "label<-"
+#' @importFrom dplyr last
+#' @importFrom dplyr "%>%"
 #' @include S3-Cell.R
 #' @include typing.R
 

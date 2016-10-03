@@ -21,9 +21,7 @@ Generate a summary table using a specified formula and data frame
 }
 \examples{
 
-tbl <- summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
-tbl
-html5(tbl)
+summary_table("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
 
 }
 

@@ -8,10 +8,6 @@ carriage_return(table_builder)
 }
 \arguments{
 \item{table_builder}{The table builder to work on}
-
-\item{nrow}{The number of the row to move too}
-
-\item{ncol}{The number of the col to move too}
 }
 \value{
 a table builder with the cursor at the first column

@@ -9,7 +9,7 @@ is.binomial(x, threshold = NA)
 \arguments{
 \item{x}{Vector to determine type of}
 
-\item{category_threshold}{The upper threshold of unique values for which a vector is considered categorical.}
+\item{threshold}{The upper threshold of unique values for which a vector is considered categorical.}
 }
 \value{
 a Boolean: TRUE / FALSE

@@ -21,7 +21,7 @@ table under construction, as well as references to the row and column
 for automated tracability when generating indexes.
 }
 \examples{
-x <- Parser$new()$run(y \\~ x)
+x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left)
 
 }

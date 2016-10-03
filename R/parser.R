@@ -1,7 +1,3 @@
-library(R6)
-library(stringr)
-library(dplyr)
-
 #' A Node in an Abstract Syntax Tree (AST)
 #'
 #' This is the root R6 class of any term of the AST which is created
@@ -106,9 +102,6 @@ ASTVariable <- R6Class("ASTVariable",
 #' @format \code{\link{R6Class}} object.
 #' @field left A pointer to the left node below this one
 #' @field right A pointer to the right node below this one
-#'
-#' @examples
-#' ASTBranch$new(ASTNode$new(""), ASTNode$new(""))
 #'
 #' @section Methods:
 #' \describe{

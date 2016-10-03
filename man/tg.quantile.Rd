@@ -4,7 +4,7 @@
 \alias{tg.quantile}
 \title{Construct a cell from a tg_quantile}
 \usage{
-\method{tg}{quantile}(quantiles, row, column, ...)
+\method{tg}{quantile}(x, row, column, ...)
 }
 \arguments{
 \item{row}{The AST row of that is generating this cell}
@@ -20,6 +20,6 @@ an S3 rendereable cell that is a hypothesis test
 Construct a cell from a tg_quantile
 }
 \examples{
-tg(tg_quantile(rnorm(10))))
+tg(tg_quantile(rnorm(10)))
 }
 

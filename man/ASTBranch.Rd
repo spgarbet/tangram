@@ -31,9 +31,5 @@ as once again the semantic information is contained in the class name.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
-\examples{
-ASTBranch$new(ASTNode$new(""), ASTNode$new(""))
-
-}
 \keyword{data}
 

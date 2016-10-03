@@ -11,7 +11,8 @@
 #'
 #' @return A string with a label for the node
 #' @export
-#' @import Hmisc
+#' @importFrom Hmisc label
+#' @importFrom Hmisc "label<-"
 #' @include S3-Cell.R
 derive_label <- function(node)
 {
@@ -155,7 +156,7 @@ row_header <- function(table_builder, ...) new_header(table_builder, "row_header
 #' @export
 #'
 #' @examples
-#' x <- Parser$new()$run(y \~ x)
+#' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left)
 #'
 new_table_builder <- function(row, column)
@@ -313,8 +314,6 @@ cursor_pos <- function(table_builder, nrow, ncol)
 #' Move table builder cursor to the first column, does not advance row
 #'
 #' @param table_builder The table builder to work on
-#' @param nrow The number of the row to move too
-#' @param ncol The number of the col to move too
 #' @return a table builder with the cursor at the first column
 #' @export
 #'
@@ -565,9 +564,9 @@ tg.cell <- function(x, row, column, ...)
 #' @export
 #' @examples
 #' tg(tg_N("Joe"))
-tg.N <- function(n, row, column, ...)
+tg.N <- function(x, row, column, ...)
 {
-  cell_n(n, src=key(row, column, "N", ...))
+  cell_n(x, src=key(row, column, "N", ...))
 }
 
 #' AOV model as cell
@@ -581,9 +580,9 @@ tg.N <- function(n, row, column, ...)
 #' @export
 #' @examples
 #' tg(aov(rnorm(10) ~ rnorm(10)))
-tg.aov <- function(model, row, column, ...)
+tg.aov <- function(x, row, column, ...)
 {
-  test <- summary(model)[[1]]
+  test <- summary(x)[[1]]
   cell_fstat(f   = cell_format("%.2f", test$'F value'[1]),
            n1  = test$Df[1],
            n2  = test$Df[2],
@@ -602,15 +601,15 @@ tg.aov <- function(model, row, column, ...)
 #' @export
 #' @examples
 #' tg(t.test(rnorm(10),rnorm(10)))
-tg.htest <- function(model, row, column, ...)
+tg.htest <- function(x, row, column, ...)
 {
   ss <- key(row, column, "htest", ...)
-  if(names(model$statistic) == "X-squared")
-    cell_chi2(round(model$statistic,2), model$parameter[1], round(model$p.value, 3), src=ss)
-  else if(model$method == "Spearman's rank correlation rho")
-    cell_spearman(round(model$statistic,0), model$parameter, round(model$p.value, 3), src=ss)
+  if(names(x$statistic) == "X-squared")
+    cell_chi2(round(x$statistic,2), x$parameter[1], round(x$p.value, 3), src=ss)
+  else if(x$method == "Spearman's rank correlation rho")
+    cell_spearman(round(x$statistic,0), x$parameter, round(x$p.value, 3), src=ss)
   else
-    cell_studentt(round(model$statistic,2), model$parameter[1], round(model$p.value, 3), src=ss)
+    cell_studentt(round(x$statistic,2), x$parameter[1], round(x$p.value, 3), src=ss)
 }
 
 #' Construct a cell from a tg_quantile
@@ -621,10 +620,10 @@ tg.htest <- function(model, row, column, ...)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(tg_quantile(rnorm(10))))
-tg.quantile <- function(quantiles, row, column, ...)
+#' tg(tg_quantile(rnorm(10)))
+tg.quantile <- function(x, row, column, ...)
 {
-  cell_quantile(quantiles,
+  cell_quantile(x,
                   src=key(row    = row,
                           col    = column,
                           label  = "quantile",
@@ -641,7 +640,7 @@ tg.quantile <- function(quantiles, row, column, ...)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(tg_quantile(rnorm(10))))
+#' tg(tg_fraction(1, 2))
 tg.fraction <- function(x, row, column, ...)
 {
   cell_fraction(x[1], x[2],

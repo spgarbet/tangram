@@ -2,12 +2,12 @@
 # Given the compiled tree of data, render as a text index
 
 #' @export
-index <- function(x, ...)
+index <- function(object, ...)
 {
-  UseMethod("index", x)
+  UseMethod("index", object)
 }
 
-index.default <- function(object,caption)
+index.default <- function(object,caption, ...)
 {
   if(!("src" %in% names(object))) return(NULL)
   if(is.na(object$src)) return(NULL)
@@ -18,7 +18,7 @@ index.default <- function(object,caption)
 }
 
 #' @export
-index.cell_table <- function(object, caption="Table")
+index.cell_table <- function(object, caption="Table",...)
 {
   nrows <- rows(object)
   ncols <- cols(object)

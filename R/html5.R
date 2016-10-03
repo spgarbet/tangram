@@ -2,16 +2,16 @@
 # Given the compiled tree of data, render as a text html5
 
 #' @export
-html5 <- function(x, ...)
+html5 <- function(object, ...)
 {
-  UseMethod("html5", x)
+  UseMethod("html5", object)
 }
 
 
 # This is the default, do nothing -- probably should be warning()
-html5.default <- function(object) "<td></td>"
+html5.default <- function(object, ...) "<td></td>"
 
-html5.cell_subheader <- function(object)
+html5.cell_subheader <- function(object, ...)
 {
   paste("<td class=\"subheader\">",
         gsub("^N=","<em>N</em>=", object$label),
@@ -19,7 +19,7 @@ html5.cell_subheader <- function(object)
         sep="")
 }
 
-html5.cell_header <- function(object)
+html5.cell_header <- function(object, ...)
 {
   paste("<td>",
         object$label,
@@ -27,7 +27,7 @@ html5.cell_header <- function(object)
         sep="")
 }
 
-html5.cell_label <- function(object)
+html5.cell_label <- function(object, ...)
 {
   if(is.na(object$units))
       paste("<td class=\"label\">",
@@ -49,7 +49,7 @@ html5.cell_label <- function(object)
 }
 
 #' @export
-html5.cell_table <- function(object, css="Hmisc.css", caption="Figure")
+html5.cell_table <- function(object, css="Hmisc.css", caption="Figure", ...)
 {
   header <- paste("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">",
                   "<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>",
@@ -94,7 +94,7 @@ html5.cell_table <- function(object, css="Hmisc.css", caption="Figure")
   paste(header, tableHdr, tableBdy, footer, sep="\n")
 }
 
-html5.cell_estimate <- function(object)
+html5.cell_estimate <- function(object, ...)
 {
   if(is.na(object$low))
     paste("<td class=\"estimate\"><b>",
@@ -110,7 +110,7 @@ html5.cell_estimate <- function(object)
           sep="")
 }
 
-html5.cell_quantile <- function(object)
+html5.cell_quantile <- function(object, ...)
 {
   paste("<td class=\"quantile\">",
         object$'25%',
@@ -123,7 +123,7 @@ html5.cell_quantile <- function(object)
 }
 
 
-html5.cell_fstat <- function(object)
+html5.cell_fstat <- function(object, ...)
 {
   paste(
     "<td class=\"statistic\">",
@@ -138,7 +138,7 @@ html5.cell_fstat <- function(object)
   )
 }
 
-html5.cell_fraction <- function(object)
+html5.cell_fraction <- function(object, ...)
 {
   x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
   den <- as.character(object$denominator)
@@ -156,7 +156,7 @@ html5.cell_fraction <- function(object)
         sep="")
 }
 
-html5.cell_chi2 <- function(object)
+html5.cell_chi2 <- function(object, ...)
 {
   paste("<td class=\"statistic\">",
         "<span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",

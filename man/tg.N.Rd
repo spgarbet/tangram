@@ -4,7 +4,7 @@
 \alias{tg.N}
 \title{N value as cell}
 \usage{
-\method{tg}{N}(n, row, column, ...)
+\method{tg}{N}(x, row, column, ...)
 }
 \arguments{
 \item{row}{The AST row of that is generating this cell}

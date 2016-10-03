@@ -160,9 +160,7 @@ cell_create_table <- function(ast, transforms)
 #'
 #' @examples
 #'
-#' tbl <- summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
-#' tbl
-#' html5(tbl)
+#' summary_table("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
 #'
 summary_table <- function(formula, data, transforms=hmisc_style)
 {

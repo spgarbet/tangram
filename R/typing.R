@@ -1,7 +1,7 @@
 #' Determine if a vector is categorical or not
 #'
 #' @param x Vector to determine type of
-#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
+#' @param threshold The upper threshold of unique values for which a vector is considered categorical.
 #'
 #' @return A Boolean: TRUE / FALSE
 #' @export
@@ -22,7 +22,7 @@ is.categorical <- function(x, threshold=NA)
 #' Determine if a vector is binomial or not
 #'
 #' @param x Vector to determine type of
-#' @param category_threshold The upper threshold of unique values for which a vector is considered categorical.
+#' @param threshold The upper threshold of unique values for which a vector is considered categorical.
 #'
 #' @return a Boolean: TRUE / FALSE
 #' @export

@@ -11,7 +11,7 @@ Description: Provides an extensible formula system to quickly and easily create
     rendering for HTML5, LaTeX, Rmarkdown and an index format.
 Depends:
     R (>= 3.2.3)
-License: GPL=2
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Suggests:

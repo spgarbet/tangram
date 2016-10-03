@@ -2,9 +2,9 @@
 # Given the compiled tree of data, render as a text summary
 #' @include S3-Cell.R
 
-summary.default <- function(object) ""
+summary.default <- function(object,...) ""
 
-summary.cell_label <- function(object)
+summary.cell_label <- function(object,...)
 {
   if(is.na(object$units))
     object$label
@@ -12,13 +12,14 @@ summary.cell_label <- function(object)
     paste(object$label, " (", object$units, ")", sep="")
 }
 
-summary.cell_quantile <- function(object)
+summary.cell_quantile <- function(object,...)
 {
   paste(object$'25%', " *", object$'50%', "* ", object$'75%', sep="")
 }
 
 #' @export
-summary.cell_table <- function(object)
+#' @importFrom stringr str_pad
+summary.cell_table <- function(object,...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -66,9 +67,9 @@ summary.cell_table <- function(object)
 }
 
 #' @export
-print.cell_table <- function(object) {summary(object)}
+print.cell_table <- function(x,...) {summary(x,...)}
 
-summary.cell_estimate <- function(object)
+summary.cell_estimate <- function(object,...)
 {
   if(is.na(object$low))
     as.character(object$value)
@@ -76,12 +77,12 @@ summary.cell_estimate <- function(object)
     paste(object$value," (",object$low,",",object$high,")")
 }
 
-summary.cell_fstat <- function(object)
+summary.cell_fstat <- function(object,...)
 {
   paste("F_{",object$n1,",",object$n2,"}=",object$f,", P=",object$p,sep="")
 }
 
-summary.cell_fraction <- function(object)
+summary.cell_fraction <- function(object,...)
 {
   x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
   den <- as.character(object$denominator)
@@ -91,22 +92,22 @@ summary.cell_fraction <- function(object)
         sep="")
 }
 
-summary.cell_chi2 <- function(object)
+summary.cell_chi2 <- function(object,...)
 {
   paste("    X^2_",object$df,"=",object$chi2,", P=",object$p,sep="")
 }
 
-summary.cell_studentt <- function(object)
+summary.cell_studentt <- function(object,...)
 {
   paste("T_",object$df,"=",object$t, ", P=",object$p, sep="")
 }
 
-summary.cell_spearman <- function(object)
+summary.cell_spearman <- function(object,...)
 {
   paste("S=",object$S,", P=",object$p, sep="")
 }
 
-summary.cell_n <- function(object)
+summary.cell_n <- function(object,...)
 {
   if (inherits(object, "cell_header"))
     paste("(N=",as.character(object$n),")",sep='')

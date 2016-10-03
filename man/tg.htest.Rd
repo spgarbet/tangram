@@ -4,7 +4,7 @@
 \alias{tg.htest}
 \title{Construct hypothesis test form cell}
 \usage{
-\method{tg}{htest}(model, row, column, ...)
+\method{tg}{htest}(x, row, column, ...)
 }
 \arguments{
 \item{row}{The AST row of that is generating this cell}
