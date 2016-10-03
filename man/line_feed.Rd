@@ -9,6 +9,8 @@ line_feed(table_builder, n = 1)
 }
 \arguments{
 \item{table_builder}{The table builder to work on}
+
+\item{n}{optional number of line_feeds to perform}
 }
 \value{
 a table builder with the cursor at the first column

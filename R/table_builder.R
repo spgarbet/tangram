@@ -150,7 +150,7 @@ row_header <- function(table_builder, ...) new_header(table_builder, "row_header
 #' for automated tracability when generating indexes.
 #'
 #' @param row The row node from the AST
-#' @param col The col node from the AST
+#' @param column The col node from the AST
 #' @return a table builder with 1 empty cell at position (1,1)
 #' @export
 #'
@@ -338,6 +338,7 @@ carriage_return <- function(table_builder)
 #' Move table builder cursor to the next line (does not alter column)
 #'
 #' @param table_builder The table builder to work on
+#' @param n optional number of line_feeds to perform
 #' @return a table builder with the cursor at the first column
 #' @export
 #'
@@ -518,6 +519,7 @@ tg <- function(x, row, column, ...)
 #'
 #' Construct a cell. This is the default fallback, it creates a label cell
 #'
+#' @param x Object to turn into a renderable label cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -535,6 +537,7 @@ tg.default <- function(x, row, column, ...)
 #' Construct a cell from a numeric. This is essentially an identity function.
 #' I.e., if a user has constructed a cell and passed it in do nothing.
 #'
+#' @param x The numeric value to return as a renderable cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -555,6 +558,7 @@ tg.numeric <- function(x, row, column, ...)
 #' Construct a cell from a cell. This is essentially an identity function.
 #' I.e., if a user has constructed a cell and passed it in do nothing.
 #'
+#' @param x the object to return
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -571,6 +575,7 @@ tg.cell <- function(x, row, column, ...)
 #'
 #' Construct a cell from an N value.
 #'
+#' @param x The tg_N object to convert into a rendereable cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -587,6 +592,7 @@ tg.N <- function(x, row, column, ...)
 #'
 #' Construct a cell from an analysis of variance model
 #'
+#' @param x The aov object to turn into a renderable cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -608,6 +614,7 @@ tg.aov <- function(x, row, column, ...)
 #'
 #' Construct a cell from a hypothesis test
 #'
+#' @param x The htest object to convert to a rendereable cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -628,6 +635,7 @@ tg.htest <- function(x, row, column, ...)
 
 #' Construct a cell from a tg_quantile
 #'
+#' @param x The quantile object to turn in to a rendereable cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -648,6 +656,7 @@ tg.quantile <- function(x, row, column, ...)
 #'
 #' Construct a cell from a tg_fraction
 #'
+#' @param x The fraction object to convert to a tg cell
 #' @param row The AST row of that is generating this cell
 #' @param column The AST column that is generating this cell
 #' @param ... additional specifiers for identifying this cell (see key)
@@ -684,8 +693,9 @@ tg_N <- function(...)
 #'
 #' Create a fraction that is convertible to a cell
 #'
-#' @param ... the N values
-#' @return an S3 rendereable cell that is a hypothesis test
+#' @param numerator The numerator of the fraction
+#' @param denominator The denominator of the fraction
+#' @return an S3 rendereable cell that is a fraction
 #' @export
 #' @examples
 #' tg_fraction(1, 2)

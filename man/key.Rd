@@ -6,6 +6,17 @@
 \usage{
 key(row, col, label = NA, subrow = NA, subcol = NA)
 }
+\arguments{
+\item{row}{The AST row node to use in key generation}
+
+\item{col}{The AST col node to use in key generation}
+
+\item{label}{Additional label about source of data}
+
+\item{subrow}{Additional specifier for row}
+
+\item{subcol}{Additional specifier for column}
+}
 \description{
 Key derivation helper function
 }

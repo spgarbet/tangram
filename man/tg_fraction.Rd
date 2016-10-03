@@ -7,10 +7,12 @@
 tg_fraction(numerator, denominator)
 }
 \arguments{
-\item{...}{the N values}
+\item{numerator}{The numerator of the fraction}
+
+\item{denominator}{The denominator of the fraction}
 }
 \value{
-an S3 rendereable cell that is a hypothesis test
+an S3 rendereable cell that is a fraction
 }
 \description{
 Create a fraction that is convertible to a cell

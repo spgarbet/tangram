@@ -134,6 +134,12 @@ cell_n <- function(n, src=NA)
 
 
 #' Key derivation helper function
+#'
+#' @param row The AST row node to use in key generation
+#' @param col The AST col node to use in key generation
+#' @param label Additional label about source of data
+#' @param subrow Additional specifier for row
+#' @param subcol Additional specifier for column
 #' @export
 key <- function(row, col, label=NA, subrow=NA, subcol=NA)
 {

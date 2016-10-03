@@ -7,6 +7,8 @@
 \method{tg}{htest}(x, row, column, ...)
 }
 \arguments{
+\item{x}{The htest object to convert to a rendereable cell}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}

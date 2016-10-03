@@ -7,6 +7,8 @@
 \method{tg}{numeric}(x, row, column, ...)
 }
 \arguments{
+\item{x}{The numeric value to return as a renderable cell}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}

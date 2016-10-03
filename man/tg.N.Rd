@@ -7,6 +7,8 @@
 \method{tg}{N}(x, row, column, ...)
 }
 \arguments{
+\item{x}{The tg_N object to convert into a rendereable cell}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}

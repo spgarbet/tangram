@@ -9,7 +9,7 @@ new_table_builder(row, column)
 \arguments{
 \item{row}{The row node from the AST}
 
-\item{col}{The col node from the AST}
+\item{column}{The col node from the AST}
 }
 \value{
 a table builder with 1 empty cell at position (1,1)

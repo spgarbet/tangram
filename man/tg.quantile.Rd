@@ -7,6 +7,8 @@
 \method{tg}{quantile}(x, row, column, ...)
 }
 \arguments{
+\item{x}{The quantile object to turn in to a rendereable cell}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}

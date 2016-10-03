@@ -7,6 +7,8 @@
 \method{tg}{default}(x, row, column, ...)
 }
 \arguments{
+\item{x}{Object to turn into a renderable label cell}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}

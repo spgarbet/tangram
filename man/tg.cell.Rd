@@ -7,6 +7,8 @@
 \method{tg}{cell}(x, row, column, ...)
 }
 \arguments{
+\item{x}{the object to return}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}

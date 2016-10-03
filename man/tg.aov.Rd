@@ -7,6 +7,8 @@
 \method{tg}{aov}(x, row, column, ...)
 }
 \arguments{
+\item{x}{The aov object to turn into a renderable cell}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}
