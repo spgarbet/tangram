@@ -20,6 +20,6 @@ an S3 rendereable cell that is a hypothesis test
 Construct a cell from a hypothesis test
 }
 \examples{
-tg(t.test(rnorm(10),rnorm(10)))
+tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
 }
 

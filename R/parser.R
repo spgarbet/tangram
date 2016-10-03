@@ -9,12 +9,6 @@
 #' @importFrom R6 R6Class
 #' @keywords data
 #'
-#' @examples
-#'
-#' ASTNode$new("some information")
-#' ASTNode$new("some information")$string()
-#' ASTNode$new("some information")$terms()
-#'
 #' @field symbol A string which tells what this node in the AST represents.
 #' @field value  A string of addtional information contained by the node.
 #'
@@ -45,6 +39,7 @@ ASTNode <- R6Class("ASTNode",
 #' @importFrom R6 R6Class
 #' @importFrom dplyr select
 #' @keywords data
+#' @export
 #' @format \code{\link{R6Class}} object.
 #'
 #' @examples
@@ -143,6 +138,7 @@ ASTBranch <- R6Class("ASTBranch",
 #' @docType class
 #' @importFrom R6 R6Class
 #' @keywords data
+#' @export
 #' @format \code{\link{R6Class}} object.
 #'
 #' @field value  The name of the function.
@@ -204,6 +200,7 @@ ASTFunction <- R6Class("ASTFunction",
 #' @docType class
 #' @importFrom R6 R6Class
 #' @keywords data
+#' @export
 #' @format \code{\link{R6Class}} object.
 #'
 #' @field left  The AST tree to the left.
@@ -247,6 +244,7 @@ ASTPlus <- R6Class("ASTPlus",
 #' @docType class
 #' @importFrom R6 R6Class
 #' @keywords data
+#' @export
 #' @format \code{\link{R6Class}} object.
 #'
 #' @field left  The AST tree to the left.
@@ -312,6 +310,7 @@ ASTMultiply <- R6Class("ASTMultiply",
 #' @docType class
 #' @importFrom R6 R6Class
 #' @keywords data
+#' @export
 #' @format \code{\link{R6Class}} object.
 #'
 #' @field left  The AST tree for the columns.
@@ -359,10 +358,6 @@ ASTTableFormula <- R6Class("ASTTableFormula",
 #'
 #' @field id    The token identifier, E.g. "LPAREN"
 #' @field name  Information about the token, useful with IDENTIFIERs.
-#'
-#' @examples
-#' Token$new("PLUS", "+")
-#' Token$new("IDENTIFIER", "albumin")
 #'
 #' @section Methods:
 #' \describe{

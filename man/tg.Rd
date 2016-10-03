@@ -24,6 +24,6 @@ of this layer is to append additional traceability information, and convert
 to internal cell type for later rendering decisions.
 }
 \examples{
-tg(NA)
+tg(NA, list(value="A"), list(value="B"))
 }
 

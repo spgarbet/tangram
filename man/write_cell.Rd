@@ -20,6 +20,7 @@ a table builder with the given cell written in the current cursor position
 Function to write a value to the current position in the table builder
 }
 \examples{
+library(dplyr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% write_cell(tg_N(23))
 

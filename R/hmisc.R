@@ -166,7 +166,7 @@ apply_factors <- function(row, column)
 #'
 hmisc_data_type <- function(x, category_threshold=NA)
 {
-  x <- x[,1] # FIXME: Need to deal with factors
+  if(inherits(x,"data.frame")) x <- x[,1] # FIXME: Need to deal with factors
   if(is.categorical(x,category_threshold))  "Categorical" else
   if(is.numeric(x))                         "Numerical"   else
   stop(paste("Unsupported class/type - ",class(x), typeof(x)))

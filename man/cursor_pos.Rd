@@ -20,6 +20,7 @@ a table builder with the cursor at the specified position
 Move table builder cursor to the specified position
 }
 \examples{
+library(dplyr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3)
 

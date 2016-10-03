@@ -29,12 +29,5 @@ as the class information carries the semantic meaning of a given node.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
-\examples{
-
-ASTNode$new("some information")
-ASTNode$new("some information")$string()
-ASTNode$new("some information")$terms()
-
-}
 \keyword{data}
 

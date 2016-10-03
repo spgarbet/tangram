@@ -21,6 +21,6 @@ Construct a cell from a numeric. This is essentially an identity function.
 I.e., if a user has constructed a cell and passed it in do nothing.
 }
 \examples{
-tg(23.0)
+tg(23.0, list(value="A"), list(value="B"))
 }
 

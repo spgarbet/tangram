@@ -18,6 +18,7 @@ Move cursor to next line
 Move table builder cursor to the next line (does not alter column)
 }
 \examples{
+library(dplyr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% line_feed()
 

@@ -24,10 +24,5 @@ A token in the formula grammar
   \item{\code{new(id, name="")}}{Create a new token in the grammar.}
 }
 }
-\examples{
-Token$new("PLUS", "+")
-Token$new("IDENTIFIER", "albumin")
-
-}
 \keyword{data}
 

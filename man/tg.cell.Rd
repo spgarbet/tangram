@@ -21,6 +21,6 @@ Construct a cell from a cell. This is essentially an identity function.
 I.e., if a user has constructed a cell and passed it in do nothing.
 }
 \examples{
-tg(tg("Joe"))
+tg(tg("Joe"), list(value="A"), list(value="B"))
 }
 

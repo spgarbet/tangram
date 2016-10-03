@@ -18,6 +18,7 @@ a table builder with the cursor up n positions
 Move table builder cursor up specified value (default 1)
 }
 \examples{
+library(dplyr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% cursor_up(2)
 

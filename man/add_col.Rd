@@ -22,6 +22,7 @@ a table builder with the cursor at the column past the last addition
 Add all elements specified and advance to the next column after each addition
 }
 \examples{
+library(dplyr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\%
 add_col(tg_N(1:3))

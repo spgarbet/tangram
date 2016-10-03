@@ -20,6 +20,6 @@ an S3 rendereable cell label
 Construct a cell. This is the default fallback, it creates a label cell
 }
 \examples{
-tg("Joe")
+tg("Joe", list(value="A"), list(value="B"))
 }
 

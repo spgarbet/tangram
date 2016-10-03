@@ -39,12 +39,11 @@ derive_label <- function(node)
 #' Flatten variable arguments
 #'
 #' Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)
+#' e.g. args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
 #'
 #' @param ... variable arguments
 #' @return a list of the arguments, with vectors and lists flattened
 #'
-#' @examples
-#' args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
 args_flatten <- function(...)
 {
   ls   <- list(...)
@@ -175,6 +174,7 @@ new_table_builder <- function(row, column)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% write_cell(tg_N(23))
 #'
@@ -197,6 +197,7 @@ write_cell <- function(table_builder, x, ...)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% home()
 #'
@@ -217,6 +218,7 @@ home <- function(table_builder)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_up(2)
 #'
@@ -237,6 +239,7 @@ cursor_up <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_down(2)
 #'
@@ -257,6 +260,7 @@ cursor_down <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_left(2)
 #'
@@ -277,6 +281,7 @@ cursor_left <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_right(2)
 #'
@@ -298,6 +303,7 @@ cursor_right <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3)
 #'
@@ -318,6 +324,7 @@ cursor_pos <- function(table_builder, nrow, ncol)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% carriage_return()
 #'
@@ -335,6 +342,7 @@ carriage_return <- function(table_builder)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% line_feed()
 #'
@@ -349,6 +357,7 @@ line_feed <- cursor_down
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% new_line()
 #'
@@ -369,6 +378,7 @@ new_line <- function(table_builder)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% new_row()
 #'
@@ -388,6 +398,7 @@ new_row <- function(table_builder)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% new_col()
 #'
@@ -411,6 +422,7 @@ new_col <- function(table_builder)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' table_builder_apply(1:3, FUN=function(tb, x) {
@@ -437,6 +449,7 @@ table_builder_apply <- function(table_builder, X, FUN, ...)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_col(tg_N(1:3))
@@ -462,6 +475,7 @@ add_col <- function(table_builder, ..., subrow=NA, subcol=NA)
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_row(tg_N(1:3))
@@ -494,7 +508,7 @@ add_row <- function(table_builder, ..., subrow=NA, subcol=NA)
 #' @export
 #'
 #' @examples
-#' tg(NA)
+#' tg(NA, list(value="A"), list(value="B"))
 tg <- function(x, row, column, ...)
 {
   UseMethod("tg", x)
@@ -510,7 +524,7 @@ tg <- function(x, row, column, ...)
 #' @return an S3 rendereable cell label
 #' @export
 #' @examples
-#' tg("Joe")
+#' tg("Joe", list(value="A"), list(value="B"))
 tg.default <- function(x, row, column, ...)
 {
   cell_label(as.character(x))
@@ -527,7 +541,7 @@ tg.default <- function(x, row, column, ...)
 #' @return an S3 rendereable cell
 #' @export
 #' @examples
-#' tg(23.0)
+#' tg(23.0, list(value="A"), list(value="B"))
 tg.numeric <- function(x, row, column, ...)
 {
   if(is.null(names(x)))
@@ -547,7 +561,7 @@ tg.numeric <- function(x, row, column, ...)
 #' @return an S3 rendereable cell label
 #' @export
 #' @examples
-#' tg(tg("Joe"))
+#' tg(tg("Joe"), list(value="A"), list(value="B"))
 tg.cell <- function(x, row, column, ...)
 {
   x
@@ -563,7 +577,7 @@ tg.cell <- function(x, row, column, ...)
 #' @return an S3 rendereable cell label
 #' @export
 #' @examples
-#' tg(tg_N("Joe"))
+#' tg(tg_N("Joe"), list(value="A"), list(value="B"))
 tg.N <- function(x, row, column, ...)
 {
   cell_n(x, src=key(row, column, "N", ...))
@@ -579,7 +593,7 @@ tg.N <- function(x, row, column, ...)
 #' @return an S3 rendereable cell that is an F-statistic
 #' @export
 #' @examples
-#' tg(aov(rnorm(10) ~ rnorm(10)))
+#' tg(aov(rnorm(10) ~ rnorm(10)), list(value="A"), list(value="B"))
 tg.aov <- function(x, row, column, ...)
 {
   test <- summary(x)[[1]]
@@ -600,7 +614,7 @@ tg.aov <- function(x, row, column, ...)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(t.test(rnorm(10),rnorm(10)))
+#' tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
 tg.htest <- function(x, row, column, ...)
 {
   ss <- key(row, column, "htest", ...)
@@ -620,7 +634,7 @@ tg.htest <- function(x, row, column, ...)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(tg_quantile(rnorm(10)))
+#' tg(tg_quantile(rnorm(10), "%.f"), list(value="A"), list(value="B"))
 tg.quantile <- function(x, row, column, ...)
 {
   cell_quantile(x,
@@ -640,7 +654,7 @@ tg.quantile <- function(x, row, column, ...)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(tg_fraction(1, 2))
+#' tg(tg_fraction(1, 2), list(value="A"), list(value="B"))
 tg.fraction <- function(x, row, column, ...)
 {
   cell_fraction(x[1], x[2],
@@ -690,7 +704,7 @@ tg_fraction <- function(numerator, denominator)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg_fraction(1, 2)
+#' tg_quantile(rnorm(100), "%.2f")
 tg_quantile <- function(x, format, ...)
 {
   result <- cell_format(format, quantile(x, ...))

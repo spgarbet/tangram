@@ -20,6 +20,6 @@ an S3 rendereable cell that is a hypothesis test
 Construct a cell from a tg_quantile
 }
 \examples{
-tg(tg_quantile(rnorm(10)))
+tg(tg_quantile(rnorm(10), "\%.f"), list(value="A"), list(value="B"))
 }
 

@@ -14,8 +14,6 @@ a list of the arguments, with vectors and lists flattened
 }
 \description{
 Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)
-}
-\examples{
-args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
+e.g. args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
 }
 

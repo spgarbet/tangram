@@ -17,6 +17,7 @@ Move table builder cursor to the bottom of all defined rows opening a new one
 in the first column
 }
 \examples{
+library(dplyr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% new_row()
 

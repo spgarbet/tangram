@@ -142,7 +142,6 @@ cell_create_table <- function(ast, transforms)
 
       transform <- transforms[[rowtype]][[coltype]]
 
-
       tbl[[row_idx]][[col_idx]] <<- transform(new_table_builder(row, column), row, column)$table
     })
   })

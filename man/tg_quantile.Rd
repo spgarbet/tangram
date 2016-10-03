@@ -20,6 +20,6 @@ an S3 rendereable cell that is a hypothesis test
 Create a quantile that is convertible to a cell
 }
 \examples{
-tg_fraction(1, 2)
+tg_quantile(rnorm(100), "\%.2f")
 }
 
