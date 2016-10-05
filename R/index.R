@@ -9,18 +9,20 @@ index <- function(object, ...)
 
 #' @importFrom base64enc base64encode
 #' @importFrom digest digest
+#' @export
 index.default <- function(object,caption, ...)
 {
   if(!("src" %in% names(object))) return(NULL)
   if(is.na(object$src)) return(NULL)
   src <- paste(caption, object$src, sep=":")
   nms <- names(object)
-  sapply(nms[!nms %in% c('label','src','units')],
+  lapply(nms[!nms %in% c('label','src','units')],
          function(y)
          {
            idx <- substr(base64encode(charToRaw(digest(c(src,y)))), 1, 4)
 
-           paste(idx, paste(src, y, sep=':'), object[[y]], sep=",")
+           c(idx, paste(src, y, sep=':'), as.character(object[[y]]))
+           #paste(idx, paste(src, y, sep=':'), object[[y]], sep=",")
          })
 }
 
@@ -39,6 +41,8 @@ index.cell_table <- function(object, caption="Table",...)
   }))
 
   names(result) <- NULL
+  result <- matrix(result, ncol=3, byrow=TRUE)
+  colnames(result) <- c("key", "src", "value")
   result
 }
 
