@@ -63,7 +63,7 @@ summarize_kruskal_vert <- function(table, row, column)
     x <- datac[datar == categories[category]]
     tbl                                                  %>%
     row_header(category)                                 %>%
-    add_col(tg_N(length(x)))                             %>%
+    add_col(tg_N(length(x)), subcol=category)            %>%
     add_col(tg_quantile(x, column$format, na.rm=TRUE), subrow=category) %>%
     new_line()
   })                                                                %>%
@@ -86,7 +86,7 @@ summarize_chisq <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    length(datac[datac == cat & !is.na(datac)])
+    tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
   })
 
   # Chi^2 test
@@ -105,7 +105,7 @@ summarize_chisq <- function(table, row, column)
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
-  col_header("", tg_N(subN), "")                             %>%
+  col_header("", subN, "")                             %>%
   table_builder_apply(labels, FUN=
     function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
