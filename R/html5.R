@@ -2,6 +2,27 @@
 # Given the compiled tree of data, render as a text html5
 
 #' @export
+custom_css <- function(filename, id=NA)
+{
+  content <- suppressWarnings(tryCatch(readChar(fileName, file.info(fileName)$size), error=function(e) NA))
+  if(is.na(content))
+  {
+    filename2 <- paste(system.file(package="tg"), "extdata", "css", filename, sep='/')
+    content <- suppressWarnings(tryCatch(readChar(filename2, file.info(filename2)$size), error=function(e) NA))
+  }
+
+  if(is.na(content))
+  {
+    stop(paste("cannot open file '", filename, "': No such file or directory", sep=''))
+  }
+
+  if(is.na(id)) return(content)
+
+  # sub in a given id
+  cat(gsub("\\n([a-zA-Z.])", paste(id," \\1"), paste("\n",content,sep=''), perl=TRUE))
+}
+
+#' @export
 html5 <- function(object, ...)
 {
   UseMethod("html5", object)
@@ -49,19 +70,34 @@ html5.cell_label <- function(object, ...)
 }
 
 #' @export
-html5.cell_table <- function(object, css="Hmisc.css", caption="Figure", ...)
+#' Use cases: To provide full html5 page with style links
+#'            To provide fragment
+#'            To provide fragment with inline style
+html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, inline=NA, ...)
 {
+  if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
+
+  scoped <- if(!is.na(inline)) paste("<style scoped>", custom_css(inline),"</style>", sep='') else ""
+
   header <- paste("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">",
-                  "<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>",
+                  css,
                   "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css\">",
 	                "<title>",caption,"</title>",
-                  "</head><body><div class=\"figure\">",
+                  "</head><body>", sep='')
+  intro <-  paste("<div class=\"figure\">",
+                  scoped,
                   "<div class=\"caption\">",caption,"</div>",
 		              "<div class=\"figbody\">",
 			            "<table class=\"summaryM\">",
-                  sep="")
+                  sep='')
 
-  footer <- "</table></div></div></body></html>"
+  if(fragment)
+  {
+    footer <- "</table></div></div>"
+  } else {
+    intro  <- paste(header, intro, sep='')
+    footer <- "</table></div></div></body></html>"
+  }
 
   nrows <- rows(object)
   ncols <- cols(object)
@@ -91,7 +127,9 @@ html5.cell_table <- function(object, css="Hmisc.css", caption="Figure", ...)
     collapse=""
   )
 
-  paste(header, tableHdr, tableBdy, footer, sep="\n")
+  final <- paste(intro, tableHdr, tableBdy, footer, sep="\n")
+  class(final) <- c("html", "character")
+  final
 }
 
 html5.cell_estimate <- function(object, ...)

@@ -1,4 +1,3 @@
-
 body {
 	font-family: "Computer Modern Serif", serif;
 }
@@ -30,10 +29,10 @@ body {
 	border-spacing: 0;
 }
 
-.summaryM thead { 
+.summaryM thead {
                 }
 
-.subheader    { font-size: small; } 
+.subheader    { font-size: small; }
 .subheader tr { border-collapse: collapse; }
 .subheader td { border-bottom: 1pt solid black; }
 
@@ -69,6 +68,7 @@ td .align{
 .nobr {
    white-space: nowrap;
 }
+
 .supsub {
    display: inline-block;
    margin: -9em 0;

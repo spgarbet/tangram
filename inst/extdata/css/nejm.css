@@ -1,5 +1,5 @@
 
-body {
+body .summaryM {
 	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   font-size: 75%;
 }
@@ -11,7 +11,7 @@ body {
 
 .figure  {  margin-left:  auto;
 			      margin-right: auto;
-			
+
 	          border: 2px solid black;
          }
 
@@ -40,11 +40,11 @@ body {
 	border-spacing: 0;
 }
 
-.summaryM thead { 
+.summaryM thead {
                 }
 .summaryM tbody tr:nth-child(odd) {background: #fffbed;}
 
-.subheader    { font-size: small; } 
+.subheader    { font-size: small; }
 .subheaderrow tr { border-collapse: collapse; }
 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
 .subheader:before { content: "("; }
