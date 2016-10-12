@@ -40,17 +40,17 @@ body .summaryM {
 	border-spacing: 0;
 }
 
-.summaryM thead {
-                }
 .summaryM tbody tr:nth-child(odd) {background: #fffbed;}
 
 .subheader    { font-size: small; }
 .subheaderrow tr { border-collapse: collapse; }
 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
-.subheader:before { content: "("; }
-.subheader:after  { content: ")"; }
+
 
 .subheader em {font-style: normal;}
+
+.N:before { content: "("; }
+.N:after  { content: ")"; }
 
 .quantile {
 	font-size: smaller;

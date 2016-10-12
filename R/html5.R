@@ -58,7 +58,7 @@ html5.cell <- function(object, ..., class=NA)
 }
 
 #' @export
-html5.cell_n <- function(object, ..., class=NA)
+html5.cell_header_n <- function(object, ..., class=NA)
 {
   paste("<td ",
         html5_class(c(class, "N")),
@@ -69,13 +69,28 @@ html5.cell_n <- function(object, ..., class=NA)
 }
 
 #' @export
+html5.cell_n <- function(object, ..., class=NA)
+{
+  paste("<td ",
+        html5_class(c(class, "N")),
+        ">",
+        object$n,
+        "</td>",
+        sep='')
+}
+
+
+#' @export
 html5.cell_subheader <- function(object, ...)
 {
   cls <- class(object)
 
   class(object) <- cls[3:length(cls)]
 
-  html5(object, class=c("subheader", "header"))
+  if(inherits(object, "cell_n"))
+    html5.cell_header_n(object, class=c("subheader", "header"))
+  else
+    html5(object, class=c("subheader", "header"))
 }
 
 #' @export
@@ -85,7 +100,10 @@ html5.cell_header <- function(object, ...)
 
   class(object) <- cls[2:length(cls)]
 
-  html5(object, class="header")
+  if(inherits(object, "cell_n"))
+    html5.cell_header_n(object, class=c("header"))
+  else
+    html5(object, class=c("header"))
 }
 
 #' @export
@@ -114,6 +132,18 @@ html5.cell_label <- function(object, ..., class=NA)
             sep="")
 }
 
+html5_extra_fonts <- function()
+{
+  paste("<script type=\"text/javascript\">",
+        "var ss = document.createElement(\"link\");",
+        "ss.rel  = \"stylesheet\";",
+        "ss.type = \"text/css\";",
+        "ss.href = \"https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css\";",
+        "document.getElementsByTagName(\"head\")[0].appendChild(ss);",
+        "</script>",
+        sep="\n")
+}
+
 #' @export
 html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, inline=NA, id=NA, ...)
 {
@@ -121,13 +151,15 @@ html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, in
 
   scoped <- if(is.na(inline)) "" else paste("<style>", custom_css(inline,id=id),"</style>", sep='')
   figdiv <- if(is.na(id)) "<div class=\"figure\">" else paste("<div class=\"figure\" id=\"", id,"\">",sep='')
+  fontld <- if(fragment) html5_extra_fonts() else ""
 
   header <- paste("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">",
                   css,
                   "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css\">",
 	                "<title>",caption,"</title>",
                   "</head><body>", sep='')
-  intro <-  paste(figdiv,
+  intro <-  paste(fontld,
+                  figdiv,
                   scoped,
                   "<div class=\"caption\">",caption,"</div>",
 		              "<div class=\"figbody\">",
