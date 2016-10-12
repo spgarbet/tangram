@@ -19,7 +19,7 @@ custom_css <- function(filename, id=NA)
   if(is.na(id)) return(content)
 
   # sub in a given id
-  cat(gsub("\\n([a-zA-Z.])", paste(id," \\1"), paste("\n",content,sep=''), perl=TRUE))
+  gsub("\\n([a-zA-Z.#])", paste("#",id," \\1",sep=''), paste("\n",content,sep=''), perl=TRUE)
 }
 
 #' @export
@@ -73,18 +73,19 @@ html5.cell_label <- function(object, ...)
 #' Use cases: To provide full html5 page with style links
 #'            To provide fragment
 #'            To provide fragment with inline style
-html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, inline=NA, ...)
+html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, inline=NA, id=NA, ...)
 {
   if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
-  scoped <- if(!is.na(inline)) paste("<style scoped>", custom_css(inline),"</style>", sep='') else ""
+  scoped <- if(is.na(inline)) "" else paste("<style>", custom_css(inline,id=id),"</style>", sep='')
+  figdiv <- if(is.na(id)) "<div class=\"figure\">" else paste("<div class=\"figure\" id=\"", id,"\">",sep='')
 
   header <- paste("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">",
                   css,
                   "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css\">",
 	                "<title>",caption,"</title>",
                   "</head><body>", sep='')
-  intro <-  paste("<div class=\"figure\">",
+  intro <-  paste(figdiv,
                   scoped,
                   "<div class=\"caption\">",caption,"</div>",
 		              "<div class=\"figbody\">",

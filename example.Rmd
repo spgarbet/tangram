@@ -47,12 +47,12 @@ It also supports HTML5, with styling fragments
 
 ```{r, results="asis"}
 html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
-      fragment=TRUE, inline="hmisc.css", caption = "HTML5 Table Hmisc Style")
+      fragment=TRUE, inline="hmisc.css", caption = "HTML5 Table Hmisc Style", id="tbl2")
 ```
 
 ```{r, results="asis"}
 html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
-      fragment=TRUE, inline="nejm.css", caption = "HTML5 Table Hmisc Style")
+      fragment=TRUE, inline="nejm.css", caption = "HTML5 Table NEJM Style", id="tbl3")
 ```
 
 ### Types
