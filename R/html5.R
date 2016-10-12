@@ -19,7 +19,7 @@ custom_css <- function(filename, id=NA)
   if(is.na(id)) return(content)
 
   # sub in a given id
-  gsub("\\n([a-zA-Z.#])", paste("#",id," \\1",sep=''), paste("\n",content,sep=''), perl=TRUE)
+  gsub("\\n([a-zA-Z.#])", paste("\n#",id," \\1",sep=''), paste("\n",content,sep=''), perl=TRUE)
 }
 
 #' @export
@@ -28,37 +28,82 @@ html5 <- function(object, ...)
   UseMethod("html5", object)
 }
 
+html5_class <- function(classes)
+{
+  paste("class=\"",
+        paste(classes[!is.na(classes)], collapse=" "),
+        "\"",
+        sep='')
+}
 
-# This is the default, do nothing -- probably should be warning()
-html5.default <- function(object, ...) "<td></td>"
 
+# This is the default, do nothing
+#' @export
+html5.default <- function(object, ..., class=NA)
+{
+  warning(paste("html5 unhandled class : ", base::class(object), collapse=', '))
+  paste("<td ",
+        html5_class(class),
+        "></td>",
+        sep='')
+}
+
+#' @export
+html5.cell <- function(object, ..., class=NA)
+{
+    paste("<td ",
+        html5_class(class),
+        "></td>",
+        sep='')
+}
+
+#' @export
+html5.cell_n <- function(object, ..., class=NA)
+{
+  paste("<td ",
+        html5_class(c(class, "N")),
+        "><em>N=",
+        object$n,
+        "</em></td>",
+        sep='')
+}
+
+#' @export
 html5.cell_subheader <- function(object, ...)
 {
-  paste("<td class=\"subheader\">",
-        gsub("^N=","<em>N</em>=", object$label),
-        "</td>",
-        sep="")
+  cls <- class(object)
+
+  class(object) <- cls[3:length(cls)]
+
+  html5(object, class=c("subheader", "header"))
 }
 
+#' @export
 html5.cell_header <- function(object, ...)
 {
-  paste("<td>",
-        object$label,
-        "</td>",
-        sep="")
+  cls <- class(object)
+
+  class(object) <- cls[2:length(cls)]
+
+  html5(object, class="header")
 }
 
-html5.cell_label <- function(object, ...)
+#' @export
+html5.cell_label <- function(object, ..., class=NA)
 {
   if(is.na(object$units))
-      paste("<td class=\"label\">",
+      paste("<td ",
+            html5_class(c(class, "tg-label")),
+            ">",
             "<div class=\"variable\">",
-            gsub("^\\s+", "&nbsp;&nbsp;", object$label), # FIXME: replace leading spaces with &nbsp;
+            gsub("^\\s+", "&nbsp;&nbsp;", object$label), # FIXME: replace all leading spaces with &nbsp;
             "</div>",
             "</td>",
             sep="")
   else
-      paste("<td class=\"label\">",
+      paste("<td ",
+            html5_class(c(class, "label")),
+            ">",
             "<div class=\"variable\">",
             object$label,
             "</div>",
@@ -70,9 +115,6 @@ html5.cell_label <- function(object, ...)
 }
 
 #' @export
-#' Use cases: To provide full html5 page with style links
-#'            To provide fragment
-#'            To provide fragment with inline style
 html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, inline=NA, id=NA, ...)
 {
   if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
@@ -133,15 +175,20 @@ html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, in
   final
 }
 
-html5.cell_estimate <- function(object, ...)
+#' @export
+html5.cell_estimate <- function(object, ..., class=NA)
 {
   if(is.na(object$low))
-    paste("<td class=\"estimate\"><b>",
+    paste("<td ",
+            html5_class(c(class, "estimate")),
+            "><b>",
           object$low,
           "</b></td>",
           sep="")
   else
-    paste("<td class=\"estimate\"><b>",
+    paste("<td ",
+            html5_class(c(class, "estimate")),
+            "><b>",
           object$low,
           "</b>",
           " (",object$low,",",object$high,")",
@@ -149,9 +196,12 @@ html5.cell_estimate <- function(object, ...)
           sep="")
 }
 
-html5.cell_quantile <- function(object, ...)
+#' @export
+html5.cell_quantile <- function(object, ..., class=NA)
 {
-  paste("<td class=\"quantile\">",
+  paste("<td ",
+        html5_class(c(class, "quantile")),
+        ">",
         object$'25%',
         " <b>",
         object$'50%',
@@ -161,11 +211,13 @@ html5.cell_quantile <- function(object, ...)
         sep="")
 }
 
-
-html5.cell_fstat <- function(object, ...)
+#' @export
+html5.cell_fstat <- function(object, ..., class=NA)
 {
   paste(
-    "<td class=\"statistic\">",
+    "<td ",
+    html5_class(c(class, "statistic")),
+    ">",
     "<em>F</em>",
     "<sub>",object$n1,",",object$n2,"</sub> = ",
     object$f,
@@ -177,13 +229,16 @@ html5.cell_fstat <- function(object, ...)
   )
 }
 
-html5.cell_fraction <- function(object, ...)
+#' @export
+html5.cell_fraction <- function(object, ..., class=NA)
 {
   x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
   den <- as.character(object$denominator)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
 
-  paste("<td class=\"percent\">",
+  paste("<td ",
+        html5_class(c(class, "percent")),
+        ">",
         x,
         "<div class=\"align\">%</div> ",
         "<sup>",
@@ -195,9 +250,12 @@ html5.cell_fraction <- function(object, ...)
         sep="")
 }
 
-html5.cell_chi2 <- function(object, ...)
+#' @export
+html5.cell_chi2 <- function(object, ..., class=NA)
 {
-  paste("<td class=\"statistic\">",
+  paste("<td ",
+        html5_class(c(class, "statistic")),
+        ">",
         "<span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
         object$df,
         "</span></span>",

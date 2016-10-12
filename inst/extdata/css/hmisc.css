@@ -2,8 +2,9 @@ body {
 	font-family: "Computer Modern Serif", serif;
 }
 
+
 .figure  {  margin-left:  auto;
-			margin-right: auto;
+			      margin-right: auto;
          }
 
 .caption { text-align:   center;
@@ -18,7 +19,7 @@ body {
 	       margin-right: auto;
 	       border-style: double none solid none;
 	       border-width: 3pt 0 1pt 0;
-	       width:        80%;
+	       width:        100%;
          }
 
 .figbody td {
@@ -29,10 +30,8 @@ body {
 	border-spacing: 0;
 }
 
-.summaryM thead {
-                }
-
 .subheader    { font-size: small; }
+
 .subheader tr { border-collapse: collapse; }
 .subheader td { border-bottom: 1pt solid black; }
 
@@ -58,6 +57,7 @@ body {
 }
 
 sub { font-size: x-small; }
+
 sup { font-size: x-small; }
 
 td .align{
