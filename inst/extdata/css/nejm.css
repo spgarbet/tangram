@@ -49,8 +49,8 @@ body .summaryM {
 
 .subheader em {font-style: normal;}
 
-.N:before { content: "("; }
-.N:after  { content: ")"; }
+.header.N:before { content: "("; }
+.header.N:after  { content: ")"; }
 
 .quantile {
 	font-size: smaller;
