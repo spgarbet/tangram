@@ -58,6 +58,13 @@ html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex +
       fragment=TRUE, inline="nejm.css", caption = "HTML5 Table NEJM Style", id="tbl3")
 ```
 
+### Indexing
+
+It is also capable of producing an index of contents inside a table for traceability.
+```{r, comment=""}
+index(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc))[1:20,]
+```
+
 ### Types
 
 The Hmisc default style recognizes 3 types: Categorical, Bionimial, and Numerical. Then for each product of these two, a function is provided to generate the corresponding rows and columns. As mentioned before, the user can declare any type in a formula, and one is not limited to the Hmisc defaults. This is completely customizable, which will be covered later.

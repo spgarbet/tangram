@@ -16,9 +16,14 @@ summarize_kruskal_horz <- function(table, row, column)
   categories <- levels(datac)
 
   # Compute N values for each category
+  #subN <- lapply(levels(datac), FUN=function(cat){
+  #  length(datac[datac == cat & !is.na(datac)])
+  #})
+  # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    length(datac[datac == cat & !is.na(datac)])
+    tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
   })
+
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
@@ -31,7 +36,7 @@ summarize_kruskal_horz <- function(table, row, column)
   table                                          %>%
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistic")  %>%
-  col_header("",  tg_N(subN), ""               ) %>%
+  col_header("",  subN,       ""              )  %>%
   add_col(tg_N(sum(!is.na(datar))))              %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
