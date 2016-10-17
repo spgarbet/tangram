@@ -80,7 +80,7 @@ html5.cell <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_header_n <- function(object, caption, ..., class=NA)
 {
-  idx <- index(object, caption)[[1]]
+  idx <- index(object, caption)
 
   paste("<td ",
         html5_class(c(class, "data", "N")),
@@ -94,24 +94,11 @@ html5.cell_header_n <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_n <- function(object, caption, ..., class=NA)
 {
-  # id <-  paste(sample(c(0:9, letters, LETTERS), replace=TRUE, 20), collapse="")
-  #
-  # paste("<td ",
-  #       html5_class(c(class, "N")),
-  #       paste(" id=\"", id, "\"", sep=''),
-  #       ">",
-  #       object$n,
-  #       "</td>",
-  #       "<script>document.getElementById('",
-  #       id,
-  #       "').addEventListener('click',function(){clipboard.copy('Testing 1.2.3.')})</script>",
-  #       sep='')
-
-  idx <- index(object, caption)[[1]]
+  idx <- index(object, caption)
 
   paste("<td ",
           html5_class(c(class, "data", "N")),
-          " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
+          " data-clipboard-text=\"","{",idx["key"]," N=",idx["value"],"}\"",
         ">",
         object$n,
         "</td>",
@@ -177,18 +164,21 @@ html5.cell_label <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_estimate <- function(object, caption, ..., class=NA)
 {
+  idx <- index(object, caption)
   if(is.na(object$low))
     paste("<td ",
-            html5_class(c(class, "estimate")),
+            html5_class(c(class, "data", "estimate")),
+            " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             "><b>",
-          object$low,
+          object$value,
           "</b></td>",
           sep="")
   else
     paste("<td ",
-            html5_class(c(class, "estimate")),
+            html5_class(c(class, "data", "estimate")),
+            " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             "><b>",
-          object$low,
+          object$value,
           "</b>",
           " (",object$low,",",object$high,")",
           "</td>",
@@ -198,8 +188,11 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_quantile <- function(object, caption, ..., class=NA)
 {
+  idx <- index(object, caption)
+
   paste("<td ",
-        html5_class(c(class, "quantile")),
+        html5_class(c(class, "data", "quantile")),
+        " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         object$'25%',
         " <b>",
@@ -213,9 +206,11 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_fstat <- function(object, caption, ..., class=NA)
 {
+  idx <- index(object, caption)
   paste(
     "<td ",
-    html5_class(c(class, "statistic")),
+    html5_class(c(class, "data", "statistic")),
+    " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
     ">",
     "<em>F</em>",
     "<sub>",object$n1,",",object$n2,"</sub> = ",
@@ -231,12 +226,14 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_fraction <- function(object, caption, ..., class=NA)
 {
+  idx <- index(object, caption)
   x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
   den <- as.character(object$denominator)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
 
   paste("<td ",
-        html5_class(c(class, "percent")),
+        html5_class(c(class, "data", "percent")),
+        " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         x,
         "<div class=\"align\">%</div> ",
@@ -252,8 +249,10 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_chi2 <- function(object, caption, ..., class=NA)
 {
+  idx <- index(object, caption)
   paste("<td ",
-        html5_class(c(class, "statistic")),
+        html5_class(c(class, "data", "statistic")),
+        " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         "<span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
         object$df,
