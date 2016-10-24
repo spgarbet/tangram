@@ -81,8 +81,8 @@ index.cell_fstat <- function(object, caption, ...)
 index.cell_fraction <- function(object, caption, ...)
 {
   content <-
-    paste(round(100*object$numerator/object$denominator, 2),
-          "% ",
+    paste(round(object$numerator/object$denominator, 3),
+          "  ",
           object$numerator,
           "/",
           object$denominator,

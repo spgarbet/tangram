@@ -227,7 +227,7 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
 html5.cell_fraction <- function(object, caption, ..., class=NA)
 {
   idx <- index(object, caption)
-  x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
+  x <- sprintf("%0.3f",round(object$numerator/object$denominator,3))
   den <- as.character(object$denominator)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
 
@@ -235,8 +235,7 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
         html5_class(c(class, "data", "percent")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
-        x,
-        "<div class=\"align\">%</div> ",
+        gsub("\\.", "<div class=\"align\">.</div>",x),
         "<sup>",
         num,
         "</sup>&frasl;<sub>",

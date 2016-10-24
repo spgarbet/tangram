@@ -84,10 +84,10 @@ summary.cell_fstat <- function(object,...)
 
 summary.cell_fraction <- function(object,...)
 {
-  x <- sprintf("%3s",round(100*object$numerator/object$denominator,0))
+  x <- sprintf("%0.3f",round(object$numerator/object$denominator,3))
   den <- as.character(object$denominator)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
-  paste(x, "%  ",
+  paste(x, "  ",
         num,"/",den,
         sep="")
 }
