@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style>
+
+.flip {display: flex;
+       flex-direction: row;
+      }
+
+.flip span {margin: 2px;}
+
+.flip .left {order: 3}
+.flip .middle {order: 2}
+.flip .right {order: 1}
+
+.shuffle {display: flex;
+       flex-direction: row;
+      }
+
+.shuffle span {margin: 2px;}
+
+.shuffle .left   {order: 2}
+.shuffle .middle {order: 3}
+.shuffle .right  {order: 1}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Flip Test</h1>
+
+<h2>Normal Ordering</h2>
+
+<div>
+  <span class="left">left</span>
+  <span class="middle">middle</span>
+  <span class="right">right</span>
+</div>
+
+<h2>CSS Override, backward</h2>
+
+<div class="flip">
+  <span class="left">left</span>
+  <span class="middle">middle</span>
+  <span class="right">right</span>
+</div>
+
+<h2>CSS Shuffle</h2>
+
+<div class="shuffle">
+  <span class="left">left</span>
+  <span class="middle">middle</span>
+  <span class="right">right</span>
+</div>
+
+<h2>End of Document</h2>
+
+</body>
+</html>
