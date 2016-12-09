@@ -169,17 +169,17 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
     paste("<td ",
             html5_class(c(class, "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-            "><b>",
+            "><strong>",
           object$value,
-          "</b></td>",
+          "</strong></td>",
           sep="")
   else
     paste("<td ",
             html5_class(c(class, "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-            "><b>",
+            "><strong>",
           object$value,
-          "</b>",
+          "</strong>",
           " (",object$low,",",object$high,")",
           "</td>",
           sep="")
@@ -195,9 +195,9 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         object$'25%',
-        " <b>",
+        " <strong>",
         object$'50%',
-        "</b> ",
+        "</strong> ",
         object$'75%',
         "</td>",
         sep="")
@@ -236,7 +236,7 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         gsub("\\.", "<div class=\"align\">.</div>",x),
-        "<sup>",
+        "&nbsp;<sup>",
         num,
         "</sup>&frasl;<sub>",
         den,
@@ -267,7 +267,7 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
 }
 
 #' @export
-html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, inline=NA, id=NA, ...)
+html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=NA, id=NA, ...)
 {
   if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
@@ -283,8 +283,9 @@ html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, in
   intro <-  paste(fontld,
                   clipboard_js(),
                   figdiv,
-                  scoped,
-                  "<div class=\"caption\">",caption,"</div>",
+                  scoped, sep='')
+  if(!is.na(caption)) intro <- paste(intro, "<div class=\"caption\">",caption,"</div>", sep='')
+  intro <- paste(intro,
 		              "<div class=\"figbody\">",
 			            "<table class=\"summaryM\">",
                   sep='')
@@ -294,7 +295,7 @@ html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, in
     footer <- "</table></div></div><script>new Clipboard('.data');</script>"
   } else {
     intro  <- paste(header, intro, sep='')
-    footer <- "</table></div></div><script>nnew Clipboard('.data');</script></body></html>"
+    footer <- "</table></div></div><script>new Clipboard('.data');</script></body></html>"
   }
 
   nrows <- rows(object)
@@ -302,24 +303,32 @@ html5.cell_table <- function(object, caption="Figure", css=NA, fragment=TRUE, in
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
   # Render it all
+  last_header_row <- 0 # Current Header Row
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
+      if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
       text[row,col] <<- html5(object[[row]][[col]], caption)
     })
   })
   pasty <- apply(text, 1, function(x) paste(x, collapse=""))
 
 # FIXME: This is hardcoded at 2!!!!
-  tableHdr <- paste(
-    "<thead>",
-    "<tr>",pasty[1],"</tr>",
-    "<tr class=\"subheaderrow\">",pasty[2],"</tr>",
-    sep=""
-  )
+  if(last_header_row > 0)
+  {
+    tableHdr <- "<thead>"
+    sapply(1:last_header_row,
+           FUN=function(row) {
+             if(row < 2) tableHdr <<- paste(tableHdr, "<tr>", pasty[row], "</tr>", sep='')
+             else        tableHdr <<- paste(tableHdr, "<tr class=\"subheaderrow\">", pasty[row], "</tr>", sep='')
+           }
+    )
+    tableHdr <- paste(tableHdr, "</thead>", sep='')
+  }
+  else tableHdr <- ""
 
   tableBdy <- paste(
     "<tbody>",
-    paste("<tr>",pasty[3:length(pasty)], "</tr>",collapse=""),
+    paste("<tr>",pasty[(last_header_row+1):length(pasty)], "</tr>",collapse=""),
     "</tbody>",
     sep="",
     collapse=""

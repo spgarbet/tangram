@@ -4,10 +4,26 @@ body .summaryM {
   font-size: 75%;
 }
 
+.summaryM thead
+{
+  border-top: 1px solid black;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+
 .summaryM thead tr td
 {
     font-weight: bold;
 }
+
+.summaryM tbody
+{
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+
+}
+
 
 .figure  {  margin-left:  auto;
 			      margin-right: auto;
@@ -56,7 +72,7 @@ body .summaryM {
 	font-size: smaller;
 }
 
-.quantile b {
+.quantile strong {
 	font-size: larger;
 }
 
