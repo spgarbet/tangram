@@ -41,6 +41,7 @@ table_flatten <- function(table)
       sapply(1:rows(rlabel), FUN=function(inner_row) {
         sapply(1:cols(rlabel), FUN=function(inner_col) {
           new_tbl[[output_row]][[inner_col]] <<- rlabel[[inner_row]][[inner_col]]
+          attr(new_tbl[[output_row]][[inner_col]], "parity") <- ifelse(row %% 2==0, "even", "odd")
         })
         output_row <<- output_row + 1
       })
@@ -48,6 +49,7 @@ table_flatten <- function(table)
     else
     {
       new_tbl[[output_row]][[1]] <<- rlabel
+      attr(new_tbl[[output_row]][[1]], "parity") <- ifelse(row %% 2==0,"even", "odd")
       output_row <<- output_row + 1
     }
   })
@@ -61,6 +63,7 @@ table_flatten <- function(table)
       sapply(1:cols(rlabel), FUN=function(inner_col) {
         sapply(1:rows(rlabel), FUN=function(inner_row) {
           new_tbl[[inner_row]][[output_col]] <<- rlabel[[inner_row]][[inner_col]]
+          attr(new_tbl[[inner_row]][[output_col]], "parity") <- "even"
         })
         output_col <<- output_col + 1
       })
@@ -68,6 +71,7 @@ table_flatten <- function(table)
     else
     {
       new_tbl[[1]][[output_col]] <<- rlabel
+      attr(new_tbl[[1]][[output_col]], "parity") <- "even"
       output_col <<- output_col + 1
     }
   })
@@ -102,7 +106,10 @@ table_flatten <- function(table)
         {
           sapply(inner_row, FUN=function(inner_element)
           {
+            if(!is.null(inner_element)) attr(inner_element, "parity") <- ifelse(row %% 2==0,"even", "odd")
+
             new_tbl[[output_row]][[output_col]] <<- inner_element
+
             output_col <<- output_col + 1
           })
           output_col <<- output_col - length(inner_row)
@@ -112,6 +119,7 @@ table_flatten <- function(table)
       }
       else
       {
+        if(!is.null(element)) attr(element, "parity") <- ifelse(row %% 2==0,"even", "odd")
         new_tbl[[output_row]][[output_col]] <<- element
       }
       output_col <<- output_col + length(element[[1]])
