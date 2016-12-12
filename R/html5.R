@@ -190,16 +190,17 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
 {
   idx <- index(object, caption)
 
-  paste("<td ",
+
+  paste("<td class=\"", attr(object, "parity"),"\"><span ",
         html5_class(c(class, attr(object, "parity"), "data", "quantile")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-        ">",
+        "><span class=\"q25\">",
         object$'25%',
-        " <strong>",
+        "</span><span class=\"q50\">",
         object$'50%',
-        "</strong> ",
+        "</span><span class=\"q75\">",
         object$'75%',
-        "</td>",
+        "</span></span></td>",
         sep="")
 }
 

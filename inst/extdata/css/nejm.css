@@ -68,13 +68,20 @@ body .summaryM {
 .header.N:before { content: "("; }
 .header.N:after  { content: ")"; }
 
-.quantile {
+.quantile .q25 {
 	font-size: smaller;
+	padding-right:   0.5em;
 }
 
-.quantile strong {
-	font-size: larger;
+.quantile .q50 {
+	font-weight: bold;
 }
+
+.quantile .q75 {
+	font-size: smaller;
+	padding-left: 0.5em;
+}
+
 
 .variable {
 	float:      left;

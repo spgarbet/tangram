@@ -36,11 +36,18 @@
 .subheader tr { border-collapse: collapse; }
 .subheader td { border-bottom: 1pt solid black; }
 
-.quantile {
+.quantile .q25 {
 	font-size: smaller;
+	padding-right: 0.5em;
 }
 
-.quantile b {
+.quantile .q75 {
+	font-size: smaller;
+	padding-left: 0.5em;
+}
+
+.quantile .q50 {
+  font-weight: bold;
 	font-size: larger;
 }
 
@@ -78,3 +85,6 @@ td .align{
    font-size: 70%;
    text-align: left;
 }
+
+
+

@@ -89,7 +89,8 @@ summarize_chisq <- function(table, row, column)
   col_categories <- levels(datac)
 
   # If it's binomial, then don't display the first value
-  if(length(row_categories) == 2) {row_categories <- last(row_categories)}
+  # FIXME: This needs more intelligence, and should be optional
+ ### if(length(row_categories) == 2) {row_categories <- last(row_categories)}
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
