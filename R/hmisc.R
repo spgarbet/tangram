@@ -103,7 +103,7 @@ summarize_chisq <- function(table, row, column)
   test <- chisq.test(y, correct=FALSE)
 
   # First row label is different
-  labels      <- lapply(row_categories, FUN=function(x) paste("    ", x))
+  labels      <- lapply(row_categories, FUN=function(x) paste("  ", x))
 
   # Now construct the table by add rows to each column
   table                                                      %>%

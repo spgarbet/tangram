@@ -63,7 +63,7 @@ html5.default <- function(object, caption, ..., class=NA)
 {
   warning(paste("html5 unhandled class : ", base::class(object), collapse=', '))
   paste("<td ",
-        html5_class(class),
+        html5_class(c(class, attr(object, "parity"))),
         "></td>",
         sep='')
 }
@@ -72,7 +72,7 @@ html5.default <- function(object, caption, ..., class=NA)
 html5.cell <- function(object, caption, ..., class=NA)
 {
     paste("<td ",
-        html5_class(class),
+        html5_class(c(class, attr(object, "parity"))),
         "></td>",
         sep='')
 }
@@ -83,7 +83,7 @@ html5.cell_header_n <- function(object, caption, ..., class=NA)
   idx <- index(object, caption)
 
   paste("<td ",
-        html5_class(c(class, "data", "N")),
+        html5_class(c(class, attr(object, "parity"), "data", "N")),
         " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
         "><em>N=",
         object$n,
@@ -97,7 +97,7 @@ html5.cell_n <- function(object, caption, ..., class=NA)
   idx <- index(object, caption)
 
   paste("<td ",
-          html5_class(c(class, "data", "N")),
+          html5_class(c(class, attr(object, "parity"), "data", "N")),
           " data-clipboard-text=\"","{",idx["key"]," N=",idx["value"],"}\"",
         ">",
         object$n,
@@ -137,16 +137,16 @@ html5.cell_label <- function(object, caption, ..., class=NA)
 {
   if(is.na(object$units))
       paste("<td ",
-            html5_class(c(class, "tg-label")),
+            html5_class(c(class, attr(object, "parity"), "tg-label")),
             ">",
             "<div class=\"variable\">",
-            gsub("^\\s+", "&nbsp;&nbsp;", object$label), # FIXME: replace all leading spaces with &nbsp;
+            gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", object$label), # FIXME: replace all leading spaces with &nbsp;
             "</div>",
             "</td>",
             sep="")
   else
       paste("<td ",
-            html5_class(c(class, "label")),
+            html5_class(c(class, attr(object, "parity"), "label")),
             ">",
             "<div class=\"variable\">",
             object$label,
@@ -167,7 +167,7 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
   idx <- index(object, caption)
   if(is.na(object$low))
     paste("<td ",
-            html5_class(c(class, "data", "estimate")),
+            html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             "><strong>",
           object$value,
@@ -175,7 +175,7 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
           sep="")
   else
     paste("<td ",
-            html5_class(c(class, "data", "estimate")),
+            html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             "><strong>",
           object$value,
@@ -191,7 +191,7 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
   idx <- index(object, caption)
 
   paste("<td ",
-        html5_class(c(class, "data", "quantile")),
+        html5_class(c(class, attr(object, "parity"), "data", "quantile")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         object$'25%',
@@ -209,7 +209,7 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
   idx <- index(object, caption)
   paste(
     "<td ",
-    html5_class(c(class, "data", "statistic")),
+    html5_class(c(class, attr(object, "parity"), "data", "statistic")),
     " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
     ">",
     "<em>F</em>",
@@ -232,7 +232,7 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
 
   paste("<td ",
-        html5_class(c(class, "data", "percent")),
+        html5_class(c(class, attr(object, "parity"), "data", "percent")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         gsub("\\.", "<div class=\"align\">.</div>",x),
@@ -250,7 +250,7 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
 {
   idx <- index(object, caption)
   paste("<td ",
-        html5_class(c(class, "data", "statistic")),
+        html5_class(c(class, attr(object, "parity"), "data", "statistic")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
         "<span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
@@ -312,7 +312,6 @@ html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=N
   })
   pasty <- apply(text, 1, function(x) paste(x, collapse=""))
 
-# FIXME: This is hardcoded at 2!!!!
   if(last_header_row > 0)
   {
     tableHdr <- "<thead>"
