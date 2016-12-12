@@ -8,13 +8,13 @@ output: html_document
 <style type="text/css">
 
 body, td {
-   font-size: 14px;
+   font-size: 12px;
 }
 code.r{
   font-size: 12px;
 }
 pre {
-  font-size: 11px
+  font-size: 10px
 }
 </style>
 
@@ -56,6 +56,14 @@ Fragments can have localized style sheets specified by given id.
 ```{r, results="asis"}
 html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
       fragment=TRUE, inline="nejm.css", caption = "HTML5 Table NEJM Style", id="tbl3")
+```
+
+### Lancet Style Example
+Fragments can have localized style sheets specified by given id.
+
+```{r, results="asis"}
+html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
+      fragment=TRUE, inline="lancet.css", caption = "HTML5 Table Lancet Style", id="tbl4")
 ```
 
 ### Indexing

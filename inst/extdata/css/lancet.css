@@ -1,0 +1,103 @@
+
+body .figbody {
+	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+  font-size: 75%;
+}
+
+.figure  {  margin-left:  auto;
+			      margin-right: auto;
+         }
+.caption { text-align:   left;
+           text-indent: 2em;
+	         padding: 0.5em 0 0.5em 0;
+	         font-weight: bold;
+	     }
+
+.figbody {
+	text-align:   center;
+  border:       1px solid #c7496d;
+}
+
+.figbody table {
+  margin: 0;
+  width: 100%;
+}
+
+.figbody td {
+	padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+.figbody thead
+{
+  border-top: 10px solid #f5e0dc;
+  border-right: 10px solid #f5e0dc;
+  border-left: 10px solid #f5e0dc;
+  border-bottom: 1px solid black;
+  background: #f5e0dc;
+}
+
+
+.figbody thead tr td
+{
+    font-weight: bold;
+}
+
+.figbody tbody
+{
+  border-bottom: 10px solid #f5e0dc;
+  border-right: 10px solid #f5e0dc;
+  border-left: 10px solid #f5e0dc;
+}
+
+.figbody tbody tr .odd {background: #f5e0dc;}
+.figbody tbody tr .even {background: #ffffff;}
+
+.subheader    { font-size: smaller; }
+.subheaderrow tr { border-collapse: collapse; }
+.subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
+
+.subheader em {font-style: normal;}
+
+.header.N:before { content: "("; }
+.header.N:after  { content: ")"; }
+
+.quantile {
+	font-size: smaller;
+}
+
+.quantile strong {
+	font-size: larger;
+}
+
+.variable {
+	float:      left;
+	text-align: left;
+}
+
+.units {
+	float:      right;
+	font-size:  x-small;
+	text-align: right;
+	padding-left: 1em;
+	vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+sub { font-size: x-small; }
+sup { font-size: x-small; }
+
+td .align{
+	display: inline-block;
+	margin: 0 auto;
+}
+
+.nobr {
+   white-space: nowrap;
+}
+.supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: 70%;
+   text-align: left;
+}
