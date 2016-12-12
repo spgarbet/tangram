@@ -7,6 +7,7 @@
 #' @docType class
 #' @importFrom stringr str_match
 #' @importFrom R6 R6Class
+#' @importFrom dplyr one_of
 #' @keywords data
 #'
 #' @field symbol A string which tells what this node in the AST represents.
@@ -463,6 +464,13 @@ Parser <- R6Class("Parser",
       if (x == ':')  {return(Token$new("COLON",   ":") )}
       if (x == '[')  {return(Token$new("LBRACKET","[") )}
       if (x == ']')  {return(Token$new("RBRACKET","]") )}
+
+      # Scan for "1"
+      if(substr(self$input, self$pos, self$pos) == "1")
+      {
+        self$pos <- self$pos + 1
+        return(Token$new("IDENTIFIER", "1"))
+      }
 
       # Scan for Name
       #   A syntactically valid name consists of letters, numbers and the dot

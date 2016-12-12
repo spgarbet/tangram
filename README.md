@@ -145,7 +145,7 @@ Note that the first term is consistent across each row, and the second term is c
     <variable>             ::= <identifier>
                                 ( "["  ( <integer>  | '"' <format> '"' "]" )
                                 ( "::" <identifier> )
-    <identifier>           ::= ( [A-Za-z\_] | .[A-Za-z\_] ) [A-Za-z0-9\_.]+
+    <identifier>           ::= 1 | ( [A-Za-z\_] | .[A-Za-z\_] ) [A-Za-z0-9\_.]+
      
      
     <format>               ::= "%" (<flags>) (<width>) (. <precision>) <specifier> 
