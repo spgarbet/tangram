@@ -125,9 +125,9 @@ This choice forces a consistency requirement upon any author of compiler package
 
                          | Binomial        | Categorical (M values)   |  Numerical      
 ------------------------ | :-------------: | :----------------------: | :--------------:
-Binomial                 |     1 X 3       |          1 X (M + 2)     |     1 X 3
-Categorical (N values)   |     N X 3       |          N X (M + 2)     |     N X 3
-Numerical                |     1 X 3       |          1 X (M + 2)     |     1 X 3
+Binomial                 |       1 X 3     |          1 X (M + 2)     |       1 X 3
+Categorical (N values)   |   (N+1) X 3     |      (N+1) X (M + 2)     |   (N+1) X 3
+Numerical                |       1 X 3     |          1 X (M + 2)     |       1 X 3
 
 Note that the first term is consistent across each row, and the second term is consistent across each column. This insures that upon flattening that the number of rows and columns remain consistent.
 

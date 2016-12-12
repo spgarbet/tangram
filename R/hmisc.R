@@ -46,7 +46,7 @@ summarize_kruskal_horz <- function(table, row, column)
   add_col(fstat)
 }
 
-# no. categories X 3
+# (N+1) X 3
 #' @export
 summarize_kruskal_vert <- function(table, row, column)
 {
@@ -64,6 +64,8 @@ summarize_kruskal_vert <- function(table, row, column)
 
   table                                                             %>%
   col_header("N", derive_label(column), "Test Statistic")           %>%
+  row_header(derive_label(row))                                     %>%
+  new_line()                                                        %>%
   table_builder_apply(categories, FUN=function(tbl, category) {
     x <- datac[datar == categories[category]]
     tbl                                                  %>%
@@ -76,7 +78,7 @@ summarize_kruskal_vert <- function(table, row, column)
   add_col(fstat)
 }
 
-# N X (M+2)
+# (N+1) X (M+2)
 #' @export
 summarize_chisq <- function(table, row, column)
 {
@@ -101,34 +103,31 @@ summarize_chisq <- function(table, row, column)
   test <- chisq.test(y, correct=FALSE)
 
   # First row label is different
-  first_row_lbl <- derive_label(row)
-  first_row_lbl$label <- paste(first_row_lbl$label,":", row_categories[1])
-
-  labels      <- lapply(row_categories, FUN=function(x) paste("  ", x))
-  labels[[1]] <- first_row_lbl
+  labels      <- lapply(row_categories, FUN=function(x) paste("    ", x))
 
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
-  col_header("", subN, "")                             %>%
+  col_header("", subN, "")                                   %>%
+  row_header(derive_label(row))                              %>%
   table_builder_apply(labels, FUN=
     function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
-
+    table <- tg::add_row(table, "")
     table_builder_apply(table, row_categories, FUN=
       function(table, row_category) {
           numerator <- length(datac[datac == col_category &
                                     datar == row_category &
                                     !is.na(datac)])
-          add_row(table,
+          tg::add_row(table,
                   tg_fraction(numerator, denominator),
                   subcol=col_category, subrow=row_category)
       }) %>%
     new_col()
   })                                                         %>%
-  add_row(test,rep("", length(row_categories)-1))
+  tg::add_row(test,rep("", length(row_categories)))
 }
 
 # 1 X 3
