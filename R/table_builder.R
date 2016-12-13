@@ -702,7 +702,7 @@ tg_N <- function(...)
 #' @export
 #' @examples
 #' tg_fraction(1, 2, 3)
-tg_fraction <- function(numerator, denominator, format)
+tg_fraction <- function(numerator, denominator, format=3)
 {
   ratio <- numerator / denominator
   structure(c(numerator,
