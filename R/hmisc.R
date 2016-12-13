@@ -88,10 +88,6 @@ summarize_chisq <- function(table, row, column)
   row_categories <- levels(datar)
   col_categories <- levels(datac)
 
-  # If it's binomial, then don't display the first value
-  # FIXME: This needs more intelligence, and should be optional
- ### if(length(row_categories) == 2) {row_categories <- last(row_categories)}
-
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
     tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
@@ -122,9 +118,11 @@ summarize_chisq <- function(table, row, column)
           numerator <- length(datac[datac == col_category &
                                     datar == row_category &
                                     !is.na(datac)])
-          tg::add_row(table,
-                  tg_fraction(numerator, denominator),
-                  subcol=col_category, subrow=row_category)
+          tg::add_row(
+            table,
+            tg_fraction(numerator, denominator, row$format),
+            subcol=col_category, subrow=row_category
+          )
       }) %>%
     new_col()
   })                                                         %>%

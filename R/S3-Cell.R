@@ -107,9 +107,9 @@ cell_fstat <- function(f, n1, n2, p, src=NA)
   structure(cell(list(f=f, n1=n1, n2=n2, p=p, src=src)), class=c("cell_fstat","cell"))
 }
 
-cell_fraction <- function(numerator, denominator, src=NA)
+cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
 {
-  structure(cell(list(numerator=numerator, denominator=denominator, src=src)), class=c("cell_fraction","cell"))
+  structure(cell(list(numerator=numerator, denominator=denominator, ratio=ratio, percentage=percentage, src=src)), class=c("cell_fraction","cell"))
 }
 
 cell_chi2 <- function(chi2, df, p, src=NA)

@@ -663,10 +663,12 @@ tg.quantile <- function(x, row, column, ...)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(tg_fraction(1, 2), list(value="A"), list(value="B"))
+#' tg(tg_fraction(1, 2, 3), list(value="A"), list(value="B"))
 tg.fraction <- function(x, row, column, ...)
 {
-  cell_fraction(x[1], x[2],
+  ratio      <- cell_format(x[3], x[1]/x[2])
+  percentage <- cell_format(x[3], 100*x[1]/x[2])
+  cell_fraction(x[1], x[2], ratio, percentage,
                   src=key(row    = row,
                           col    = column,
                           label  = "fraction",
@@ -695,13 +697,20 @@ tg_N <- function(...)
 #'
 #' @param numerator The numerator of the fraction
 #' @param denominator The denominator of the fraction
+#' @param format Formating option for ratio / percentage
 #' @return an S3 rendereable cell that is a fraction
 #' @export
 #' @examples
-#' tg_fraction(1, 2)
-tg_fraction <- function(numerator, denominator)
+#' tg_fraction(1, 2, 3)
+tg_fraction <- function(numerator, denominator, format)
 {
-  structure(c(numerator, denominator), class=c("fraction", "numeric"))
+  ratio <- numerator / denominator
+  structure(c(numerator,
+              denominator,
+              format
+              ),
+            class=c("fraction", "numeric")
+           )
 }
 
 #' Quantile creation
