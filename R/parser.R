@@ -71,7 +71,7 @@ ASTVariable <- R6Class("ASTVariable",
       self$type   <- type
       self$data   <- NA
     },
-    factors    = function()     { return(c(self))    },
+    factors  = function()     { return(c(self))    },
     string   = function()
     {
       fmt <- ""
@@ -82,6 +82,13 @@ ASTVariable <- R6Class("ASTVariable",
     },
     reduce   = function(d)
     {
+      if(self$value == "1")
+      {
+        self$data  <- data.frame(factor(rep(1, length(d[,1]))))
+        self$value <- ""
+
+        return(self)
+      }
       self$data <- d %>% select(one_of(c(self$value)))
       self
     }
@@ -466,9 +473,8 @@ Parser <- R6Class("Parser",
       if (x == ']')  {return(Token$new("RBRACKET","]") )}
 
       # Scan for "1"
-      if(substr(self$input, self$pos, self$pos) == "1")
+      if(substr(self$input, self$pos-1, self$pos-1) == "1")
       {
-        self$pos <- self$pos + 1
         return(Token$new("IDENTIFIER", "1"))
       }
 

@@ -11,6 +11,9 @@ devtools::load_all()
 label(pbc$bili) <- "Serum Bilirubin"
 units(pbc$bili) <- "mg/dl"
 
+summary_table(1 ~ stage::Categorical, pbc)
+summary_table(stage::Categorical ~ 1, pbc)
+
 #f <- formula(albumin ~ age)
 #f <- formula(drug ~ stage::Categorical)
 #f <- formula(drug + log(age) ~ bili + albumin + stage::Categorical + protime + sex + age + spiders)

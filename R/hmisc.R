@@ -95,8 +95,9 @@ summarize_chisq <- function(table, row, column)
 
   # Chi^2 test
   y    <- table(datar,datac, useNA="no")
-  y    <- y[,which(!apply(y,2,FUN = function(x){all(x == 0)}))]
-  y    <- y[which(!apply(y,1,FUN = function(x){all(x == 0)})),]
+  validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)}))
+  validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
+  y    <- y[validrow,validcol]
   test <- chisq.test(y, correct=FALSE)
 
   # First row label is different
