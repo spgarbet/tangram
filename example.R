@@ -8,7 +8,8 @@ library(R6)
 library(dplyr)
 devtools::load_all()
 
-
+label(pbc$bili) <- "Serum Bilirubin"
+units(pbc$bili) <- "mg/dl"
 
 #f <- formula(albumin ~ age)
 #f <- formula(drug ~ stage::Categorical)
