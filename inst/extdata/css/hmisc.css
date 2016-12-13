@@ -69,6 +69,8 @@
 .fraction .numerator { font-size: x-small; vertical-align: super; }
 .fraction .numerator:after {content: " \2044";}
 .fraction .denominator { font-size: x-small; vertical-align: sub;}
+.statistics .description {font-style: italic;}
+.statistic {padding-right: 0.5em;}
 
 td .align{
 	display: inline-block;

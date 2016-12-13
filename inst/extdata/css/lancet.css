@@ -6,7 +6,7 @@ body .figbody {
 
 .figure  {  margin-left:  auto;
 			      margin-right: auto;
-         }
+}
 .caption { text-align:   left;
            text-indent: 2em;
 	         padding: 0.5em 0 0.5em 0;
@@ -52,13 +52,15 @@ body .figbody {
 .figbody tbody .odd {background: #f5e0dc;}
 .figbody tbody .even {background: #ffffff;}
 
+.header td {text-align: center;}
+
 .subheader    { font-size: smaller; }
 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
 
 .subheader em {font-style: normal;}
 
-.header .N:before { content: "("; }
-.header .N:after  { content: ")"; }
+.header.N:before { content: "("; }
+.header.N:after  { content: ")"; }
 
 .quantile {
   display: flex;
@@ -75,7 +77,7 @@ body .figbody {
 .quantile .q75:before {content: "-";}
 .quantile .q75 {order: 3}
 .quantile .q75:after {content: ")";}
-.variable {
+tbody .variable {
 	float:      left;
 	text-align: left;
 }
@@ -99,6 +101,9 @@ body .figbody {
 .fraction .percentage:before {content: "\00A0(";}
 .fraction .percentage:after {content: "%)";}
 
+.statistics {text-align: center;}
+.statistic {display: none;}
+.pvalue .description {display: none;}
 
 
 td .align{

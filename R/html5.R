@@ -210,15 +210,15 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
   idx <- index(object, caption)
   paste(
     "<td ",
-    html5_class(c(class, attr(object, "parity"), "data", "statistic")),
+    html5_class(c(class, attr(object, "parity"), "data", "statistics")),
     " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
     ">",
-    "<em>F</em>",
-    "<sub>",object$n1,",",object$n2,"</sub> = ",
-    object$f,
-    ", <em>P</em> = ",
+    "<span class=\"statistic\"><span class=\"description\">F",
+    "<sub>",object$n1,",",object$n2,"</sub> = </span>",
+    object$f, ",</span>",
+    "<span class=\"pvalue\"><span class=\"description\">P = </span>",
     object$p,
-    "<sup>1</sup>",
+    "<sup>1</sup></span>",
     "</td>",
     sep=""
   )
@@ -249,17 +249,17 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
 {
   idx <- index(object, caption)
   paste("<td ",
-        html5_class(c(class, attr(object, "parity"), "data", "statistic")),
+        html5_class(c(class, attr(object, "parity"), "data", "statistics")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         ">",
-        "<span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
+        "<span class=\"statistic\"><span class=\"description\"><span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
         object$df,
         "</span></span>",
-        " = ",
+        " = </span>",
         object$chi2,
-        ", <em>P</em> = ",
+        ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
         object$p,
-        "<sup>2</sup>",
+        "<sup>2</sup></span>",
         "</td>",
         sep=""
   )

@@ -42,7 +42,7 @@ body .summaryM {
 	     }
 
 .figbody {
-		   text-align:   center;
+		     text-align:   center;
 	       margin-left:  auto;
 	       margin-right: auto;
 	       width:        100%;
@@ -102,6 +102,9 @@ body .summaryM {
 .fraction .numerator { font-size: x-small; vertical-align: super; }
 .fraction .numerator:after {content: " \2044";}
 .fraction .denominator { font-size: x-small; vertical-align: sub;}
+
+.statistics .description {font-style: italic;}
+.statistic {padding-right: 0.5em;}
 
 td .align{
 	display: inline-block;
