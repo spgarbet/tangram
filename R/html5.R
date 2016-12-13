@@ -139,21 +139,21 @@ html5.cell_label <- function(object, caption, ..., class=NA)
       paste("<td ",
             html5_class(c(class, attr(object, "parity"), "tg-label")),
             ">",
-            "<div class=\"variable\">",
-            gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", object$label), # FIXME: replace all leading spaces with &nbsp;
-            "</div>",
+            "<span class=\"variable\">",
+            gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", object$label),
+            "</span>",
             "</td>",
             sep="")
   else
       paste("<td ",
             html5_class(c(class, attr(object, "parity"), "label")),
             ">",
-            "<div class=\"variable\">",
+            "<span class=\"variable\">",
             object$label,
-            "</div>",
-            "<div class=\"units\">",
+            "</span>",
+            "<span class=\"units\">",
             object$units,
-            "</div>",
+            "</span>",
             "</td>",
             sep="")
 }
@@ -233,15 +233,15 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
 
   paste("<td ",
-        html5_class(c(class, attr(object, "parity"), "data", "percent")),
+        html5_class(c(class, attr(object, "parity"), "fraction")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-        ">",
+        "><span class=\"data\">",
         gsub("\\.", "<div class=\"align\">.</div>",x),
-        "&nbsp;<sup>",
+        "</span><span class=\"sup\">",
         num,
-        "</sup>&frasl;<sub>",
+        "</span><span class=\"sub\">",
         den,
-        "</sub>",
+        "</span>",
         "</td>",
         sep="")
 }

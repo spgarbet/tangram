@@ -86,5 +86,9 @@ td .align{
    text-align: left;
 }
 
+.sup:before {content: "\00A0";}
+.sup { font-size: x-small; vertical-align: super; }
+.sup:after {content: "\2044"; }
+.sub { font-size: x-small; vertical-align: sub;}
 
 

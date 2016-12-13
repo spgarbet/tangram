@@ -53,7 +53,6 @@ body .figbody {
 .figbody tbody .even {background: #ffffff;}
 
 .subheader    { font-size: smaller; }
-.subheaderrow tr { border-collapse: collapse; }
 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
 
 .subheader em {font-style: normal;}
@@ -89,8 +88,12 @@ body .figbody {
 	vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-sub { font-size: x-small; }
-sup { font-size: x-small; }
+.sup:before {content: "\00A0";}
+.sup { font-size: x-small; vertical-align: super; }
+.sup:after {content: " \2044";}
+.sub { font-size: x-small; vertical-align: sub;}
+
+
 
 td .align{
 	display: inline-block;
