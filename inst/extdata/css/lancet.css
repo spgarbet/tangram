@@ -88,10 +88,16 @@ body .figbody {
 	vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-.sup:before {content: "\00A0";}
-.sup { font-size: x-small; vertical-align: super; }
-.sup:after {content: " \2044";}
-.sub { font-size: x-small; vertical-align: sub;}
+.fraction {
+  display: flex;
+  flex-direction: row;
+}
+.fraction .numerator   { order: 1 }
+.fraction .denominator { order: 2; display: none; }
+.fraction .ratio       { order: 3; display: none; }
+.fraction .percentage  { order: 4; }
+.fraction .percentage:before {content: "\00A0(";}
+.fraction .percentage:after {content: "%)";}
 
 
 

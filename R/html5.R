@@ -227,22 +227,20 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_fraction <- function(object, caption, ..., class=NA)
 {
-  idx <- index(object, caption)
-  x <- sprintf("%0.3f",round(object$numerator/object$denominator,3))
-  den <- as.character(object$denominator)
-  num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
+  idx        <- index(object, caption)
+  ratio      <- gsub("\\.", "<div class=\"align\">.</div>",object$ratio)
+  percentage <- object$percentage
+  den        <- as.character(object$denominator)
+  num        <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator) # Adds some spaces to match
 
-  paste("<td ",
-        html5_class(c(class, attr(object, "parity"), "fraction")),
-        " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-        "><span class=\"data\">",
-        gsub("\\.", "<div class=\"align\">.</div>",x),
-        "</span><span class=\"sup\">",
-        num,
-        "</span><span class=\"sub\">",
-        den,
-        "</span>",
-        "</td>",
+  paste("<td class=\"", attr(object, "parity"),"\"><span ",
+              html5_class(c(class, attr(object, "parity"),  "fraction")),
+              " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"", ">",
+          "<span class=\"ratio\">",       ratio,      "</span>",
+          "<span class=\"percentage\">",  percentage, "</span>",
+          "<span class=\"numerator\">",   num,        "</span>",
+          "<span class=\"denominator\">", den,        "</span>",
+        "</span></td>",
         sep="")
 }
 

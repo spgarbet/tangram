@@ -64,9 +64,11 @@
 	vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-sub { font-size: x-small; }
-
-sup { font-size: x-small; }
+.fraction .percentage {display: none;}
+.fraction .numerator:before {content: "\00A0";}
+.fraction .numerator { font-size: x-small; vertical-align: super; }
+.fraction .numerator:after {content: " \2044";}
+.fraction .denominator { font-size: x-small; vertical-align: sub;}
 
 td .align{
 	display: inline-block;
