@@ -168,6 +168,7 @@ cell_create_table <- function(ast, transforms)
 #' @param formula, the formula to apply for summarization
 #' @param data the data frame to use
 #' @param transforms a list of lists that contain the transformation to apply for summarization
+#' @param after one or more functions to further process an abstract table
 #' @return the table flattened
 #' @export
 #'
@@ -175,19 +176,27 @@ cell_create_table <- function(ast, transforms)
 #'
 #' summary_table("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
 #'
-summary_table <- function(formula, data, transforms=hmisc_style)
+summary_table <- function(formula, data, transforms=hmisc_style, after=NA)
 {
-  # Helper function for single conversion function
+  # Helper function for single transform function
   if(!inherits(transforms, "list"))
   {
     transforms <- list(
-      Type = function(x) {"Data"},
+      Type = function(x) {"Data"}, # Short circuit data type determination
       Data = list(
         Data = transforms
       )
     )
   }
 
-  cell_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
-                  transforms)
+  tbl <- cell_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
+                           transforms)
+
+  # Post function processing
+  if(!is.na(after))
+  {
+    sapply(after, function(f) tbl <<- f(tbl))
+  }
+
+  tbl
 }
