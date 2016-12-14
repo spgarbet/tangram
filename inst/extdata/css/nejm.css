@@ -1,89 +1,66 @@
-
-body .summaryM {
+body .figbody {
 	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   font-size: 75%;
 }
 
-.summaryM thead
-{
-  border-top: 1px solid black;
-  border-right: 1px solid black;
-  border-left: 1px solid black;
+.figure  {  margin-left:  auto;
+			      margin-right: auto;
+}
+.caption { text-align:   left;
+           text-indent: 2em;
+	         padding: 0.5em 0 0.5em 0;
+	         font-weight: bold;
+	         background-color: #f7f4ef;
+	         border: 1px solid black;
+	     }
+
+.figbody {
+	text-align:   center;
+  border:       1px solid black
 }
 
-.summaryM thead tr td
+.figbody table {
+  margin: 0;
+  width: 100%;
+}
+
+.figbody td {
+	padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+.figbody thead tr td
 {
     font-weight: bold;
 }
 
-.summaryM tbody
-{
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
-  border-left: 1px solid black;
+.figbody tbody tr:nth-child(odd) {background: #fffbed;}
 
-}
+.header td {text-align: center;}
 
-
-.figure  {  margin-left:  auto;
-			      margin-right: auto;
-
-	          border: 2px solid black;
-         }
-
-.caption { text-align:   left;
-           text-indent: 2em;
-	         margin-left:  auto;
-	         margin-right: auto;
-	         padding: 0.5em 0 0.5em 0;
-	         border-bottom: 2px solid black;
-	         font-weight: bold;
-	         background-color: #f7f4ef;
-	     }
-
-.figbody {
-		     text-align:   center;
-	       margin-left:  auto;
-	       margin-right: auto;
-	       width:        100%;
-         }
-
-.figbody td {
-				padding: 0.2em 0.5em 0.2em 0.5em;
-             }
-
-.summaryM {
-	border-spacing: 0;
-}
-
-.summaryM tbody tr:nth-child(odd) {background: #fffbed;}
-
-.subheader    { font-size: small; }
-.subheaderrow tr { border-collapse: collapse; }
+.subheader    { font-size: smaller; }
 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
-
 
 .subheader em {font-style: normal;}
 
-.header.N:before { content: "("; }
+.header.N:before { content: "(n="; }
 .header.N:after  { content: ")"; }
 
-.quantile .q25 {
-	font-size: smaller;
-	padding-right:   0.5em;
+.quantile {
+  display: flex;
+  flex-direction: row;
 }
-
 .quantile .q50 {
-	font-weight: bold;
+  order: 1;
+  padding-right: 0.5em;
 }
-
-.quantile .q75 {
-	font-size: smaller;
-	padding-left: 0.5em;
+.quantile .q25:before {content: "(";}
+.quantile .q25 {
+  order: 2
 }
-
-
-.variable {
+.quantile .q75:before {content: "-";}
+.quantile .q75 {order: 3}
+.quantile .q75:after {content: ")";}
+tbody .variable {
 	float:      left;
 	text-align: left;
 }
@@ -96,15 +73,21 @@ body .summaryM {
 	vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-
-.fraction .percentage {display: none;}
-.fraction .numerator:before {content: "\00A0";}
-.fraction .numerator { font-size: x-small; vertical-align: super; }
-.fraction .numerator:after {content: " \2044";}
-.fraction .denominator { font-size: x-small; vertical-align: sub;}
+.fraction {
+  display: flex;
+  flex-direction: row;
+}
+.fraction .numerator   { order: 1 }
+.fraction .denominator:before {content: "/";}
+.fraction .denominator { order: 2; }
+.fraction .ratio       { order: 3; display: none; }
+.fraction .percentage:before {content: "\00A0(";}
+.fraction .percentage  { order: 4; }
+.fraction .percentage:after  {content: ")";}
 
 .statistics .description {font-style: italic;}
 .statistic {padding-right: 0.5em;}
+
 
 td .align{
 	display: inline-block;
@@ -122,8 +105,3 @@ td .align{
    font-size: 70%;
    text-align: left;
 }
-
-.sup:before {content: "\00A0";}
-.sup { font-size: x-small; vertical-align: super; }
-.sup:after {content: "\2044";}
-.sub { font-size: x-small; vertical-align: sub;}

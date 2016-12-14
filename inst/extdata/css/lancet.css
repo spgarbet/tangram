@@ -59,7 +59,7 @@ body .figbody {
 
 .subheader em {font-style: normal;}
 
-.header.N:before { content: "("; }
+.header.N:before { content: "(n="; }
 .header.N:after  { content: ")"; }
 
 .quantile {

@@ -7,7 +7,7 @@
 .caption { text-align:   center;
 	         margin-left:  auto;
 	         margin-right: auto;
-	         padding: 1.5em 0em 1.5em 0em;
+	         padding: 1.5em 0 1.5em 0;
 	       }
 
 .figbody {
@@ -31,7 +31,7 @@
 	border-spacing: 0;
 }
 
-.subheader    { font-size: small; }
+.subheader    { font-size: smaller; }
 
 .subheader tr { border-collapse: collapse; }
 .subheader td { border-bottom: 1pt solid black; }
@@ -48,7 +48,6 @@
 
 .quantile .q50 {
   font-weight: bold;
-	font-size: larger;
 }
 
 .variable {
@@ -63,6 +62,11 @@
 	padding-left: 1em;
 	vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
+
+thead .header {font-weight: bold;}
+.header.N  { font-style: italic; }
+.header.N:before { content: "N="; }
+
 
 .fraction .percentage {display: none;}
 .fraction .numerator:before {content: "\00A0";}
