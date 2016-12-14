@@ -729,7 +729,16 @@ tg_quantile <- function(x, format=NA, ...)
 {
   x <- quantile(x, ...)
   class(x) <- c("quantile", "numeric")
+
+  # Make an intelligent default format based on the data
+  if(is.na(format))
+  {
+    leading <- max(sapply(x, function(y) floor(log10(abs(y)))))
+    format  <- max(2-leading, 0)
+  }
+
   attr(x, "format") <- format
+
   x
 }
 

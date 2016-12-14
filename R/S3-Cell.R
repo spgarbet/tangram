@@ -16,10 +16,10 @@ render_f <- function(x, format=NA)
 
   result <- if(is.numeric(format))
   {
-    #sprintf(paste("%1.", format, "f", sep=""), x)
-    withCallingHandlers(formatC(round(as.numeric(x), digits=format), digits=format,format="fg", flag="#"),
-      warning = function(w) {}
-    )
+    sprintf(paste("%1.", format, "f", sep=""), x)
+    #withCallingHandlers(formatC(round(as.numeric(x), digits=format), digits=format,format="fg", flag="#"),
+    #  warning = function(w) {}
+    #)
   }
   else
   {
