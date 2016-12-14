@@ -24,13 +24,12 @@ summarize_kruskal_horz <- function(table, row, column)
     tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
   })
 
-
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
-  fstat <- cell_fstat(f   = test['F'], #cell_format("%.2f", test['F']),
+  fstat <- cell_fstat(f   = test['F'],
                       n1  = test['df1'],
                       n2  = test['df2'],
-                      p   = test['P'], #cell_format("%1.3f", test['P']),
+                      p   = test['P'],
                       src = key(row, column, "F"))
 
   table                                          %>%
@@ -56,10 +55,10 @@ summarize_kruskal_vert <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datar, datac, na.action=na.retain)
-  fstat <- cell_fstat(f   = test['F'], #cell_format("%.2f", test['F']),
+  fstat <- cell_fstat(f   = test['F'],
                       n1  = test['df1'],
                       n2  = test['df2'],
-                      p   = test['P'], #cell_format("%1.3f", test['P']),
+                      p   = test['P'],
                       src = key(row, column, "F"))
 
   table                                                             %>%

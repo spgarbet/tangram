@@ -15,7 +15,7 @@ cell_format <- function(format, x)
 
   result <- if(is.numeric(format))
   {
-    withCallingHandlers(formatC(signif(as.numeric(x), digits=format), digits=format,format="fg", flag="#"),
+    withCallingHandlers(formatC(round(as.numeric(x), digits=format), digits=format,format="fg", flag="#"),
       warning = function(w) {}
     )
   }
@@ -74,6 +74,11 @@ cell_table <- function(rows, cols, embedded=TRUE)
   tbl
 }
 
+list_cell <- function(classes, ...)
+{
+  structure(list(...), class=c(classes, "cell"))
+}
+
 cell_label <- function(text, units=NA, src=NA)
 {
   if(!inherits(text, "character")) text <- as.character(text)
@@ -82,12 +87,18 @@ cell_label <- function(text, units=NA, src=NA)
 
 cell_header <- function(text, units=NA, src=NA)
 {
-  structure(cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("cell_header", "cell_label", "cell"))
+  list_cell(c("cell_header", "cell_label"),
+            label=as.character(text),
+            units=as.character(units),
+            src=src)
 }
 
 cell_subheader <- function(text, units=NA, src=NA)
 {
-  structure(cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("cell_subheader", "cell_header", "cell_label", "cell"))
+  list_cell(c("cell_subheader", "cell_header", "cell_label"),
+            label=as.character(text),
+            units=as.character(units),
+            src=src)
 }
 
 cell_quantile <- function(quantiles, src=NA)
@@ -99,37 +110,40 @@ cell_quantile <- function(quantiles, src=NA)
 
 cell_estimate <- function(value, low=NA, high=NA, conf.level=0.95, src=NA)
 {
-  structure(cell(list(value=value, low=low, high=high, src=src)), class=c("cell_estimate", "cell"))
+  list_cell("cell_estimate", value=value, low=low, high=high, src=src)
 }
 
 cell_fstat <- function(f, n1, n2, p, src=NA)
 {
-  structure(cell(list(f=f, n1=n1, n2=n2, p=p, src=src)), class=c("cell_fstat","cell"))
+  list_cell("cell_fstat", f=f, n1=n1, n2=n2, p=p, src=src)
 }
 
 cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
 {
-  structure(cell(list(numerator=numerator, denominator=denominator, ratio=ratio, percentage=percentage, src=src)), class=c("cell_fraction","cell"))
+  list_cell("cell_fraction",
+            numerator=numerator, denominator=denominator,
+            ratio=ratio,         percentage=percentage,
+            src=src)
 }
 
 cell_chi2 <- function(chi2, df, p, src=NA)
 {
-  structure(cell(list(chi2=chi2, df=df, p=p, src=src)), class=c("cell_chi2", "cell"))
+  list_cell("cell_chi2", chi2=chi2, df=df, p=p, src=src)
 }
 
 cell_studentt <- function(t, df, p, src=NA)
 {
-  structure(cell(list(t=t, df=df, p=p, src=src)), class=c("cell_studentt", "cell"))
+  list_cell("cell_studentt", t=t, df=df, p=p, src=src)
 }
 
 cell_spearman <- function(S, rho, p, src=NA)
 {
-  structure(cell(list(S=S,rho=rho, p=p, src=src)), class=c("cell_spearman", "cell"))
+  list_cell("cell_spearman", S=S, rho=rho, p=p, src=src)
 }
 
 cell_n <- function(n, src=NA)
 {
-  structure(cell(list(n=n, src=src)), class=c("cell_n", "cell"))
+  list_cell("cell_n", n=n, src=src)
 }
 
 

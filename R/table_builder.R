@@ -603,10 +603,10 @@ tg.N <- function(x, row, column, ...)
 tg.aov <- function(x, row, column, ...)
 {
   test <- summary(x)[[1]]
-  cell_fstat(f   = test$'F value'[1], #cell_format("%.2f", test$'F value'[1]),
+  cell_fstat(f   = form(test$'F value'[1], "%.2f"),
              n1  = test$Df[1],
              n2  = test$Df[2],
-             p   = test$'Pr(>F)'[1],  #cell_format("%1.3f", test$'Pr(>F)'[1]),
+             p   = form(test$'Pr(>F)'[1], "%1.3f"),
              src = key(row, column, "aov", ...))
 }
 
@@ -626,11 +626,11 @@ tg.htest <- function(x, row, column, ...)
 {
   ss <- key(row, column, "htest", ...)
   if(names(x$statistic) == "X-squared")
-    cell_chi2(round(x$statistic,2), x$parameter[1], round(x$p.value, 3), src=ss)
+    cell_chi2(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3"), src=ss)
   else if(x$method == "Spearman's rank correlation rho")
-    cell_spearman(round(x$statistic,0), x$parameter, round(x$p.value, 3), src=ss)
+    cell_spearman(form(x$statistic, 0), x$parameter, form(x$p.value, "%1.3"), src=ss)
   else
-    cell_studentt(round(x$statistic,2), x$parameter[1], round(x$p.value, 3), src=ss)
+    cell_studentt(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3"), src=ss)
 }
 
 #' Construct a cell from a tg_quantile
@@ -646,10 +646,11 @@ tg.htest <- function(x, row, column, ...)
 tg.quantile <- function(x, row, column, ...)
 {
   cell_quantile(x,
-                  src=key(row    = row,
-                          col    = column,
-                          label  = "quantile",
-                          ...))
+                src    = key(row    = row,
+                             col    = column,
+                             label  = "quantile",
+                             ...)
+               )
 }
 
 #' Cell Fraction Conversion
@@ -666,9 +667,8 @@ tg.quantile <- function(x, row, column, ...)
 #' tg(tg_fraction(1, 2, 3), list(value="A"), list(value="B"))
 tg.fraction <- function(x, row, column, ...)
 {
-  ratio      <- x[1]/x[2] #cell_format(x[3], x[1]/x[2])
-  percentage <- 100*ratio #cell_format(x[3], 100*x[1]/x[2])
-  cell_fraction(x[1], x[2], ratio, percentage,
+  ratio      <- x[1]/x[2]
+  cell_fraction(x[1], x[2], x[3], x[4],
                   src=key(row    = row,
                           col    = column,
                           label  = "fraction",
@@ -707,7 +707,8 @@ tg_fraction <- function(numerator, denominator, format=3)
   ratio <- numerator / denominator
   structure(c(numerator,
               denominator,
-              format
+              form(ratio, format),
+              form(100*ratio, format)
               ),
             class=c("fraction", "numeric")
            )
@@ -724,12 +725,25 @@ tg_fraction <- function(numerator, denominator, format=3)
 #' @export
 #' @examples
 #' tg_quantile(rnorm(100), "%.2f")
-tg_quantile <- function(x, format, ...)
+tg_quantile <- function(x, format=NULL, ...)
 {
-  #result <- cell_format(format, quantile(x, ...))
-  #class(result) <- c("quantile", "numeric")
-  #result
   class(x) <- c("quantile", "numeric")
   attr(x, "format") <- format
+  x
+}
+
+#' Attach format attribute
+#'
+#' Attach formatting information to an object in the attr "format"
+#'
+#' @param x the object to attach format information
+#' @param format the formatting to be applied (usually comes from AST node)
+#' @return an S3 object with format attr set
+#' @export
+#' @examples
+#' format(2, "%.2f")
+form <- function(x, value)
+{
+  attr(x, "format") <- value
   x
 }

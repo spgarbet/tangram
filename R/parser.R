@@ -84,7 +84,7 @@ ASTVariable <- R6Class("ASTVariable",
     {
       if(self$value == "1")
       {
-        self$data  <- data.frame(factor(rep(1, length(d[,1]))))
+        self$data  <- data.frame(factor(rep(1, length(d[,1])),labels=""))
         self$value <- ""
 
         return(self)
