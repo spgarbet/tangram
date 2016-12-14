@@ -26,10 +26,10 @@ summarize_kruskal_horz <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datac, datar, na.action=na.retain)
-  fstat <- cell_fstat(f   = test['F'],
+  fstat <- cell_fstat(f   = form(test['F'], "%.2f"),
                       n1  = test['df1'],
                       n2  = test['df2'],
-                      p   = test['P'],
+                      p   = form(test['P'], "%1.3f"),
                       src = key(row, column, "F"))
 
   table                                          %>%
@@ -55,10 +55,10 @@ summarize_kruskal_vert <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test <- spearman2(datar, datac, na.action=na.retain)
-  fstat <- cell_fstat(f   = test['F'],
+  fstat <- cell_fstat(f   = form(test['F'], "%.2f"),
                       n1  = test['df1'],
                       n2  = test['df2'],
-                      p   = test['P'],
+                      p   = form(test['P'], "%1.3f"),
                       src = key(row, column, "F"))
 
   table                                                             %>%

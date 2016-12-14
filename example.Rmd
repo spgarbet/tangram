@@ -62,8 +62,16 @@ html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex +
 Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
-html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
-      fragment=TRUE, inline="lancet.css", caption = "HTML5 Table Lancet Style", id="tbl4")
+# Lancet uses 4-digit p-values
+p_digits_4 <- cell_transform(function(cell) {
+  if("p" %in% names(cell)) cell$p <- form(cell$p, "%1.4f")
+  cell
+})
+
+html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc,
+      after=p_digits_4),
+      fragment=TRUE, inline="lancet.css", caption = "HTML5 Table Lancet Style", id="tbl4"
+      )
 ```
 
 ### Indexing

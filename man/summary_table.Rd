@@ -4,7 +4,7 @@
 \alias{summary_table}
 \title{Generate a summary table using a specified formula and data frame}
 \usage{
-summary_table(formula, data, transforms = hmisc_style)
+summary_table(formula, data, transforms = hmisc_style, after = NA)
 }
 \arguments{
 \item{formula, }{the formula to apply for summarization}
@@ -12,6 +12,8 @@ summary_table(formula, data, transforms = hmisc_style)
 \item{data}{the data frame to use}
 
 \item{transforms}{a list of lists that contain the transformation to apply for summarization}
+
+\item{after}{one or more functions to further process an abstract table}
 }
 \value{
 the table flattened

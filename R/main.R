@@ -163,6 +163,24 @@ cell_create_table <- function(ast, transforms)
   table_flatten(tbl)
 }
 
+#' Apply a function to all cells of a table
+#' @param table the table to modify
+#' @param function to apply, must return the modified cell
+#' @return the modified table
+#' @export
+cell_transform <- function(FUN, ...)
+{
+  function(table)
+  {
+    sapply(1:rows(table), function(row) {
+      sapply(1:cols(table), function(col) {
+        table[[row]][[col]] <<- FUN(table[[row]][[col]], ...)
+      })
+    })
+    table
+  }
+}
+
 #' Generate a summary table using a specified formula and data frame
 #'
 #' @param formula, the formula to apply for summarization
@@ -192,11 +210,10 @@ summary_table <- function(formula, data, transforms=hmisc_style, after=NA)
   tbl <- cell_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
                            transforms)
 
+  if(is.na(after)) {return(tbl)}
+
   # Post function processing
-  if(!is.na(after))
-  {
-    sapply(after, function(f) tbl <<- f(tbl))
-  }
+  if(class(after) == "list") sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
 
   tbl
 }
