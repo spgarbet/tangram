@@ -432,8 +432,6 @@ html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex +
       after=p_digits_4),
       fragment=TRUE, inline=&quot;lancet.css&quot;, caption = &quot;HTML5 Table Lancet Style&quot;, id=&quot;tbl4&quot;
       )</code></pre>
-<pre><code>## Warning in is.na(after): is.na() applied to non-(list or vector) of type
-## 'closure'</code></pre>
 <script type="text/javascript">
 var ss = document.createElement("link");
 ss.rel  = "stylesheet";
@@ -689,9 +687,9 @@ summarize_count &lt;- function(table, row, column)
 summary_table(event ~ id[&quot;%1.0f&quot;], df, summarize_count)</code></pre>
 <pre><code>====================================================================================== 
      N          A                 B                 C              Test Statistic      
-             (N=246)           (N=248)           (N=249)                               
+             (N=241)           (N=249)           (N=241)                               
 -------------------------------------------------------------------------------------- 
-ID  250  3.00 *4.00* 5.00  3.00 *4.00* 5.00  3.00 *4.00* 5.00  F_{2,740}=0.04, P=0.960 
+ID  250  3.00 *4.00* 5.00  3.00 *4.00* 5.00  3.00 *4.00* 6.00  F_{2,728}=0.38, P=0.681 
 ====================================================================================== </code></pre>
 </div>
 
