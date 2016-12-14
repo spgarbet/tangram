@@ -4,12 +4,14 @@
 \alias{tg_fraction}
 \title{Fraction values creation}
 \usage{
-tg_fraction(numerator, denominator)
+tg_fraction(numerator, denominator, format = 3)
 }
 \arguments{
 \item{numerator}{The numerator of the fraction}
 
 \item{denominator}{The denominator of the fraction}
+
+\item{format}{Formating option for ratio / percentage}
 }
 \value{
 an S3 rendereable cell that is a fraction
@@ -18,6 +20,6 @@ an S3 rendereable cell that is a fraction
 Create a fraction that is convertible to a cell
 }
 \examples{
-tg_fraction(1, 2)
+tg_fraction(1, 2, 3)
 }
 

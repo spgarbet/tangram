@@ -8,13 +8,15 @@ cols <- function(x)
   UseMethod("cols", x)
 }
 
-cell_format <- function(format, x)
+render_f <- function(x, format=NA)
 {
-  if(is.na(format)) format <- 3
+  if(is.null(format) || is.na(format)) format <-attr(x, "format")
+  if(is.null(format)) format <- 3
   if(is.character(format) && substr(format, 1, 1) != "%") format <- as.numeric(format)
 
   result <- if(is.numeric(format))
   {
+    #sprintf(paste("%1.", format, "f", sep=""), x)
     withCallingHandlers(formatC(round(as.numeric(x), digits=format), digits=format,format="fg", flag="#"),
       warning = function(w) {}
     )

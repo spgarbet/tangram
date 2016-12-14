@@ -78,33 +78,18 @@ html5.cell <- function(object, caption, ..., class=NA)
 }
 
 #' @export
-html5.cell_header_n <- function(object, caption, ..., class=NA)
+html5.cell_n <- function(object, caption, ..., class=NA)
 {
   idx <- index(object, caption)
 
   paste("<td ",
         html5_class(c(class, attr(object, "parity"), "data", "N")),
         " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
-        "><em>N=",
+        "><span class=\"N\">",
         object$n,
-        "</em></td>",
+        "</span></td>",
         sep='')
 }
-
-#' @export
-html5.cell_n <- function(object, caption, ..., class=NA)
-{
-  idx <- index(object, caption)
-
-  paste("<td ",
-          html5_class(c(class, attr(object, "parity"), "data", "N")),
-          " data-clipboard-text=\"","{",idx["key"]," N=",idx["value"],"}\"",
-        ">",
-        object$n,
-        "</td>",
-        sep='')
-}
-
 
 #' @export
 html5.cell_subheader <- function(object, caption, ...)
@@ -114,7 +99,7 @@ html5.cell_subheader <- function(object, caption, ...)
   class(object) <- cls[3:length(cls)]
 
   if(inherits(object, "cell_n"))
-    html5.cell_header_n(object, caption, class=c("subheader", "header"))
+    html5.cell_n(object, caption, class=c("subheader", "header"))
   else
     html5(object, caption, class=c("subheader", "header"))
 }
@@ -127,7 +112,7 @@ html5.cell_header <- function(object, caption, ...)
   class(object) <- cls[2:length(cls)]
 
   if(inherits(object, "cell_n"))
-    html5.cell_header_n(object, caption, class=c("header"))
+    html5.cell_n(object, caption, class=c("header"))
   else
     html5(object, caption, class=c("header"))
 }
@@ -170,7 +155,7 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             "><strong>",
-          object$value,
+          render_f(object$value),
           "</strong></td>",
           sep="")
   else
@@ -178,9 +163,9 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             "><strong>",
-          object$value,
+          render_f(object$value),
           "</strong>",
-          " (",object$low,",",object$high,")",
+          " (",render_f(object$low),",",render_f(object$high),")",
           "</td>",
           sep="")
 }
@@ -195,11 +180,11 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
         html5_class(c(class, attr(object, "parity"), "data", "quantile")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
         "><span class=\"q25\">",
-        object$'25%',
+        render_f(object$'25%', object$format),
         "</span><span class=\"q50\">",
-        object$'50%',
+        render_f(object$'50%', object$format),
         "</span><span class=\"q75\">",
-        object$'75%',
+        render_f(object$'75%', object$format),
         "</span></span></td>",
         sep="")
 }
@@ -215,9 +200,9 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
     ">",
     "<span class=\"statistic\"><span class=\"description\">F",
     "<sub>",object$n1,",",object$n2,"</sub> = </span>",
-    object$f, ",</span>",
+    render_f(object$f, object$format), ",</span>",
     "<span class=\"pvalue\"><span class=\"description\">P = </span>",
-    object$p,
+    render_f(object$p, object$format),
     "<sup>1</sup></span>",
     "</td>",
     sep=""
@@ -228,8 +213,8 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
 html5.cell_fraction <- function(object, caption, ..., class=NA)
 {
   idx        <- index(object, caption)
-  ratio      <- gsub("\\.", "<div class=\"align\">.</div>",object$ratio)
-  percentage <- object$percentage
+  ratio      <- gsub("\\.", "<div class=\"align\">.</div>", render_f(object$ratio))
+  percentage <- render_f(object$percentage)
   den        <- as.character(object$denominator)
   num        <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator) # Adds some spaces to match
 
@@ -256,9 +241,9 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
         object$df,
         "</span></span>",
         " = </span>",
-        object$chi2,
+        render_f(object$chi2),
         ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
-        object$p,
+        render_f(object$p),
         "<sup>2</sup></span>",
         "</td>",
         sep=""

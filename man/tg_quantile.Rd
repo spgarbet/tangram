@@ -4,7 +4,7 @@
 \alias{tg_quantile}
 \title{Quantile creation}
 \usage{
-tg_quantile(x, format, ...)
+tg_quantile(x, format = NULL, ...)
 }
 \arguments{
 \item{x}{the data passed to the quantile {stats} function}

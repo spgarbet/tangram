@@ -626,11 +626,11 @@ tg.htest <- function(x, row, column, ...)
 {
   ss <- key(row, column, "htest", ...)
   if(names(x$statistic) == "X-squared")
-    cell_chi2(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3"), src=ss)
+    cell_chi2(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), src=ss)
   else if(x$method == "Spearman's rank correlation rho")
-    cell_spearman(form(x$statistic, 0), x$parameter, form(x$p.value, "%1.3"), src=ss)
+    cell_spearman(form(x$statistic, 0), x$parameter, form(x$p.value, "%1.3f"), src=ss)
   else
-    cell_studentt(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3"), src=ss)
+    cell_studentt(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), src=ss)
 }
 
 #' Construct a cell from a tg_quantile
@@ -725,8 +725,9 @@ tg_fraction <- function(numerator, denominator, format=3)
 #' @export
 #' @examples
 #' tg_quantile(rnorm(100), "%.2f")
-tg_quantile <- function(x, format=NULL, ...)
+tg_quantile <- function(x, format=NA, ...)
 {
+  x <- quantile(x, ...)
   class(x) <- c("quantile", "numeric")
   attr(x, "format") <- format
   x

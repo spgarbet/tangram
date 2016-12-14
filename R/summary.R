@@ -14,7 +14,10 @@ summary.cell_label <- function(object,...)
 
 summary.cell_quantile <- function(object,...)
 {
-  paste(object$'25%', " *", object$'50%', "* ", object$'75%', sep="")
+  paste(render_f(object$'25%',object$format),
+        " *", render_f(object$'50%', object$format), "* ",
+        render_f(object$'75%', object$format),
+        sep="")
 }
 
 #' @export
@@ -72,19 +75,19 @@ print.cell_table <- function(x,...) {summary(x,...)}
 summary.cell_estimate <- function(object,...)
 {
   if(is.na(object$low))
-    as.character(object$value)
+    render_f(object$value)
   else
-    paste(object$value," (",object$low,",",object$high,")")
+    paste(render_f(object$value)," (",render_f(object$low),",",render_f(object$high),")")
 }
 
 summary.cell_fstat <- function(object,...)
 {
-  paste("F_{",object$n1,",",object$n2,"}=",object$f,", P=",object$p,sep="")
+  paste("F_{",object$n1,",",object$n2,"}=",render_f(object$f),", P=",render_f(object$p),sep="")
 }
 
 summary.cell_fraction <- function(object,...)
 {
-  x <- sprintf("%0.3f",round(object$numerator/object$denominator,3))
+  x <- render_f(object$ratio)
   den <- as.character(object$denominator)
   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
   paste(x, "  ",
@@ -94,17 +97,17 @@ summary.cell_fraction <- function(object,...)
 
 summary.cell_chi2 <- function(object,...)
 {
-  paste("    X^2_",object$df,"=",object$chi2,", P=",object$p,sep="")
+  paste("    X^2_",object$df,"=",render_f(object$chi2),", P=",render_f(object$p),sep="")
 }
 
 summary.cell_studentt <- function(object,...)
 {
-  paste("T_",object$df,"=",object$t, ", P=",object$p, sep="")
+  paste("T_",object$df,"=",render_f(object$t), ", P=",render_f(object$p), sep="")
 }
 
 summary.cell_spearman <- function(object,...)
 {
-  paste("S=",object$S,", P=",object$p, sep="")
+  paste("S=",render_f(object$S),", P=",render_f(object$p), sep="")
 }
 
 summary.cell_n <- function(object,...)
