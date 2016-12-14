@@ -603,11 +603,11 @@ tg.N <- function(x, row, column, ...)
 tg.aov <- function(x, row, column, ...)
 {
   test <- summary(x)[[1]]
-  cell_fstat(f   = cell_format("%.2f", test$'F value'[1]),
-           n1  = test$Df[1],
-           n2  = test$Df[2],
-           p   = cell_format("%1.3f", test$'Pr(>F)'[1]),
-           src = key(row, column, "aov", ...))
+  cell_fstat(f   = test$'F value'[1], #cell_format("%.2f", test$'F value'[1]),
+             n1  = test$Df[1],
+             n2  = test$Df[2],
+             p   = test$'Pr(>F)'[1],  #cell_format("%1.3f", test$'Pr(>F)'[1]),
+             src = key(row, column, "aov", ...))
 }
 
 #' Construct hypothesis test form cell
@@ -666,8 +666,8 @@ tg.quantile <- function(x, row, column, ...)
 #' tg(tg_fraction(1, 2, 3), list(value="A"), list(value="B"))
 tg.fraction <- function(x, row, column, ...)
 {
-  ratio      <- cell_format(x[3], x[1]/x[2])
-  percentage <- cell_format(x[3], 100*x[1]/x[2])
+  ratio      <- x[1]/x[2] #cell_format(x[3], x[1]/x[2])
+  percentage <- 100*ratio #cell_format(x[3], 100*x[1]/x[2])
   cell_fraction(x[1], x[2], ratio, percentage,
                   src=key(row    = row,
                           col    = column,
@@ -726,9 +726,10 @@ tg_fraction <- function(numerator, denominator, format=3)
 #' tg_quantile(rnorm(100), "%.2f")
 tg_quantile <- function(x, format, ...)
 {
-  result <- cell_format(format, quantile(x, ...))
-
-  class(result) <- c("quantile", "numeric")
-
-  result
+  #result <- cell_format(format, quantile(x, ...))
+  #class(result) <- c("quantile", "numeric")
+  #result
+  class(x) <- c("quantile", "numeric")
+  attr(x, "format") <- format
+  x
 }

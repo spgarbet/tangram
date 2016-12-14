@@ -27,4 +27,8 @@ Collate:
     'main.R'
     'summary.R'
     'table_builder.R'
-Imports: Hmisc, dplyr, R6, stringr
+Imports:
+    Hmisc,
+    dplyr,
+    R6,
+    stringr
