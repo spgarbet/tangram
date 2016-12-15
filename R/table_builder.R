@@ -732,7 +732,12 @@ tg_fraction <- function(numerator, denominator, format=3)
 #' format_guess(rnorm(100))
 format_guess <- function(x)
 {
-  if(all(x == floor(x))) 0 else max(2-max(floor(log10(abs(x)))), 0)
+  d <- x[!is.na(x)]
+  if(length(d) == 0) return(0)
+  if(all(d == floor(d)))
+    return(0)
+  else
+    return(max(2-max(floor(log10(abs(d)))), 0))
 }
 
 #' Quantile creation
