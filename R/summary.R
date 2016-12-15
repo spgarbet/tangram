@@ -7,9 +7,11 @@ summary.default <- function(object,...) ""
 summary.cell_label <- function(object,...)
 {
   if(is.na(object$units))
-    object$label
-  else
-    paste(object$label, " (", object$units, ")", sep="")
+  {
+    if(length(object$label) == 0) return("") else return(object$label)
+  } else {
+    return(paste(object$label, " (", object$units, ")", sep=""))
+  }
 }
 
 summary.cell_quantile <- function(object,...)

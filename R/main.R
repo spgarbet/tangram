@@ -274,6 +274,42 @@ hmisc_intercept_cleanup <- function(table)
   del_row(table, 2)
 }
 
+#' Generate a table using a data frame directly
+#'
+#' Transform a data frame directly into a table
+#' @param data the data frame to use
+#' @return table
+#' @export
+summary_frame <- function(data, colheader=NA)
+{
+  roffset <- if(any(is.na(colheader))) 1 else 2
+  width   <- length(colnames(data)) + 1
+  height  <- length(rownames(data)) + roffset
+  tbl     <- cell_table(height, width, FALSE)
+
+  tbl[[1]][[1]] <- cell_header("")
+  if(!any(is.na(colheader))) tbl[[2]][[1]] <- cell_subheader("")
+
+  sapply(2:width, FUN=function(col_idx) {
+    if(any(is.na(colheader)))
+    {
+      tbl[[1]][[col_idx]] <<- cell_header(colnames(data)[col_idx-1])
+    } else {
+      tbl[[1]][[col_idx]] <<- cell_header(colheader[col_idx-1])
+      tbl[[2]][[col_idx]] <<- cell_subheader(colnames(data)[col_idx-1])
+    }
+    sapply((roffset+1):height, FUN=function(row_idx) {
+       tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(data[row_idx-roffset,col_idx-1]))
+    })
+  })
+
+  sapply((roffset+1):height, FUN=function(row_idx) {
+    tbl[[row_idx]][[1]] <<- cell_header(rownames(data)[row_idx-roffset])
+  })
+
+  tbl
+}
+
 #' Generate a summary table using a specified formula and data frame
 #'
 #' @param formula, the formula to apply for summarization

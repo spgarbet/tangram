@@ -81,12 +81,14 @@ list_cell <- function(classes, ...)
   structure(list(...), class=c(classes, "cell"))
 }
 
+#' @export
 cell_label <- function(text, units=NA, src=NA)
 {
   if(!inherits(text, "character")) text <- as.character(text)
   structure(cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("cell_label", "cell"))
 }
 
+#' @export
 cell_header <- function(text, units=NA, src=NA)
 {
   list_cell(c("cell_header", "cell_label"),
