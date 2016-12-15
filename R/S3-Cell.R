@@ -118,7 +118,7 @@ cell_estimate <- function(value, low=NA, high=NA, conf.level=0.95, src=NA)
 
 cell_fstat <- function(f, n1, n2, p, src=NA)
 {
-  list_cell("cell_fstat", f=f, n1=n1, n2=n2, p=p, src=src)
+  list_cell(c("cell_fstat","statistics"), f=f, n1=n1, n2=n2, p=p, src=src)
 }
 
 cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
@@ -131,17 +131,17 @@ cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
 
 cell_chi2 <- function(chi2, df, p, src=NA)
 {
-  list_cell("cell_chi2", chi2=chi2, df=df, p=p, src=src)
+  list_cell(c("cell_chi2", "statistics"), chi2=chi2, df=df, p=p, src=src)
 }
 
 cell_studentt <- function(t, df, p, src=NA)
 {
-  list_cell("cell_studentt", t=t, df=df, p=p, src=src)
+  list_cell(c("cell_studentt", "statistics"), t=t, df=df, p=p, src=src)
 }
 
 cell_spearman <- function(S, rho, p, src=NA)
 {
-  list_cell("cell_spearman", S=S, rho=rho, p=p, src=src)
+  list_cell(c("cell_spearman", "statistics"), S=S, rho=rho, p=p, src=src)
 }
 
 cell_n <- function(n, src=NA)

@@ -720,26 +720,6 @@ tg_fraction <- function(numerator, denominator, format=3)
            )
 }
 
-#' Guess the best format for a set of data
-#'
-#' Given a vector of data, default to 3 significant digits or all if maximum is greater
-#' than zero
-#'
-#' @param x the data passed to the quantile {stats} function
-#' @return the significant digits to preserve
-#' @export
-#' @examples
-#' format_guess(rnorm(100))
-format_guess <- function(x)
-{
-  d <- x[!is.na(x)]
-  if(length(d) == 0) return(0)
-  if(all(d == floor(d)))
-    return(0)
-  else
-    return(max(2-max(floor(log10(abs(d)))), 0))
-}
-
 #' Quantile creation
 #'
 #' Create a quantile that is convertible to a cell
@@ -764,18 +744,42 @@ tg_quantile <- function(x, format=NA, ...)
   x
 }
 
-#' Attach format attribute
+  #############################################################################
+ ##
+## Set of misc helper functions for dealing with data / tables
+
+#' Guess the best format for a set of data
+#'
+#' Given a vector of data, default to 3 significant digits or all if maximum is greater
+#' than zero
+#'
+#' @param x the data passed to the quantile {stats} function
+#' @return the significant digits to preserve
+#' @export
+#' @examples
+#' format_guess(rnorm(100))
+format_guess <- function(x)
+{
+  d <- x[!is.na(x)]
+  if(length(d) == 0) return(0) # Nothing, then just return 0 for rounding
+  if(all(d == floor(d)))       # Is it all whole numbers, then no decimals
+    return(0)
+  else
+    return(max(2-max(floor(log10(abs(d)))), 0)) # Otherwise that 3 significant digits of the maximum magnitude
+}
+
+#' Attach format attribute to object
 #'
 #' Attach formatting information to an object in the attr "format"
 #'
-#' @param x the object to attach format information
+#' @param object the object to attach format information
 #' @param format the formatting to be applied (usually comes from AST node)
-#' @return an S3 object with format attr set
+#' @return an S3 object with format attribute set
 #' @export
 #' @examples
 #' format(2, "%.2f")
-form <- function(x, value)
+form <- function(object, value)
 {
-  attr(x, "format") <- value
-  x
+  attr(object, "format") <- value
+  object
 }
