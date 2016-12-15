@@ -160,7 +160,14 @@ cell_create_table <- function(ast, transforms)
     })
   })
 
-  table_flatten(tbl)
+  flat <- table_flatten(tbl)
+
+  if(!is.null(transforms[["Footnote"]]))
+  {
+    attr(flat, "footnote") <- transforms[["Footnote"]]
+  }
+
+  flat
 }
 
 #' Create a function to transform all cells of a table

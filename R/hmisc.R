@@ -248,5 +248,6 @@ hmisc_style <- list(
                   Numerical   = apply_factors,
                   Categorical = apply_factors,
                   Factors     = apply_factors
-            )
+            ),
+  Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis test. ^2^Pearson test"
 )

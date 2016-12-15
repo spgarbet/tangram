@@ -251,7 +251,7 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
 }
 
 #' @export
-html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=NA, id=NA, ...)
+html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=NA, id=NA, footnote=NA, ...)
 {
   if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
@@ -274,12 +274,25 @@ html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=N
 			            "<table class=\"summaryM\">",
                   sep='')
 
+  if(is.na(footnote) && !is.null(attr(object, "footnote")))
+  {
+    footnote <- attr(object, "footnote")
+  }
+  footnote <- if(is.na(footnote)) "" else
+  {
+    paste("<div class=\"footnote\">", footnote, "</div>", sep='')
+  }
+
+  footnote <- gsub("\\^([a-zA-Z0-9_]+)\\^", "<sup>\\1</sup>", footnote, fixed=FALSE)
+
   if(fragment)
   {
-    footer <- "</table></div></div><script>new Clipboard('.data');</script>"
+    footer <- paste("</table></div>", footnote,
+                    "</div><script>new Clipboard('.data');</script>", sep='')
   } else {
     intro  <- paste(header, intro, sep='')
-    footer <- "</table></div></div><script>new Clipboard('.data');</script></body></html>"
+    footer <- paste("</table></div>", footnote,
+                    "</div><script>new Clipboard('.data');</script></body></html>", sep='')
   }
 
   nrows <- rows(object)
