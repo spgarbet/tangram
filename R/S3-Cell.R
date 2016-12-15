@@ -10,8 +10,8 @@ cols <- function(x)
 
 render_f <- function(x, format=NA)
 {
-  if(is.null(format) || is.na(format)) format <-attr(x, "format")
-  if(is.null(format)) format <- 3
+  if(is.null(format) || is.na(format)) format <- attr(x, "format")
+  if(is.null(format) || is.na(format)) format <- 3
   if(is.character(format) && substr(format, 1, 1) != "%") format <- as.numeric(format)
 
   result <- if(is.numeric(format))
@@ -105,7 +105,8 @@ cell_subheader <- function(text, units=NA, src=NA)
 
 cell_quantile <- function(quantiles, src=NA)
 {
-  ql <- as.list(quantiles)
+  format <- attr(quantiles, "format")
+  ql <- lapply(as.list(quantiles), function(x) form(x, format))
   if(!is.na(src)) ql[['src']] <- src
   structure(cell(ql), class=c("cell_quantile", "cell"))
 }

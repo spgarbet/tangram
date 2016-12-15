@@ -118,7 +118,7 @@ summarize_chisq <- function(table, row, column)
           numerator <- length(datac[datac == col_category &
                                     datar == row_category &
                                     !is.na(datac)])
-          tg::add_row(
+          add_row(
             table,
             tg_fraction(numerator, denominator, row$format),
             subcol=col_category, subrow=row_category

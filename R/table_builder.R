@@ -667,12 +667,17 @@ tg.quantile <- function(x, row, column, ...)
 #' tg(tg_fraction(1, 2, 3), list(value="A"), list(value="B"))
 tg.fraction <- function(x, row, column, ...)
 {
-  ratio      <- x[1]/x[2]
-  cell_fraction(x[1], x[2], x[3], x[4],
-                  src=key(row    = row,
-                          col    = column,
-                          label  = "fraction",
-                          ...))
+  f <- attr(x, "format")
+  if(is.na(f)) f<-3
+  list_cell("cell_fraction",
+            numerator=x[1],
+            denominator=x[2],
+            ratio=form(x[3],f),
+            percentage=form(x[4],max(f-2,0)),
+            src=key(row    = row,
+                    col    = column,
+                    label  = "fraction",
+                    ...))
 }
 
 #' N values creation
@@ -705,12 +710,13 @@ tg_N <- function(...)
 tg_fraction <- function(numerator, denominator, format=3)
 {
   ratio <- numerator / denominator
-  structure(c(numerator,
-              denominator,
-              form(ratio, format),
-              form(100*ratio, format)
-              ),
-            class=c("fraction", "numeric")
+  structure(c(numerator=numerator,
+              denominator=denominator,
+              ratio=ratio,
+              percentage=100*ratio
+            ),
+            class=c("fraction", "numeric"),
+            format=format
            )
 }
 
@@ -731,10 +737,9 @@ tg_quantile <- function(x, format=NA, ...)
   class(x) <- c("quantile", "numeric")
 
   # Make an intelligent default format based on the data
-  if(is.na(format))
+  format <- if(is.na(format))
   {
-    leading <- max(sapply(x, function(y) floor(log10(abs(y)))))
-    format  <- max(2-leading, 0)
+    if(all(x == floor(x))) 0 else max(2-max(floor(log10(abs(x)))), 0)
   }
 
   attr(x, "format") <- format
