@@ -18,10 +18,6 @@ summarize_kruskal_horz <- function(table, row, column)
   format <- ifelse(is.na(row$format), format_guess(datar), row$format)
 
   # Compute N values for each category
-  #subN <- lapply(levels(datac), FUN=function(cat){
-  #  length(datac[datac == cat & !is.na(datac)])
-  #})
-  # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
     tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
   })
@@ -66,6 +62,7 @@ summarize_kruskal_vert <- function(table, row, column)
   table                                                             %>%
   col_header("N", derive_label(column), "Test Statistic")           %>%
   row_header(derive_label(row))                                     %>%
+# FIXME Need to handle single case consistent with chisq
   new_line()                                                        %>%
   table_builder_apply(categories, FUN=function(tbl, category) {
     x <- datac[datar == categories[category]]
@@ -79,12 +76,57 @@ summarize_kruskal_vert <- function(table, row, column)
   add_col(fstat)
 }
 
+#' @export
+summarize_chisq_single <- function(table, row, column)
+{
+  datar          <- as.categorical(row$data[,1])
+  datac          <- as.categorical(column$data[,1])
+
+  row_category   <- last(levels(datar))
+  col_categories <- levels(datac)
+
+  # Compute N values for each category
+  subN <- lapply(levels(datac), FUN=function(cat){
+    tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
+  })
+
+  # Chi^2 test
+  y    <- table(datar,datac, useNA="no")
+  validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)})) # Negative logic deals with NAs
+  validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
+  y    <- y[validrow,validcol]
+  test <- chisq.test(y, correct=FALSE)
+
+  # Now construct the table by add rows to each column
+  table                                                      %>%
+  col_header("N", col_categories, "Test Statistic")          %>%
+  col_header("", subN, "")                                   %>%
+  row_header(paste(derive_label(row),":", row_category))     %>%
+  add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
+  table_builder_apply(col_categories, FUN=function(table, col_category) {
+    denominator <- length(datac[datac == col_category & !is.na(datac)])
+    numerator   <- length(datac[datac == col_category &
+                                datar == row_category &
+                                !is.na(datac)         &
+                                !is.na(datar)])
+    if(numerator == 0)
+        add_row(table, "") %>% new_col()
+    else
+        add_row(table,
+                tg_fraction(numerator, denominator, row$format),
+                subcol=col_category, subrow=row_category) %>% new_col()
+  })                                                         %>%
+  add_row(test)
+}
+
 # (N+1) X (M+2)
 #' @export
 summarize_chisq <- function(table, row, column)
 {
   datar          <- as.categorical(row$data[,1])
   datac          <- as.categorical(column$data[,1])
+
+  if(length(levels(datar))==2) return(summarize_chisq_single(table, row, column))
 
   row_categories <- levels(datar)
   col_categories <- levels(datac)
@@ -101,7 +143,6 @@ summarize_chisq <- function(table, row, column)
   y    <- y[validrow,validcol]
   test <- chisq.test(y, correct=FALSE)
 
-  # First row label is different
   labels      <- lapply(row_categories, FUN=function(x) paste("  ", x))
 
   # Now construct the table by add rows to each column
