@@ -737,9 +737,9 @@ tg_quantile <- function(x, format=NA, ...)
   class(x) <- c("quantile", "numeric")
 
   # Make an intelligent default format based on the data
-  format <- if(is.na(format))
+  if(is.na(format))
   {
-    if(all(x == floor(x))) 0 else max(2-max(floor(log10(abs(x)))), 0)
+    format <- if(all(x == floor(x))) 0 else max(2-max(floor(log10(abs(x)))), 0)
   }
 
   attr(x, "format") <- format

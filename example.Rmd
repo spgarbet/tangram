@@ -37,7 +37,7 @@ This package is meant to implement the concept of a grammar of tables. It allows
 Here's an example similary to summaryM from Hmisc to get us started:
 
 ```{r pbc, comment=""}
-summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
+summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
 ```
 
 Notice that stage in the formula wasn't stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.
@@ -46,7 +46,7 @@ It also supports HTML5, with styling fragments
 
 ### Hmisc Style Example
 ```{r, results="asis"}
-html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
+html5(summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
       fragment=TRUE, inline="hmisc.css", caption = "HTML5 Table Hmisc Style", id="tbl2")
 ```
 
@@ -54,7 +54,7 @@ html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex +
 Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
-html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
+html5(summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
       fragment=TRUE, inline="nejm.css", caption = "HTML5 Table NEJM Style", id="tbl3")
 ```
 
@@ -68,7 +68,7 @@ p_digits_4 <- cell_transform(function(cell) {
   cell
 })
 
-html5(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc,
+html5(summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc,
       after=p_digits_4),
       fragment=TRUE, inline="lancet.css", caption = "HTML5 Table Lancet Style", id="tbl4"
       )
