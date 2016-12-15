@@ -15,6 +15,8 @@ summarize_kruskal_horz <- function(table, row, column)
   datac      <- as.categorical(column$data[,1])
   categories <- levels(datac)
 
+  format <- ifelse(is.na(row$format), format_guess(datar), row$format)
+
   # Compute N values for each category
   #subN <- lapply(levels(datac), FUN=function(cat){
   #  length(datac[datac == cat & !is.na(datac)])
@@ -40,7 +42,7 @@ summarize_kruskal_horz <- function(table, row, column)
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     tbl %>% add_col(tg_quantile(x, row$format, na.rm=TRUE), subcol=category)
+     tbl %>% add_col(tg_quantile(x, format, na.rm=TRUE), subcol=category)
   })                                             %>%
   add_col(fstat)
 }

@@ -720,6 +720,21 @@ tg_fraction <- function(numerator, denominator, format=3)
            )
 }
 
+#' Guess the best format for a set of data
+#'
+#' Given a vector of data, default to 3 significant digits or all if maximum is greater
+#' than zero
+#'
+#' @param x the data passed to the quantile {stats} function
+#' @return the significant digits to preserve
+#' @export
+#' @examples
+#' format_guess(rnorm(100))
+format_guess <- function(x)
+{
+  if(all(x == floor(x))) 0 else max(2-max(floor(log10(abs(x)))), 0)
+}
+
 #' Quantile creation
 #'
 #' Create a quantile that is convertible to a cell
@@ -737,10 +752,7 @@ tg_quantile <- function(x, format=NA, ...)
   class(x) <- c("quantile", "numeric")
 
   # Make an intelligent default format based on the data
-  if(is.na(format))
-  {
-    format <- if(all(x == floor(x))) 0 else max(2-max(floor(log10(abs(x)))), 0)
-  }
+  if(is.na(format)) format <- format_guess(x)
 
   attr(x, "format") <- format
 
