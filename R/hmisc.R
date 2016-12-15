@@ -119,11 +119,14 @@ summarize_chisq <- function(table, row, column)
       function(table, row_category) {
           numerator <- length(datac[datac == col_category &
                                     datar == row_category &
-                                    !is.na(datac)])
-          add_row(
-            table,
-            tg_fraction(numerator, denominator, row$format),
-            subcol=col_category, subrow=row_category
+                                    !is.na(datac)         &
+                                    !is.na(datar)])
+          if(numerator == 0) add_row(table, "")
+          else
+            add_row(
+              table,
+              tg_fraction(numerator, denominator, row$format),
+              subcol=col_category, subrow=row_category
           )
       }) %>%
     new_col()
