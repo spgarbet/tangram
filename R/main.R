@@ -353,3 +353,143 @@ summary_table <- function(formula, data, transforms=hmisc_style, after=NA)
 
   tbl
 }
+
+extract_data_set_labels <- function(data.set, short.labels)
+{
+  label.data <- NULL
+  if(!is.null(data.set)){
+    if('Labels' %in% names(contents(data.set)$contents)){
+      label.data <- data.frame(variable = names(data.set),
+                               varlabel = as.vector(contents(data.set)$contents$Labels),
+                               stringsAsFactors = FALSE)
+
+      ## Create indicator for whether shortened labels will be used; if so, create new column with
+      ## original labels, replaced with short versions as indicated by names of short.labels
+      use.short <- FALSE
+
+      ## Remove and warn of any elements of short.labels that aren't in names(data.set)
+      if(length(setdiff(names(short.labels), names(data.set))) > 0){
+        message(paste("Note: these elements of short.labels do not appear in names(data.set):",
+                      paste(setdiff(names(short.labels), names(data.set)), collapse = ', ')))
+      }
+
+      short.labels <- short.labels[names(short.labels) %in% names(data.set)]
+      if(length(short.labels) > 0){
+        use.short <- TRUE
+
+        ## All short labels are the same as variable labels by default
+        label.data$shortlabel <- label.data$varlabel
+
+        ## Replace desired variable labels with short versions
+        for(i in 1:length(short.labels)){
+          varnum <- match(names(short.labels)[i], label.data$variable)
+          if(!is.na(varnum)){
+            label.data$shortlabel[varnum] <- short.labels[i]
+          }
+        }
+      }
+    }
+  }
+  # Create a third column for interaction variable use
+  label.data$intlabel <- if(use.short) label.data$shortlabel else label.data$varlabel
+
+  label.data
+}
+
+summary_rms <- function(object.model,
+                        data.set = NULL,
+                        short.labels = NULL,
+                        rm.rows = c('nl.int', 'nl', 'int', 'none'))
+{
+  # Check Arguments
+  if(!('rms' %in% class(model.obj))){
+    stop('model.obj must be of class rms')
+  } else if(!(is.null(data.set) | 'data.frame' %in% class(data.set))){
+    stop('data.set must be of class data.frame')
+  }
+
+  ## -- General setup ----------------------------------------------------------------------------
+  ## Which rows (if any) to remove from final?
+  rm.rows <- match.arg(rm.rows)
+
+  ## These model classes will have ratios presented, not beta coefficients
+  use.ratios <- c('lrm', 'cph')
+
+  ## -- Variable labels --------------------------------------------------------------------------
+  ## If data.set is NULL or has no labels, use variable names
+  label.data <- extract_data_set_labels(data.set, short.labels)
+
+  ## -- summary.rms() results --------------------------------------------------------------------
+  mod.sum <- as.data.frame(summary(model.obj)) ## Often won't print due to duplicate rownames
+
+  ## Get variable name in every row
+  mod.sum$quantity <- rownames(mod.sum)
+  rownames(mod.sum) <- NULL
+
+  ## Create variable column ##
+  ## Models for which summary() produces both coefficients and ratios: Take only ratios, variable
+  ## column = row above ratio row
+  if(sum(!is.na(match(use.ratios, class(model.obj)))) > 0){
+    mod.sum$var <- c(NA, mod.sum$quantity[1:(nrow(mod.sum) - 1)])
+    mod.sum <- subset(mod.sum, Type == 2)
+  } else{
+    mod.sum$var <- mod.sum$quantity
+
+    ## If model is a Poisson model, exponentiate all point estimates, CLs to get IRRs
+    if('Glm' %in% class(model.obj)){
+      if(model.obj$family$family == 'poisson'){
+        mod.sum[,c('Effect', 'Lower 0.95', 'Upper 0.95')] <-
+          exp(mod.sum[,c('Effect', 'Lower 0.95', 'Upper 0.95')])
+      }
+    }
+  }
+
+  ## For categorical covariates, var column currently is of format
+  ##  "variable name - comparison category:reference category"; split out components
+  var.split <- lapply(mod.sum$var, FUN = function(x){ strsplit(x, split = ' - |:')[[1]] })
+  mod.sum$var <- unlist(lapply(var.split, FUN = function(x){ x[1] }))
+
+  ## Create new low/high variables with categories (not factor numbers) or formatted numbers
+  mod.sum$low.char <- unlist(lapply(var.split, FUN = function(x){ x[3] }))
+  mod.sum$low.char <- with(mod.sum, ifelse(is.na(low.char),
+    format(round(Low, rnd.digits), nsmall = rnd.digits),
+    as.character(low.char)))
+  mod.sum$high.char <- unlist(lapply(var.split, FUN = function(x){ x[2] }))
+  mod.sum$high.char <- with(mod.sum, ifelse(is.na(high.char),
+    format(round(High, rnd.digits), nsmall = rnd.digits),
+    as.character(high.char)))
+
+  ## -- anova.rms() results ----------------------------------------------------------------------
+  ## Create data frame of anova() results, add column to indicate variable/quantity
+  mod.anova <- as.data.frame(anova(model.obj))
+  mod.anova$line <- rownames(mod.anova); rownames(mod.anova) <- NULL
+  mod.anova$var <- gsub('^ ', '', gsub(' +\\(.*\\)$| : .*$', '', mod.anova$line))
+
+  ## Remove rows requested in rm.rows
+  if(rm.rows != 'none'){
+    remove.these <- NULL
+    if(rm.rows %in% c('nl', 'nl.int')){
+      remove.these <- c(remove.these, '^ *Nonlinear', '^ *f\\(A,B\\)')
+    }
+    if(rm.rows %in% c('int', 'nl.int')){
+      remove.these <- c(remove.these, '^ *All Interactions', '^ *Nonlinear Interaction')
+    }
+
+    mod.anova <- mod.anova[-unique(unlist(sapply(remove.these, grep, mod.anova[,'var']))),]
+  }
+
+  ## For each row, create unique var value that is as descriptive as possible
+  cur.var <- NULL
+  for(i in 1:nrow(mod.anova)){
+    if((!is.null(data.set) & mod.anova$var[i] %in% names(data.set)) |
+        length(grep('*', mod.anova$var[i], fixed = TRUE)) > 0){
+      cur.var <- mod.anova$var[i]
+    } else{
+      if(length(grep('^TOTAL|ERROR', mod.anova$var[i])) == 0){
+        mod.anova$var[i] <- ifelse(is.null(cur.var),
+          gsub('^All ', '', mod.anova$var[i]),
+          paste(cur.var, gsub('^All ', '', mod.anova$var[i])))
+      }
+    }
+  }
+}
