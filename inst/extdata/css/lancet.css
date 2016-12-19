@@ -1,7 +1,8 @@
 
 body .figbody {
 	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
-  font-size: 75%;
+  font-size: 66%;
+  -webkit-print-color-adjust: exact;
 }
 
 .figure  {  margin-left:  auto;
@@ -49,7 +50,7 @@ body .figbody {
   border-left: 10px solid #f5e0dc;
 }
 
-.figbody tbody .odd {background: #f5e0dc;}
+.figbody tbody .odd {background: #f5e0dc !important;}
 .figbody tbody .even {background: #ffffff;}
 
 .header td {text-align: center;}

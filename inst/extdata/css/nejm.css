@@ -1,6 +1,7 @@
 body .figbody {
 	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
-  font-size: 75%;
+  font-size: 66%;
+  -webkit-print-color-adjust: exact;
 }
 
 .figure  {  margin-left:  auto;
@@ -10,7 +11,7 @@ body .figbody {
            text-indent: 2em;
 	         padding: 0.5em 0 0.5em 0;
 	         font-weight: bold;
-	         background-color: #f7f4ef;
+	         background-color: #f7f4ef !important;
 	         border: 1px solid black;
 	     }
 
@@ -33,7 +34,7 @@ body .figbody {
     font-weight: bold;
 }
 
-.figbody tbody tr:nth-child(odd) {background: #fffbed;}
+.figbody tbody tr:nth-child(odd) {background: #fffbed !important;}
 
 .header td {text-align: center;}
 

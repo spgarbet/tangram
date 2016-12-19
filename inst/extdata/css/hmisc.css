@@ -2,6 +2,8 @@
 .figure  {  font-family: "Computer Modern Serif", serif;
             margin-left:  auto;
 			      margin-right: auto;
+			      font-size: 66%;
+  -webkit-print-color-adjust: exact;
          }
 
 .caption { text-align:   center;
@@ -90,7 +92,7 @@ td .align{
    margin: -9em 0;
    vertical-align: -0.55em;
    line-height: 1.35em;
-   font-size: 70%;
+   font-size: x-small;
    text-align: left;
 }
 
