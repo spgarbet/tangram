@@ -23,7 +23,7 @@ summarize_kruskal_horz <- function(table, row, column)
   })
 
   # Kruskal-Wallis via F-distribution
-  test <- spearman2(datac, datar, na.action=na.retain)
+  test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
   fstat <- cell_fstat(f   = form(test['F'], "%.2f"),
                       n1  = test['df1'],
                       n2  = test['df2'],
@@ -52,7 +52,7 @@ summarize_kruskal_vert <- function(table, row, column)
   categories <- levels(datar)
 
   # Kruskal-Wallis via F-distribution
-  test <- spearman2(datar, datac, na.action=na.retain)
+  test  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
   fstat <- cell_fstat(f   = form(test['F'], "%.2f"),
                       n1  = test['df1'],
                       n2  = test['df2'],
@@ -95,7 +95,7 @@ summarize_chisq_single <- function(table, row, column)
   validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)})) # Negative logic deals with NAs
   validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
   y    <- y[validrow,validcol]
-  test <- chisq.test(y, correct=FALSE)
+  test <- suppressWarnings(chisq.test(y, correct=FALSE))
 
   # Now construct the table by add rows to each column
   table                                                      %>%
@@ -141,7 +141,7 @@ summarize_chisq <- function(table, row, column)
   validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)}))
   validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
   y    <- y[validrow,validcol]
-  test <- chisq.test(y, correct=FALSE)
+  test <- suppressWarnings(chisq.test(y, correct=FALSE))
 
   labels      <- lapply(row_categories, FUN=function(x) paste("  ", x))
 
@@ -182,7 +182,7 @@ summarize_spearman <- function(table, row, column)
   datar <- row$data[,1]
   datac <- column$data[,1]
 
-  test  <- cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE)
+  test  <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
 
   table %>%
   row_header(derive_label(row)) %>%
