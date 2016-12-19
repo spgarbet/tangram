@@ -81,6 +81,16 @@ It is also capable of producing an index of contents inside a table for traceabi
 index(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc))[1:20,]
 ```
 
+### Intercept Model Example
+```{r, results='asis'}
+load('shawn_summaryM.Rdata')
+html5(summary_table(1 ~ rbans.global.score.3 + rbans.global.score.12 +
+                        trail.b.tscore.3 + trail.b.tscore.12,
+                    subset(shawn.oneobs, id %in% ltpts.either),
+                    after=hmisc_intercept_cleanup),
+      fragment=TRUE, inline="lancet.css", caption="", id="tbl5")
+```
+
 ### Types
 
 The Hmisc default style recognizes 3 types: Categorical, Bionimial, and Numerical. Then for each product of these two, a function is provided to generate the corresponding rows and columns. As mentioned before, the user can declare any type in a formula, and one is not limited to the Hmisc defaults. This is completely customizable, which will be covered later.
