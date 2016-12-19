@@ -34,7 +34,7 @@ body .figbody {
   border-right: 10px solid #f5e0dc;
   border-left: 10px solid #f5e0dc;
   border-bottom: 1px solid black;
-  background: #f5e0dc;
+  background: #f5e0dc !important;
 }
 
 
