@@ -25,6 +25,7 @@ Collate:
     'index.R'
     'parser.R'
     'main.R'
+    'rms.R'
     'summary.R'
     'table_builder.R'
 Imports:

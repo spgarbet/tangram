@@ -189,7 +189,7 @@ summarize_spearman <- function(table, row, column)
   col_header("N", derive_label(column), "Test Statistic") %>%
   col_header("", "", "") %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac)))) %>%
-  add_col(round(test$estimate,2)) %>%
+  add_col(test$estimate) %>%
   add_col(test)
 }
 

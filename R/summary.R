@@ -79,7 +79,7 @@ summary.cell_estimate <- function(object,...)
   if(is.na(object$low))
     render_f(object$value)
   else
-    paste(render_f(object$value)," (",render_f(object$low),",",render_f(object$high),")")
+    paste(render_f(object$value)," (",render_f(object$low),", ",render_f(object$high),")", sep='')
 }
 
 summary.cell_fstat <- function(object,...)
