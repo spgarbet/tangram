@@ -102,8 +102,9 @@ tbody .variable {
 .fraction .percentage:before {content: "\00A0(";}
 .fraction .percentage:after {content: "%)";}
 
-.statistics .description {font-style: italic;}
-.statistic {padding-right: 0.5em;}
+.statistics {text-align: center;}
+.statistic {display: none;}
+.pvalue .description {display: none;}
 
 
 td .align{

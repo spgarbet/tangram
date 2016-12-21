@@ -83,7 +83,7 @@ index(summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex +
 
 ### Intercept Model Example
 ```{r, results='asis'}
-load('shawn_summaryM.Rdata')
+load('../sandbox/shawn_summaryM.Rdata')
 html5(summary_table(1 ~ rbans.global.score.3 + rbans.global.score.12 +
                         trail.b.tscore.3 + trail.b.tscore.12,
                     subset(shawn.oneobs, id %in% ltpts.either),
