@@ -2,19 +2,20 @@
 % Please edit documentation in R/main.R
 \name{cell_transform}
 \alias{cell_transform}
-\title{Apply a function to all cells of a table}
+\title{Create a function to transform all cells of a table}
 \usage{
 cell_transform(FUN, ...)
 }
 \arguments{
-\item{table}{the table to modify}
-
-\item{function}{to apply, must return the modified cell}
+\item{FUN}{function to apply, must return the modified cell}
 }
 \value{
-the modified table
+a table modification function
 }
 \description{
-Apply a function to all cells of a table
+Given a function that operates on a table cell and returns
+the modified cell, return a function that given a table
+applies that function to all cells and returns the modified
+table.
 }
 

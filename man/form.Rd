@@ -2,17 +2,17 @@
 % Please edit documentation in R/table_builder.R
 \name{form}
 \alias{form}
-\title{Attach format attribute}
+\title{Attach format attribute to object}
 \usage{
-form(x, value)
+form(object, value)
 }
 \arguments{
-\item{x}{the object to attach format information}
+\item{object}{the object to attach format information}
 
 \item{format}{the formatting to be applied (usually comes from AST node)}
 }
 \value{
-an S3 object with format attr set
+an S3 object with format attribute set
 }
 \description{
 Attach formatting information to an object in the attr "format"

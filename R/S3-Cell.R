@@ -97,6 +97,7 @@ cell_header <- function(text, units=NA, src=NA)
             src=src)
 }
 
+#' @export
 cell_subheader <- function(text, units=NA, src=NA)
 {
   list_cell(c("cell_subheader", "cell_header", "cell_label"),
@@ -105,6 +106,7 @@ cell_subheader <- function(text, units=NA, src=NA)
             src=src)
 }
 
+#' @export
 cell_quantile <- function(quantiles, src=NA)
 {
   format <- attr(quantiles, "format")
@@ -113,16 +115,19 @@ cell_quantile <- function(quantiles, src=NA)
   structure(cell(ql), class=c("cell_quantile", "cell"))
 }
 
+#' @export
 cell_estimate <- function(value, low=NA, high=NA, conf.level=0.95, src=NA)
 {
   list_cell("cell_estimate", value=value, low=low, high=high, src=src)
 }
 
+#' @export
 cell_fstat <- function(f, n1, n2, p, src=NA)
 {
   list_cell(c("cell_fstat","statistics"), f=f, n1=n1, n2=n2, p=p, src=src)
 }
 
+#' @export
 cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
 {
   list_cell("cell_fraction",
@@ -131,21 +136,25 @@ cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
             src=src)
 }
 
+#' @export
 cell_chi2 <- function(chi2, df, p, src=NA)
 {
   list_cell(c("cell_chi2", "statistics"), chi2=chi2, df=df, p=p, src=src)
 }
 
+#' @export
 cell_studentt <- function(t, df, p, src=NA)
 {
   list_cell(c("cell_studentt", "statistics"), t=t, df=df, p=p, src=src)
 }
 
+#' @export
 cell_spearman <- function(S, rho, p, src=NA)
 {
   list_cell(c("cell_spearman", "statistics"), S=S, rho=rho, p=p, src=src)
 }
 
+#' @export
 cell_n <- function(n, src=NA)
 {
   list_cell("cell_n", n=n, src=src)

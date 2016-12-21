@@ -1,6 +1,7 @@
 #' @include S3-Cell.R
 #' @include parser.R
 
+#' @export
 table_flatten <- function(table)
 {
   # Compute final size of table

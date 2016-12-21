@@ -25,11 +25,12 @@ Collate:
     'index.R'
     'parser.R'
     'main.R'
+    'table_builder.R'
     'rms.R'
     'summary.R'
-    'table_builder.R'
 Imports:
     Hmisc,
     dplyr,
     R6,
-    stringr
+    stringr,
+    rms
