@@ -82,13 +82,13 @@ args_flatten <- function(...)
 #' @param ... All the header elements to add
 #' @return the modified table_builder
 #'
-new_header <- function(table_builder, attribute, ...)
+new_header <- function(table_builder, attribute, sub, ...)
 {
   # Grab old header if it exists
   old_hdr   <- attr(table_builder$table, attribute)
 
   # Either a header or subheader
-  hdr_class <- if (is.null(old_hdr)) "cell_header" else c("cell_subheader", "cell_header")
+  hdr_class <- if (is.null(old_hdr) | !sub) "cell_header" else c("cell_subheader", "cell_header")
 
   # Convert every element to an appropriate cell from request
   new_hdr   <- lapply(args_flatten(...), FUN=function(cell) {
@@ -120,10 +120,11 @@ new_header <- function(table_builder, attribute, ...)
 #'
 #' @param table_builder The table builder object to modify
 #' @param ... All the column header elements to add
+#' @param sub treat as subheader if after first header, defaults to TRUE
 #' @return the modified table_builder
 #' @export
 #'
-col_header <- function(table_builder, ...) new_header(table_builder, "col_header", ...)
+col_header <- function(table_builder, ..., sub=TRUE) new_header(table_builder, "col_header", sub, ...)
 
 #' Create a new row header in a table.
 #'
@@ -132,10 +133,11 @@ col_header <- function(table_builder, ...) new_header(table_builder, "col_header
 #'
 #' @param table_builder The table builder object to modify
 #' @param ... All the row header elements to add
+#' @param sub treat as subheader if after first, default to TRUE
 #' @return the modified table_builder
 #' @export
 #'
-row_header <- function(table_builder, ...) new_header(table_builder, "row_header", ...)
+row_header <- function(table_builder, ..., sub=TRUE) new_header(table_builder, "row_header", sub, ...)
 
   #############################################################################
  ##

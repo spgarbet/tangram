@@ -1,0 +1,30 @@
+---
+title: "Model Demo"
+author: "Shawn Garbett"
+date: "December 21, 2016"
+output: html_document
+---
+<style type="text/css">
+
+body, td {
+   font-size: 12px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 10px
+}
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tg)
+```
+
+### Hmisc Style Example
+```{r, results="asis"}
+load("shawn_moreexamples.Rdata")
+
+html5(summary_rms(models.rbans[[1]], data.cog.3),
+      fragment=TRUE, inline="lancet.css", caption = "Demo RMS Model", id="rms1")
+```

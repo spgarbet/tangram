@@ -1,4 +1,5 @@
 #' @import rms
+#' @importFrom Hmisc contents
 #' @include S3-Cell.R
 #' @include table_builder.R
 #' @include main.R
@@ -82,7 +83,8 @@ extract_label_data <- function(object.anova, data.set, short.labels)
 rms_variable <- function(model.sum,
                          model.anova,
                          var,
-                         varname)
+                         varname,
+                         rnd.digits)
 {
   results <- model.anova[var,]
 
@@ -93,11 +95,13 @@ rms_variable <- function(model.sum,
   tbl <- if(var %in% rownames(model.sum))
   {
     tbl                                                                           %>%
-    add_col(cell_estimate(model.sum[var, 'Low'], src=paste(var, ":Low", sep=''))) %>%
-    add_col(cell_estimate(model.sum[var, 'High'],src=paste(var, ":High",sep=''))) %>%
-    add_col(cell_estimate(model.sum[var, 'Effect'],
-      low= model.sum[var,'Lower 0.95'],
-      high=model.sum[var,'Upper 0.95'],
+    add_col(cell_estimate(form(model.sum[var, 'Low'], rnd.digits),
+                          src=paste(var, ":Low", sep='')))                        %>%
+    add_col(cell_estimate(form(model.sum[var, 'High'], rnd.digits),
+                          src=paste(var, ":High",sep='')))                        %>%
+    add_col(cell_estimate(form(model.sum[var, 'Effect'], rnd.digits),
+      low= form(model.sum[var,'Lower 0.95'], rnd.digits),
+      high=form(model.sum[var,'Upper 0.95'], rnd.digits),
       src=paste(var,":Effect")
     ))
   } else {
@@ -112,12 +116,75 @@ rms_variable <- function(model.sum,
                      src = paste(var,":Test",sep='')))
 }
 
+rms_stats <- function(model.anova)
+{
+  anit <- model.anova['TOTAL NONLINEAR + INTERACTION',]
+  ant  <- model.anova['TOTAL NONLINEAR',]
+  om   <- model.anova['TOTAL',]
+
+  tbl <- new_table_builder(NA, NA)                            %>%
+  row_header("All Nonlinear & Interaction Terms")             %>%
+  add_col("", "", "")                                         %>%
+  add_col(cell_fstat(f   = form(anit['F'], "%.2f"),
+                     n1  = anit['d.f.'],
+                     n2  = model.anova['ERROR','d.f.'],
+                     p   = form(anit['P'], "%1.3f"),
+                     src = paste("NonlinearAndInteraction",":Test",sep='')))        %>%
+  new_line()                                                  %>%
+  row_header("All Nonlinear Terms", sub=FALSE)                %>%
+  add_col("", "", "")                                         %>%
+  add_col(cell_fstat(f   = form(ant['F'], "%.2f"),
+                     n1  = ant['d.f.'],
+                     n2  = model.anova['ERROR','d.f.'],
+                     p   = form(ant['P'], "%1.3f"),
+                     src = paste("NonlinearTerms",":Test",sep='')))        %>%
+  new_line()                                                  %>%
+  row_header("Overall Model", sub=FALSE)                      %>%
+  add_col("", "", "")                                         %>%
+  add_col(cell_fstat(f   = form(om['F'], "%.2f"),
+                     n1  = om['d.f.'],
+                     n2  = model.anova['ERROR','d.f.'],
+                     p   = form(om['P'], "%1.3f"),
+                     src = paste("OverallModel",":Test",sep='')))
+}
+
+rms_model_fit <- function(rms.model, rnd.stats)
+{
+  results <- rms.model$stats
+
+  tbl <- new_table_builder(NA, NA)                            %>%
+  row_header("Model Likelihood Ratio")                        %>%
+  add_col("", "")                                             %>%
+  add_col(cell_estimate(form(results['Model L.R.'],rnd.stats),
+                        src=paste('ModelLR', sep='')))        %>%
+  add_col("")                                                 %>%
+  new_line()                                                  %>%
+  row_header("R^2", sub=FALSE)                                %>%
+  add_col("", "")                                             %>%
+  add_col(cell_estimate(form(results['R2'],rnd.stats),
+                        src=paste('R2', sep='')))             %>%
+  add_col("")
+}
+
+#' Combine information from summary.rms(), anova.rms(), and other rms object info to create a
+#' single pretty table of model results.
+#'
+#' @param model.obj Object of class rms
+#' @param data.set Data frame from which to get variable labels. Defaults to NULL, in which case
+#' variable names will be used.
+#' @param short.labels Named vector of variable labels to replace in interaction rows. Must be in
+#' format c("variable name" = "shortened label").
+#' @param footnote A string to add to the table as a footnote.
+#' @param rnd.digits Number of digits to round reference, comparison, result and CI values to.
+#' Defaults to 2.
+#' @param rnd.stats Number of digits to round model LR, R2, etc to. Defaults to rnd.digits.
 #' @export
 summary_rms <- function(rms.model,
                         data.set = NULL,
                         short.labels = NULL,
-                        rm.rows = c('nl.int', 'nl', 'int', 'none'),
-                        footnote = NULL)
+                        footnote = NULL,
+                        rnd.digits = 2,
+                        rnd.stats  = rnd.digits)
 {
   # Check Arguments
   if(!('rms' %in% class(rms.model))){
@@ -162,13 +229,16 @@ summary_rms <- function(rms.model,
 
   #############################
   # Commence building Table
-  master_table <- cell_table(length(vars), 1, FALSE)
+  master_table <- cell_table(length(vars)+2, 1, FALSE)
   for(row in 1:length(vars))
   {
     var <- vars[row]
     label <- create.label(var, label.data, data.set)
-    master_table[[row]][[1]] <- rms_variable(model.sum, model.anova, var, label)$table
+    master_table[[row]][[1]] <- rms_variable(model.sum, model.anova, var, label, rnd.digits)$table
   }
+
+  master_table[[length(vars)+1]][[1]] <- rms_stats(model.anova)$table
+  master_table[[length(vars)+2]][[1]] <- rms_model_fit(rms.model, rnd.stats)$table
 
   flat <- table_flatten(master_table)
 

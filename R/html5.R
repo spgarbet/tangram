@@ -154,17 +154,16 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
     paste("<td ",
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-            "><strong>",
+            ">",
           render_f(object$value),
-          "</strong></td>",
+          "</td>",
           sep="")
   else
     paste("<td ",
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-            "><strong>",
+            ">",
           render_f(object$value),
-          "</strong>",
           " (",render_f(object$low),",",render_f(object$high),")",
           "</td>",
           sep="")
