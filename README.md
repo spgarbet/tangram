@@ -6,7 +6,7 @@ The idea of creating a quick summary of a data set has been around a good while.
 
 This project intends to create a table grammar that is simple to use, while providing ultimate freedom to the end user when generating summary tables from data sets. This project contains the reference implementation in the language R, but is not limited to R.
 
-For an example using Rmarkdown, see [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/example.html)
+For an example using Rmarkdown, see [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
 
 
 ## General Outline
