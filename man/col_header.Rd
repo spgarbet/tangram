@@ -4,12 +4,14 @@
 \alias{col_header}
 \title{Create a new column header in a table}
 \usage{
-col_header(table_builder, ...)
+col_header(table_builder, ..., sub = TRUE)
 }
 \arguments{
 \item{table_builder}{The table builder object to modify}
 
 \item{...}{All the column header elements to add}
+
+\item{sub}{treat as subheader if after first header, defaults to TRUE}
 }
 \value{
 the modified table_builder

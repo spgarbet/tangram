@@ -4,7 +4,7 @@
 \alias{new_header}
 \title{Create a new header on a table}
 \usage{
-new_header(table_builder, attribute, ...)
+new_header(table_builder, attribute, sub, ...)
 }
 \arguments{
 \item{table_builder}{The table builder object to modify}

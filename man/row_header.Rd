@@ -4,12 +4,14 @@
 \alias{row_header}
 \title{Create a new row header in a table.}
 \usage{
-row_header(table_builder, ...)
+row_header(table_builder, ..., sub = TRUE)
 }
 \arguments{
 \item{table_builder}{The table builder object to modify}
 
 \item{...}{All the row header elements to add}
+
+\item{sub}{treat as subheader if after first, default to TRUE}
 }
 \value{
 the modified table_builder
