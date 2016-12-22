@@ -196,6 +196,7 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
 #' @export
 html5.cell_fstat <- function(object, caption, ..., class=NA)
 {
+  ref <- if(is.na(object$reference)) "" else paste("<sup>", object$reference, "</sup>", sep="")
   idx <- index(object, caption)
   paste(
     "<td ",
@@ -207,7 +208,8 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
     render_f(object$f, object$format), ",</span>",
     "<span class=\"pvalue\"><span class=\"description\">P = </span>",
     render_f(object$p, object$format),
-    "<sup>1</sup></span>",
+    ref,
+    "</span>",
     "</td>",
     sep=""
   )
@@ -237,6 +239,7 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
 html5.cell_chi2 <- function(object, caption, ..., class=NA)
 {
   idx <- index(object, caption)
+  ref <- if(is.na(object$reference)) "" else paste("<sup>", object$reference, "</sup>", sep="")
   paste("<td ",
         html5_class(c(class, attr(object, "parity"), "data", "statistics")),
         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
@@ -248,7 +251,8 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
         render_f(object$chi2),
         ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
         render_f(object$p),
-        "<sup>2</sup></span>",
+        ref,
+        "</span>",
         "</td>",
         sep=""
   )

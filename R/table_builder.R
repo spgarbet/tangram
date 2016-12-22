@@ -609,6 +609,7 @@ tg.aov <- function(x, row, column, ...)
              n1  = test$Df[1],
              n2  = test$Df[2],
              p   = form(test$'Pr(>F)'[1], "%1.3f"),
+             reference = "1",
              src = key(row, column, "aov", ...))
 }
 
@@ -628,11 +629,11 @@ tg.htest <- function(x, row, column, ...)
 {
   ss <- key(row, column, "htest", ...)
   if(names(x$statistic) == "X-squared")
-    cell_chi2(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), src=ss)
+    cell_chi2(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), reference="2", src=ss)
   else if(x$method == "Spearman's rank correlation rho")
-    cell_spearman(form(x$statistic, 0), x$parameter, form(x$p.value, "%1.3f"), src=ss)
+    cell_spearman(form(x$statistic, 0), x$parameter, form(x$p.value, "%1.3f"), reference="3", src=ss)
   else
-    cell_studentt(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), src=ss)
+    cell_studentt(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), reference="4", src=ss)
 }
 
 #' Construct a cell from a tg_quantile

@@ -28,6 +28,7 @@ summarize_kruskal_horz <- function(table, row, column)
                       n1  = test['df1'],
                       n2  = test['df2'],
                       p   = form(test['P'], "%1.3f"),
+                      reference = "1",
                       src = key(row, column, "F"))
 
   table                                          %>%
@@ -57,6 +58,7 @@ summarize_kruskal_vert <- function(table, row, column)
                       n1  = test['df1'],
                       n2  = test['df2'],
                       p   = form(test['P'], "%1.3f"),
+                      reference = "1",
                       src = key(row, column, "F"))
 
   table                                                             %>%

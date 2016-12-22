@@ -122,9 +122,9 @@ cell_estimate <- function(value, low=NA, high=NA, conf.level=0.95, src=NA)
 }
 
 #' @export
-cell_fstat <- function(f, n1, n2, p, src=NA)
+cell_fstat <- function(f, n1, n2, p, reference=NA, src=NA)
 {
-  list_cell(c("cell_fstat","statistics"), f=f, n1=n1, n2=n2, p=p, src=src)
+  list_cell(c("cell_fstat","statistics"), f=f, n1=n1, n2=n2, p=p, reference=reference, src=src)
 }
 
 #' @export
@@ -137,21 +137,21 @@ cell_fraction <- function(numerator, denominator, ratio, percentage, src=NA)
 }
 
 #' @export
-cell_chi2 <- function(chi2, df, p, src=NA)
+cell_chi2 <- function(chi2, df, p, reference=NA, src=NA)
 {
-  list_cell(c("cell_chi2", "statistics"), chi2=chi2, df=df, p=p, src=src)
+  list_cell(c("cell_chi2", "statistics"), chi2=chi2, df=df, p=p, reference=reference, src=src)
 }
 
 #' @export
-cell_studentt <- function(t, df, p, src=NA)
+cell_studentt <- function(t, df, p, reference=NA, src=NA)
 {
-  list_cell(c("cell_studentt", "statistics"), t=t, df=df, p=p, src=src)
+  list_cell(c("cell_studentt", "statistics"), t=t, df=df, p=p, reference=reference, src=src)
 }
 
 #' @export
-cell_spearman <- function(S, rho, p, src=NA)
+cell_spearman <- function(S, rho, p, reference=NA, src=NA)
 {
-  list_cell(c("cell_spearman", "statistics"), S=S, rho=rho, p=p, src=src)
+  list_cell(c("cell_spearman", "statistics"), S=S, rho=rho, p=p, reference=reference, src=src)
 }
 
 #' @export
