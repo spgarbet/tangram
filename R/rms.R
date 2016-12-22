@@ -3,6 +3,8 @@
 #' @include S3-Cell.R
 #' @include table_builder.R
 #' @include main.R
+#'
+#' Special thanks to Jennifer Thompson for providing the original code for this
 
 ## Function to determine label value given a string
 create.label <- function(v, label.data, data.set){
