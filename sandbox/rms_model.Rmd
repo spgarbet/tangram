@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tg)
 ```
 
-### Hmisc Style Example
+### RMS Model Example
 ```{r, results="asis"}
 load("shawn_moreexamples.Rdata")
 
