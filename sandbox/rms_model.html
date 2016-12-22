@@ -140,7 +140,9 @@ pre {
 <h3>Hmisc Style Example</h3>
 <pre class="r"><code>load(&quot;shawn_moreexamples.Rdata&quot;)
 
-html5(summary_rms(list(&quot;Model X&quot;=models.rbans[[1]], &quot;Model Y&quot;=models.rbans[[2]]), data.cog.3),
+names(models.rbans) &lt;- c(&quot;Model X&quot;, &quot;Model Y&quot;)
+
+html5(summary_rms(models.rbans, data.cog.3),
       fragment=TRUE, inline=&quot;lancet.css&quot;, caption = &quot;Demo RMS Model&quot;, id=&quot;rms1&quot;)</code></pre>
 <script type="text/javascript">
 var ss = document.createElement("link");

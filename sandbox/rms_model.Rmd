@@ -25,6 +25,8 @@ library(tg)
 ```{r, results="asis"}
 load("shawn_moreexamples.Rdata")
 
-html5(summary_rms(list("Model X"=models.rbans[[1]], "Model Y"=models.rbans[[2]]), data.cog.3),
+names(models.rbans) <- c("Model X", "Model Y")
+
+html5(summary_rms(models.rbans, data.cog.3),
       fragment=TRUE, inline="lancet.css", caption = "Demo RMS Model", id="rms1")
 ```
