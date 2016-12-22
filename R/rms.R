@@ -84,6 +84,7 @@ extract_label_data <- function(object.anova, data.set, short.labels)
 
 rms_variable <- function(model.sum,
                          model.anova,
+                         model.name,
                          var,
                          varname,
                          rnd.digits,
@@ -93,8 +94,13 @@ rms_variable <- function(model.sum,
 
   tbl <- new_table_builder(NA, NA)
 
-  tbl <- if(lowhigh) col_header(tbl, "Low", "High", "Est CI", "Test Statistic") else
-                     col_header(tbl, "Est CI", "Test Statistic")
+  tbl <- if(lowhigh) {
+           col_header(tbl, "", "", model.name, "") %>%
+           col_header(     "Low", "High", "Est CI", "Test Statistic")
+         } else {
+           col_header(tbl, model.name, "") %>%
+           col_header(    "Est CI", "Test Statistic")
+         }
 
   tbl <- row_header(tbl, varname)
 
@@ -267,6 +273,7 @@ summary_rms <- function(rms.model,
     {
       master_table[[row]][[col]] <- rms_variable(
         model.sum[[col]], model.anova[[col]],
+        names(rms.model)[[col]],
         var, label, rnd.digits,
         col==1
       )$table
