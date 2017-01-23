@@ -27,6 +27,7 @@ Collate:
     'index.R'
     'parser.R'
     'main.R'
+    'rmd.R'
     'table_builder.R'
     'rms.R'
     'summary.R'

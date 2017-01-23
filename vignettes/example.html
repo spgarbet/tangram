@@ -157,6 +157,126 @@ sex : female                       418   0.903  139/154    0.867  137/158    0.9
 Age                                418  41.4 *48.1* 55.8  43.0 *51.9* 58.9  46.0 *53.0* 61.0  F_{2,415}=6.10, P=0.002 
 spiders : present                  312   0.292   45/154    0.285   45/158                         X^2_1=0.02, P=0.885 
 ===================================================================================================================== </code></pre>
+<p>Or the same directly into an Rmarkdown pipe_table:</p>
+<pre class="r"><code>rmd(summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc))</code></pre>
+<table style="width:92%;">
+<colgroup>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="22%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right"></th>
+<th align="right">N</th>
+<th align="right">D-penicillamine</th>
+<th align="right">placebo</th>
+<th align="right">not randomized</th>
+<th align="right">Test Statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">(N=154)</td>
+<td align="right">(N=158)</td>
+<td align="right">(N=106)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="right">Serum Bilirubin (mg/dl)</td>
+<td align="right">418</td>
+<td align="right">0.72 <strong>1.30</strong> 3.60</td>
+<td align="right">0.80 <strong>1.40</strong> 3.20</td>
+<td align="right">0.72 <strong>1.40</strong> 3.08</td>
+<td align="right">F<sub>2,415</sub>=0.03, P=0.972</td>
+</tr>
+<tr class="odd">
+<td align="right">Albumin (gm/dl)</td>
+<td align="right">418</td>
+<td align="right">3.34 <strong>3.54</strong> 3.78</td>
+<td align="right">3.21 <strong>3.56</strong> 3.83</td>
+<td align="right">3.12 <strong>3.47</strong> 3.72</td>
+<td align="right">F<sub>2,415</sub>=2.13, P=0.120</td>
+</tr>
+<tr class="even">
+<td align="right">Histologic Stage, Ludwig Criteria</td>
+<td align="right">412</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">χ<sup>2</sup><sub>6</sub>=5.33, P=0.502</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right"></td>
+<td align="right">0.026 4/154</td>
+<td align="right">0.076 12/158</td>
+<td align="right">0.047 5/106</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right"></td>
+<td align="right">0.208 32/154</td>
+<td align="right">0.222 35/158</td>
+<td align="right">0.236 25/106</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right"></td>
+<td align="right">0.416 64/154</td>
+<td align="right">0.354 56/158</td>
+<td align="right">0.330 35/106</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right"></td>
+<td align="right">0.351 54/154</td>
+<td align="right">0.348 55/158</td>
+<td align="right">0.330 35/106</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="right">Prothrombin Time (sec.)</td>
+<td align="right">416</td>
+<td align="right">10.0 <strong>10.6</strong> 11.4</td>
+<td align="right">10.0 <strong>10.6</strong> 11.0</td>
+<td align="right">10.1 <strong>10.6</strong> 11.0</td>
+<td align="right">F<sub>2,413</sub>=0.23, P=0.795</td>
+</tr>
+<tr class="even">
+<td align="right">sex : female</td>
+<td align="right">418</td>
+<td align="right">0.903 139/154</td>
+<td align="right">0.867 137/158</td>
+<td align="right">0.925 98/106</td>
+<td align="right">χ<sup>2</sup><sub>2</sub>=2.38, P=0.304</td>
+</tr>
+<tr class="odd">
+<td align="right">Age</td>
+<td align="right">418</td>
+<td align="right">41.4 <strong>48.1</strong> 55.8</td>
+<td align="right">43.0 <strong>51.9</strong> 58.9</td>
+<td align="right">46.0 <strong>53.0</strong> 61.0</td>
+<td align="right">F<sub>2,415</sub>=6.10, P=0.002</td>
+</tr>
+<tr class="even">
+<td align="right">spiders : present</td>
+<td align="right">312</td>
+<td align="right">0.292 45/154</td>
+<td align="right">0.285 45/158</td>
+<td align="right"></td>
+<td align="right">χ<sup>2</sup><sub>1</sub>=0.02, P=0.885</td>
+</tr>
+</tbody>
+</table>
 <p>Notice that stage in the formula wasn’t stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.</p>
 <p>It also supports HTML5, with styling fragments</p>
 <div id="hmisc-style-example" class="section level3">
@@ -481,7 +601,7 @@ document.getElementsByTagName("head")[0].appendChild(ss);
   border-right: 10px solid #f5e0dc;
   border-left: 10px solid #f5e0dc;
   border-bottom: 1px solid black;
-  background: #f5e0dc;
+  background: #f5e0dc !important;
 }
 
 
@@ -549,9 +669,8 @@ document.getElementsByTagName("head")[0].appendChild(ss);
 #tbl4 .fraction .percentage:before {content: "\00A0(";}
 #tbl4 .fraction .percentage:after {content: "%)";}
 
-#tbl4 .statistics {text-align: center;}
-#tbl4 .statistic {display: none;}
-#tbl4 .pvalue .description {display: none;}
+#tbl4 .statistics .description {font-style: italic;}
+#tbl4 .statistic {padding-right: 0.5em;}
 
 
 #tbl4 td .align{
@@ -624,7 +743,7 @@ document.getElementsByTagName("head")[0].appendChild(ss);
 </div>
 <div id="intercept-model-example" class="section level3">
 <h3>Intercept Model Example</h3>
-<pre class="r"><code>load('shawn_summaryM.Rdata')
+<pre class="r"><code>load('../sandbox/shawn_summaryM.Rdata')
 html5(summary_table(1 ~ rbans.global.score.3 + rbans.global.score.12 +
                         trail.b.tscore.3 + trail.b.tscore.12,
                     subset(shawn.oneobs, id %in% ltpts.either),
@@ -680,7 +799,7 @@ document.getElementsByTagName("head")[0].appendChild(ss);
   border-right: 10px solid #f5e0dc;
   border-left: 10px solid #f5e0dc;
   border-bottom: 1px solid black;
-  background: #f5e0dc;
+  background: #f5e0dc !important;
 }
 
 
@@ -748,9 +867,8 @@ document.getElementsByTagName("head")[0].appendChild(ss);
 #tbl5 .fraction .percentage:before {content: "\00A0(";}
 #tbl5 .fraction .percentage:after {content: "%)";}
 
-#tbl5 .statistics {text-align: center;}
-#tbl5 .statistic {display: none;}
-#tbl5 .pvalue .description {display: none;}
+#tbl5 .statistics .description {font-style: italic;}
+#tbl5 .statistic {padding-right: 0.5em;}
 
 
 #tbl5 td .align{
@@ -839,9 +957,9 @@ summarize_count &lt;- function(table, row, column)
 summary_table(event ~ id[&quot;%1.0f&quot;], df, summarize_count)</code></pre>
 <pre><code>=========================================================== 
      N      A        B        C         Test Statistic      
-         (N=245)  (N=244)  (N=248)                          
+         (N=248)  (N=243)  (N=245)                          
 ----------------------------------------------------------- 
-ID  250  3 *4* 5  3 *4* 5  3 *4* 5  F_{2,734}=0.08, P=0.923 
+ID  250  3 *4* 5  3 *4* 5  3 *4* 5  F_{2,733}=0.12, P=0.888 
 =========================================================== </code></pre>
 </div>
 

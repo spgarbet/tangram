@@ -22,7 +22,7 @@ Defaults to 2.}
 
 \item{rnd.stats}{Number of digits to round model LR, R2, etc to. Defaults to rnd.digits.}
 
-\item{model.obj}{Object of class rms}
+\item{model.obj}{Object of class rms, or list of named objects}
 }
 \description{
 Combine information from summary.rms(), anova.rms(), and other rms object info to create a
