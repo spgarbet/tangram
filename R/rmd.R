@@ -48,7 +48,8 @@ rmd.cell_fraction <- function(object,...)
 
 rmd.cell_chi2 <- function(object,...)
 {
-  paste("&chi;<sup>2</sup><sub>",object$df,"</sub>=",render_f(object$chi2),", P=",render_f(object$p),sep="")
+  paste("&chi;<span class=\"supsub\" style=\"display:inline-block;margin:-9em 0;vertical-align: -0.55em;line-height: 1.35em;font-size: x-small;text-align: left;\">2<br/>",
+        object$df,"</span>=",render_f(object$chi2),", P=",render_f(object$p),sep="")
 }
 
 rmd.cell_studentt <- function(object,...)
@@ -90,10 +91,10 @@ rmd.cell_table <- function(object,...)
   sapply(1:ncols, FUN=function(col) {
     if(is.na(text[1,col]))
     {
-      text[1,col] <<- "     "
-    } else if(nchar(text[1,col]) < 5)
+      text[1,col] <<- "          "
+    } else if(nchar(text[1,col]) < 10)
     {
-      text[1,col] <<- str_pad(text[1,col], width=5, side="right");
+      text[1,col] <<- str_pad(text[1,col], width=10, side="both");
     }
   })
 
