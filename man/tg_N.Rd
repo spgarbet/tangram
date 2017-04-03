@@ -18,4 +18,3 @@ Create a vector of N values that are convertable to a cell
 \examples{
 tg_N(1, 2, 3)
 }
-

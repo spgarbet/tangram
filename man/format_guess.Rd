@@ -19,4 +19,3 @@ than zero
 \examples{
 format_guess(rnorm(100))
 }
-

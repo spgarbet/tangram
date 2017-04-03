@@ -18,6 +18,7 @@ The root ASTNode of a formula.
 
 \item{\code{right}}{The AST tree for the rows.}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -28,9 +29,9 @@ The root ASTNode of a formula.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the entire AST.}
 }
 }
+
 \examples{
 ASTTableFormula$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 
 }
 \keyword{data}
-

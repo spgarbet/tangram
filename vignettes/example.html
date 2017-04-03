@@ -159,14 +159,14 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 ===================================================================================================================== </code></pre>
 <p>Or the same directly into an Rmarkdown pipe_table:</p>
 <pre class="r"><code>rmd(summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc))</code></pre>
-<table style="width:92%;">
+<table>
 <colgroup>
-<col width="8%"></col>
-<col width="8%"></col>
-<col width="22%"></col>
-<col width="11%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
 <col width="20%"></col>
-<col width="20%"></col>
+<col width="13%"></col>
+<col width="18%"></col>
+<col width="18%"></col>
 </colgroup>
 <thead>
 <tr class="header">
@@ -209,7 +209,7 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 <td align="right"></td>
 <td align="right"></td>
 <td align="right"></td>
-<td align="right">χ<sup>2</sup><sub>6</sub>=5.33, P=0.502</td>
+<td align="right">χ<span class="supsub" style="display:inline-block;margin:-9em 0;vertical-align: -0.55em;line-height: 1.35em;font-size: x-small;text-align: left;">2<br />6</span>=5.33, P=0.502</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -257,7 +257,7 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 <td align="right">0.903 139/154</td>
 <td align="right">0.867 137/158</td>
 <td align="right">0.925 98/106</td>
-<td align="right">χ<sup>2</sup><sub>2</sub>=2.38, P=0.304</td>
+<td align="right">χ<span class="supsub" style="display:inline-block;margin:-9em 0;vertical-align: -0.55em;line-height: 1.35em;font-size: x-small;text-align: left;">2<br />2</span>=2.38, P=0.304</td>
 </tr>
 <tr class="odd">
 <td align="right">Age</td>
@@ -273,7 +273,7 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 <td align="right">0.292 45/154</td>
 <td align="right">0.285 45/158</td>
 <td align="right"></td>
-<td align="right">χ<sup>2</sup><sub>1</sub>=0.02, P=0.885</td>
+<td align="right">χ<span class="supsub" style="display:inline-block;margin:-9em 0;vertical-align: -0.55em;line-height: 1.35em;font-size: x-small;text-align: left;">2<br />1</span>=0.02, P=0.885</td>
 </tr>
 </tbody>
 </table>
@@ -957,9 +957,9 @@ summarize_count &lt;- function(table, row, column)
 summary_table(event ~ id[&quot;%1.0f&quot;], df, summarize_count)</code></pre>
 <pre><code>=========================================================== 
      N      A        B        C         Test Statistic      
-         (N=248)  (N=243)  (N=245)                          
+         (N=246)  (N=247)  (N=247)                          
 ----------------------------------------------------------- 
-ID  250  3 *4* 5  3 *4* 5  3 *4* 5  F_{2,733}=0.12, P=0.888 
+ID  250  3 *4* 5  3 *4* 5  2 *4* 5  F_{2,737}=0.01, P=0.994 
 =========================================================== </code></pre>
 </div>
 

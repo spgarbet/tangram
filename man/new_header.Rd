@@ -20,4 +20,3 @@ the modified table_builder
 Function to append a header object to a given attribute. Will create
 a new header if one doesn't exit, or append to existing
 }
-

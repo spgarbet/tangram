@@ -19,4 +19,3 @@ Cleanup an intercept only table that was generated from the hmisc default
 transform. This drops the statistics column, and modifies the header
 to eliminate blank space.
 }
-

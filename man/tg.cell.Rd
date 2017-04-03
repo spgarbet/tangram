@@ -25,4 +25,3 @@ I.e., if a user has constructed a cell and passed it in do nothing.
 \examples{
 tg(tg("Joe"), list(value="A"), list(value="B"))
 }
-

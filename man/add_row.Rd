@@ -27,4 +27,3 @@ x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\%
 add_row(tg_N(1:3))
 }
-

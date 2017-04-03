@@ -23,4 +23,3 @@ x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% cursor_left(2)
 
 }
-

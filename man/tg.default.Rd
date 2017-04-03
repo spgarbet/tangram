@@ -24,4 +24,3 @@ Construct a cell. This is the default fallback, it creates a label cell
 \examples{
 tg("Joe", list(value="A"), list(value="B"))
 }
-

@@ -24,4 +24,3 @@ Construct a cell from a hypothesis test
 \examples{
 tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
 }
-

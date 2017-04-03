@@ -21,4 +21,3 @@ x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% new_col()
 
 }
-

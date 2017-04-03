@@ -18,6 +18,7 @@ A specified function call as an ASTNode
 
 \item{\code{r_expr}}{A string containing the raw r expression from inside the parenthesis}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -29,9 +30,9 @@ A specified function call as an ASTNode
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
+
 \examples{
 ASTFunction$new("log", "x+2")$string()
 
 }
 \keyword{data}
-

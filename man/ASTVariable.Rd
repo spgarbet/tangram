@@ -22,6 +22,7 @@ in R. This class inherits from \code{\link{ASTNode}}.
 
 \item{\code{type}}{A string that represents the type specifier for that variable}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -32,9 +33,9 @@ in R. This class inherits from \code{\link{ASTNode}}.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
+
 \examples{
 ASTVariable$new("x", "2", "Continuous")$string()
 
 }
 \keyword{data}
-

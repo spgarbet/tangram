@@ -26,4 +26,3 @@ to internal cell type for later rendering decisions.
 \examples{
 tg(NA, list(value="A"), list(value="B"))
 }
-

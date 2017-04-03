@@ -20,6 +20,7 @@ The parser class for generating abstract syntax trees for given table formulas.
 
 \item{\code{len}}{The length of the input}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -44,9 +45,9 @@ The parser class for generating abstract syntax trees for given table formulas.
      Aho, A. V., Lam, M. S., Sethi, R., and Ullman, J. D. (2006) \emph{Compilers: Principles, Techniques, and Tools}, 2nd edition. Addison Wesley.
 }
 }
+
 \examples{
 Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")
 
 }
 \keyword{data}
-

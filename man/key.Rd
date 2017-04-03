@@ -20,4 +20,3 @@ key(row, col, label = NA, subrow = NA, subcol = NA)
 \description{
 Key derivation helper function
 }
-

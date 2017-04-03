@@ -22,4 +22,3 @@ Create a fraction that is convertible to a cell
 \examples{
 tg_fraction(1, 2, 3)
 }
-

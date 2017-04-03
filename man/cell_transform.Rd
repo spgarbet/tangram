@@ -18,4 +18,3 @@ the modified cell, return a function that given a table
 applies that function to all cells and returns the modified
 table.
 }
-

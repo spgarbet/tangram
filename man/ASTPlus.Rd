@@ -18,6 +18,7 @@ The addition of two terms, in an ASTNode.
 
 \item{\code{right}}{The AST tree to the right.}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -28,9 +29,9 @@ The addition of two terms, in an ASTNode.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
+
 \examples{
 ASTPlus$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 
 }
 \keyword{data}
-

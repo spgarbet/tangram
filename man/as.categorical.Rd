@@ -20,4 +20,3 @@ Convert data type to a factor if it's not already
 as.categorical(1:3)
 
 }
-

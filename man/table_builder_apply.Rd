@@ -31,4 +31,3 @@ table_builder_apply(1:3, FUN=function(tb, x) {
 })
 
 }
-

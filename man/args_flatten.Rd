@@ -16,4 +16,3 @@ a list of the arguments, with vectors and lists flattened
 Take variable arguments, flatten vectors and lists, but do not flatten cells (which are lists)
 e.g. args_flatten(NA, list(1,2,3), 4:6, c(7,8,9))
 }
-

@@ -16,4 +16,3 @@ A string with a label for the node
 Determine the label of a given AST node.
 NOTE: Should have data attached via reduce before calling.
 }
-

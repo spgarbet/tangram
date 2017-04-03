@@ -15,4 +15,3 @@ the modified table
 \description{
 Delete from a table all columns that contain statistics
 }
-

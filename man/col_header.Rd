@@ -20,4 +20,3 @@ the modified table_builder
 Function to append a column header to a table being built. The first call creates
 a column header, subsequent calls add sub headers to existing column header
 }
-

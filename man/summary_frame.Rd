@@ -15,4 +15,3 @@ table
 \description{
 Transform a data frame directly into a table
 }
-

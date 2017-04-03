@@ -22,4 +22,3 @@ Create a quantile that is convertible to a cell
 \examples{
 tg_quantile(rnorm(100), "\%.2f")
 }
-

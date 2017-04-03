@@ -20,4 +20,3 @@ Attach formatting information to an object in the attr "format"
 \examples{
 format(2, "\%.2f")
 }
-

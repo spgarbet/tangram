@@ -24,4 +24,3 @@ Construct a cell from an N value.
 \examples{
 tg(tg_N("Joe"), list(value="A"), list(value="B"))
 }
-

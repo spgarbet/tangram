@@ -25,4 +25,3 @@ is.binomial(factor(c("A","B","B","A")))
 is.binomial(factor(c(TRUE, FALSE, TRUE, FALSE)))
 is.binomial(c('M', 'F', 'M', 'F'), 10)
 }
-

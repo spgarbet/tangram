@@ -15,4 +15,3 @@ The returned list should contain the same list of types, and represents the type
 a function to process the intersection of those two types.
 }
 \keyword{data}
-

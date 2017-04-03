@@ -20,6 +20,7 @@ as the class information carries the semantic meaning of a given node.
 
 \item{\code{value}}{A string of addtional information contained by the node.}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -29,5 +30,5 @@ as the class information carries the semantic meaning of a given node.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
-\keyword{data}
 
+\keyword{data}

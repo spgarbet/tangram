@@ -25,4 +25,3 @@ x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% write_cell(tg_N(23))
 
 }
-

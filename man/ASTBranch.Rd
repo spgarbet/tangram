@@ -22,6 +22,7 @@ as once again the semantic information is contained in the class name.
 
 \item{\code{right}}{A pointer to the right node below this one}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -31,5 +32,5 @@ as once again the semantic information is contained in the class name.
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }
-\keyword{data}
 
+\keyword{data}

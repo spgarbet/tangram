@@ -17,4 +17,3 @@ the modified table
 \description{
 Given a table, remove the specified column
 }
-

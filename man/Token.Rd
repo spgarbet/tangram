@@ -18,11 +18,12 @@ A token in the formula grammar
 
 \item{\code{name}}{Information about the token, useful with IDENTIFIERs.}
 }}
+
 \section{Methods}{
 
 \describe{
   \item{\code{new(id, name="")}}{Create a new token in the grammar.}
 }
 }
-\keyword{data}
 
+\keyword{data}

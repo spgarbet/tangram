@@ -24,4 +24,3 @@ Construct a cell from a tg_fraction
 \examples{
 tg(tg_fraction(1, 2, 3), list(value="A"), list(value="B"))
 }
-

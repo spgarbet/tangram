@@ -24,4 +24,3 @@ Construct a cell from an analysis of variance model
 \examples{
 tg(aov(rnorm(10) ~ rnorm(10)), list(value="A"), list(value="B"))
 }
-

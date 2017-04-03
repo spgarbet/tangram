@@ -28,4 +28,3 @@ Defaults to 2.}
 Combine information from summary.rms(), anova.rms(), and other rms object info to create a
 single pretty table of model results.
 }
-
