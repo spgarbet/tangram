@@ -344,7 +344,7 @@ summary_table <- function(formula, data, transforms=hmisc_style, after=NA)
   tbl <- cell_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
                            transforms)
 
-  if(suppressWarnings(is.na(after))) {return(tbl)}
+  if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
   # Post function processing
   if(class(after) == "list") sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
