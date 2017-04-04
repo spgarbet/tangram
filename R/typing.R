@@ -19,6 +19,7 @@ is.categorical <- function(x, threshold=NA)
 {
   is.factor(x)    ||
   is.character(x) ||
+  is.logical(x)   ||
   (!is.na(threshold) && length(unique(x[! is.na(x)])) < threshold)
 }
 
