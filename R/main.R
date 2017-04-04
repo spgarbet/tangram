@@ -205,9 +205,7 @@ del_col <- function(table, col)
 {
   sapply(1:length(table), function(row) {
     cols <- length(table[[row]])
-    if(col < cols)
-      for(i in (col+1):cols)
-        sapply((col+1):cols, function(i) table[[row]][[i-1]] <<- table[[row]][[i]])
+    if(col < cols) sapply((col+1):cols, function(i) table[[row]][[i-1]] <<- table[[row]][[i]])
     table[[row]][[cols]] <<- NULL
   })
   table
@@ -238,15 +236,14 @@ del_row <- function(table, row)
 #' @export
 drop_statistics <- function(table)
 {
-    columns <- sapply(1:length(table[[1]]), function(col) {
+    columns <- (1:length(table[[1]]))[sapply(1:length(table[[1]]), function(col) {
                  any(sapply(1:length(table), function(row) {
                    "statistics" %in% class(table[[row]][[col]])
                  }))
-               })
+               })]
 
-    sapply((length(table[[1]]):1)[rev(columns)], function(col) {
-      table <<- del_col(table, col)
-    })
+    # Deleting columns changes the number of columns, so do in reverse order
+    sapply(rev(columns), function(col) {table <<- del_col(table, col)})
 
     table
 }
