@@ -16,7 +16,7 @@
 #' @include S3-Cell.R
 derive_label <- function(node)
 {
-  l <- node$string()
+  l <- node$name()
   try({
         l2 <- label(node$data, units=FALSE)
         if(nchar(l2)>0) {l<-l2}

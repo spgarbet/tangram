@@ -56,6 +56,7 @@ ASTNode <- R6Class("ASTNode",
 #'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
+#'   \item{\code{name()}}{Return a human representation of a node}
 #'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 #' }
 ASTVariable <- R6Class("ASTVariable",
@@ -72,6 +73,7 @@ ASTVariable <- R6Class("ASTVariable",
       self$data   <- NA
     },
     factors  = function()     { return(c(self))    },
+    name     = function()     { self$value         },
     string   = function()
     {
       fmt <- ""
@@ -174,10 +176,8 @@ ASTFunction <- R6Class("ASTFunction",
       self$r_expr <- r_expr
     },
     factors    = function()     { return(c(self))    },
-    string = function()
-    {
-      paste(self$value, "(", self$r_expr, ")", sep="")
-    },
+    name       = function()     { paste(self$value, "(", self$r_expr, ")", sep="") },
+    string     = function()     { paste(self$value, "(", self$r_expr, ")", sep="") },
     reduce = function(data)
     {
       expr <- paste(self$value,"(",self$r_expr,")", sep='')
