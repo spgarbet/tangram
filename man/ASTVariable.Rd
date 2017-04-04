@@ -30,6 +30,7 @@ in R. This class inherits from \code{\link{ASTNode}}.
   \item{\code{terms()}}{Returns the node}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
+  \item{\code{name()}}{Return a human representation of a node}
   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
 }
 }

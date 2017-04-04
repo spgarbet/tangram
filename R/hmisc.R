@@ -103,7 +103,7 @@ summarize_chisq_single <- function(table, row, column)
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
   col_header("", subN, "")                                   %>%
-  row_header(paste(derive_label(row),":", row_category))     %>%
+  row_header(paste(row$name(),":", row_category))            %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
