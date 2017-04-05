@@ -123,11 +123,11 @@ Internally, a table consists of cells. A cell may be renderable, or it might be 
 
 This choice forces a consistency requirement upon any author of compiler packages for tables. The number of rows and columns that analysis generates must be consistent across types. For example, for the default Hmisc descriptive compiler, the following table shows how many cells (rows X columns) are generated when analysis is done between a row type and a column type:
 
-                         | Binomial        | Categorical (M values)   |  Numerical      
------------------------- | :-------------: | :----------------------: | :--------------:
-Binomial                 |       1 X 3     |          1 X (M + 2)     |       1 X 3
-Categorical (N values)   |   (N+1) X 3     |      (N+1) X (M + 2)     |   (N+1) X 3
-Numerical                |       1 X 3     |          1 X (M + 2)     |       1 X 3
+|                        | Binomial      | Categorical (M values) |  Numerical     |
+|------------------------|:-------------:|:----------------------:|:--------------:|
+| Binomial               |       1 X 3   |          1 X (M + 2)   |       1 X 3    |
+| Categorical (N values) |   (N+1) X 3   |      (N+1) X (M + 2)   |   (N+1) X 3    |
+| Numerical              |       1 X 3   |          1 X (M + 2)   |       1 X 3    |
 
 Note that the first term is consistent across each row, and the second term is consistent across each column. This insures that upon flattening that the number of rows and columns remain consistent.
 
