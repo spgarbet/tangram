@@ -544,15 +544,6 @@ Parser <- R6Class("Parser",
       }
 
       # Only valid thing left is a variable, check for additional specifiers on variable
-      format <- NA
-      if(pk == "LBRACKET")
-      {
-        self$expect("LBRACKET")
-        format <- self$format()
-        self$expect("RBRACKET")
-        pk <- self$peek()
-      }
-
       type_override <- NA
       if(pk == "COLON")
       {
@@ -565,6 +556,16 @@ Parser <- R6Class("Parser",
         }
 
         type_override <- nt2$name
+        pk <- self$peek() # Refresh peek ahead
+      }
+
+      format <- NA
+      if(pk == "LBRACKET")
+      {
+        self$expect("LBRACKET")
+        format <- self$format()
+        self$expect("RBRACKET")
+        pk <- self$peek()
       }
       return(ASTVariable$new(nt$name, format, type_override))
 

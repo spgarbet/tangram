@@ -143,8 +143,8 @@ Note that the first term is consistent across each row, and the second term is c
                                 <function-name> "(" <r-expression> ")"
     <function-name>        ::= <identifier>
     <variable>             ::= <identifier>
-                                ( "["  ( <integer>  | '"' <format> '"' "]" )
                                 ( "::" <identifier> )
+                                ( "["  ( <integer>  | '"' <format> '"' "]" )
     <identifier>           ::= 1 | ( [A-Za-z\_] | .[A-Za-z\_] ) [A-Za-z0-9\_.]+
      
      
