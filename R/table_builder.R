@@ -670,13 +670,16 @@ tg.quantile <- function(x, row, column, ...)
 #' tg(tg_fraction(1, 2, 3), list(value="A"), list(value="B"))
 tg.fraction <- function(x, row, column, ...)
 {
-  f <- attr(x, "format")
-  if(is.na(f)) f<-3
+  format <- attr(x, "format")
+  # Make an intelligent default format based on the data
+  if(is.na(format)) format <- 3
+  pformat <- if(is.numeric(format)) max(format-2,0) else format
+
   list_cell("cell_fraction",
             numerator=x[1],
             denominator=x[2],
-            ratio=form(x[3],f),
-            percentage=form(x[4],max(f-2,0)),
+            ratio=form(x[3],format),
+            percentage=form(x[4],pformat),
             src=key(row    = row,
                     col    = column,
                     label  = "fraction",
