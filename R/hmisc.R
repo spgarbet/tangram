@@ -99,11 +99,19 @@ summarize_chisq_single <- function(table, row, column)
   y    <- y[validrow,validcol]
   test <- suppressWarnings(chisq.test(y, correct=FALSE))
 
+  # More complex name derivation
+  name <- row$name()
+  try({
+        l2 <- label(row$data, units=FALSE)
+        if(nchar(l2)>0) {name<-l2}
+  })
+  lbl <- paste(name,":", row_category)
+
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
   col_header("", subN, "")                                   %>%
-  row_header(paste(row$name(),":", row_category))            %>%
+  row_header(lbl)                                            %>%
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])

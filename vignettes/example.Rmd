@@ -107,7 +107,23 @@ Let's cover the phases of table generations.
 2. Semantics. The elements of the AST are examined, and passed to compilation functions. The compilation function function is chosen by determining the type of the row variable, and the type of column variable. For example, `drug ~ stage::Categorical`, is a Categorical$\times$Categorical which references the `summarize_chisq` for compiling. One can easily specify different compilers for a formula and get very different results inside a formula. Note: the application of multiplication `*` cannot be done in the previous phase, because this involves semantic meaning of what multiplication means. In one context it might be an interaction, in another simple multiplication. Handling multiplicative terms can be tricky. Once compiling is finished a table object composed of cells (list of lists) which are one of a variety of S3 types is the result.
 3. Rendering. With a compiled table object in memory, the final stage is conversion to an output format which could be plain text, HTML5, LaTeX or anything. These are overrideable via S3 classes representing the different possible types of cells that are present inside a table. User specified rendering is possible as well. 
 
+## Summary columns
 
+A simple example of using an intercept in a formula, with some post processing to remove undesired columns.
+
+```{r, results='asis'}
+d1 <- iris
+d1$A <- d1$Sepal.Length > 5.1
+label(d1$A) <- "Sepal Length > 5.1"
+tbl1 <- summary_table(
+  Species + 1 ~ A + Sepal.Width, 
+  data = d1,
+  after = list(drop_statistics, function(tbl) del_col(tbl, 6))
+  )
+
+html5(tbl1,
+      fragment=TRUE, inline="nejm.css", caption = "Example All Summary", id="tbl1")
+```
 
 ## Extensibility
 
