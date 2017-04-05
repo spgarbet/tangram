@@ -73,7 +73,7 @@ ASTVariable <- R6Class("ASTVariable",
       self$data   <- NA
     },
     factors  = function()     { return(c(self))    },
-    name     = function()     { self$value         },
+    name     = function()     { if(self$value=="1") "All" else self$value },
     string   = function()
     {
       fmt <- ""
@@ -86,8 +86,7 @@ ASTVariable <- R6Class("ASTVariable",
     {
       if(self$value == "1")
       {
-        self$data  <- data.frame(factor(rep(1, length(d[,1])),labels=""))
-        self$value <- ""
+        self$data  <- data.frame(factor(rep(1, length(d[,1])),labels="All"))
 
         return(self)
       }
