@@ -771,7 +771,8 @@ format_guess <- function(x)
   if(all(d == floor(d)))       # Is it all whole numbers, then no decimals
     return(0)
   else
-    return(max(2-max(floor(log10(abs(d)))), 0)) # Otherwise that 3 significant digits of the maximum magnitude
+    # Otherwise use 3 significant digits of a representative smaller side quantile
+    return(max(2-max(floor(log10(quantile(abs(d), c(0.05, 0.5))))), 0))
 }
 
 #' Attach format attribute to object
