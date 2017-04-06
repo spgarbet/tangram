@@ -1,6 +1,6 @@
 Package: tg
 Title: The Grammar of Tables
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person("Shawn", "Garbett", email = "shawn.garbett@vanderbilt.edu", role = c("aut", "cre")),
              person("Jennifer", "Thompson", email = "	jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
              )
@@ -12,12 +12,12 @@ Description: Provides an extensible formula system to quickly and easily create
     a separate step that can be override by a user as well, the package contains
     rendering for HTML5, LaTeX, Rmarkdown and an index format.
 Depends:
-    R (>= 3.2.3)
+    R (>= 3.2.3), dplyr, R6, stringr, base64enc, digest
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Suggests:
-    testthat
+    testthat, rms
 RoxygenNote: 6.0.1
 Collate: 
     'S3-Cell.R'
@@ -42,8 +42,6 @@ Collate:
     'rms.R'
     'summary.R'
 Imports:
-    Hmisc,
     dplyr,
     R6,
-    stringr,
-    rms
+    stringr

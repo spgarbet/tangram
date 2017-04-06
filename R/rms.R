@@ -1,4 +1,3 @@
-#' @import rms
 #' @include S3-Cell.R
 #' @include table_builder.R
 #' @include main.R
@@ -190,7 +189,7 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
 }
 
 #' Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-#' single pretty table of model results.
+#' single pretty table of model results.  \pkg{\link{rms}} package required.
 #'
 #' @param model.obj Object of class rms, or list of named objects
 #' @param data.set Data frame from which to get variable labels. Defaults to NULL, in which case
@@ -226,7 +225,7 @@ summary_rms <- function(rms.model,
   # Compute Model summaries for variables
   model.sum <- lapply(1:length(rms.model), function(i) {
     m <- rms.model[[i]]
-    x <- summary(m)
+    x <- rms::summary.rms(m)
 
     ## Models for which summary() produces both coefficients and ratios: Take only ratios, variable
     ## column = row above ratio row
