@@ -7,7 +7,6 @@
 #' @docType class
 #' @importFrom stringr str_match
 #' @importFrom R6 R6Class
-#' @importFrom dplyr one_of
 #' @keywords data
 #'
 #' @field symbol A string which tells what this node in the AST represents.
@@ -38,7 +37,6 @@ ASTNode <- R6Class("ASTNode",
 #'
 #' @docType class
 #' @importFrom R6 R6Class
-#' @importFrom dplyr select
 #' @keywords data
 #' @export
 #' @format \code{\link{R6Class}} object.
@@ -90,7 +88,9 @@ ASTVariable <- R6Class("ASTVariable",
 
         return(self)
       }
-      self$data <- d %>% select(one_of(c(self$value)))
+      self$data <- data.frame(x=d[,self$value])
+      colnames(self$data) <- self$value
+
       self
     }
   )

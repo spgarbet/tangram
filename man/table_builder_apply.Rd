@@ -23,7 +23,7 @@ Run a continuation function over a list of items.
 Similar to a foldl in ML
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\%
 table_builder_apply(1:3, FUN=function(tb, x) {

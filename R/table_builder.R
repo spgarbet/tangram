@@ -176,7 +176,7 @@ new_table_builder <- function(row, column)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% write_cell(tg_N(23))
 #'
@@ -199,7 +199,7 @@ write_cell <- function(table_builder, x, ...)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% home()
 #'
@@ -220,7 +220,7 @@ home <- function(table_builder)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_up(2)
 #'
@@ -241,7 +241,7 @@ cursor_up <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_down(2)
 #'
@@ -262,7 +262,7 @@ cursor_down <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_left(2)
 #'
@@ -283,7 +283,7 @@ cursor_left <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_right(2)
 #'
@@ -305,7 +305,7 @@ cursor_right <- function(table_builder, n=1)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3)
 #'
@@ -326,7 +326,7 @@ cursor_pos <- function(table_builder, nrow, ncol)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% carriage_return()
 #'
@@ -345,7 +345,7 @@ carriage_return <- function(table_builder)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% line_feed()
 #'
@@ -360,7 +360,7 @@ line_feed <- cursor_down
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% new_line()
 #'
@@ -381,7 +381,7 @@ new_line <- function(table_builder)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% new_row()
 #'
@@ -401,7 +401,7 @@ new_row <- function(table_builder)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>% new_col()
 #'
@@ -425,7 +425,7 @@ new_col <- function(table_builder)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' table_builder_apply(1:3, FUN=function(tb, x) {
@@ -452,7 +452,7 @@ table_builder_apply <- function(table_builder, X, FUN, ...)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_col(tg_N(1:3))
@@ -478,7 +478,7 @@ add_col <- function(table_builder, ..., subrow=NA, subcol=NA)
 #' @export
 #'
 #' @examples
-#' library(dplyr)
+#' library(magrittr)
 #' x <- Parser$new()$run(y ~ x)
 #' new_table_builder(x$right, x$left) %>%
 #' add_row(tg_N(1:3))

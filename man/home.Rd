@@ -16,7 +16,7 @@ a table builder with the cursor at home
 Return table builder cursor position to (1,1)
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% home()
 

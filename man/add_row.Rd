@@ -22,7 +22,7 @@ a table builder with the cursor at the row past the last addition
 Add all elements specified and advance to the next row after each addition
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\%
 add_row(tg_N(1:3))

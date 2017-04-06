@@ -18,7 +18,7 @@ a table builder with the cursor down n positions
 Move table builder cursor down specified value (default 1)
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% cursor_down(2)
 

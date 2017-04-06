@@ -16,7 +16,7 @@ a table builder with the cursor at the first column on a new line
 Return table_builder to 1st column, and advance to next line
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% new_line()
 

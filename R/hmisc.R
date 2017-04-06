@@ -1,5 +1,4 @@
-#' @importFrom dplyr last
-#' @importFrom dplyr "%>%"
+#' @importFrom magrittr "%>%"
 #' @include S3-Cell.R
 #' @include typing.R
 #' @include hmisc-label.R
@@ -82,7 +81,7 @@ summarize_chisq_single <- function(table, row, column)
   datar          <- as.categorical(row$data[,1])
   datac          <- as.categorical(column$data[,1])
 
-  row_category   <- last(levels(datar))
+  row_category   <- levels(datar)[2]
   col_categories <- levels(datac)
 
   # Compute N values for each category

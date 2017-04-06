@@ -16,7 +16,7 @@ a table builder with the cursor at the first column
 Move table builder cursor to the first column, does not advance row
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% cursor_pos(3,3) \%>\% carriage_return()
 

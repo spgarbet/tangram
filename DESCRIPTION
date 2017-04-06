@@ -12,7 +12,7 @@ Description: Provides an extensible formula system to quickly and easily create
     a separate step that can be override by a user as well, the package contains
     rendering for HTML5, LaTeX, Rmarkdown and an index format.
 Depends:
-    R (>= 3.2.3), dplyr, R6, stringr, base64enc, digest
+    R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -42,6 +42,8 @@ Collate:
     'rms.R'
     'summary.R'
 Imports:
-    dplyr,
+    magrittr,
     R6,
-    stringr
+    stringr,
+    base64enc,
+    digest

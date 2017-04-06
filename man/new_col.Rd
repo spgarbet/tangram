@@ -16,7 +16,7 @@ a table builder with the cursor at the first column
 Advance table builder cursor to the furthest right column on the top row and open a new column
 }
 \examples{
-library(dplyr)
+library(magrittr)
 x <- Parser$new()$run(y ~ x)
 new_table_builder(x$right, x$left) \%>\% new_col()
 
