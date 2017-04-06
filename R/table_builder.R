@@ -15,13 +15,25 @@
 derive_label <- function(node)
 {
   l <- node$name()
+  units <- NA
   try({
         l2 <- attr(node$data, "label")
-        if(!is.null(l2)) {l<-l2}
+        if(!is.null(l2))
+        {
+          # Since a label was found, see if it has units
+          u2 <- str_match(l2, "(.*)\\((.*)\\)")
+          if(is.na(u2[1,1]))
+          {
+            l <- l2
+          } else {
+            cat("FOUND UNITS", u2[1,3], "\n")
+            l     <- u2[1,2]
+            units <- u2[1,3]
+          }
+        }
   })
 
   # Find units if they exist
-  units <- NA
   try({
     u2 <- attr(node$data, "units")
 

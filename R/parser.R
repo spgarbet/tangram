@@ -71,7 +71,16 @@ ASTVariable <- R6Class("ASTVariable",
       self$data   <- NA
     },
     factors  = function()     { return(c(self))    },
-    name     = function()     { if(self$value=="1") "All" else self$value },
+    name     = function()
+    {
+      if(self$value=="1") "All" else {
+        x <- NULL
+        try({
+          x <- attr(self$data[,1], "label")
+        })
+        if(is.null(x)) self$value else x
+      }
+    },
     string   = function()
     {
       fmt <- ""

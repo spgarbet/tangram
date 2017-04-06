@@ -59,11 +59,9 @@ as.categorical <- function(x)
 {
   if(!inherits(x, "factor"))
   {
-    lbl  <- attr(x, "label")
-    units <- attr(x, "units")
+    stuff  <- attributes(x)
     x <- factor(x, levels=sort(unique(x[!is.na(x)])))
-    attr(x, "label") <- lbl
-    attr(x, "units") <- units
+    attributes(x) <- stuff
   }
   x
 }
