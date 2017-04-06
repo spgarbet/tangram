@@ -10,10 +10,10 @@
 #' @param node Abstract syntax tree node.
 #'
 #' @return A string with a label for the node
-#' @export
-#' @importFrom Hmisc label
-#' @importFrom Hmisc "label<-"
 #' @include S3-Cell.R
+#' @include hmisc-label.R
+#' @include hmisc-html.R
+#' @export
 derive_label <- function(node)
 {
   l <- node$name()

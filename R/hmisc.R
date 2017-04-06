@@ -1,12 +1,10 @@
-#' @importFrom Hmisc units
-#' @importFrom Hmisc label
-#' @importFrom Hmisc spearman2
-#' @importFrom Hmisc "label<-"
 #' @importFrom dplyr last
 #' @importFrom dplyr "%>%"
 #' @include S3-Cell.R
 #' @include typing.R
-
+#' @include hmisc-label.R
+#' @include hmisc-unit.R
+#' @include hmisc-biVar.R
 # 1 X (n + no. categories + test statistic)
 #' @export
 summarize_kruskal_horz <- function(table, row, column)

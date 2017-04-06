@@ -1,8 +1,8 @@
 #' @import rms
-#' @importFrom Hmisc contents
 #' @include S3-Cell.R
 #' @include table_builder.R
 #' @include main.R
+#' @include hmisc-describe.R
 #'
 #' Special thanks to Jennifer Thompson for providing the original code for this
 
