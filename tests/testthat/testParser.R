@@ -69,7 +69,7 @@ test_that("functions with nested parenthesis and r-expression characters are par
 
 test_that("type specifier information is extracted correctly.",
 {
-  ast <- Parser$new()$run("a+b[23]+c::Binomial ~ d[\"%03.2g\"] * f[4]::Categorical")
+  ast <- Parser$new()$run("a+b[23]+c::Binomial ~ d[\"%03.2g\"] * f::Categorical[4]")
 
   expect_true(inherits(ast, "ASTTableFormula"))
 
