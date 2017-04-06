@@ -11,22 +11,21 @@
 #'
 #' @return A string with a label for the node
 #' @include S3-Cell.R
-#' @include hmisc-label.R
-#' @include hmisc-html.R
 #' @export
 derive_label <- function(node)
 {
   l <- node$name()
   try({
-        l2 <- label(node$data, units=FALSE)
-        if(nchar(l2)>0) {l<-l2}
+        l2 <- attr(node$data, "label")
+        if(!is.null(l2)) {l<-l2}
   })
 
   # Find units if they exist
   units <- NA
   try({
-    u2 <- units(node$data)
-    if(nchar(u2)>0) {units<-u2}
+    u2 <- attr(node$data, "units")
+
+    if(!is.null(u2)) {units<-u2}
   })
 
   cell_label(l, units)

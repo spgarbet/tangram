@@ -21,11 +21,8 @@ pre {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 data(pbc)
-
 library(Hmisc)
-library(stringr)
-library(R6)
-library(dplyr)
+library(magrittr)
 devtools::load_all()
 data(pbc)
 ```

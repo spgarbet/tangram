@@ -1,7 +1,6 @@
 #' @include S3-Cell.R
 #' @include table_builder.R
 #' @include main.R
-#' @include hmisc-describe.R
 #'
 #' Special thanks to Jennifer Thompson for providing the original code for this
 
@@ -189,7 +188,7 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
 }
 
 #' Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-#' single pretty table of model results.  \pkg{\link{rms}} package required.
+#' single pretty table of model results. \pkg{\link{rms}} and \pkg{\link{Hmisc}} packages required.
 #'
 #' @param model.obj Object of class rms, or list of named objects
 #' @param data.set Data frame from which to get variable labels. Defaults to NULL, in which case

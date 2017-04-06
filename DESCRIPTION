@@ -1,6 +1,6 @@
 Package: tg
 Title: The Grammar of Tables
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(person("Shawn", "Garbett", email = "shawn.garbett@vanderbilt.edu", role = c("aut", "cre")),
              person("Jennifer", "Thompson", email = "	jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
              )
@@ -24,13 +24,7 @@ Collate:
     'hmisc-lm.fit.qr.bare.R'
     'hmisc-impute.R'
     'hmisc-biVar.R'
-    'hmisc-consolidate.R'
     'hmisc-in.operator.R'
-    'hmisc-html.R'
-    'hmisc-describe.R'
-    'hmisc-valueTags.R'
-    'hmisc-label.R'
-    'hmisc-unit.R'
     'typing.R'
     'hmisc.R'
     'html5.R'

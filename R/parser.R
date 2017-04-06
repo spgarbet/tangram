@@ -88,9 +88,8 @@ ASTVariable <- R6Class("ASTVariable",
 
         return(self)
       }
-      self$data <- data.frame(x=d[,self$value])
+      self$data <- data.frame(x=d[self$value])
       colnames(self$data) <- self$value
-
       self
     }
   )
@@ -185,17 +184,19 @@ ASTFunction <- R6Class("ASTFunction",
 
       name <- expr
       try({
-        l2 <- label(x)
-        if(nchar(l2)>0)
+        l2 <- attr(x, "label")
+        if(!is.null(l2))
         {
           name <- paste(self$value,"(",l2,")",sep='')
         }
       })
 
       var <- ASTVariable$new(name)
-      var$data <- data.frame(x)
+      stuff <- attributes(x)
+      var$data <- data.frame(x=as.vector(x))
       colnames(var$data) <- c(name)
-      label(var$data[,1]) <- name
+      attributes(x) <- stuff
+      attr(var$data[,1], "label") <- name
 
       var
     }

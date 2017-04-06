@@ -3,7 +3,7 @@
 \name{summary_rms}
 \alias{summary_rms}
 \title{Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-single pretty table of model results.  \pkg{\link{rms}} package required.}
+single pretty table of model results. \pkg{\link{rms}} and \pkg{\link{Hmisc}} packages required.}
 \usage{
 summary_rms(rms.model, data.set = NULL, short.labels = NULL,
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits)
@@ -26,5 +26,5 @@ Defaults to 2.}
 }
 \description{
 Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-single pretty table of model results.  \pkg{\link{rms}} package required.
+single pretty table of model results. \pkg{\link{rms}} and \pkg{\link{Hmisc}} packages required.
 }

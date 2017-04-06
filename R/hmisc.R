@@ -1,8 +1,6 @@
 #' @importFrom magrittr "%>%"
 #' @include S3-Cell.R
 #' @include typing.R
-#' @include hmisc-label.R
-#' @include hmisc-unit.R
 #' @include hmisc-biVar.R
 # 1 X (n + no. categories + test statistic)
 #' @export
@@ -99,8 +97,8 @@ summarize_chisq_single <- function(table, row, column)
   # More complex name derivation
   name <- row$name()
   try({
-        l2 <- label(row$data, units=FALSE)
-        if(nchar(l2)>0) {name<-l2}
+        l2 <- attr(row$data, "label")
+        if(!is.null(l2)) {name<-l2}
   })
   lbl <- paste(name,":", row_category)
 
