@@ -136,7 +136,7 @@ html5.cell_label <- function(object, caption, ..., class=NA)
             sep="")
   else
       paste("<td ",
-            html5_class(c(class, attr(object, "parity"), "label")),
+            html5_class(c(class, attr(object, "parity"), "tg-label")),
             ">",
             "<span class=\"variable\">",
             label,
