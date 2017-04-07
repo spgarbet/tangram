@@ -39,3 +39,13 @@ test_that("A Numerical versus a Numerical generates a table",
 
   expect_true(inherits(test_table, "cell_table"))
 })
+
+test_that("Intercept handling works",
+{
+  d1 <- iris
+  d1$A <- d1$Sepal.Length > 5.1
+  attr(d1$A,"label") <- "Sepal Length > 5.1"
+  tbl1 <- summary_table(Species + 1 ~ A + Sepal.Width,data = d1)
+
+  expect_true(inherits(tbl1, "cell_table"))
+})
