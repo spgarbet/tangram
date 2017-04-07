@@ -8,7 +8,7 @@ biVar <- function(formula, statinfo, data=NULL, subset=NULL,
                list(formula, data=data, subset=subset, na.action=na.action))
   nam <- names(x); yname <- nam[1]
   y <- x[[1]]
-  ylabel <- label(y)
+  ylabel <- attr(y, "label")
   x <- x[-1]
   xlabel <- sapply(x, label)
   m <- ncol(x)

@@ -119,7 +119,7 @@ test_that("reduction via data works",
   df <- data.frame(x=rnorm(20), y=1:20)
   reducto <- Parser$new()$run("y ~ x")$reduce(df)
 
-  expect_equal(reducto$left$data$y,  df[,"y"])
-  expect_equal(reducto$right$data$x, df[,"x"])
+  expect_equal(reducto$left$data,  df[,"y"])
+  expect_equal(reducto$right$data, df[,"x"])
 })
 

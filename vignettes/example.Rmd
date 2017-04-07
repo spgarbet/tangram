@@ -21,10 +21,8 @@ pre {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 data(pbc)
-library(Hmisc)
-library(magrittr)
+library(tg)
 devtools::load_all()
-data(pbc)
 ```
 
 ## A Grammar of Tables
@@ -34,7 +32,7 @@ This package is meant to implement the concept of a grammar of tables. It allows
 Here's an example similary to summaryM from Hmisc to get us started:
 
 ```{r pbc, comment=""}
-summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
+summary_table(drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders, pbc)
 ```
 
 Or the same directly into an Rmarkdown pipe_table:
@@ -111,15 +109,15 @@ A simple example of using an intercept in a formula, with some post processing t
 ```{r, results='asis'}
 d1 <- iris
 d1$A <- d1$Sepal.Length > 5.1
-label(d1$A) <- "Sepal Length > 5.1"
+attr(d1$A,"label") <- "Sepal Length > 5.1"
 tbl1 <- summary_table(
-  Species + 1 ~ A + Sepal.Width, 
-  data = d1,
-  after = list(drop_statistics, function(tbl) del_col(tbl, 6))
-  )
+ Species + 1 ~ A + Sepal.Width,
+ data = d1,
+ after = list(drop_statistics, function(tbl) del_col(tbl, 6))
+ )
 
 html5(tbl1,
-      fragment=TRUE, inline="nejm.css", caption = "Example All Summary", id="tbl1")
+     fragment=TRUE, inline="nejm.css", caption = "Example All Summary", id="tbl1")
 ```
 
 ## Extensibility
@@ -133,14 +131,14 @@ This example shows how to create a function that given a row and column, to cons
 ### Make up some data, which has events nested within an id
 n  <- 1000
 df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
-label(df$id) <- "ID"
+attr(df$id, "label") <- "ID"
 
 ### Now create custom function for counting events with a category
 summarize_count <- function(table, row, column)
 {
   ### Getting Data for row column ast nodes, assuming no factors
-  datar <- row$data[,1]
-  datac <- column$data[,1]
+  datar <- row$data
+  datac <- column$data
 
   ### Grabbing categories
   col_categories <- levels(datac)
@@ -150,7 +148,7 @@ summarize_count <- function(table, row, column)
     # Worst interface complexity example. Work in progress to simplify
     tg(tg_N(length(unique(x))), row, column, subcol=cat_name)
   })
-  
+
   # Test a poisson model
   test <- aov(glm(x ~ treatment,
                   aggregate(datar, by=list(id=datar, treatment=datac), FUN=length),
@@ -169,7 +167,7 @@ summarize_count <- function(table, row, column)
       # Compute each data set
       x  <- datar[datac == cat_name]
       xx <- aggregate(x, by=list(x), FUN=length)$x
-        
+
       # Add a column that is a quantile
       add_col(tbl, tg_quantile(xx, row$format, na.rm=TRUE))
   })                                                 %>%

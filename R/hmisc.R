@@ -6,8 +6,8 @@
 #' @export
 summarize_kruskal_horz <- function(table, row, column)
 {
-  datar      <- row$data[,1]
-  datac      <- as.categorical(column$data[,1])
+  datar      <- row$data
+  datac      <- as.categorical(column$data)
   categories <- levels(datac)
 
   format <- ifelse(is.na(row$format), format_guess(datar), row$format)
@@ -43,8 +43,8 @@ summarize_kruskal_horz <- function(table, row, column)
 #' @export
 summarize_kruskal_vert <- function(table, row, column)
 {
-  datar      <- as.categorical(row$data[,1])
-  datac      <- column$data[,1]
+  datar      <- as.categorical(row$data)
+  datac      <- column$data
   categories <- levels(datar)
 
   # Kruskal-Wallis via F-distribution
@@ -76,8 +76,8 @@ summarize_kruskal_vert <- function(table, row, column)
 #' @export
 summarize_chisq_single <- function(table, row, column)
 {
-  datar          <- as.categorical(row$data[,1])
-  datac          <- as.categorical(column$data[,1])
+  datar          <- as.categorical(row$data)
+  datac          <- as.categorical(column$data)
 
   row_category   <- levels(datar)[2]
   col_categories <- levels(datac)
@@ -128,8 +128,8 @@ summarize_chisq_single <- function(table, row, column)
 #' @export
 summarize_chisq <- function(table, row, column)
 {
-  datar          <- as.categorical(row$data[,1])
-  datac          <- as.categorical(column$data[,1])
+  datar          <- as.categorical(row$data)
+  datac          <- as.categorical(column$data)
 
   if(length(levels(datar))==2) return(summarize_chisq_single(table, row, column))
 
@@ -184,8 +184,8 @@ summarize_chisq <- function(table, row, column)
 #' @export
 summarize_spearman <- function(table, row, column)
 {
-  datar <- row$data[,1]
-  datac <- column$data[,1]
+  datar <- row$data
+  datac <- column$data
 
   test  <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
 
@@ -220,7 +220,7 @@ apply_factors <- function(row, column)
 #'
 hmisc_data_type <- function(x, category_threshold=NA)
 {
-  if(inherits(x,"data.frame")) x <- x[,1] # FIXME: Need to deal with factors
+  #if(inherits(x,"data.frame")) x <- x[,1] # FIXME: Need to deal with factors
   if(is.categorical(x,category_threshold))  "Categorical" else
   if(is.numeric(x))                         "Numerical"   else
   stop(paste("Unsupported class/type - ",class(x), typeof(x)))

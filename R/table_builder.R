@@ -26,7 +26,6 @@ derive_label <- function(node)
           {
             l <- l2
           } else {
-            cat("FOUND UNITS", u2[1,3], "\n")
             l     <- u2[1,2]
             units <- u2[1,3]
           }

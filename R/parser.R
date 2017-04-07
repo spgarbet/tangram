@@ -62,13 +62,13 @@ ASTVariable <- R6Class("ASTVariable",
   public  = list(
     format = "character",
     type   = "character",
-    data   = "data.frame",
+    data   = NULL,
     initialize = function(identifier, format=NA, type=NA)
     {
       self$value  <- identifier
       self$format <- format
       self$type   <- type
-      self$data   <- NA
+      self$data   <- NULL
     },
     factors  = function()     { return(c(self))    },
     name     = function()
@@ -76,7 +76,7 @@ ASTVariable <- R6Class("ASTVariable",
       if(self$value=="1") "All" else {
         x <- NULL
         try({
-          x <- attr(self$data[,1], "label")
+          x <- attr(self$data, "label")
         })
         if(is.null(x)) self$value else x
       }
@@ -93,12 +93,11 @@ ASTVariable <- R6Class("ASTVariable",
     {
       if(self$value == "1")
       {
-        self$data  <- data.frame(factor(rep(1, length(d[,1])),labels="All"))
-
+        self$data  <- factor(rep(1, length(d[,1])))
+        attr(self$data, "label") <- "All"
         return(self)
       }
-      self$data <- data.frame(x=d[self$value])
-      colnames(self$data) <- self$value
+      self$data <- d[,self$value]
       self
     }
   )
@@ -177,6 +176,7 @@ ASTFunction <- R6Class("ASTFunction",
   inherit = ASTNode,
   public   = list(
     r_expr = "character",
+    data   = NULL,
     initialize = function(value, r_expr)
     {
       self$value  <- value
@@ -201,12 +201,7 @@ ASTFunction <- R6Class("ASTFunction",
       })
 
       var <- ASTVariable$new(name)
-      stuff <- attributes(x)
-      var$data <- data.frame(x=as.vector(x))
-      colnames(var$data) <- c(name)
-      attributes(x) <- stuff
-      attr(var$data[,1], "label") <- name
-
+      var$data <- x
       var
     }
   )
