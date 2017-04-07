@@ -61,7 +61,8 @@ as.categorical <- function(x)
   {
     stuff  <- attributes(x)
     x <- factor(x, levels=sort(unique(x[!is.na(x)])))
-    attributes(x) <- stuff
+    attr(x, "label") <- stuff[["label"]]
+    attr(x, "units") <- stuff[["units"]]
   }
   x
 }
