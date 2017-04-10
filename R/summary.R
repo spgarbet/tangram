@@ -22,8 +22,14 @@ summary.cell_quantile <- function(object,...)
         sep="")
 }
 
+#' Create a text summary of a given table
+#'
+#' @param object The cell table to render to text
+#'
+#' @return A text string rendering of the given table
 #' @export
 #' @importFrom stringr str_pad
+#'
 summary.cell_table <- function(object,...)
 {
   nrows <- rows(object)
@@ -71,7 +77,14 @@ summary.cell_table <- function(object,...)
 
 }
 
+#' Print a text summary of a given table
+#'
+#' @param object The cell table to render to text
+#'
+#' @return A text string rendering of the given table
 #' @export
+#' @importFrom stringr str_pad
+#'
 print.cell_table <- function(x,...) {summary(x,...)}
 
 summary.cell_estimate <- function(object,...)
