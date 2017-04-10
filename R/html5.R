@@ -9,7 +9,24 @@ clipboard_js <- function()
   paste("<script type=\"text/javascript\">", content, "</script>", sep='')
 }
 
+#' Return a CSS file as a string
+#'
+#' Given a filename, this function will load the file name from the current working directory.
+#' If it is not found from the current working directory it will search in the package for a
+#' a matching filename and load that instead. If an id is specified, that will be prepended
+#' to all CSS selectors (TODO: make this substitution more robust). The result is returned
+#' as a string.
+#'
+#' @param filename Name of the CSS file to load
+#' @param id       CSS id to prepend to all entries
+#'
+#' @return String of possibly modified CSS file
 #' @export
+#'
+#' @examples
+#'
+#' custom_css("lancet.css", "tbl1")
+#'
 custom_css <- function(filename, id=NA)
 {
   content <- suppressWarnings(tryCatch(readChar(filename, file.info(filename)$size), error=function(e) NA))

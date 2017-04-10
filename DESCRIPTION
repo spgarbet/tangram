@@ -1,6 +1,6 @@
 Package: tg
 Title: The Grammar of Tables
-Version: 0.2.3
+Version: 0.2.4
 Authors@R: c(person("Shawn", "Garbett", email = "shawn.garbett@vanderbilt.edu", role = c("aut", "cre")),
              person("Jennifer", "Thompson", email = "	jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
              )

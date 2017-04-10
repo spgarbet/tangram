@@ -1,0 +1,80 @@
+---
+title: "Single Style Multiple Tables"
+author: "Shawn Garbett"
+date: "April 10, 2017"
+output: html_document
+---
+
+<style type="text/css">
+body, td {
+   font-size: 12px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 10px
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tg)
+data(pbc)
+```
+
+<style type="text/css">
+```{r style, results='asis'}
+cat(custom_css("lancet.css"))
+```
+
+.figbody thead
+{
+  background: #99ffff !important;
+}
+.figbody tbody .odd
+{
+  background: #99ffff !important;
+}
+</style>
+
+## Purpose
+
+When presenting tables in an HTML Rmarkdown report, it is more common to have all tables styled in the same manner. This is an example of all tables having the same style, with a few overridden styles.
+
+This package is meant to implement the concept of a grammar of tables. It allows for a simple formula expression and a data frame to create a rich summary table in a variety of formats. It is designed for extensibility at each step of the process, so that one is not limited by the authors choice of table statistics, output format. The grammar however is an integral part of the package, and as such is not modifiable.
+
+Supposed that further in addition to the lancet style one really wanted a shade of cyan to make the document pop. This was added to the header of this document to make all this magic happen:
+
+     <style type="text/css">
+     \```{r, results='asis'}
+     cat(custom_css("lancet.css"))
+     ```
+     .figbody thead
+     {
+       background: #aaffff !important;
+     }
+     .figbody tbody .odd
+     {
+       background: #aaffff !important;
+     }
+     </style>
+
+Here's an example similary to summaryM from Hmisc to get us started:
+
+### Table 1
+```{r, results="asis"}
+html5(summary_table(drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders, pbc),
+      fragment=TRUE, caption = "Hmisc::PBC", id="tbl2")
+```
+
+###  Table 2
+```{r, results='asis'}
+load('../sandbox/shawn_summaryM.Rdata')
+html5(summary_table(1 ~ rbans.global.score.3 + rbans.global.score.12 +
+                        trail.b.tscore.3 + trail.b.tscore.12,
+                    subset(shawn.oneobs, id %in% ltpts.either),
+                    after=hmisc_intercept_cleanup),
+      fragment=TRUE, caption="Intercept", id="tbl5")
+```
+
