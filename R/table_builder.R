@@ -745,6 +745,7 @@ tg_fraction <- function(numerator, denominator, format=3)
 #' @param ... all arguments that are passed to the quantile {stats} function
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
+#' @importFrom stats quantile
 #' @examples
 #' tg_quantile(rnorm(100), "%.2f")
 tg_quantile <- function(x, format=NA, ...)

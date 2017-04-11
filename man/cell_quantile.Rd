@@ -2,7 +2,7 @@
 % Please edit documentation in R/S3-Cell.R
 \name{cell_quantile}
 \alias{cell_quantile}
-\title{Create an cell_quantile (S3) object of the given quantile}
+\title{Create a cell_quantile (S3) object of the given quantile}
 \usage{
 cell_quantile(quantiles, src = NA)
 }
@@ -19,5 +19,6 @@ A cell_quantile object contains the raw quantiles expected
 for later rendering.
 }
 \examples{
-cell_quantile(quantile(rnorm(100), "Example")
+require(stats)
+cell_quantile(quantile(rnorm(100)), 'Example')
 }

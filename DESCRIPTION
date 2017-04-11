@@ -1,6 +1,6 @@
 Package: tg
 Title: The Grammar of Tables
-Version: 0.2.5
+Version: 0.2.6
 Authors@R: c(person("Shawn", "Garbett", email = "shawn.garbett@vanderbilt.edu", role = c("aut", "cre")),
              person("Jennifer", "Thompson", email = "	jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
              )
@@ -11,6 +11,10 @@ Description: Provides an extensible formula system to quickly and easily create
     Medicine and Hmisc behaviors are provided. Further rendering into a format is
     a separate step that can be override by a user as well, the package contains
     rendering for HTML5, LaTeX, Rmarkdown and an index format.
+Author: Shawn Garbett [aut, cre],
+  Thomas Stewart [ctb],
+  Jennifer Thompson [ctb]
+Maintainer: Shawn Garbett <Shawn.Garbett@Vanderbilt.edu>
 Depends:
     R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr
 License: GPL-2
@@ -35,9 +39,4 @@ Collate:
     'table_builder.R'
     'rms.R'
     'summary.R'
-Imports:
-    magrittr,
-    R6,
-    stringr,
-    base64enc,
-    digest
+

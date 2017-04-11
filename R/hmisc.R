@@ -2,6 +2,11 @@
 #' @include S3-Cell.R
 #' @include typing.R
 #' @include hmisc-biVar.R
+#' @importFrom stats chisq.test
+#' @importFrom stats cor
+#' @importFrom stats cor.test
+#' @importFrom stats na.omit
+#'
 # 1 X (n + no. categories + test statistic)
 #' @export
 summarize_kruskal_horz <- function(table, row, column)

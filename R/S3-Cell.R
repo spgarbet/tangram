@@ -155,7 +155,7 @@ cell_subheader <- function(text, units=NA, src=NA)
             src=src)
 }
 
-#' Create an cell_quantile (S3) object of the given quantile
+#' Create a cell_quantile (S3) object of the given quantile
 #'
 #' A cell_quantile object contains the raw quantiles expected
 #' for later rendering.
@@ -166,7 +166,8 @@ cell_subheader <- function(text, units=NA, src=NA)
 #' @return A cell_quantile object.
 #' @export
 #' @examples
-#' cell_quantile(quantile(rnorm(100), "Example")
+#' require(stats)
+#' cell_quantile(quantile(rnorm(100)), 'Example')
 cell_quantile <- function(quantiles, src=NA)
 {
   format <- attr(quantiles, "format")

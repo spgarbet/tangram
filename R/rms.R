@@ -2,8 +2,9 @@
 #' @include table_builder.R
 #' @include main.R
 #'
-#' Special thanks to Jennifer Thompson for providing the original code for this
-
+#' @importFrom stats anova
+#'
+## Special thanks to Jennifer Thompson for providing the original code for this
 ## Function to determine label value given a string
 create.label <- function(v, label.data, data.set){
   ## For rows involving interactions, replace variable names with labels (if using) and keep

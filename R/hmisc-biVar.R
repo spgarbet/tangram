@@ -1,5 +1,14 @@
 #' @include hmisc-impute.R
 #' @include hmisc-lm.fit.qr.bare.R
+#' @importFrom stats chisq.test
+#' @importFrom stats cor
+#' @importFrom stats cor.test
+#' @importFrom stats lm.fit
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pf
+#' @importFrom stats pnorm
+
 biVar <- function(formula, statinfo, data=NULL, subset=NULL,
                   na.action=na.retain, exclude.imputed=TRUE, ...)
 {
