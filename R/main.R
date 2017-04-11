@@ -1,7 +1,16 @@
+#' Given a cell_table object with embedded tables, flattens to a single table.
+#'
+#' Flattening function to expanded embedded tables inside table cells.
+#'
+#' @param table the table object to flatten
+#' @return the flattened table object
+#' @export
 #' @include S3-Cell.R
 #' @include parser.R
-
-#' @export
+#' @examples
+#' data(pbc)
+#' x <- summary_table(drug ~ bili, pbc)
+#' table_flatten(x)
 table_flatten <- function(table)
 {
   # Compute final size of table
@@ -179,6 +188,7 @@ cell_create_table <- function(ast, transforms)
 #' table.
 #'
 #' @param FUN function to apply, must return the modified cell
+#' @param ... additional arguments to pass into function
 #' @return a table modification function
 #' @export
 cell_transform <- function(FUN, ...)
@@ -255,7 +265,6 @@ drop_statistics <- function(table)
 #' to eliminate blank space.
 #'
 #' @param table the table to modify
-#' @param function to apply, must return the modified cell
 #' @return the modified table
 #' @export
 hmisc_intercept_cleanup <- function(table)
@@ -283,6 +292,7 @@ hmisc_intercept_cleanup <- function(table)
 #'
 #' Transform a data frame directly into a table
 #' @param data the data frame to use
+#' @param colheader vector of headers to use for columns
 #' @return table
 #' @export
 summary_frame <- function(data, colheader=NA)

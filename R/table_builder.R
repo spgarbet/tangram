@@ -89,6 +89,7 @@ args_flatten <- function(...)
 #'
 #' @param table_builder The table builder object to modify
 #' @param attribute The header attribute name, i.e. row_header or col_header
+#' @param sub boolean indicating if this is a subheader
 #' @param ... All the header elements to add
 #' @return the modified table_builder
 #'
@@ -791,11 +792,11 @@ format_guess <- function(x)
 #' Attach formatting information to an object in the attr "format"
 #'
 #' @param object the object to attach format information
-#' @param format the formatting to be applied (usually comes from AST node)
+#' @param value the formatting to be applied (usually comes from AST node)
 #' @return an S3 object with format attribute set
 #' @export
 #' @examples
-#' format(2, "%.2f")
+#' form(2, "%.2f")
 form <- function(object, value)
 {
   attr(object, "format") <- value

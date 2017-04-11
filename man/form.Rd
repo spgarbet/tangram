@@ -9,7 +9,7 @@ form(object, value)
 \arguments{
 \item{object}{the object to attach format information}
 
-\item{format}{the formatting to be applied (usually comes from AST node)}
+\item{value}{the formatting to be applied (usually comes from AST node)}
 }
 \value{
 an S3 object with format attribute set
@@ -18,5 +18,5 @@ an S3 object with format attribute set
 Attach formatting information to an object in the attr "format"
 }
 \examples{
-format(2, "\%.2f")
+form(2, "\%.2f")
 }

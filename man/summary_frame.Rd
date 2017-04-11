@@ -8,6 +8,8 @@ summary_frame(data, colheader = NA)
 }
 \arguments{
 \item{data}{the data frame to use}
+
+\item{colheader}{vector of headers to use for columns}
 }
 \value{
 table

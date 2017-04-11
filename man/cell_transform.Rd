@@ -8,6 +8,8 @@ cell_transform(FUN, ...)
 }
 \arguments{
 \item{FUN}{function to apply, must return the modified cell}
+
+\item{...}{additional arguments to pass into function}
 }
 \value{
 a table modification function

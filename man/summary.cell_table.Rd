@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{object}{The cell table to render to text}
+
+\item{...}{additional arguments to renderer. Unused at present.}
 }
 \value{
 A text string rendering of the given table

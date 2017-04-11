@@ -8,8 +8,6 @@ hmisc_intercept_cleanup(table)
 }
 \arguments{
 \item{table}{the table to modify}
-
-\item{function}{to apply, must return the modified cell}
 }
 \value{
 the modified table

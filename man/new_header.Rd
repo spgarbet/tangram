@@ -11,6 +11,8 @@ new_header(table_builder, attribute, sub, ...)
 
 \item{attribute}{The header attribute name, i.e. row_header or col_header}
 
+\item{sub}{boolean indicating if this is a subheader}
+
 \item{...}{All the header elements to add}
 }
 \value{
