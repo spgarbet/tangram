@@ -43,9 +43,9 @@ extract_label_data <- function(object.anova, data.set, short.labels)
   ## original labels, replaced with short versions as indicated by names of short.labels
   use.short <- FALSE
   if(!is.null(data.set)){
-    if('Labels' %in% names(contents(data.set)$contents)){
+    if('Labels' %in% names(rms::contents(data.set)$contents)){
       label.data <- data.frame(variable = names(data.set),
-                               varlabel = as.vector(contents(data.set)$contents$Labels),
+                               varlabel = as.vector(rms::contents(data.set)$contents$Labels),
                                stringsAsFactors = FALSE)
 
       ## Remove and warn of any elements of short.labels that aren't in names(data.set)

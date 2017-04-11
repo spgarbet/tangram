@@ -9,6 +9,29 @@
 #' @importFrom stats pf
 #' @importFrom stats pnorm
 
+na.retain <- function(d) d
+
+combine.levels <- function(x, minlev=.05) {
+  x <- as.factor(x)
+  notna <- sum(! is.na(x))
+  if(notna == 0) return(rep(NA, length(x)))
+  lev <- levels(x)
+  f <- table(x) / notna
+  i <- f < minlev
+  si <- sum(i)
+  if(si == 0) return(x)
+
+  comb <- if(si == 1) names(sort(f))[1 : 2]
+  else names(f)[i]
+
+  keepsep <- setdiff(names(f), comb)
+  names(keepsep) <- keepsep
+  w <- c(list(OTHER=comb), keepsep)
+  levels(x) <- w
+  x
+}
+
+
 biVar <- function(formula, statinfo, data=NULL, subset=NULL,
                   na.action=na.retain, exclude.imputed=TRUE, ...)
 {
@@ -19,7 +42,7 @@ biVar <- function(formula, statinfo, data=NULL, subset=NULL,
   y <- x[[1]]
   ylabel <- attr(y, "label")
   x <- x[-1]
-  xlabel <- sapply(x, label)
+  xlabel <- attr(x, "label")
   m <- ncol(x)
   statnames <- statinfo$names
   stats <- matrix(NA, nrow=m, ncol=length(statnames),
@@ -45,64 +68,64 @@ biVar <- function(formula, statinfo, data=NULL, subset=NULL,
             statinfo=statinfo, call=call)
 }
 
-print.biVar <- function(x, ...) {
-  info  <- attr(x, 'statinfo')
-  yname <- attr(x, 'yname')
-  cat('\n', info$title, '    Response variable:', yname, '\n\n', sep='')
-
-  dig <- c(info$digits,0)
-  for(i in 1:ncol(x))
-    x[,i] <- round(x[,i],dig[i])
-
-  attr(x,'yname') <- attr(x, 'statinfo') <- attr(x, 'call') <-
-    attr(x, 'ylabel') <- attr(x, 'xlabel') <- class(x) <- NULL
-  print(x)
-  invisible()
-}
-
-
-plot.biVar <- function(x,
-                       what=info$defaultwhat,
-                       sort.=TRUE,
-                       main, xlab,
-                       vnames=c('names','labels'), ...) {
-
-  vnames <- match.arg(vnames)
-  yname <- attr(x, 'yname')
-  ylabel <- attr(x, 'ylabel')
-  if(vnames=='labels' && ylabel!='') yname <- sedit(ylabel, ' ', '~')
-  xlabel <- attr(x, 'xlabel')
-  info  <- attr(x, 'statinfo')
-  aux   <- info$aux
-  auxlabel <- info$auxlabel
-  if(!length(auxlabel)) auxlabel <- aux
-
-  i <- match(what, info$names)
-  if(is.na(i)) stop(paste('what must be one of',
-                          paste(info$names,collapse=' ')))
-  if(missing(xlab))
-    xlab <- info$rxlab[i]
-  if(missing(main)) main <-
-    parse(text=paste(as.character(info$rmain),'~~~~Response:',
-            yname,sep=''))
-  auxtitle <- 'N'; auxdata <- format(x[,'n'])
-  if(length(aux)) {
-    auxtitle <- paste('N', auxlabel, sep='  ')
-    auxdata  <- paste(format(x[,'n']), format(x[,aux]))
-  }
-  stat <- x[,what]
-  if(vnames=='labels')
-    names(stat) <- ifelse(xlabel=='', names(stat), xlabel)
-  if(sort.) {
-    i <- order(stat)
-    stat <- stat[i]
-    auxdata <- auxdata[i]
-  }
-  dotchart3(stat, auxdata=auxdata,
-            xlab=xlab, auxtitle=auxtitle,
-            main=main, ...)
-  invisible()
-}
+# print.biVar <- function(x, ...) {
+#   info  <- attr(x, 'statinfo')
+#   yname <- attr(x, 'yname')
+#   cat('\n', info$title, '    Response variable:', yname, '\n\n', sep='')
+#
+#   dig <- c(info$digits,0)
+#   for(i in 1:ncol(x))
+#     x[,i] <- round(x[,i],dig[i])
+#
+#   attr(x,'yname') <- attr(x, 'statinfo') <- attr(x, 'call') <-
+#     attr(x, 'ylabel') <- attr(x, 'xlabel') <- class(x) <- NULL
+#   print(x)
+#   invisible()
+# }
+#
+#
+# plot.biVar <- function(x,
+#                        what=info$defaultwhat,
+#                        sort.=TRUE,
+#                        main, xlab,
+#                        vnames=c('names','labels'), ...) {
+#
+#   vnames <- match.arg(vnames)
+#   yname <- attr(x, 'yname')
+#   ylabel <- attr(x, 'ylabel')
+#   if(vnames=='labels' && ylabel!='') yname <- sedit(ylabel, ' ', '~')
+#   xlabel <- attr(x, 'xlabel')
+#   info  <- attr(x, 'statinfo')
+#   aux   <- info$aux
+#   auxlabel <- info$auxlabel
+#   if(!length(auxlabel)) auxlabel <- aux
+#
+#   i <- match(what, info$names)
+#   if(is.na(i)) stop(paste('what must be one of',
+#                           paste(info$names,collapse=' ')))
+#   if(missing(xlab))
+#     xlab <- info$rxlab[i]
+#   if(missing(main)) main <-
+#     parse(text=paste(as.character(info$rmain),'~~~~Response:',
+#             yname,sep=''))
+#   auxtitle <- 'N'; auxdata <- format(x[,'n'])
+#   if(length(aux)) {
+#     auxtitle <- paste('N', auxlabel, sep='  ')
+#     auxdata  <- paste(format(x[,'n']), format(x[,aux]))
+#   }
+#   stat <- x[,what]
+#   if(vnames=='labels')
+#     names(stat) <- ifelse(xlabel=='', names(stat), xlabel)
+#   if(sort.) {
+#     i <- order(stat)
+#     stat <- stat[i]
+#     auxdata <- auxdata[i]
+#   }
+#   dotchart3(stat, auxdata=auxdata,
+#             xlab=xlab, auxtitle=auxtitle,
+#             main=main, ...)
+#   invisible()
+# }
 
 chiSquare <- function(formula, data=NULL, subset=NULL, na.action=na.retain,
                       exclude.imputed=TRUE, ...) {
@@ -226,44 +249,44 @@ biVar(formula, statinfo=statinfo, data=data, subset=subset,
 }
 
 
-rcorrcens <- function(x, ...) UseMethod("rcorrcens")
-
-rcorrcens.formula <- function(formula, data=NULL, subset=NULL,
-                              na.action=na.retain,
-                              exclude.imputed=TRUE, outx=FALSE, ...)
-{
-  g <- function(x, y, outx)
-    {
-      lev <- levels(x)
-      if(is.factor(x) && length(lev)==2) x <- as.integer(x)
-
-      u <- if(is.factor(x))
-        {
-          i <- order(-table(x))
-          u <- rcorr.cens(1*(x==lev[i[1]]), y, outx=outx)
-          v <- rcorr.cens(1*(x==lev[i[2]]), y, outx=outx)
-          if(abs(v['Dxy']) > abs(u['Dxy'])) v else u
-        }
-      else rcorr.cens(x, y, outx=outx)
-      Dxy <- u['Dxy']
-      SE <- u['S.D.']
-      aDxy <- abs(Dxy)
-      z <- aDxy/SE
-      P <- 2 * pnorm(- z)
-      c(C=u['C Index'], Dxy=Dxy, aDxy=aDxy, SD=SE, Z=z, P=P)
-    }
-
-statinfo <- list(fun=g,
-                 title="Somers' Rank Correlation for Censored Data",
-                 main="Somers' Rank Correlation",
-                 rmain=expression(paste("Somers' ", D[xy])),
-                 names=c('C','Dxy','aDxy','SD','Z','P'),
-                 xlab=c('C','Dxy','|Dxy|','SD','Z','P-value'),
-                 rxlab=expression(C-index, D[xy], paste('|',D[xy],'|'), SD, Z, P-value),
-                 digits=c(3,3,3,3,2,4),
-#                 aux='n', auxlabel='N',
-                 nmin=2, defaultwhat='aDxy')
-
-biVar(formula, statinfo=statinfo, data=data, subset=subset,
-      na.action=na.action, exclude.imputed=exclude.imputed, outx=outx, ...)
-}
+# rcorrcens <- function(x, ...) UseMethod("rcorrcens")
+#
+# rcorrcens.formula <- function(formula, data=NULL, subset=NULL,
+#                               na.action=na.retain,
+#                               exclude.imputed=TRUE, outx=FALSE, ...)
+# {
+#   g <- function(x, y, outx)
+#     {
+#       lev <- levels(x)
+#       if(is.factor(x) && length(lev)==2) x <- as.integer(x)
+#
+#       u <- if(is.factor(x))
+#         {
+#           i <- order(-table(x))
+#           u <- rcorr.cens(1*(x==lev[i[1]]), y, outx=outx)
+#           v <- rcorr.cens(1*(x==lev[i[2]]), y, outx=outx)
+#           if(abs(v['Dxy']) > abs(u['Dxy'])) v else u
+#         }
+#       else rcorr.cens(x, y, outx=outx)
+#       Dxy <- u['Dxy']
+#       SE <- u['S.D.']
+#       aDxy <- abs(Dxy)
+#       z <- aDxy/SE
+#       P <- 2 * pnorm(- z)
+#       c(C=u['C Index'], Dxy=Dxy, aDxy=aDxy, SD=SE, Z=z, P=P)
+#     }
+#
+# statinfo <- list(fun=g,
+#                  title="Somers' Rank Correlation for Censored Data",
+#                  main="Somers' Rank Correlation",
+#                  rmain=expression(paste("Somers' ", D[xy])),
+#                  names=c('C','Dxy','aDxy','SD','Z','P'),
+#                  xlab=c('C','Dxy','|Dxy|','SD','Z','P-value'),
+#                  rxlab=expression(C-index, D[xy], paste('|',D[xy],'|'), SD, Z, P-value),
+#                  digits=c(3,3,3,3,2,4),
+# #                 aux='n', auxlabel='N',
+#                  nmin=2, defaultwhat='aDxy')
+#
+# biVar(formula, statinfo=statinfo, data=data, subset=subset,
+#       na.action=na.action, exclude.imputed=exclude.imputed, outx=outx, ...)
+# }

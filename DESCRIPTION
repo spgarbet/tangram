@@ -28,6 +28,7 @@ Collate:
     'hmisc-lm.fit.qr.bare.R'
     'hmisc-impute.R'
     'hmisc-biVar.R'
+    'hmisc-cut2.R'
     'hmisc-in.operator.R'
     'typing.R'
     'hmisc.R'
@@ -39,4 +40,3 @@ Collate:
     'table_builder.R'
     'rms.R'
     'summary.R'
-

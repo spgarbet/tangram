@@ -29,7 +29,7 @@ impute.default <- function(x, fun=median, ...)
            FALSE)
       else
         fun(x[!m])
-          
+
   ## median(logical vector) doesn't work - know trying to get median
   ## if fun is omitted.  Get mode.
 
@@ -48,7 +48,7 @@ impute.default <- function(x, fun=median, ...)
       x <- factor(xc, c(levels(x), newlev[!z]))
     } else x[m] <- fill
   } else x[m] <- fill
-  
+
   structure(x, imputed=(1:length(x))[m],
             class=c('impute', attr(x, 'class')))
 }
@@ -61,12 +61,12 @@ print.impute <- function(x, ...)
     print.default(x);
     return(invisible())
   }
-  
+
   if(is.factor(x))
     w <- as.character(x)
   else
     w <- format(x)
-  
+
   names(w) <- names(x)
   w[i] <- paste(w[i], "*", sep="")
   attr(w, "label") <- attr(w,"imputed") <- attr(w, "class") <- NULL
@@ -74,32 +74,32 @@ print.impute <- function(x, ...)
   invisible()
 }
 
-
-summary.impute <- function(object, ...)
-{
-  i <- attr(object, "imputed")
-  oi <- object
-  attr(oi,'class') <- attr(oi,'class')[attr(oi,'class')!="impute"]
-  oi <- oi[i]
-  if(all(oi==oi[1]))
-    cat("\n",length(i),"values imputed to",
-        if(is.numeric(oi))
-          format(oi[1])
-        else
-          as.character(oi[1]),
-        "\n\n")
-  else {
-    cat("\nImputed Values:\n\n")
-    if(length(i)<20)
-      print(oi)
-    else
-      print(describe(oi, descript=as.character(sys.call())[2]))
-    
-    cat("\n")
-  }
-  
-  NextMethod("summary")
-}
+#
+# summary.impute <- function(object, ...)
+# {
+#   i <- attr(object, "imputed")
+#   oi <- object
+#   attr(oi,'class') <- attr(oi,'class')[attr(oi,'class')!="impute"]
+#   oi <- oi[i]
+#   if(all(oi==oi[1]))
+#     cat("\n",length(i),"values imputed to",
+#         if(is.numeric(oi))
+#           format(oi[1])
+#         else
+#           as.character(oi[1]),
+#         "\n\n")
+#   else {
+#     cat("\nImputed Values:\n\n")
+#     if(length(i)<20)
+#       print(oi)
+#     else
+#       print(describe(oi, descript=as.character(sys.call())[2]))
+#
+#     cat("\n")
+#   }
+#
+#   NextMethod("summary")
+# }
 
 
 "[.impute" <- function(x, ..., drop=FALSE)
@@ -112,7 +112,7 @@ summary.impute <- function(object, ...)
   y <- x[..., drop = drop]
   if(length(y)==0)
     return(y)
-  
+
   k <- 1:length(x);
   names(k) <- names(x)
   k <- k[...]
@@ -127,7 +127,7 @@ summary.impute <- function(object, ...)
                          else
                            NULL)
   }
-  
+
   y
 }
 
@@ -137,7 +137,7 @@ is.imputed <- function(x)
   w <- rep(FALSE, if(is.matrix(x))nrow(x) else length(x))
   if(length(z <- attr(x,"imputed")))
     w[z] <- TRUE
-  
+
   w
 }
 
@@ -155,10 +155,10 @@ as.data.frame.impute <- function(x, row.names = NULL, optional = FALSE, ...)
     else
       row.names <- as.character(1:nrows)
   }
-  
+
   value <- list(x)
   if(!optional)
     names(value) <- deparse(substitute(x))[[1]]
-  
+
   structure(value, row.names=row.names, class='data.frame')
 }

@@ -271,7 +271,7 @@ hmisc_intercept_cleanup <- function(table)
     if(!("cell_label" %in% class(up)) ||
        up$label == "")
     {
-      class(below) <- tail(class(below), -1)
+      class(below) <- class(below)[length(class(below))]
       table[[1]][[col]] <<- below
     }
   })
