@@ -1,3 +1,13 @@
+#' Create a summarization for a categorical set of column versus a numerical row
+#'
+#' Given a row and column object from the parser apply a Kruskal test and output
+#' the results horizontally. 1 X (n + no. categories + test statistic)
+#'
+#' @param table The table object to modify
+#' @param row The row variable object to use (numerical)
+#' @param column The column variable to use (categorical)
+#' @return The modified table object
+#' @export
 #' @importFrom magrittr "%>%"
 #' @include S3-Cell.R
 #' @include typing.R
@@ -6,9 +16,6 @@
 #' @importFrom stats cor
 #' @importFrom stats cor.test
 #' @importFrom stats na.omit
-#'
-# 1 X (n + no. categories + test statistic)
-#' @export
 summarize_kruskal_horz <- function(table, row, column)
 {
   datar      <- row$data
@@ -44,7 +51,15 @@ summarize_kruskal_horz <- function(table, row, column)
   add_col(fstat)
 }
 
-# (N+1) X 3
+#' Create a summarization for a categorical row versus a numerical column
+#'
+#' Given a row and column object from the parser apply a Kruskal test and output
+#' the results vertically (#Categories+1) X (N, Summary, Statistic)
+#'
+#' @param table The table object to modify
+#' @param row The row variable object to use (categorical)
+#' @param column The column variable to use (numerical)
+#' @return The modified table object
 #' @export
 summarize_kruskal_vert <- function(table, row, column)
 {
@@ -78,6 +93,15 @@ summarize_kruskal_vert <- function(table, row, column)
   add_col(fstat)
 }
 
+#' Create a summarization for a binomial row versus a categorical column
+#'
+#' Given a row and column object from the parser apply a chi^2 test and output
+#' the results (1) X (N,#col categories ,statistic) format.
+#'
+#' @param table The table object to modify
+#' @param row The row variable object to use (binomial)
+#' @param column The column variable to use (categorical)
+#' @return The modified table object
 #' @export
 summarize_chisq_single <- function(table, row, column)
 {
@@ -129,7 +153,16 @@ summarize_chisq_single <- function(table, row, column)
   add_row(test)
 }
 
-# (N+1) X (M+2)
+
+#' Create a summarization for a categorical row versus a categorical column
+#'
+#' Given a row and column object from the parser apply a chi^2 test and output
+#' the results
+#'
+#' @param table The table object to modify
+#' @param row The row variable object to use (categorical)
+#' @param column The column variable to use (categorical)
+#' @return The modified table object
 #' @export
 summarize_chisq <- function(table, row, column)
 {
@@ -185,7 +218,15 @@ summarize_chisq <- function(table, row, column)
   tg::add_row(test,rep("", length(row_categories)))
 }
 
-# 1 X 3
+#' Create a summarization for a numerical row versus a numerical column
+#'
+#' Given a row and column object from the parser apply a Spearman test and output
+#' the results in a 1X3 format.
+#'
+#' @param table The table object to modify
+#' @param row The row variable object to use (numerical)
+#' @param column The column variable to use (numerical)
+#' @return The modified table object
 #' @export
 summarize_spearman <- function(table, row, column)
 {
@@ -231,7 +272,6 @@ hmisc_data_type <- function(x, category_threshold=NA)
   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
 }
 
-#'
 #' Style Bundle for Hmisc defaults.
 #'
 #' List of lists, should contain a "Type" entry with a function to determine type of vector passed in.

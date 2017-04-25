@@ -150,7 +150,6 @@ html5.cell_n <- function(object, caption, ..., class=NA)
 #' @param object The cell subheader to render to HTML5
 #' @param caption A string caption for the table
 #' @param ... additional arguments to renderer. Unused
-#' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given subheader as a <td> with several <span>'s.
 #' @export
 #'
@@ -173,7 +172,6 @@ html5.cell_subheader <- function(object, caption, ...)
 #' @param object The cell header to render to HTML5
 #' @param caption A string caption for the table
 #' @param ... additional arguments to renderer. Unused
-#' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given header as a <td> with several <span>'s.
 #' @export
 #'

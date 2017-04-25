@@ -12,8 +12,6 @@
 \item{caption}{A string caption for the table}
 
 \item{...}{additional arguments to renderer. Unused}
-
-\item{class}{An additional class attribute for the HTML5 element}
 }
 \value{
 A text string rendering of the given header as a <td> with several <span>'s.
