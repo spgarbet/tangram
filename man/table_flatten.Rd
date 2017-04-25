@@ -15,8 +15,3 @@ the flattened table object
 \description{
 Flattening function to expanded embedded tables inside table cells.
 }
-\examples{
-data(pbc)
-x <- summary_table(drug ~ bili, pbc)
-table_flatten(x)
-}

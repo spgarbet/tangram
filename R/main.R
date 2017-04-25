@@ -7,10 +7,6 @@
 #' @export
 #' @include S3-Cell.R
 #' @include parser.R
-#' @examples
-#' data(pbc)
-#' x <- summary_table(drug ~ bili, pbc)
-#' table_flatten(x)
 table_flatten <- function(table)
 {
   # Compute final size of table
