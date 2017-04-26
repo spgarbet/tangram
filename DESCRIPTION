@@ -1,8 +1,9 @@
 Package: tg
 Title: The Grammar of Tables
 Version: 0.2.6
-Authors@R: c(person("Shawn", "Garbett", email = "shawn.garbett@vanderbilt.edu", role = c("aut", "cre")),
-             person("Jennifer", "Thompson", email = "	jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
+Authors@R: c(person("Shawn", "Garbett", email = "Shawn.Garbett@Vanderbilt.edu", role = c("aut", "cre")),
+             person("Thomas", "Stewart", email = "Thomas.Stewart@Vanderbilt.edu", role=c("ctb")),
+             person("Jennifer", "Thompson", email = "jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
              )
 Description: Provides an extensible formula system to quickly and easily create
     production quality tables. Each step of the process (with the exception of the
