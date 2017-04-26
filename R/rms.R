@@ -236,6 +236,7 @@ summary_rms <- function(rms.model,
     ## column = row above ratio row
     ## These model classes will have ratios presented, not beta coefficients
     use.ratios <- c('lrm', 'cph')
+    Type <- NULL # Eliminate CRAN Check False Positive
     if(sum(!is.na(match(use.ratios, class(m)))) > 0){
       quantity <- rownames(x)
       rownames(x) <- c(NA, quantity[1:(nrow(x)-1)])
