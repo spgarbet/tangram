@@ -4,3 +4,4 @@ tg.Rproj
 .RData
 sandbox
 .Rapp.history
+vignettes/*.R
