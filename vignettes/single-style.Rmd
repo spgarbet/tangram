@@ -1,8 +1,12 @@
 ---
-title: "Single Style Multiple Tables"
+title: "Global Style for Rmd Example"
 author: "Shawn Garbett"
-date: "April 10, 2017"
-output: html_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+vignette: >
+  %\VignetteIndexEntry{Global Style Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 <style type="text/css">
