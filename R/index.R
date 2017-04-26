@@ -1,12 +1,22 @@
 #######
 # Given the compiled tree of data, render as a text index
 
+#' Generate an index from a cell object
+#'
+#' Given a cell class create an index representation.
+#'
+#' @param object The cell header to render to HTML5
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index <- function(object, ...)
 {
   UseMethod("index", object)
 }
 
+#' @importFrom base64enc base64encode
+#' @importFrom digest digest
 index_content <- function(object,caption,value)
 {
   if(!("src" %in% names(object))) return(NULL)
@@ -19,9 +29,18 @@ index_content <- function(object,caption,value)
   result
 }
 
-#' @importFrom base64enc base64encode
-#' @importFrom digest digest
+
+#' Generate an index from a cell object
+#'
+#' Given a cell class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.default <- function(object,caption, ...)
 {
   if(!("src" %in% names(object))) return(NULL)
@@ -38,13 +57,34 @@ index.default <- function(object,caption, ...)
          })
 }
 
+#' Generate an index from a cell_n object
+#'
+#' Given a cell_n class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell_n for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.cell_n <- function(object, caption, ...)
 {
   index_content(object, caption, object$n)
 }
 
+#' Generate an index from a cell_estimate object
+#'
+#' Given a cell_estimate class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell_estimate for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+
+#'
 index.cell_estimate <- function(object, caption, ...)
 {
   content <- if(is.na(object$low))
@@ -57,7 +97,17 @@ index.cell_estimate <- function(object, caption, ...)
   index_content(object, caption, content)
 }
 
+#' Generate an an index from a cell_quantile object
+#'
+#' Given a cell_quantile class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell_quantile for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.cell_quantile <- function(object, caption, ...)
 {
   content <-
@@ -68,7 +118,17 @@ index.cell_quantile <- function(object, caption, ...)
   index_content(object, caption, content)
 }
 
+#' Generate an an index from a cell_fstat object
+#'
+#' Given a cell_fstat class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell_fstat for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.cell_fstat <- function(object, caption, ...)
 {
   content <-
@@ -77,7 +137,17 @@ index.cell_fstat <- function(object, caption, ...)
   index_content(object, caption, content)
 }
 
+#' Generate an an index from a cell_fraction object
+#'
+#' Given a cell_fraction class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell_fraction for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.cell_fraction <- function(object, caption, ...)
 {
   content <-
@@ -91,7 +161,17 @@ index.cell_fraction <- function(object, caption, ...)
   index_content(object, caption, content)
 }
 
+#' Generate an an index from a cell_chi2 object
+#'
+#' Given a cell_chi2 class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object The cell_chi2 for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.cell_chi2 <- function(object, caption, ...)
 {
   content <-
@@ -104,9 +184,16 @@ index.cell_chi2 <- function(object, caption, ...)
   index_content(object, caption, content)
 }
 
-# FIXME: OPEN QUESTION: should caption be part of the "key"?
-
+#' Generate an an index from a cell_table object
+#'
+#' Given a cell_table class create an index representation.
+#'
+#' @param object The cell_table for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
 #' @export
+#'
 index.cell_table <- function(object, caption="Table",...)
 {
   nrows <- rows(object)

@@ -3,12 +3,14 @@
 \name{summary_rms}
 \alias{summary_rms}
 \title{Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-single pretty table of model results. \pkg{\link{rms}} and \pkg{\link{Hmisc}} packages required.}
+single pretty table of model results. The rms and Hmisc packages are required.}
 \usage{
 summary_rms(rms.model, data.set = NULL, short.labels = NULL,
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits)
 }
 \arguments{
+\item{rms.model}{Object of class rms, or list of named objects}
+
 \item{data.set}{Data frame from which to get variable labels. Defaults to NULL, in which case
 variable names will be used.}
 
@@ -21,10 +23,8 @@ format c("variable name" = "shortened label").}
 Defaults to 2.}
 
 \item{rnd.stats}{Number of digits to round model LR, R2, etc to. Defaults to rnd.digits.}
-
-\item{model.obj}{Object of class rms, or list of named objects}
 }
 \description{
 Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-single pretty table of model results. \pkg{\link{rms}} and \pkg{\link{Hmisc}} packages required.
+single pretty table of model results. The rms and Hmisc packages are required.
 }

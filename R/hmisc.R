@@ -301,3 +301,16 @@ hmisc_style <- list(
             ),
   Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis test. ^2^Pearson test"
 )
+
+#' Mayo Clinic Primary Biliary Cirrhosis Data
+#'
+#' D This data is from the Mayo Clinic trial in primary biliary cirrhosis (PBC) of the liver conducted between 1974 and 1984. A total of 424 PBC patients, referred to Mayo Clinic during that ten-year interval, met eligibility criteria for the randomized placebo controlled trial of the drug D-penicillamine. The first 312 cases in the data set participated in the randomized trial and contain largely complete data. The additional 112 cases did not participate in the clinical trial, but consented to have basic measurements recorded and to be followed for survival. Six of those cases were lost to follow-up shortly after diagnosis, so the data here are on an additional 106 cases as well as the 312 randomized participants.
+#'
+#' A nearly identical data set found in appendix D of Fleming and Harrington; this version has fewer missing values.
+#'
+#' Included for use in example from Hmisc.
+#'
+#' @name pbc
+#' @docType data
+#' @keywords data
+"pbc"

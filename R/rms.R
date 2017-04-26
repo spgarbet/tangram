@@ -43,9 +43,9 @@ extract_label_data <- function(object.anova, data.set, short.labels)
   ## original labels, replaced with short versions as indicated by names of short.labels
   use.short <- FALSE
   if(!is.null(data.set)){
-    if('Labels' %in% names(rms::contents(data.set)$contents)){
+    if('Labels' %in% names(Hmisc::contents(data.set)$contents)){
       label.data <- data.frame(variable = names(data.set),
-                               varlabel = as.vector(rms::contents(data.set)$contents$Labels),
+                               varlabel = as.vector(Hmisc::contents(data.set)$contents$Labels),
                                stringsAsFactors = FALSE)
 
       ## Remove and warn of any elements of short.labels that aren't in names(data.set)
@@ -189,9 +189,9 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
 }
 
 #' Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-#' single pretty table of model results. \pkg{\link{rms}} and \pkg{\link{Hmisc}} packages required.
+#' single pretty table of model results. The rms and Hmisc packages are required.
 #'
-#' @param model.obj Object of class rms, or list of named objects
+#' @param rms.model Object of class rms, or list of named objects
 #' @param data.set Data frame from which to get variable labels. Defaults to NULL, in which case
 #' variable names will be used.
 #' @param short.labels Named vector of variable labels to replace in interaction rows. Must be in
@@ -208,6 +208,11 @@ summary_rms <- function(rms.model,
                         rnd.digits = 2,
                         rnd.stats  = rnd.digits)
 {
+  if(!requireNamespace("rms", quietly = TRUE)) {
+        stop("tg::summary_rms requires the rms package, please install it.",
+             call. = FALSE)
+    }
+
   # If the argument is not a list, make it so
   if(!('list' %in% class(rms.model))) rms.model <- list(rms.model)
 
@@ -225,7 +230,7 @@ summary_rms <- function(rms.model,
   # Compute Model summaries for variables
   model.sum <- lapply(1:length(rms.model), function(i) {
     m <- rms.model[[i]]
-    x <- rms::summary.rms(m)
+    x <- summary(m)
 
     ## Models for which summary() produces both coefficients and ratios: Take only ratios, variable
     ## column = row above ratio row

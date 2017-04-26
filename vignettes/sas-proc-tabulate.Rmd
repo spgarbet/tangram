@@ -1,0 +1,40 @@
+---
+title: "SAS Proc Tabulate Examples"
+author: "Shawn Garbett"
+date: "January 4, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tg)
+```
+<style type="text/css">
+
+body, td {
+   font-size: 12px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 10px
+}
+</style>
+
+## Examples
+
+To duplicate as many examples from SAS's publication _Proc Tabulate by Example_, by Lauren E. Haworth, 1st Edition.
+
+### Example 1.3
+
+```{r, results="asis"}
+data = read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data",
+        sep=",",header=F,col.names=c("age", "type_employer", "fnlwgt", "education", 
+                "education_num","marital", "occupation", "relationship", "race","sex",
+                "capital_gain", "capital_loss", "hr_per_week","country", "income"),
+        fill=FALSE,strip.white=T)
+html5(summary_table(sex ~ age + income + education_num, data),
+      fragment=TRUE, inline="lancet.css", caption = "HTML5 Table Lancet Style", id="tbl4"
+      )
+```

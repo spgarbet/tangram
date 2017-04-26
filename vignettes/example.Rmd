@@ -1,8 +1,12 @@
 ---
-title: "A Grammar of Tables"
+title: "Table Grammar Examples"
 author: "Shawn Garbett"
-date: "September 11, 2016"
-output: html_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+vignette: >
+  %\VignetteIndexEntry{Table Grammar Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 <style type="text/css">

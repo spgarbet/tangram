@@ -15,13 +15,12 @@ Author: Shawn Garbett [aut, cre],
   Thomas Stewart [ctb],
   Jennifer Thompson [ctb]
 Maintainer: Shawn Garbett <Shawn.Garbett@Vanderbilt.edu>
-Depends:
-    R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr
+Depends: R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Suggests:
-    testthat, rms
+Suggests: testthat, rms, knitr, rmarkdown, Hmisc
+VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Collate: 
     'S3-Cell.R'
@@ -40,3 +39,5 @@ Collate:
     'table_builder.R'
     'rms.R'
     'summary.R'
+NeedsCompilation: no
+Packaged: 2017-04-25 20:16:25 UTC; garbetsp

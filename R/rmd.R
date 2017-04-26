@@ -70,7 +70,15 @@ rmd.cell_n <- function(object,...)
     as.character(object$n)
 }
 
+#' Generate an Rmd table entry from a cell_table object
+#'
+#' Given a cell_table object generate the corresponding piece of an Rmd table
+#'
+#' @param object The cell_fstat for indexing
+#' @param ... additional arguments to renderer. Unused
+#' @return A string representation of the table
 #' @export
+#'
 #' @importFrom stringr str_pad
 rmd.cell_table <- function(object,...)
 {
@@ -107,7 +115,15 @@ rmd.cell_table <- function(object,...)
 
 }
 
+#' Generate an Rmd table entry from a cell object
+#'
+#' Given a cell object generate the corresponding piece of an Rmd table
+#'
+#' @param object The cell_fstat for indexing
+#' @param ... additional arguments to renderer. Unused
+#' @return A string representation of the table
 #' @export
+#'
 rmd <- function(object, ...)
 {
   UseMethod("rmd", object)
