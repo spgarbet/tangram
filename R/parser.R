@@ -93,7 +93,7 @@ ASTVariable <- R6Class("ASTVariable",
     {
       if(self$value == "1")
       {
-        self$data  <- factor(rep(1, length(d[,1])))
+        self$data  <- factor(rep(1, length(d[,1])), labels="All")
         attr(self$data, "label") <- "All"
         return(self)
       }
