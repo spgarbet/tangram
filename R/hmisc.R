@@ -198,7 +198,7 @@ summarize_chisq <- function(table, row, column)
   add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
-    table <- tg::add_row(table, "")
+    table <- tangram::add_row(table, "")
     table_builder_apply(table, row_categories, FUN=
       function(table, row_category) {
           numerator <- length(datac[datac == col_category &
@@ -215,7 +215,7 @@ summarize_chisq <- function(table, row, column)
       }) %>%
     new_col()
   })                                                         %>%
-  tg::add_row(test,rep("", length(row_categories)))
+  tangram::add_row(test,rep("", length(row_categories)))
 }
 
 #' Create a summarization for a numerical row versus a numerical column

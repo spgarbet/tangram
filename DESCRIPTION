@@ -1,4 +1,4 @@
-Package: tg
+Package: tangram
 Title: The Grammar of Tables
 Version: 0.2.6
 Authors@R: c(person("Shawn", "Garbett", email = "Shawn.Garbett@Vanderbilt.edu", role = c("aut", "cre")),
@@ -6,12 +6,17 @@ Authors@R: c(person("Shawn", "Garbett", email = "Shawn.Garbett@Vanderbilt.edu", 
              person("Jennifer", "Thompson", email = "jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
              )
 Description: Provides an extensible formula system to quickly and easily create
-    production quality tables. Each step of the process (with the exception of the
-    grammar itself) is easily override by user functions. One can chose to override
-    the generation of table elements, and bundles to achive New England Journal of
-    Medicine and Hmisc behaviors are provided. Further rendering into a format is
-    a separate step that can be override by a user as well, the package contains
-    rendering for HTML5, LaTeX, Rmarkdown and an index format.
+    production quality tables. The steps of the process are formula parser,
+    statistical content generation from data, to rendering. Each step of the process
+    is separate and user definable thus creating a set of building blocks for
+    highly extensible table generation. A user is not limited by any of the 
+    choices of the package creator other than the formula grammar. For example,
+    one could chose to add a different S3 rendering function and output a format
+    not provided in the default package. Or possibly one would rather have Gini
+    coefficients for their statistical content. Routines to achieve New England
+    Journal of Medicine style, Lancet style and Hmisc::summaryM statistics are
+    provided. The package contains rendering for HTML5, Rmarkdown and an indexing
+    format for use in tracing and tracking are provided.
 Author: Shawn Garbett [aut, cre],
   Thomas Stewart [ctb],
   Jennifer Thompson [ctb]

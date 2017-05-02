@@ -1,4 +1,4 @@
-# A Grammar of Tables
+# A Grammar of Tables 'tangram'
 
 ## Goal
 

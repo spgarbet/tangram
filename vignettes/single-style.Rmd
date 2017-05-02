@@ -23,7 +23,7 @@ pre {
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tg)
+library(tangram)
 data(pbc)
 ```
 

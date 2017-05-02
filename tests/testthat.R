@@ -1,4 +1,4 @@
 library(testthat)
-library(tg)
+library(tangram)
 
-test_check("tg")
+test_check("tangram")

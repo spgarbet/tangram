@@ -209,7 +209,7 @@ summary_rms <- function(rms.model,
                         rnd.stats  = rnd.digits)
 {
   if(!requireNamespace("rms", quietly = TRUE)) {
-        stop("tg::summary_rms requires the rms package, please install it.",
+        stop("tangram::summary_rms requires the rms package, please install it.",
              call. = FALSE)
     }
 
