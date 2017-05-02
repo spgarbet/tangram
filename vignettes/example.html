@@ -892,7 +892,7 @@ document.getElementsByTagName("head")[0].appendChild(ss);
 }
 </style><div class="caption"></div><div class="figbody"><table class="summaryM">
 <thead><tr><td class="even"></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">All</span></td></tr></thead>
-<tbody><tr> <td class="header odd tg-label"><span class="variable">Global score, 3m</span></td><td class="odd data N" data-clipboard-text="{Mzgw N=375}"><span class="N">375</span></td><td class="odd"><span class="odd data quantile" data-clipboard-text="{ZWE5 79 [72.5, 86]}"><span class="q25">72</span><span class="q50">79</span><span class="q75">86</span></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Global score, 12m</span></td><td class="even data N" data-clipboard-text="{NmJh N=374}"><span class="N">374</span></td><td class="even"><span class="even data quantile" data-clipboard-text="{YzIz 80 [75, 85.75]}"><span class="q25">75</span><span class="q50">80</span><span class="q75">86</span></span></td> </tr></tbody>
+<tbody><tr> <td class="header odd tg-label"><span class="variable">Global score, 3m</span></td><td class="odd data N" data-clipboard-text="{Mzgw N=375}"><span class="N">375</span></td><td class="odd"><span class="odd data quantile" data-clipboard-text="{ZWE5 79 [72, 86]}"><span class="q25">72</span><span class="q50">79</span><span class="q75">86</span></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Global score, 12m</span></td><td class="even data N" data-clipboard-text="{NmJh N=374}"><span class="N">374</span></td><td class="even"><span class="even data quantile" data-clipboard-text="{YzIz 80 [74, 86]}"><span class="q25">74</span><span class="q50">80</span><span class="q75">86</span></span></td> </tr></tbody>
 </table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis test. <sup>2</sup>Pearson test</div></div><script>new Clipboard('.data');</script>
 </div>
 <div id="types" class="section level3">
@@ -1101,9 +1101,9 @@ summarize_count &lt;- function(table, row, column)
 summary_table(event ~ id[&quot;%1.0f&quot;], df, summarize_count)</code></pre>
 <pre><code>=========================================================== 
      N      A        B        C         Test Statistic      
-         (N=246)  (N=247)  (N=244)                          
+         (N=246)  (N=246)  (N=245)                          
 ----------------------------------------------------------- 
-ID  250  3 *4* 5  3 *4* 5  3 *4* 5  F_{2,734}=0.04, P=0.957 
+ID  250  3 *4* 5  3 *4* 5  3 *4* 5  F_{2,734}=0.01, P=0.994 
 =========================================================== </code></pre>
 </div>
 

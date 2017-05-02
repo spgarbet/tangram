@@ -3,7 +3,7 @@
 
 clipboard_js <- function()
 {
-  filename <- paste(system.file(package="tg"), "extdata", "js", "clipboard.min.js", sep='/')
+  filename <- file.path(system.file(package="tangram"), "extdata", "js", "clipboard.min.js")
   content <- readChar(filename, file.info(filename)$size)
 
   paste("<script type=\"text/javascript\">", content, "</script>", sep='')
@@ -32,7 +32,7 @@ custom_css <- function(filename, id=NA)
   content <- suppressWarnings(tryCatch(readChar(filename, file.info(filename)$size), error=function(e) NA))
   if(is.na(content))
   {
-    filename2 <- paste(system.file(package="tg"), "extdata", "css", filename, sep='/')
+    filename2 <- file.path(system.file(package="tangram"), "extdata", "css", filename)
     content <- suppressWarnings(tryCatch(readChar(filename2, file.info(filename2)$size), error=function(e) NA))
   }
 
