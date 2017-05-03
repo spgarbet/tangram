@@ -14,7 +14,7 @@ Description: Provides an extensible formula system to quickly and easily create
     one could chose to add a different S3 rendering function and output a format
     not provided in the default package. Or possibly one would rather have Gini
     coefficients for their statistical content. Routines to achieve New England
-    Journal of Medicine style, Lancet style and Hmisc::summaryM statistics are
+    Journal of Medicine style, Lancet style and Hmisc::summaryM() statistics are
     provided. The package contains rendering for HTML5, Rmarkdown and an indexing
     format for use in tracing and tracking are provided.
 Author: Shawn Garbett [aut, cre],
