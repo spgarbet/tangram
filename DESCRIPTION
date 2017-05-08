@@ -44,6 +44,7 @@ Collate:
     'rmd.R'
     'table_builder.R'
     'rms.R'
+    'rtf.R'
     'summary.R'
 NeedsCompilation: no
 Packaged: 2017-04-25 20:16:25 UTC; garbetsp
