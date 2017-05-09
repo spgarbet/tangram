@@ -19,10 +19,11 @@ rtf.default <- function(object, ...)
 #'
 #' @param object The cell label to render to RTF
 #' @param caption A string caption for the table
+#' @param point
 #' @param ... additional arguments to renderer. Unused
 #' @return An RTF text string rendering of the given label.
 #'
-rtf.cell_label <- function(object, ...)
+rtf.cell_label <- function(object, ..., point=18)
 {
   # Turn leading spaces into a set of non breaking html space
   label <- gsub("^\\s+", "    ", object$label)
@@ -33,9 +34,10 @@ rtf.cell_label <- function(object, ...)
       label
   else
       paste0(label,
-            " \\fs16\\i\\b0 ",
+            " {\\fs", round(point*1.6),
+            "\\i\\b0 ",
             object$units,
-            "\\i0 "
+            "}"
             )
 }
 
@@ -71,9 +73,9 @@ rtf.cell_header <- function(object, ...)
   class(object) <- cls[2:length(cls)]
 
   if(inherits(object, "cell_n"))
-    paste0("{\\b N=", rtf.cell_n(object), "}")
+    paste0("{\\b N=", rtf.cell_n(object, ...), "}")
   else # Peel down to cell_label
-    paste0("{\\b ", rtf(object), "}")
+    paste0("{\\b ", rtf(object, ...), "}")
 }
 
 #' Convert an abstract cell_subheader object into an RTF string
@@ -85,16 +87,18 @@ rtf.cell_header <- function(object, ...)
 #' @return An RTF string rendering of the given header
 #' @export
 #'
-rtf.cell_subheader <- function(object, ...)
+rtf.cell_subheader <- function(object, ..., point=9)
 {
   cls <- class(object)
 
   class(object) <- cls[3:length(cls)]
 
+  fontsize <- paste0("\\fs", round(point*1.6), " ")
+
   if(inherits(object, "cell_n"))
-    paste0("{\\fs16 N=", rtf.cell_n(object), "}")
+    paste0("{", fontsize, " N=", rtf.cell_n(object, ...), "}")
   else # Peel down to cell_label
-    paste0("{\\fs16", rtf(object), "}")
+    paste0("{", fontsize, rtf(object, ...), "}")
 }
 
 #' Convert an abstract cell_quantile object into an RTF string
@@ -103,20 +107,23 @@ rtf.cell_subheader <- function(object, ...)
 #'
 #' @param object The cell quantile to render to RTF
 #' @param ... additional arguments to renderer. Unused
-#' @param class An additional class attribute for the RTF element
 #' @return An RTF string rendering of the given quantile.
 #' @export
 #'
-rtf.cell_quantile <- function(object, ..., class=NA)
+rtf.cell_quantile <- function(object, ..., point=9)
 {
   #idx <- index(object, caption)
 
-  paste0("\\fs16 ",
+  small <- paste0("\\fs", round(point*1.6), " ")
+  large <- paste0("\\fs", round(point*2.0), " ")
+
+  paste0("{",small,
         render_f(object$'25%', object$format),
-        " \\b\\fs18 ",
+        " \\b",large,
         render_f(object$'50%', object$format),
-        "\\b0\\fs16  ",
-        render_f(object$'75%', object$format)
+        "\\b0",small," ",
+        render_f(object$'75%', object$format),
+        "}"
   )
 }
 
@@ -126,11 +133,10 @@ rtf.cell_quantile <- function(object, ..., class=NA)
 #'
 #' @param object The cell fstat to render to RTF
 #' @param ... additional arguments to renderer. Unused
-#' @param class An additional class attribute for the RTF element
 #' @return A text string rendering of the given fstat as a <td> with several <span>'s.
 #' @export
 #'
-rtf.cell_fstat <- function(object, caption, ..., class=NA)
+rtf.cell_fstat <- function(object, caption, ...)
 {
   ref <- if(is.na(object$reference)) "" else paste0("{\\super ", object$reference, "}")
   #idx <- index(object, caption)
@@ -155,9 +161,16 @@ rtf.cell <- function(object, ...) ""
 
 est_column_widths <- function(object)
 {
+  nrows <- rows(object)
   ncols <- cols(object)
-  # FIXME: Replace using text summary relative size
-  c(0, rep(1.5, ncols))
+
+  lens <- sapply(1:ncols, FUN=function(col) {
+    max(sapply(1:nrows, FUN=function(row) {
+      nchar(summary(object[[row]][[col]]))
+    }))
+  })
+
+  c(0, pmax(lens/16, rep(0.4, ncols)))
 }
 
 #' S3 rtf Method function for use on abstract table class
@@ -184,11 +197,22 @@ rtf <- function(object, ...)
 #' @param footnote Any footnotes to include under the table.
 #' @param filename A filename to write resulting rtf file to
 #' @param append A boolean for whether or not to append to given filename
+#' @param point Main font point size
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given table
 #' @export
 #'
-rtf.cell_table <- function(object, caption=NA, fragment=FALSE, id=NA, widths=NA, footnote=NA, filename=NA, append=FALSE, ...)
+rtf.cell_table <- function(
+  object,
+  caption  = NA,
+  fragment = FALSE,
+  id       = NA,
+  widths   = NA,
+  footnote = NA,
+  filename = NA,
+  append   = FALSE,
+  point    = 9,
+  ...)
 {
   header <- if(fragment) "" else
     paste(
@@ -202,7 +226,8 @@ rtf.cell_table <- function(object, caption=NA, fragment=FALSE, id=NA, widths=NA,
       sep=''
     )
 
-  widths <- 1440*cumsum(if(is.na(widths)) est_column_widths(object) else widths)
+  # Scale by inverse of conway's constant
+  widths <- round((point/9)^(0.7671241) *1440*cumsum(if(is.na(widths)) est_column_widths(object) else widths))
 
   # Construct row open and close text
   celldecl <-
@@ -219,7 +244,7 @@ rtf.cell_table <- function(object, caption=NA, fragment=FALSE, id=NA, widths=NA,
   rowopen      <- paste0(rowopen, paste0("\\cellx", tail(widths,-1), collapse=''), '\n')
 
   # Construct cell open and close text
-  cellopen  <- "\\pard\\qc\\intbl\\fs18 "
+  cellopen  <- paste0("\\pard\\qc\\intbl\\fs", round(point*2), " ")
   cellclose <- "\\cell\n"
 
   trailer <- "}"
@@ -233,7 +258,7 @@ rtf.cell_table <- function(object, caption=NA, fragment=FALSE, id=NA, widths=NA,
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- rtf(object[[row]][[col]])
+      text[row,col] <<- rtf(object[[row]][[col]], point=point)
     })
   })
   rowtext <- paste0(

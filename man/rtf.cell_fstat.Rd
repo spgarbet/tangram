@@ -4,14 +4,12 @@
 \alias{rtf.cell_fstat}
 \title{Convert an abstract cell_fstat object into an RTF string}
 \usage{
-\method{rtf}{cell_fstat}(object, caption, ..., class = NA)
+\method{rtf}{cell_fstat}(object, caption, ...)
 }
 \arguments{
 \item{object}{The cell fstat to render to RTF}
 
 \item{...}{additional arguments to renderer. Unused}
-
-\item{class}{An additional class attribute for the RTF element}
 }
 \value{
 A text string rendering of the given fstat as a <td> with several <span>'s.

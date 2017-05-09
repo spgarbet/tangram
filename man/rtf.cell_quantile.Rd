@@ -4,14 +4,12 @@
 \alias{rtf.cell_quantile}
 \title{Convert an abstract cell_quantile object into an RTF string}
 \usage{
-\method{rtf}{cell_quantile}(object, ..., class = NA)
+\method{rtf}{cell_quantile}(object, ..., point = 9)
 }
 \arguments{
 \item{object}{The cell quantile to render to RTF}
 
 \item{...}{additional arguments to renderer. Unused}
-
-\item{class}{An additional class attribute for the RTF element}
 }
 \value{
 An RTF string rendering of the given quantile.

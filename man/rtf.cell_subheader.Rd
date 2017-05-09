@@ -4,7 +4,7 @@
 \alias{rtf.cell_subheader}
 \title{Convert an abstract cell_subheader object into an RTF string}
 \usage{
-\method{rtf}{cell_subheader}(object, ...)
+\method{rtf}{cell_subheader}(object, ..., point = 9)
 }
 \arguments{
 \item{object}{The cell header to render to RTF}

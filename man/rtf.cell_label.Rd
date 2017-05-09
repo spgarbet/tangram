@@ -4,7 +4,7 @@
 \alias{rtf.cell_label}
 \title{Given a cell_label class create an RTF representation.}
 \usage{
-\method{rtf}{cell_label}(object, ...)
+\method{rtf}{cell_label}(object, ..., point = 18)
 }
 \arguments{
 \item{object}{The cell label to render to RTF}

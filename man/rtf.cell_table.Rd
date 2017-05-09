@@ -5,7 +5,8 @@
 \title{Convert an abstract table object into an RTF string or file}
 \usage{
 \method{rtf}{cell_table}(object, caption = NA, fragment = FALSE, id = NA,
-  widths = NA, footnote = NA, filename = NA, append = FALSE, ...)
+  widths = NA, footnote = NA, filename = NA, append = FALSE,
+  point = 9, ...)
 }
 \arguments{
 \item{object}{The cell table to render to RTF}
@@ -23,6 +24,8 @@
 \item{filename}{A filename to write resulting rtf file to}
 
 \item{append}{A boolean for whether or not to append to given filename}
+
+\item{point}{Main font point size}
 
 \item{...}{additional arguments to renderer. Unused}
 }
