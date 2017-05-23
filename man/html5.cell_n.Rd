@@ -4,12 +4,12 @@
 \alias{html5.cell_n}
 \title{Convert an abstract cell_n object into an HTML5 string}
 \usage{
-\method{html5}{cell_n}(object, caption, ..., class = NA)
+\method{html5}{cell_n}(object, id, ..., class = NA)
 }
 \arguments{
 \item{object}{The cell n to render to HTML5}
 
-\item{caption}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 

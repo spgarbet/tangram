@@ -4,18 +4,18 @@
 \alias{rtf.cell_table}
 \title{Convert an abstract table object into an RTF string or file}
 \usage{
-\method{rtf}{cell_table}(object, caption = NA, fragment = FALSE, id = NA,
+\method{rtf}{cell_table}(object, id = NA, caption = NA, fragment = FALSE,
   widths = NA, footnote = NA, filename = NA, append = FALSE,
   point = 9, ...)
 }
 \arguments{
 \item{object}{The cell table to render to RTF}
 
+\item{id}{A unique identifier for the table (strongly recommended).}
+
 \item{caption}{A string caption for the table}
 
 \item{fragment}{A boolean flag that determines whether a fragment or a complete RTF document is generatedf}
-
-\item{id}{A unique identifier for the table (strongly recommended).}
 
 \item{widths}{RTF requires specified left margin and column widths, this allows user control over these (inches)}
 

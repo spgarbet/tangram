@@ -4,10 +4,12 @@
 \alias{rtf.cell_n}
 \title{Convert an abstract cell_n object into an RTF string}
 \usage{
-\method{rtf}{cell_n}(object, ...)
+\method{rtf}{cell_n}(object, id, ...)
 }
 \arguments{
 \item{object}{The cell n to render to RTF}
+
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }

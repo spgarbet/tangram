@@ -4,10 +4,12 @@
 \alias{rtf.cell_fstat}
 \title{Convert an abstract cell_fstat object into an RTF string}
 \usage{
-\method{rtf}{cell_fstat}(object, caption, ...)
+\method{rtf}{cell_fstat}(object, id, ...)
 }
 \arguments{
 \item{object}{The cell fstat to render to RTF}
+
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }

@@ -4,12 +4,12 @@
 \alias{html5}
 \title{S3 html5 Method function for use on abstract table class}
 \usage{
-html5(object, caption, ...)
+html5(object, id, ...)
 }
 \arguments{
 \item{object}{The cell to render to HTML5}
 
-\item{caption}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer.}
 }

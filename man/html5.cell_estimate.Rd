@@ -4,12 +4,12 @@
 \alias{html5.cell_estimate}
 \title{Convert an abstract cell_estimate object into an HTML5 string}
 \usage{
-\method{html5}{cell_estimate}(object, caption, ..., class = NA)
+\method{html5}{cell_estimate}(object, id, ..., class = NA)
 }
 \arguments{
 \item{object}{The cell estimate to render to HTML5}
 
-\item{caption}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 

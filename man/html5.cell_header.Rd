@@ -4,12 +4,12 @@
 \alias{html5.cell_header}
 \title{Convert an abstract cell_header object into an HTML5 string}
 \usage{
-\method{html5}{cell_header}(object, caption, ...)
+\method{html5}{cell_header}(object, id, ...)
 }
 \arguments{
 \item{object}{The cell header to render to HTML5}
 
-\item{caption}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }

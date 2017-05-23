@@ -4,12 +4,12 @@
 \alias{html5.cell_chi2}
 \title{Convert an abstract cell_chi2 object into an HTML5 string}
 \usage{
-\method{html5}{cell_chi2}(object, caption, ..., class = NA)
+\method{html5}{cell_chi2}(object, id, ..., class = NA)
 }
 \arguments{
 \item{object}{The cell chi2 to render to HTML5}
 
-\item{caption}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 

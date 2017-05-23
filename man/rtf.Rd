@@ -4,10 +4,12 @@
 \alias{rtf}
 \title{S3 rtf Method function for use on abstract table class}
 \usage{
-rtf(object, ...)
+rtf(object, id, ...)
 }
 \arguments{
 \item{object}{The cell to render to RTF}
+
+\item{id}{A unique identifier for the table (strongly recommended). If not provided, caption will be used.}
 
 \item{...}{additional arguments to renderer.}
 }

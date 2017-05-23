@@ -62,12 +62,12 @@ html5_extra_fonts <- function()
 #' S3 html5 Method function for use on abstract table class
 #'
 #' @param object The cell to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer.
 #' @export
 #'
 
-html5 <- function(object, caption, ...)
+html5 <- function(object, id, ...)
 {
   UseMethod("html5", object)
 }
@@ -85,13 +85,13 @@ html5_class <- function(classes)
 #' Gives a warning and produces an empty cell
 #'
 #' @param object The cell to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given cell as a <td> with several <span>'s.
 #' @export
 #'
-html5.default <- function(object, caption, ..., class=NA)
+html5.default <- function(object, id, ..., class=NA)
 {
   warning(paste("html5 unhandled class : ", base::class(object), collapse=', '))
   paste("<td ",
@@ -105,13 +105,13 @@ html5.default <- function(object, caption, ..., class=NA)
 #' Given a cell class create an HTML5 representation.
 #'
 #' @param object The cell to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given cell as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell <- function(object, caption, ..., class=NA)
+html5.cell <- function(object, id, ..., class=NA)
 {
     paste("<td ",
         html5_class(c(class, attr(object, "parity"))),
@@ -124,15 +124,15 @@ html5.cell <- function(object, caption, ..., class=NA)
 #' Given a cell_n class create an HTML5 representation.
 #'
 #' @param object The cell n to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given n as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_n <- function(object, caption, ..., class=NA)
+html5.cell_n <- function(object, id, ..., class=NA)
 {
-  idx <- index(object, caption)
+  idx <- index(object, id)
 
   paste("<td ",
         html5_class(c(class, attr(object, "parity"), "data", "N")),
@@ -148,21 +148,21 @@ html5.cell_n <- function(object, caption, ..., class=NA)
 #' Given a cell_subheader class create an HTML5 representation.
 #'
 #' @param object The cell subheader to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given subheader as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_subheader <- function(object, caption, ...)
+html5.cell_subheader <- function(object, id, ...)
 {
   cls <- class(object)
 
   class(object) <- cls[3:length(cls)]
 
   if(inherits(object, "cell_n"))
-    html5.cell_n(object, caption, class=c("subheader", "header"))
+    html5.cell_n(object, id, class=c("subheader", "header"))
   else
-    html5(object, caption, class=c("subheader", "header"))
+    html5(object, id, class=c("subheader", "header"))
 }
 
 #' Convert an abstract cell_header object into an HTML5 string
@@ -170,21 +170,21 @@ html5.cell_subheader <- function(object, caption, ...)
 #' Given a cell_header class create an HTML5 representation.
 #'
 #' @param object The cell header to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given header as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_header <- function(object, caption, ...)
+html5.cell_header <- function(object, id, ...)
 {
   cls <- class(object)
 
   class(object) <- cls[2:length(cls)]
 
   if(inherits(object, "cell_n"))
-    html5.cell_n(object, caption, class=c("header"))
+    html5.cell_n(object, id, class=c("header"))
   else
-    html5(object, caption, class=c("header"))
+    html5(object, id, class=c("header"))
 }
 
 #' Convert an abstract cell_label object into an HTML5 string
@@ -192,13 +192,13 @@ html5.cell_header <- function(object, caption, ...)
 #' Given a cell_label class create an HTML5 representation.
 #'
 #' @param object The cell label to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given label as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_label <- function(object, caption, ..., class=NA)
+html5.cell_label <- function(object, id, ..., class=NA)
 {
   # Turn leading spaces into a set of non breaking html space
   label <- gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", object$label)
@@ -236,15 +236,15 @@ html5.cell_label <- function(object, caption, ..., class=NA)
 #' Given a cell_estimate class create an HTML5 representation.
 #'
 #' @param object The cell estimate to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given estimate as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_estimate <- function(object, caption, ..., class=NA)
+html5.cell_estimate <- function(object, id, ..., class=NA)
 {
-  idx <- index(object, caption)
+  idx <- index(object, id)
   if(is.na(object$low))
     paste("<td ",
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
@@ -269,15 +269,15 @@ html5.cell_estimate <- function(object, caption, ..., class=NA)
 #' Given a cell_quantile class create an HTML5 representation.
 #'
 #' @param object The cell quantile to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given quantile as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_quantile <- function(object, caption, ..., class=NA)
+html5.cell_quantile <- function(object, id, ..., class=NA)
 {
-  idx <- index(object, caption)
+  idx <- index(object, id)
 
 
   paste("<td class=\"", attr(object, "parity"),"\"><span ",
@@ -298,16 +298,16 @@ html5.cell_quantile <- function(object, caption, ..., class=NA)
 #' Given a cell_fstat class create an HTML5 representation.
 #'
 #' @param object The cell fstat to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given fstat as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_fstat <- function(object, caption, ..., class=NA)
+html5.cell_fstat <- function(object, id, ..., class=NA)
 {
   ref <- if(is.na(object$reference)) "" else paste("<sup>", object$reference, "</sup>", sep="")
-  idx <- index(object, caption)
+  idx <- index(object, id)
   paste(
     "<td ",
     html5_class(c(class, attr(object, "parity"), "data", "statistics")),
@@ -330,15 +330,15 @@ html5.cell_fstat <- function(object, caption, ..., class=NA)
 #' Given a cell_fraction class create an HTML5 representation.
 #'
 #' @param object The cell fraction to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given fraction as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_fraction <- function(object, caption, ..., class=NA)
+html5.cell_fraction <- function(object, id, ..., class=NA)
 {
-  idx        <- index(object, caption)
+  idx        <- index(object, id)
   ratio      <- gsub("\\.", "<div class=\"align\">.</div>", render_f(object$ratio))
   percentage <- render_f(object$percentage)
   den        <- as.character(object$denominator)
@@ -360,15 +360,15 @@ html5.cell_fraction <- function(object, caption, ..., class=NA)
 #' Given a cell_chi2 class create an HTML5 representation.
 #'
 #' @param object The cell chi2 to render to HTML5
-#' @param caption A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given chi2 as a <td> with several <span>'s.
 #' @export
 #'
-html5.cell_chi2 <- function(object, caption, ..., class=NA)
+html5.cell_chi2 <- function(object, id, ..., class=NA)
 {
-  idx <- index(object, caption)
+  idx <- index(object, id)
   ref <- if(is.na(object$reference)) "" else paste("<sup>", object$reference, "</sup>", sep="")
   paste("<td ",
         html5_class(c(class, attr(object, "parity"), "data", "statistics")),
@@ -397,19 +397,24 @@ html5.cell_chi2 <- function(object, caption, ..., class=NA)
 #' The package includes several css files for styling. At present the following exist: 'hmisc.css', 'lancet.css', 'lancet-stripped.css' and 'nejm.css'
 #'
 #' @param object The cell table to render to HTML5
+#' @param id A unique identifier for the table (strongly recommended). If not provided, caption will be used.
 #' @param caption A string caption for the table
 #' @param css A string that is the href to the css for complete HTML5
 #' @param fragment A boolean flag that determines whether a fragment or a complete HTML5 document is generatedf
 #' @param inline A string containing a filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.
-#' @param id A unique identifier for the table (strongly recommended).
 #' @param footnote Any footnotes to include under the table.
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given table
 #' @export
 #'
-html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=NA, id=NA, footnote=NA, ...)
+html5.cell_table <- function(object, id=NA, caption=NA, css=NA, fragment=TRUE, inline=NA, footnote=NA, ...)
 {
   if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
+  if(is.na(id))
+  {
+    warning("No id specified for later traceability of table elements")
+    id <- ""
+  }
 
   scoped <- if(is.na(inline)) "" else paste("<style>", custom_css(inline,id=id),"</style>", sep='')
   figdiv <- if(is.na(id)) "<div class=\"figure\">" else paste("<div class=\"figure\" id=\"", id,"\">",sep='')
@@ -460,7 +465,7 @@ html5.cell_table <- function(object, caption=NA, css=NA, fragment=TRUE, inline=N
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- html5(object[[row]][[col]], caption)
+      text[row,col] <<- html5(object[[row]][[col]], id)
     })
   })
   pasty <- apply(text, 1, function(x) paste(x, collapse=""))

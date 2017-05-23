@@ -4,11 +4,13 @@
 \alias{html5.cell_table}
 \title{Convert an abstract table object into an HTML5 string}
 \usage{
-\method{html5}{cell_table}(object, caption = NA, css = NA,
-  fragment = TRUE, inline = NA, id = NA, footnote = NA, ...)
+\method{html5}{cell_table}(object, id = NA, caption = NA, css = NA,
+  fragment = TRUE, inline = NA, footnote = NA, ...)
 }
 \arguments{
 \item{object}{The cell table to render to HTML5}
+
+\item{id}{A unique identifier for the table (strongly recommended). If not provided, caption will be used.}
 
 \item{caption}{A string caption for the table}
 
@@ -17,8 +19,6 @@
 \item{fragment}{A boolean flag that determines whether a fragment or a complete HTML5 document is generatedf}
 
 \item{inline}{A string containing a filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.}
-
-\item{id}{A unique identifier for the table (strongly recommended).}
 
 \item{footnote}{Any footnotes to include under the table.}
 

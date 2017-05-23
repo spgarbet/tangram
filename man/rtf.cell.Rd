@@ -4,10 +4,12 @@
 \alias{rtf.cell}
 \title{Given a cell class create an RTF representation.}
 \usage{
-\method{rtf}{cell}(object, ...)
+\method{rtf}{cell}(object, id, ...)
 }
 \arguments{
 \item{object}{The cell to render to RTF}
+
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }

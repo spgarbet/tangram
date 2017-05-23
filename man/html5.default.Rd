@@ -4,12 +4,12 @@
 \alias{html5.default}
 \title{Default conversion to HTML5 for an abstract table element}
 \usage{
-\method{html5}{default}(object, caption, ..., class = NA)
+\method{html5}{default}(object, id, ..., class = NA)
 }
 \arguments{
 \item{object}{The cell to render to HTML5}
 
-\item{caption}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 

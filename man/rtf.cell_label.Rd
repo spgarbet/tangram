@@ -4,14 +4,14 @@
 \alias{rtf.cell_label}
 \title{Given a cell_label class create an RTF representation.}
 \usage{
-\method{rtf}{cell_label}(object, ..., point = 18)
+\method{rtf}{cell_label}(object, id, ..., point = 18)
 }
 \arguments{
 \item{object}{The cell label to render to RTF}
 
-\item{...}{additional arguments to renderer. Unused}
+\item{id}{A string caption for the table}
 
-\item{caption}{A string caption for the table}
+\item{...}{additional arguments to renderer. Unused}
 }
 \value{
 An RTF text string rendering of the given label.

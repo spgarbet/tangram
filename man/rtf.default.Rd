@@ -4,10 +4,12 @@
 \alias{rtf.default}
 \title{Default conversion to RTF for an abstract table element}
 \usage{
-\method{rtf}{default}(object, ...)
+\method{rtf}{default}(object, id, ...)
 }
 \arguments{
 \item{object}{The cell to render to RTF}
+
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }

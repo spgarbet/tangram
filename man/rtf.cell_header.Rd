@@ -4,10 +4,12 @@
 \alias{rtf.cell_header}
 \title{Convert an abstract cell_header object into an RTF string}
 \usage{
-\method{rtf}{cell_header}(object, ...)
+\method{rtf}{cell_header}(object, id, ...)
 }
 \arguments{
 \item{object}{The cell header to render to RTF}
+
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }

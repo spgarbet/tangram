@@ -4,10 +4,12 @@
 \alias{rtf.cell_subheader}
 \title{Convert an abstract cell_subheader object into an RTF string}
 \usage{
-\method{rtf}{cell_subheader}(object, ..., point = 9)
+\method{rtf}{cell_subheader}(object, id, ..., point = 9)
 }
 \arguments{
 \item{object}{The cell header to render to RTF}
+
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 }
