@@ -1,7 +1,24 @@
+
+convert_table <- list(
+  "alpha" = "α",
+  "beta"  = "β",
+  "gamma" = "γ",
+
+  "infty" = "∞"
+)
+
+latex2unicode <- function(x)
+{
+  for(i in names(convert_table))
+  {
+    x <- str_replace_all(x, paste0("\\\\", i), convert_table[[i]])
+  }
+  x
+}
+
 #######
 # Given the compiled tree of data, render as a text summary
 #' @include S3-Cell.R
-
 summary.default <- function(object,...) ""
 
 summary.cell_label <- function(object,...)
