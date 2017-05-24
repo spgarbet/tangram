@@ -1,3 +1,10 @@
+# Plan of attack
+# 1) rows/cols ? why is this needed. Can it be chucked overboard?
+#    Used only on cell_table right now. Should only be used for that.
+# 2) render_f / formatting moved to construction. Stop duplicating in render code.
+# 3) cell_table object is still fine
+# 4) 
+
 rows <- function(x)
 {
   UseMethod("rows", x)
@@ -83,9 +90,23 @@ cell_table <- function(rows, cols, embedded=TRUE)
   tbl
 }
 
-list_cell <- function(classes, ...)
+#' Construct a table cell from an object
+#' 
+#' Any R object can be used as a cell value. Attributes
+#' are used to store additional aspects of that cell
+#' attached to the object. This is a helper function
+#' to attach all the additional attributes to the 
+#' provided object
+#' 
+#' @param x R object to attach attributes top
+#' @param ... Each additional argument becomes an attribute for the object
+#' @return The modified R object
+cell <- function(x, ...)
 {
-  structure(list(...), class=c(classes, "cell"))
+  aspects <- list(...)
+  for(i in names(aspects))
+    attr(x, i) <- aspects[[i]]
+  x
 }
 
 #' Create an cell_label (S3) object of the given text.
@@ -93,85 +114,98 @@ list_cell <- function(classes, ...)
 #' A cell_label object represents a label cell inside a table. It can
 #' also contain units.
 #'
-#' @param text The text of the label
+#' @param text The text of the label. May include a subset of LaTeX greek or math.
 #' @param units An optional field that contains units
-#' @param src An optional field for traceability of the source of the field
+#' @param ... optional extra information to attach
 #'
 #' @return A cell_table object
 #' @export
 #'
 #' @examples
 #' cell_label("Compaction Method")
-cell_label <- function(text, units=NA, src=NA)
+#' cell_label("Concentration", "mg/dl")
+#' cell_label("Concentration", "mg/dl", subcol="A")
+cell_label <- function(text, units=NA, ...)
 {
-  if(!inherits(text, "character")) text <- as.character(text)
-  structure(cell(list(label=as.character(text), units=as.character(units), src=src)), class = c("cell_label", "cell"))
+  cell(as.character(text),
+       aspect="cell_label",
+       units=as.character(units), ...)
 }
 
-#' Create a cell_header (S3) object of the given text.
+#' Create a cell_header object of the given text.
 #'
-#' A cell_header object is a sub class of a cell_label representing
-#' that this label is a header and upon rendering may invoke different
-#' handling.
+#' A cell_header object represents a label cell inside a table. It can
+#' also contain units. 
 #'
-#' @param text The text of the label
+#' @param text The text of the label. May include a subset of LaTeX greek or math.
 #' @param units An optional field that contains units
-#' @param src An optional field for traceability of the source of the field
+#' @param ... optional extra information to attach
 #'
 #' @return A cell_header object
 #' @export
 #' @examples
-#' cell_header("Bold THIS")
-cell_header <- function(text, units=NA, src=NA)
+#' cell_header("Yahoo")
+#' cell_header("Concentration", "mg/dl")
+#' cell_header("Concentration", "mg/dl", src="A")
+cell_header <- function(text, units=NA, ...)
 {
-  list_cell(c("cell_header", "cell_label"),
-            label=as.character(text),
-            units=as.character(units),
-            src=src)
+  cell(as.character(text),        aspect=c("cell_header", "cell_label"),
+       units=as.character(units), ...)
 }
 
-#' Create a cell_subheader (S3) object of the given text.
+#' Create a cell_subheader object of the given text.
 #'
-#' A cell_subheader object is a sub class of a cell_header representing
-#' that this label is a header and upon rendering may invoke different
-#' handling.
+#' A cell_subheader object represents a label cell inside a table. It can
+#' also contain units.
 #'
-#' @param text The text of the label
+#' @param text The text of the label. May include a subset of LaTeX greek or math.
 #' @param units An optional field that contains units
-#' @param src An optional field for traceability of the source of the field
+#' @param ... optional extra information to attach
 #'
 #' @return A cell_subheader object.
 #' @export
 #' @examples
-#' cell_subheader("Italic this")
-cell_subheader <- function(text, units=NA, src=NA)
+#' cell_subheader("Concentration")
+#' cell_subheader("Concentration", "mg/dl")
+#' cell_subheader("Concentration", "mg/dl", src="A")
+cell_subheader <- function(text, units=NA, ...)
 {
-  list_cell(c("cell_subheader", "cell_header", "cell_label"),
-            label=as.character(text),
-            units=as.character(units),
-            src=src)
+  cell(as.character(text),      
+       aspect=c("cell_subheader", "cell_header", "cell_label"),
+       units=as.character(units), ...)
 }
 
-#' Create a cell_quantile (S3) object of the given quantile
+#' Create a interquartile range cell object of the given data
 #'
-#' A cell_quantile object contains the raw quantiles expected
-#' for later rendering.
+#' Construct a cell which has the 3 interquartile ranges specified. 
 #'
-#' @param quantiles The raw quantiles object.
-#' @param src An optional field for traceability of the source of the field
+#' @param x numeric vector whose sample quantiles are wanted. NA and NaN values are not allowed in numeric vectors unless na.rm is TRUE.
+#' @param format numeric or character; Significant digits or fmt to pass to sprintf
+#' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
+#' @param names logical; if true, the result has a names attribute. Set to FALSE for speedup with many probs.
+#' @param type integer; specify algorithm to use in constructing quantile. See quantile for more information.
+#' @param ... additional arguments to constructing cell
 #'
 #' @return A cell_quantile object.
 #' @export
 #' @examples
 #' require(stats)
-#' cell_quantile(quantile(rnorm(100)), 'Example')
-cell_quantile <- function(quantiles, src=NA)
+#' cell_iqr(rnorm(100), '3')
+cell_iqr <- function(x,
+                     format = NA,
+                     na.rm  = TRUE,
+                     names  = FALSE,
+                     type   = 8,
+                     ...
+                          )
 {
-  format <- attr(quantiles, "format")
-  ql <- lapply(as.list(quantiles), function(x) form(x, format))
-  if(!is.na(src)) ql[['src']] <- src
-  structure(cell(ql), class=c("cell_quantile", "cell"))
+  x <- quantile(x,  c(0.25, 0.50, 0.75), na.rm, names, type)
+  
+  if(is.na(format)) format <- format_guess(x)
+  ql <- sapply(x, function(x) render_f(x, format))
+  cell(ql, aspect="cell_iqr", ...)
 }
+
 
 #' Create an cell_estimate (S3) object of the given estimate
 #'
@@ -188,10 +222,11 @@ cell_quantile <- function(quantiles, src=NA)
 #' @return A cell_estimate object.
 #' @export
 #' @examples
-#' cell_estimate(1.0, 0.5, 1.5)
-cell_estimate <- function(value, low=NA, high=NA, conf.level=0.95, src=NA)
+#' cell_estimate(1.0)
+#' cell_estimate(c(1.0, 0.5, 1.5))
+cell_estimate <- function(x, ...)
 {
-  list_cell("cell_estimate", value=value, low=low, high=high, src=src)
+  cell(x, aspects="cell_estimate", ...)
 }
 
 #' Create an cell_fstat (S3) object of the given statistic
