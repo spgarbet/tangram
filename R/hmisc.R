@@ -26,27 +26,27 @@ summarize_kruskal_horz <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
+    #       src=key(row, column, "N", cat))
+    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat)
   })
 
   # Kruskal-Wallis via F-distribution
   test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
-  fstat <- cell_fstat(f   = form(test['F'], "%.2f"),
-                      n1  = test['df1'],
-                      n2  = test['df2'],
-                      p   = form(test['P'], "%1.3f"),
-                      reference = "1",
-                      src = key(row, column, "F"))
+  fstat <- cell_fstat(f         = form(test['F'], "%.2f"),
+                      n1        = test['df1'],
+                      n2        = test['df2'],
+                      p         = form(test['P'], "%1.3f"),
+                      reference = "1")
 
   table                                          %>%
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistic")  %>%
   col_header("",  subN,       ""              )  %>%
-  add_col(tg_N(sum(!is.na(datar))))              %>%
+  add_col(cell_N(sum(!is.na(datar))))            %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     tbl %>% add_col(tg_quantile(x, format, na.rm=TRUE), subcol=category)
+     add_col(tbl, cell_quantile(x, format, na.rm=TRUE, subcol=category))
   })                                             %>%
   add_col(fstat)
 }
@@ -73,8 +73,7 @@ summarize_kruskal_vert <- function(table, row, column)
                       n1  = test['df1'],
                       n2  = test['df2'],
                       p   = form(test['P'], "%1.3f"),
-                      reference = "1",
-                      src = key(row, column, "F"))
+                      reference = "1")
 
   table                                                             %>%
   col_header("N", derive_label(column), "Test Statistic")           %>%
@@ -85,8 +84,8 @@ summarize_kruskal_vert <- function(table, row, column)
     x <- datac[datar == categories[category]]
     tbl                                                  %>%
     row_header(category)                                 %>%
-    add_col(tg_N(length(x)), subcol=category)            %>%
-    add_col(tg_quantile(x, column$format, na.rm=TRUE), subrow=category) %>%
+    add_col(cell_N(length(x), subcol=category))          %>%
+    add_col(cell_quantile(x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
   })                                                                %>%
   cursor_pos(1, 3)                                                  %>%
@@ -113,15 +112,15 @@ summarize_chisq_single <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
+    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat))
   })
 
   # Chi^2 test
-  y    <- table(datar,datac, useNA="no")
+  y        <- table(datar, datac, useNA="no")
   validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)})) # Negative logic deals with NAs
   validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
-  y    <- y[validrow,validcol]
-  test <- suppressWarnings(chisq.test(y, correct=FALSE))
+  y        <- y[validrow,validcol]
+  test     <- suppressWarnings(chisq.test(y, correct=FALSE))
 
   # More complex name derivation
   name <- row$name()
@@ -134,9 +133,9 @@ summarize_chisq_single <- function(table, row, column)
   # Now construct the table by add rows to each column
   table                                                      %>%
   col_header("N", col_categories, "Test Statistic")          %>%
-  col_header("", subN, "")                                   %>%
+  col_header("",  subN,           "")                        %>%
   row_header(lbl)                                            %>%
-  add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
+  add_col(cell_n(sum(!is.na(datar) & !is.na(datac))))        %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
     numerator   <- length(datac[datac == col_category &
@@ -147,12 +146,12 @@ summarize_chisq_single <- function(table, row, column)
         add_row(table, "") %>% new_col()
     else
         add_row(table,
-                tg_fraction(numerator, denominator, row$format),
-                subcol=col_category, subrow=row_category) %>% new_col()
+                cell_fraction(numerator, denominator, row$format,
+                              subcol=col_category, subrow=row_category)) %>%
+        new_col()
   })                                                         %>%
   add_row(test)
 }
-
 
 #' Create a summarization for a categorical row versus a categorical column
 #'
@@ -176,17 +175,17 @@ summarize_chisq <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    tg(tg_N(length(datac[datac == cat & !is.na(datac)])), row, column, subcol=cat)
+    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat)
   })
 
   # Chi^2 test
-  y    <- table(datar,datac, useNA="no")
+  y        <- table(datar,datac, useNA="no")
   validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)}))
   validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
-  y    <- y[validrow,validcol]
-  test <- suppressWarnings(chisq.test(y, correct=FALSE))
+  y        <- y[validrow,validcol]
+  test     <- suppressWarnings(chisq.test(y, correct=FALSE))
 
-  labels      <- lapply(row_categories, FUN=function(x) paste("  ", x))
+  labels   <- lapply(row_categories, FUN=function(x) paste("  ", x))
 
   # Now construct the table by add rows to each column
   table                                                      %>%
@@ -195,10 +194,10 @@ summarize_chisq <- function(table, row, column)
   row_header(derive_label(row))                              %>%
   table_builder_apply(labels, FUN=
     function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
-  add_col(tg_N(sum(!is.na(datar) & !is.na(datac))))          %>%
+  add_col(cell_n(sum(!is.na(datar) & !is.na(datac))))        %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
-    table <- tangram::add_row(table, "")
+    table <- add_row(table, "")
     table_builder_apply(table, row_categories, FUN=
       function(table, row_category) {
           numerator <- length(datac[datac == col_category &
@@ -209,13 +208,13 @@ summarize_chisq <- function(table, row, column)
           else
             add_row(
               table,
-              tg_fraction(numerator, denominator, row$format),
-              subcol=col_category, subrow=row_category
+              cell_fraction(numerator, denominator, row$format,
+                            subcol=col_category, subrow=row_category)
           )
       }) %>%
     new_col()
   })                                                         %>%
-  tangram::add_row(test,rep("", length(row_categories)))
+  add_row(test,rep("", length(row_categories)))
 }
 
 #' Create a summarization for a numerical row versus a numerical column
@@ -239,7 +238,7 @@ summarize_spearman <- function(table, row, column)
   row_header(derive_label(row)) %>%
   col_header("N", derive_label(column), "Test Statistic") %>%
   col_header("", "", "") %>%
-  add_col(tg_N(sum(!is.na(datar) & !is.na(datac)))) %>%
+  add_col(cell_n(sum(!is.na(datar) & !is.na(datac)))) %>%
   add_col(test$estimate) %>%
   add_col(test)
 }
