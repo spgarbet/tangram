@@ -42,7 +42,7 @@ summarize_kruskal_horz <- function(table, row, column)
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistic")  %>%
   col_header("",  subN,       ""              )  %>%
-  add_col(cell_N(sum(!is.na(datar))))            %>%
+  add_col(cell_n(sum(!is.na(datar))))            %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
@@ -84,7 +84,7 @@ summarize_kruskal_vert <- function(table, row, column)
     x <- datac[datar == categories[category]]
     tbl                                                  %>%
     row_header(category)                                 %>%
-    add_col(cell_N(length(x), subcol=category))          %>%
+    add_col(cell_n(length(x), subcol=category))          %>%
     add_col(cell_quantile(x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
   })                                                                %>%
