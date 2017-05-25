@@ -18,7 +18,7 @@ latex2unicode <- function(x)
 
 #######
 # Given the compiled tree of data, render as a text summary
-#' @include S3-Cell.R
+#' @include build-cell.R
 summary.default <- function(object,...) ""
 
 summary.cell_label <- function(object,...)

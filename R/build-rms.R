@@ -1,6 +1,6 @@
-#' @include S3-Cell.R
-#' @include table_builder.R
-#' @include main.R
+#' @include build-cell.R
+#' @include build-helpers.R
+#' @include build-operators.R
 #'
 #' @importFrom stats anova
 #'

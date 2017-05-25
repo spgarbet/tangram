@@ -1,6 +1,6 @@
 #######
 # Given the compiled tree of data, render as a text rmd
-#' @include S3-Cell.R
+#' @include build-cell.R
 
 rmd.default <- function(object,...) ""
 

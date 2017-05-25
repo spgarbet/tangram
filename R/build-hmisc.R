@@ -9,8 +9,8 @@
 #' @return The modified table object
 #' @export
 #' @importFrom magrittr "%>%"
-#' @include S3-Cell.R
-#' @include typing.R
+#' @include build-cell.R
+#' @include build-typing.R
 #' @include hmisc-biVar.R
 #' @importFrom stats chisq.test
 #' @importFrom stats cor
@@ -112,7 +112,7 @@ summarize_chisq_single <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat))
+    cell_n( length(datac[datac == cat & !is.na(datac)]), subcol=cat)
   })
 
   # Chi^2 test
