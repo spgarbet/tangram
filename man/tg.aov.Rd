@@ -4,16 +4,16 @@
 \alias{tg.aov}
 \title{AOV model as cell}
 \usage{
-\method{tg}{aov}(x, row, column, ...)
+tg.aov(x, ...)
 }
 \arguments{
 \item{x}{The aov object to turn into a renderable cell}
 
+\item{...}{additional specifiers for identifying this cell (see key)}
+
 \item{row}{The AST row of that is generating this cell}
 
 \item{column}{The AST column that is generating this cell}
-
-\item{...}{additional specifiers for identifying this cell (see key)}
 }
 \value{
 an S3 rendereable cell that is an F-statistic

@@ -102,8 +102,8 @@ new_header <- function(table_builder, attribute, sub, ...)
   hdr_class <- if (is.null(old_hdr) | !sub) "cell_header" else c("cell_subheader", "cell_header")
 
   # Convert every element to an appropriate cell from request
-  new_hdr   <- lapply(args_flatten(...), FUN=function(cell) {
-    value <- tg(cell, table_builder$row, table_builder$col)
+  new_hdr   <- lapply(args_flatten(...), FUN=function(x) {
+    value <-   cell(x, row=table_builder$row, col=table_builder$col)
     attr(value, "class") <- c(hdr_class, attr(value,"class"))
     value
   })
@@ -197,7 +197,7 @@ write_cell <- function(table_builder, x, ...)
   {
     table_builder$table[[table_builder$nrow]] <- list()
   }
-  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- tg(x, table_builder$row, table_builder$col, ...)
+  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- cell(x, row=table_builder$row, col=table_builder$col, ...)
   table_builder
 }
 
@@ -508,98 +508,9 @@ add_row <- function(table_builder, ..., subrow=NA, subcol=NA)
  ##
 ## Table Cell generation functions
 
-#' Convert to Cell
-#'
-#' Base S3 function to allow for constructing table cells. The main purpose
-#' of this layer is to append additional traceability information, and convert
-#' to internal cell type for later rendering decisions.
-#'
-#' @param x element to convert
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
-#' @param ... additional specifiers for identifying this cell (see key)
-#' @return an S3 rendereable cell
-#' @export
-#'
-#' @examples
-#' tg(NA, list(value="A"), list(value="B"))
-tg <- function(x, row, column, ...)
-{
-  UseMethod("tg", x)
-}
+## FIXME FIXME FIXME
+## What to do with these guys
 
-#' Default cell is a label
-#'
-#' Construct a cell. This is the default fallback, it creates a label cell
-#'
-#' @param x Object to turn into a renderable label cell
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
-#' @param ... additional specifiers for identifying this cell (see key)
-#' @return an S3 rendereable cell label
-#' @export
-#' @examples
-#' tg("Joe", list(value="A"), list(value="B"))
-tg.default <- function(x, row, column, ...)
-{
-  cell_label(as.character(x))
-}
-
-#' Numeric Cell passed in
-#'
-#' Construct a cell from a numeric. This is essentially an identity function.
-#' I.e., if a user has constructed a cell and passed it in do nothing.
-#'
-#' @param x The numeric value to return as a renderable cell
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
-#' @param ... additional specifiers for identifying this cell (see key)
-#' @return an S3 rendereable cell
-#' @export
-#' @examples
-#' tg(23.0, list(value="A"), list(value="B"))
-tg.numeric <- function(x, row, column, ...)
-{
-  if(is.null(names(x)))
-    cell_label(as.character(x), src=key(row, column, ...))
-  else
-    cell_label(paste(names(x),"=",as.character(x),sep=''), src=key(row, column, ...))
-}
-
-#' Identity function on cell
-#'
-#' Construct a cell from a cell. This is essentially an identity function.
-#' I.e., if a user has constructed a cell and passed it in do nothing.
-#'
-#' @param x the object to return
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
-#' @param ... additional specifiers for identifying this cell (see key)
-#' @return an S3 rendereable cell label
-#' @export
-#' @examples
-#' tg(tg("Joe"), list(value="A"), list(value="B"))
-tg.cell <- function(x, row, column, ...)
-{
-  x
-}
-
-#' N value as cell
-#'
-#' Construct a cell from an N value.
-#'
-#' @param x The tg_N object to convert into a rendereable cell
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
-#' @param ... additional specifiers for identifying this cell (see key)
-#' @return an S3 rendereable cell label
-#' @export
-#' @examples
-#' tg(tg_N("Joe"), list(value="A"), list(value="B"))
-tg.N <- function(x, row, column, ...)
-{
-  cell_n(x, src=key(row, column, "N", ...))
-}
 
 #' AOV model as cell
 #'
@@ -613,15 +524,15 @@ tg.N <- function(x, row, column, ...)
 #' @export
 #' @examples
 #' tg(aov(rnorm(10) ~ rnorm(10)), list(value="A"), list(value="B"))
-tg.aov <- function(x, row, column, ...)
+tg.aov <- function(x, ...)
 {
   test <- summary(x)[[1]]
-  cell_fstat(f   = form(test$'F value'[1], "%.2f"),
+  cell_fstat(f   = render_f(test$'F value'[1], "%.2f"),
              n1  = test$Df[1],
              n2  = test$Df[2],
-             p   = form(test$'Pr(>F)'[1], "%1.3f"),
+             p   = render_f(test$'Pr(>F)'[1], "%1.3f"),
              reference = "1",
-             src = key(row, column, "aov", ...))
+             ...)
 }
 
 #' Construct hypothesis test form cell
@@ -645,26 +556,6 @@ tg.htest <- function(x, row, column, ...)
     cell_spearman(form(x$statistic, 0), x$parameter, form(x$p.value, "%1.3f"), reference="3", src=ss)
   else
     cell_studentt(form(x$statistic, 2), x$parameter[1], form(x$p.value, "%1.3f"), reference="4", src=ss)
-}
-
-#' Construct a cell from a tg_quantile
-#'
-#' @param x The quantile object to turn in to a rendereable cell
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
-#' @param ... additional specifiers for identifying this cell (see key)
-#' @return an S3 rendereable cell that is a hypothesis test
-#' @export
-#' @examples
-#' tg(tg_quantile(rnorm(10), "%.f"), list(value="A"), list(value="B"))
-tg.quantile <- function(x, row, column, ...)
-{
-  cell_quantile(x,
-                src    = key(row    = row,
-                             col    = column,
-                             label  = "quantile",
-                             ...)
-               )
 }
 
 #' Cell Fraction Conversion
@@ -697,21 +588,7 @@ tg.fraction <- function(x, row, column, ...)
                     ...))
 }
 
-#' N values creation
-#'
-#' Create a vector of N values that are convertable to a cell
-#'
-#' @param ... the N values
-#' @return an S3 rendereable cell that is a hypothesis test
-#' @export
-#' @examples
-#' tg_N(1, 2, 3)
-tg_N <- function(...)
-{
-  v <- c(...)
-  class(v) <- c("N", "numeric")
-  v
-}
+
 
 #' Fraction values creation
 #'
@@ -737,28 +614,4 @@ tg_fraction <- function(numerator, denominator, format=3)
            )
 }
 
-#' Quantile creation
-#'
-#' Create a quantile that is convertible to a cell
-#'
-#' @param x the data passed to the quantile {stats} function
-#' @param format the formatting to be applied (usually comes from AST node)
-#' @param ... all arguments that are passed to the quantile {stats} function
-#' @return an S3 rendereable cell that is a hypothesis test
-#' @export
-#' @importFrom stats quantile
-#' @examples
-#' tg_quantile(rnorm(100), "%.2f")
-tg_quantile <- function(x, format=NA, ...)
-{
-  x <- quantile(x, ...)
-  class(x) <- c("quantile", "numeric")
-
-  # Make an intelligent default format based on the data
-  if(is.na(format)) format <- format_guess(x)
-
-  attr(x, "format") <- format
-
-  x
-}
 

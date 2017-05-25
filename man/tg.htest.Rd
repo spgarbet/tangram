@@ -4,7 +4,7 @@
 \alias{tg.htest}
 \title{Construct hypothesis test form cell}
 \usage{
-\method{tg}{htest}(x, row, column, ...)
+tg.htest(x, row, column, ...)
 }
 \arguments{
 \item{x}{The htest object to convert to a rendereable cell}

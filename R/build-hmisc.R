@@ -32,10 +32,10 @@ summarize_kruskal_horz <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
-  fstat <- cell_fstat(f         = form(test['F'], "%.2f"),
+  fstat <- cell_fstat(f         = render_f(test['F'], "%.2f"),
                       n1        = test['df1'],
                       n2        = test['df2'],
-                      p         = form(test['P'], "%1.3f"),
+                      p         = render_f(test['P'], "%1.3f"),
                       reference = "1")
 
   table                                          %>%
@@ -46,7 +46,7 @@ summarize_kruskal_horz <- function(table, row, column)
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     add_col(tbl, cell_quantile(x, format, na.rm=TRUE, subcol=category))
+     add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category))
   })                                             %>%
   add_col(fstat)
 }
@@ -69,10 +69,10 @@ summarize_kruskal_vert <- function(table, row, column)
 
   # Kruskal-Wallis via F-distribution
   test  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
-  fstat <- cell_fstat(f   = form(test['F'], "%.2f"),
+  fstat <- cell_fstat(f   = render_f(test['F'], "%.2f"),
                       n1  = test['df1'],
                       n2  = test['df2'],
-                      p   = form(test['P'], "%1.3f"),
+                      p   = render_f(test['P'], "%1.3f"),
                       reference = "1")
 
   table                                                             %>%
@@ -85,7 +85,7 @@ summarize_kruskal_vert <- function(table, row, column)
     tbl                                                  %>%
     row_header(category)                                 %>%
     add_col(cell_n(length(x), subcol=category))          %>%
-    add_col(cell_quantile(x, column$format, na.rm=TRUE, subrow=category)) %>%
+    add_col(cell_iqr(x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
   })                                                                %>%
   cursor_pos(1, 3)                                                  %>%

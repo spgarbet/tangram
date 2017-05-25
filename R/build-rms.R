@@ -1,5 +1,5 @@
 #' @include build-cell.R
-#' @include build-helpers.R
+#' @include build-main.R
 #' @include build-operators.R
 #'
 #' @importFrom stats anova

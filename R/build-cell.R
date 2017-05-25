@@ -15,12 +15,12 @@ cols <- function(x)
   UseMethod("cols", x)
 }
 
-rows.cell <- function(object)
+rows.list <- function(object)
 {
   length(object)
 }
 
-cols.cell <- function(object)
+cols.list <- function(object)
 {
   if(length(object) >= 1)
   {
@@ -32,9 +32,9 @@ cols.cell <- function(object)
   }
 }
 
-#' Create an empty cell_table
+#' Create an empty table of cells
 #'
-#' Create an empty cell_table (S3) object to fill with desired table elements. Note that
+#' Create an empty list of lists to fill with desired table elements. Note that
 #' The initial size is not a limiting factor, the table can grow as needed later.
 #'
 #' @param rows An integer of the number of rows to create
@@ -45,13 +45,8 @@ cols.cell <- function(object)
 #' @export
 cell_table <- function(rows, cols, embedded=TRUE)
 {
-  nt <- sapply(1:rows, FUN=function(x) list(sapply(1:cols, FUN=function(x) cell())))
-
-  tbl <- structure(cell(nt), class=c("cell_table", "cell") )
-
-  attr(tbl, "embedded") <- embedded
-
-  tbl
+  cell(lapply(1:rows, function(x) as.list(rep(cell(""), cols))),
+       embedded = embedded)
 }
 
 #' Construct a table cell from an object

@@ -4,7 +4,7 @@
 \alias{tg.fraction}
 \title{Cell Fraction Conversion}
 \usage{
-\method{tg}{fraction}(x, row, column, ...)
+tg.fraction(x, row, column, ...)
 }
 \arguments{
 \item{x}{The fraction object to convert to a tg cell}

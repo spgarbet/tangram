@@ -2,7 +2,7 @@
 % Please edit documentation in R/build-cell.R
 \name{cell_table}
 \alias{cell_table}
-\title{Create an empty cell_table}
+\title{Create an empty table of cells}
 \usage{
 cell_table(rows, cols, embedded = TRUE)
 }
@@ -17,6 +17,6 @@ cell_table(rows, cols, embedded = TRUE)
 An empty cell_table object.
 }
 \description{
-Create an empty cell_table (S3) object to fill with desired table elements. Note that
+Create an empty list of lists to fill with desired table elements. Note that
 The initial size is not a limiting factor, the table can grow as needed later.
 }

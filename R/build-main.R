@@ -31,7 +31,6 @@ table_flatten <- function(table)
   row_label <- attr(table[[1]][[1]], "row_header")
   col_label <- attr(table[[1]][[1]], "col_header")
 
-
   # Set aside additional for labeling
   label_rows <- rows(col_label) # How many rows in the column header
   label_cols <- cols(row_label) # How many cols in the row headers
@@ -291,7 +290,7 @@ hmisc_intercept_cleanup <- function(table)
 #' @param colheader vector of headers to use for columns
 #' @return table
 #' @export
-summary_frame <- function(data, colheader=NA)
+summary_df <- function(data, colheader=NA)
 {
   roffset <- if(any(is.na(colheader))) 1 else 2
   width   <- length(colnames(data)) + 1
