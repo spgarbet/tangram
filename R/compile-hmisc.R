@@ -9,9 +9,11 @@
 #' @return The modified table object
 #' @export
 #' @importFrom magrittr "%>%"
-#' @include build-cell.R
-#' @include build-typing.R
 #' @include hmisc-biVar.R
+#' @include compile.R
+#' @include compile-cell.R
+#' @include compile-typing.R
+#' @include helper-format.R
 #' @importFrom stats chisq.test
 #' @importFrom stats cor
 #' @importFrom stats cor.test

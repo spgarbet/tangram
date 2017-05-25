@@ -1,6 +1,6 @@
-#' @include build-cell.R
-#' @include build-main.R
-#' @include build-operators.R
+#' @include compile-cell.R
+#' @include compile-operators.R
+#' @include compile.R
 #'
 #' @importFrom stats anova
 #'

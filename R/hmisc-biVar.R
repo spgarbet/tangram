@@ -1,5 +1,6 @@
 #' @include hmisc-impute.R
 #' @include hmisc-lm.fit.qr.bare.R
+#' @include hmisc-cut2.R
 #' @importFrom stats chisq.test
 #' @importFrom stats cor
 #' @importFrom stats cor.test

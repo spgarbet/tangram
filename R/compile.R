@@ -5,7 +5,7 @@
 #' @param table the table object to flatten
 #' @return the flattened table object
 #' @export
-#' @include build-cell.R
+#' @include compile-cell.R
 #' @include parser.R
 table_flatten <- function(table)
 {

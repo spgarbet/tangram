@@ -10,7 +10,7 @@
 #' @param node Abstract syntax tree node.
 #'
 #' @return A string with a label for the node
-#' @include build-cell.R
+#' @include compile-cell.R
 #' @export
 derive_label <- function(node)
 {

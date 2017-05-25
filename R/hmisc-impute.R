@@ -1,6 +1,5 @@
 impute <- function(x, ...) UseMethod("impute")
 
-
 impute.default <- function(x, fun=median, ...)
 {
   m <- is.na(x)
