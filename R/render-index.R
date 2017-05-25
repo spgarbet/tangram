@@ -1,6 +1,25 @@
 #######
 # Given the compiled tree of data, render as a text index
 
+#' Key derivation helper function
+#'
+#' @param x cell object to derive key for
+#' @export
+key <- function(x)
+{
+  if(is.null(attr(x, "row")) || is.null(attr(x, "col"))) return(NA)
+
+  row    <- attr(x, "row")
+  col    <- attr(x, "col")
+  label  <- attr(x, "names")
+  subrow <- attr(x, "subrow")
+  subcol <- attr(x, "subcol")
+
+  rv <- if(is.null(subrow)) row$value else paste0(row$value, '[',subrow,']')
+  cv <- if(is.null(subcol)) col$value else paste0(col$value, '[',subcol,']')
+  if(is.null(label)) paste0(rv,":",cv) else paste0(rv,":",cv,":",paste0(label, collapse=''))
+}
+
 #' Generate an index from a cell object
 #'
 #' Given a cell class create an index representation.

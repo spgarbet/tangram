@@ -4,7 +4,7 @@
 \alias{cell_fraction}
 \title{Create an cell_fraction (S3) object of the given statistic}
 \usage{
-cell_fraction(numerator, denominator, ratio, percentage, aspect = NULL, ...)
+cell_fraction(numerator, denominator, format = 3, aspect = NULL, ...)
 }
 \arguments{
 \item{numerator}{The value of the numerator}

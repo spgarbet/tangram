@@ -1,9 +1,3 @@
-# Plan of attack
-# 1) rows/cols ? why is this needed. Can it be chucked overboard?
-#    Used only on cell_table right now. Should only be used for that.
-# 2) render_f / formatting moved to construction. Stop duplicating in render code.
-# 3) cell_table object is still fine
-# 4)
 
 rows <- function(x)
 {
@@ -68,7 +62,13 @@ cell_table <- function(rows, cols, embedded=TRUE)
 #' @param x R object to attach attributes too
 #' @param ... Each additional argument becomes an attribute for the object
 #' @return The modified R object
+#'
 cell <- function(x, ...)
+{
+  UseMethod("cell", x)
+}
+
+cell.default <- function(x, ...)
 {
   attribs <- list(...)
   for(i in names(attribs))
@@ -240,8 +240,10 @@ cell_estimate <- function(value, low, high, name=NULL, aspect=NULL, sep=", ", ..
 #' @export
 #' @examples
 #' cell_fraction(1, 4, 0.25, 25)
-cell_fraction <- function(numerator, denominator, ratio, percentage, aspect=NULL, ...)
+cell_fraction <- function(numerator, denominator, format=3, aspect=NULL, ...)
 {
+  ratio      <- render_f(numerator / denominator, format)
+  percentage <- render_f(100 * numerator / denominator, format)
   cell_named_values(c(numerator, denominator, ratio, percentage),
                     c("numerator", "denominator", "ratio", "percentage"),
                     aspect=c(aspect, "cell_fraction"),
@@ -346,23 +348,46 @@ cell_n <- function(n, aspect=NULL, ...)
   cell_named_values(n, "N", aspect=c(aspect, "cell_n"), ...)
 }
 
-#' Key derivation helper function
+
+#' AOV model as cell
 #'
-#' @param x cell object to derive key for
+#' Construct a cell from an analysis of variance model
+#'
+#' @param x The aov object to turn into a renderable cell
+#' @param row The AST row of that is generating this cell
+#' @param column The AST column that is generating this cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell that is an F-statistic
 #' @export
-key <- function(x)
+#' @examples
+#' tg(aov(rnorm(10) ~ rnorm(10)), list(value="A"), list(value="B"))
+cell.aov <- function(x, format_p="%1.3f", ...)
 {
-  if(is.null(attr(x, "row")) || is.null(attr(x, "col"))) return(NA)
-
-  row    <- attr(x, "row")
-  col    <- attr(x, "col")
-  label  <- attr(x, "names")
-  subrow <- attr(x, "subrow")
-  subcol <- attr(x, "subcol")
-
-  rv <- if(is.null(subrow)) row$value else paste0(row$value, '[',subrow,']')
-  cv <- if(is.null(subcol)) col$value else paste0(col$value, '[',subcol,']')
-  if(is.null(label)) paste0(rv,":",cv) else paste0(rv,":",cv,":",paste0(label, collapse=''))
+  test <- summary(x)[[1]]
+  cell_fstat(f   = render_f(test$'F value'[1], "%.2f"),
+             n1  = test$Df[1],
+             n2  = test$Df[2],
+             p   = render_f(test$'Pr(>F)'[1], format_p),
+             ...)
 }
 
+#' Construct hypothesis test cell
+#'
+#' Construct a cell from a hypothesis test
+#'
+#' @param x The htest object to convert to a rendereable cell
+#' @param ... additional specifiers for identifying this cell (see key)
+#' @return an S3 rendereable cell that is a hypothesis test
+#' @export
+#' @examples
+#' tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
+cell.htest <- function(x, format=2, format_p="%1.3f", ...)
+{
+  if(names(x$statistic) == "X-squared")
+    cell_chi2(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, format_p), ...)
+  else if(x$method == "Spearman's rank correlation rho")
+    cell_spearman(render_f(x$statistic, 0), x$parameter, render_f(x$p.value, format_p), ...)
+  else
+    cell_studentt(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, format_p), ...)
+}
 
