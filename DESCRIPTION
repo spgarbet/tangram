@@ -1,10 +1,10 @@
 Package: tangram
 Title: The Grammar of Tables
 Version: 0.2.6
-Authors@R: c(person("Shawn", "Garbett", email = "Shawn.Garbett@Vanderbilt.edu", role = c("aut", "cre")),
-             person("Thomas", "Stewart", email = "Thomas.Stewart@Vanderbilt.edu", role=c("ctb")),
-             person("Jennifer", "Thompson", email = "jennifer.l.thompson@vanderbilt.edu", role= c("ctb")),
-             person("Frank", "Harrell", email = "frank.harrell@vanderbilt.edu", role= c("ctb")),
+Authors@R: c(person("Shawn",    "Garbett",  email = "Shawn.Garbett@Vanderbilt.edu",       role = c("aut", "cre")),
+             person("Thomas",   "Stewart",  email = "Thomas.Stewart@Vanderbilt.edu",      role = c("ctb")),
+             person("Jennifer", "Thompson", email = "Jennifer.L.Thompson@Vanderbilt.edu", role = c("ctb")),
+             person("Frank",    "Harrell",  email = "F.Harrell@Vanderbilt.edu",           role = c("ctb"))
              )
 Description: Provides an extensible formula system to quickly and easily create
     production quality tables. The steps of the process are formula parser,
