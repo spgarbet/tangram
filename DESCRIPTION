@@ -3,7 +3,8 @@ Title: The Grammar of Tables
 Version: 0.2.6
 Authors@R: c(person("Shawn", "Garbett", email = "Shawn.Garbett@Vanderbilt.edu", role = c("aut", "cre")),
              person("Thomas", "Stewart", email = "Thomas.Stewart@Vanderbilt.edu", role=c("ctb")),
-             person("Jennifer", "Thompson", email = "jennifer.l.thompson@vanderbilt.edu", role= c("ctb"))
+             person("Jennifer", "Thompson", email = "jennifer.l.thompson@vanderbilt.edu", role= c("ctb")),
+             person("Frank", "Harrell", email = "frank.harrell@vanderbilt.edu", role= c("ctb")),
              )
 Description: Provides an extensible formula system to quickly and easily create
     production quality tables. The steps of the process are formula parser,
@@ -19,10 +20,11 @@ Description: Provides an extensible formula system to quickly and easily create
     format for use in tracing and tracking are provided.
 Author: Shawn Garbett [aut, cre],
   Thomas Stewart [ctb],
-  Jennifer Thompson [ctb]
+  Jennifer Thompson [ctb],
+  Frank Harrell [ctb]
 Maintainer: Shawn Garbett <Shawn.Garbett@Vanderbilt.edu>
 Depends: R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr
-License: GPL-2
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat, rms, knitr, rmarkdown, Hmisc
