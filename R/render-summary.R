@@ -28,12 +28,20 @@ summary.character <- function(x, ...)
     paste(x, collapse=sep)
   } else {
     name <- vapply(names(x), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
-    paste(paste(name, as.character(x), sep="="), collapse=sep)
+    paste(paste0(name, as.character(x)), collapse=sep)
   }
 }
 
 summary.integer <- function(x, ...) summary.character(x, ...)
 summary.numeric <- function(x, ...) summary.character(x, ...)
+
+summary.cell_iqr <- function(x, ...) 
+{
+  if(is.null(names(x)))
+    paste0(x[1], " *", x[2], "* ", x[3])
+  else
+    paste0(names(x)[1], "=", x[1], " *", x[2], "* ", x[3])
+}
 
 #' summary.cell_quantile <- function(object,...)
 #' {
