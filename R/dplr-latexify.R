@@ -1,23 +1,25 @@
 # dplR::latexify 1.6.6 modified for use in tangram
 # Copyright (C) 2017 Andy Bunn
 # Copyright (C) 2017 Shawn Garbett, modifications
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Return a string representing the given date(s) (default: current date)
 ## in the format used by \today in LaTeX.
 ## Example: latexDate("2013-12-06") returns "December 6, 2013"
+
+
 latexDate <- function(x = Sys.Date(), ...) {
     ltDate <- as.POSIXlt(x, ...)
     sprintf("%s %d, %d",
@@ -30,6 +32,8 @@ latexDate <- function(x = Sys.Date(), ...) {
 ##
 ## It seems that Sweave needs doublebackslash = TRUE
 ## but knitr needs doublebackslash = FALSE.
+#' @include render-latex-map.R
+#' @import stringi
 latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
                      quotes = c("straight", "curved"),
                      packages = c("fontenc", "textcomp")) {
@@ -77,14 +81,15 @@ latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
     ## This starts the 'substitutions' list, which is finally
     ## processed close to the end of the function.
     substitutions <-
-        list(c("([{}])", "\\\\\\1"),
+        list(#c("([{}])", "\\\\\\1"),
              c("\\\\(?![{}])", "\\\\textbackslash{}"),
-             c("\\^", "\\\\textasciicircum{}"),
+             #c("\\^", "\\\\textasciicircum{}"),
              c("~", "\\\\textasciitilde{}"),
              c("<", "\\\\textless{}"),
              c(">", "\\\\textgreater{}"),
              c("\\|", "\\\\textbar{}"),
-             c("([#$%&_])", "\\\\\\1"),
+             #c("([#$%&_])", "\\\\\\1"),
+             c("([#$%&])", "\\\\\\1"),
              if (isTRUE(dashdash)) {
                  c("-", "\\\\mbox{-}")
              },
@@ -336,6 +341,9 @@ latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
                c("\u221a", "\\\\textsurd{}"),
                c("\u00ac", "\\\\textlnot{}"),
                c("\u2212", "\\\\textminus{}")))
+
+    ## A more comprehensive list
+    substitutions <- c(substitutions, sub_table)
 
     ## After a command, remove empty group (when at the end of the
     ## string or some suitable character follows) or replace it with a
