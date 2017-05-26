@@ -1,16 +1,16 @@
 # tangram a general purpose table toolkit for R
 # Copyright (C) 2017 Shawn Garbett
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -127,10 +127,7 @@ new_header <- function(table_builder, attribute, sub, ...)
   # If the old header is null, then create one
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
-    header <- list(new_hdr)
-    attr(header, "class")    <- c("cell_table", "cell")
-    attr(header, "embedded") <- FALSE
-    header
+    cell(list(new_hdr), class=c("cell_table"), embedded=FALSE)
   } else { # extend existing
     old_hdr[[length(old_hdr)+1]] <- new_hdr
     old_hdr
@@ -213,7 +210,7 @@ write_cell <- function(table_builder, x, ...)
   {
     table_builder$table[[table_builder$nrow]] <- list()
   }
-  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- cell(x, row=table_builder$row, col=table_builder$col, ...)
+  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- cell(x, row=table_builder$row$value, col=table_builder$col$value, ...)
   table_builder
 }
 
