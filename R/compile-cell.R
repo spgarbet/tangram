@@ -116,7 +116,7 @@ cell.default <- function(x, ...)
 #' cell_label("Concentration", "mg/dl", subcol="A")
 cell_label <- function(text, units=NULL, class=NULL, ...)
 {
-  cell(as.character(text),
+  cell(text,
        class=c(class, "cell_label"),
        units=units, ...)
 }
@@ -138,7 +138,7 @@ cell_label <- function(text, units=NULL, class=NULL, ...)
 #' cell_header("Concentration", "mg/dl", src="A")
 cell_header <- function(text, units=NULL, class=NULL, ...)
 {
-  cell(as.character(text),
+  cell(text,
        class=c(class, "cell_header", "cell_label"),
        units=units,
        ...)
@@ -161,7 +161,7 @@ cell_header <- function(text, units=NULL, class=NULL, ...)
 #' cell_subheader("Concentration", "mg/dl", src="A")
 cell_subheader <- function(text, units=NULL, class=NULL, ...)
 {
-  cell(as.character(text),
+  cell(text,
        class=c(class, "cell_subheader", "cell_header", "cell_label"),
        units=units,
        ...)

@@ -44,7 +44,6 @@ summarize_kruskal_horz <- function(table, row, column)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    #       src=key(row, column, "N", cat))
     cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat)
   })
 
@@ -60,7 +59,7 @@ summarize_kruskal_horz <- function(table, row, column)
   row_header(derive_label(row))                  %>%
   col_header("N", categories, "Test Statistic")  %>%
   col_header("",  subN,       ""              )  %>%
-  add_col(cell_n(sum(!is.na(datar))))            %>%
+  add_col(sum(!is.na(datar)))                    %>%
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
@@ -102,7 +101,7 @@ summarize_kruskal_vert <- function(table, row, column)
     x <- datac[datar == categories[category]]
     tbl                                                  %>%
     row_header(category)                                 %>%
-    add_col(cell_n(length(x), subcol=category))          %>%
+    add_col(cell(length(x), subcol=category))            %>%
     add_col(cell_iqr(x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
   })                                                                %>%
@@ -153,7 +152,7 @@ summarize_chisq_single <- function(table, row, column)
   col_header("N", col_categories, "Test Statistic")          %>%
   col_header("",  subN,           "")                        %>%
   row_header(lbl)                                            %>%
-  add_col(cell_n(sum(!is.na(datar) & !is.na(datac))))        %>%
+  add_col(sum(!is.na(datar) & !is.na(datac)))                %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
     numerator   <- length(datac[datac == col_category &
@@ -212,7 +211,7 @@ summarize_chisq <- function(table, row, column)
   row_header(derive_label(row))                              %>%
   table_builder_apply(labels, FUN=
     function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
-  add_col(cell_n(sum(!is.na(datar) & !is.na(datac))))        %>%
+  add_col(sum(!is.na(datar) & !is.na(datac)))                %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
     table <- add_row(table, "")
@@ -256,7 +255,7 @@ summarize_spearman <- function(table, row, column)
   row_header(derive_label(row)) %>%
   col_header("N", derive_label(column), "Test Statistic") %>%
   col_header("", "", "") %>%
-  add_col(cell_n(sum(!is.na(datar) & !is.na(datac)))) %>%
+  add_col(sum(!is.na(datar) & !is.na(datac))) %>%
   add_col(test$estimate) %>%
   add_col(test)
 }
