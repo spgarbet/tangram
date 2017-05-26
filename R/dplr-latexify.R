@@ -15,19 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Return a string representing the given date(s) (default: current date)
-## in the format used by \today in LaTeX.
-## Example: latexDate("2013-12-06") returns "December 6, 2013"
-
-
-latexDate <- function(x = Sys.Date(), ...) {
-    ltDate <- as.POSIXlt(x, ...)
-    sprintf("%s %d, %d",
-            month.name[ltDate[["mon"]] + 1],
-            ltDate[["mday"]],
-            1900 + ltDate[["year"]])
-}
-
 ## Usage: \Sexpr{latexify(string_produced_by_R_code)}
 ##
 ## It seems that Sweave needs doublebackslash = TRUE
