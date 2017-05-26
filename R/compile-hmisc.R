@@ -164,7 +164,7 @@ summarize_chisq_single <- function(table, row, column)
         add_row(table, "") %>% new_col()
     else
         add_row(table,
-                cell_fraction(numerator, denominator, row$format,
+                cell_fraction(numerator, denominator, format=row$format,
                               subcol=col_category, subrow=row_category)) %>%
         new_col()
   })                                                         %>%
@@ -226,7 +226,7 @@ summarize_chisq <- function(table, row, column)
           else
             add_row(
               table,
-              cell_fraction(numerator, denominator, row$format,
+              cell_fraction(numerator, denominator, format=row$format,
                             subcol=col_category, subrow=row_category)
           )
       }) %>%

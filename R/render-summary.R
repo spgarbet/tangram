@@ -17,9 +17,13 @@
 #######
 # Given the compiled tree of data, render as a text summary
 #' @include compile-cell.R
-summary.default <- function(object, ...) ""
+summary.default <- function(object, ...) 
+{
+  warning(paste("summary unhandled class : ", paste(base::class(object), collapse=', ')))
+  ""
+}
 
-summary.character <- function(x, ...)
+summary.cell <- function(x, ...)
 {
   sep  <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
   
@@ -32,9 +36,6 @@ summary.character <- function(x, ...)
   }
 }
 
-summary.integer <- function(x, ...) summary.character(x, ...)
-summary.numeric <- function(x, ...) summary.character(x, ...)
-
 summary.cell_iqr <- function(x, ...) 
 {
   if(is.null(names(x)))
@@ -43,13 +44,18 @@ summary.cell_iqr <- function(x, ...)
     paste0(names(x)[1], "=", x[1], " *", x[2], "* ", x[3])
 }
 
-#' summary.cell_quantile <- function(object,...)
-#' {
-#'   paste(render_f(object$'25%',object$format),
-#'         " *", render_f(object$'50%', object$format), "* ",
-#'         render_f(object$'75%', object$format),
-#'         sep="")
-#' }
+summary.cell_estimate <- function(x,...)
+{
+  x <- summary(x[[1]])
+  if(length(x) == 1) x else paste(x, " (", summary(x[[2]]), ")")
+}
+
+summary.cell_fraction <- function(x,...)
+{
+  den <- as.character(x['denominator'])
+  num <- sprintf(paste("%",nchar(den),"s",sep=''), x['numerator'])
+  paste0(x['ratio'], "  ", num, "/", den)
+}
 
 #' Create a text summary of a given table
 #'
@@ -117,24 +123,4 @@ summary.cell_table <- function(object,...)
 print.cell_table <- function(x,...) {summary(x,...)}
 
 
-#' 
-#' summary.cell_estimate <- function(object,...)
-#' {
-#'   if(is.na(object$low))
-#'     render_f(object$value)
-#'   else
-#'     paste(render_f(object$value)," (",render_f(object$low),", ",render_f(object$high),")", sep='')
-#' }
-#' 
-
-#' 
-#' summary.cell_fraction <- function(object,...)
-#' {
-#'   x <- render_f(object$ratio)
-#'   den <- as.character(object$denominator)
-#'   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
-#'   paste(x, "  ",
-#'         num,"/",den,
-#'         sep="")
-#' }
 

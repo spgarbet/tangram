@@ -90,10 +90,11 @@ cell <- function(x, ...)
 
 cell.default <- function(x, ...)
 {
-  orig_class <- class(x)
-  attribs <- list(...)
+  attribs     <- list(...)
+  add_class   <- if("class" %in% names(attribs)) attribs[['class']] else NULL
+  final_class <- if(inherits(x, "cell")) c(add_class, class(x)) else c(add_class, "cell", class(x))
   for(i in names(attribs)) attr(x, i) <- attribs[[i]]
-  class(x) <- c(attribs[["class"]], orig_class)
+  class(x) <- final_class
   x
 }
 
@@ -223,7 +224,7 @@ cell_range <- function(low, high, class=NULL, sep=", ", ...)
   cell(c(low, high), class=c(class, "cell_range"), sep=sep, ...)
 }
 
-#' Create an cell_estimate object of the given estimate
+#' Create a cell_estimate object of the given estimate
 #'
 #' A cell_estimate object contains a statistical estimate. It may
 #' additionally contain an interval with a low and high of a
@@ -309,7 +310,7 @@ cell_fstat <- function(f, n1, n2, p, class=NULL, ...)
 cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
   cell_named_values(c(chi2, p),
-                    c(paste0("\\chi^2_{",df,"}"), "P"),
+                    c(paste0("Χ^{2}_{",df,"}"), "P"),
                     class=c(class, "cell_chi2", "statistics"),
                     ...)
 }
@@ -351,7 +352,7 @@ cell_studentt <- function(t, df, p, class=NULL, ...)
 cell_spearman <- function(S, rho, p, class=NULL, ...)
 {
   cell_named_values(c(S, rho, p),
-                    names=c("S", "\\rho", "P"),
+                    names=c("S", "ρ", "P"),
                     class=c(class, "cell_spearman", "statistics"),
                     ...)
 }

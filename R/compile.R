@@ -103,16 +103,11 @@ table_flatten <- function(table)
   # Set label class in upper left corner, that represent headers
   sapply(1:label_rows, FUN=function(row){
     sapply(1:label_cols, FUN=function(col){
-      # Either a header or subheader
-      hdr_class <- if (inherits(new_tbl[[row]][[label_cols+1]], "cell_subheader"))
-                   {
-                     c("cell_subheader", "cell_header")
-                   } else {
-                     "cell_header"
-                   }
-
-      class(new_tbl[[row]][[col]])  <<- c(hdr_class, class(new_tbl[[row]][[col]]))
-      attr(new_tbl[[row]][[col]],"parity") <<- "even"
+      
+      new_tbl[[row]][[col]] <<- if(inherits(new_tbl[[row]][[label_cols+1]], "cell_subheader"))
+        cell_subheader("", parity="even")
+      else
+        cell_header("", parity="even")
     })
   })
 
