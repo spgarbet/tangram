@@ -14,39 +14,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-latex2unicode <- function(x)
-{
-  for(i in names(convert_table))
-  {
-    x <- str_replace_all(x, paste0("\\\\", i,"{}"), convert_table[[i]])
-    x <- str_replace_all(x, paste0("\\\\", i),      convert_table[[i]])
-  }
-  x
-}
-
 #######
 # Given the compiled tree of data, render as a text summary
 #' @include compile-cell.R
-summary.default <- function(object,...) ""
+summary.default <- function(object, ...) ""
 
-summary.cell_label <- function(object,...)
+summary.character <- function(x, ...)
 {
-  if(is.na(object$units))
+  sep  <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
+  
+  if(is.null(names(x)))
   {
-    if(length(object$label) == 0) return("") else return(object$label)
+    paste(x, collapse=sep)
   } else {
-    return(paste(object$label, " (", object$units, ")", sep=""))
+    name <- vapply(names(x), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
+    paste(paste(name, as.character(x), sep="="), collapse=sep)
   }
 }
 
-summary.cell_quantile <- function(object,...)
-{
-  paste(render_f(object$'25%',object$format),
-        " *", render_f(object$'50%', object$format), "* ",
-        render_f(object$'75%', object$format),
-        sep="")
-}
+summary.integer <- function(x, ...) summary.character(x, ...)
+summary.numeric <- function(x, ...) summary.character(x, ...)
+
+#' summary.cell_quantile <- function(object,...)
+#' {
+#'   paste(render_f(object$'25%',object$format),
+#'         " *", render_f(object$'50%', object$format), "* ",
+#'         render_f(object$'75%', object$format),
+#'         sep="")
+#' }
 
 #' Create a text summary of a given table
 #'
@@ -113,48 +108,25 @@ summary.cell_table <- function(object,...)
 #'
 print.cell_table <- function(x,...) {summary(x,...)}
 
-summary.cell_estimate <- function(object,...)
-{
-  if(is.na(object$low))
-    render_f(object$value)
-  else
-    paste(render_f(object$value)," (",render_f(object$low),", ",render_f(object$high),")", sep='')
-}
 
-summary.cell_fstat <- function(object,...)
-{
-  paste("F_{",object$n1,",",object$n2,"}=",render_f(object$f),", P=",render_f(object$p),sep="")
-}
+#' 
+#' summary.cell_estimate <- function(object,...)
+#' {
+#'   if(is.na(object$low))
+#'     render_f(object$value)
+#'   else
+#'     paste(render_f(object$value)," (",render_f(object$low),", ",render_f(object$high),")", sep='')
+#' }
+#' 
 
-summary.cell_fraction <- function(object,...)
-{
-  x <- render_f(object$ratio)
-  den <- as.character(object$denominator)
-  num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
-  paste(x, "  ",
-        num,"/",den,
-        sep="")
-}
+#' 
+#' summary.cell_fraction <- function(object,...)
+#' {
+#'   x <- render_f(object$ratio)
+#'   den <- as.character(object$denominator)
+#'   num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
+#'   paste(x, "  ",
+#'         num,"/",den,
+#'         sep="")
+#' }
 
-summary.cell_chi2 <- function(object,...)
-{
-  paste("    X^2_",object$df,"=",render_f(object$chi2),", P=",render_f(object$p),sep="")
-}
-
-summary.cell_studentt <- function(object,...)
-{
-  paste("T_",object$df,"=",render_f(object$t), ", P=",render_f(object$p), sep="")
-}
-
-summary.cell_spearman <- function(object,...)
-{
-  paste("S=",render_f(object$S),", P=",render_f(object$p), sep="")
-}
-
-summary.cell_n <- function(object,...)
-{
-  if (inherits(object, "cell_header"))
-    paste("(N=",as.character(object$n),")",sep='')
-  else
-    as.character(object$n)
-}

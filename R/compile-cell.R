@@ -14,22 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#' @export
 rows <- function(x)
 {
   UseMethod("rows", x)
 }
 
+#' @export
 cols <- function(x)
 {
   UseMethod("cols", x)
 }
 
-rows.cell_table <- function(object)
+#' @export
+rows.list <- function(object)
 {
   length(object)
 }
 
-cols.cell_table <- function(object)
+#' @export
+cols.list <- function(object)
 {
   if(length(object) >= 1)
   {
@@ -52,17 +56,17 @@ cols.cell_table <- function(object)
 #'
 #' @return An empty cell_table object.
 #' @export
-cell_table <- function(rows, cols, embedded=TRUE)
+cell_table <- function(rows=1, cols=1, embedded=TRUE)
 {
   cell(lapply(1:rows, function(x) as.list(rep(cell(""), cols))),
-       class= c("cell_table"),
+       class= c("cell_table","list"),
        embedded = embedded)
 }
 
 #' Construct a table cell from an object
 #'
 #' Any R object can be used as a cell value. Attributes
-#' are used to store additional aspects of that cell
+#' are used to store additional classs of that cell
 #' attached to the object. This is a helper function
 #' to attach all the additional attributes to the
 #' provided object
@@ -70,7 +74,7 @@ cell_table <- function(rows, cols, embedded=TRUE)
 #' Certain attributes have special meaning:
 #' - 'names' is appended to the front of a value, e.g. "P=" for a p-value.
 #' - 'sep' is used to join values, e.g. ", " for a list of values.
-#' - 'aspect' denotes special rendering handling, e.g. generally passed as CSS class to HTML5
+#' - 'class' denotes special rendering handling, e.g. generally passed as CSS class to HTML5
 #' - 'reference' a list of reference symbols to put inside the cell
 #' - 'row' and 'col' should refer to the row / column if key generation is needed
 #' - 'subrow' and 'subcol' further delinate the key value of a cell for key generation
@@ -86,9 +90,10 @@ cell <- function(x, ...)
 
 cell.default <- function(x, ...)
 {
+  orig_class <- class(x)
   attribs <- list(...)
-  for(i in names(attribs))
-    attr(x, i) <- attribs[[i]]
+  for(i in names(attribs)) attr(x, i) <- attribs[[i]]
+  class(x) <- c(attribs[["class"]], orig_class)
   x
 }
 
@@ -108,11 +113,11 @@ cell.default <- function(x, ...)
 #' cell_label("Compaction Method")
 #' cell_label("Concentration", "mg/dl")
 #' cell_label("Concentration", "mg/dl", subcol="A")
-cell_label <- function(text, units=NA, ...)
+cell_label <- function(text, units=NULL, class=NULL, ...)
 {
   cell(as.character(text),
-       aspect="cell_label",
-       units=as.character(units), ...)
+       class=c(class, "cell_label"),
+       units=units, ...)
 }
 
 #' Create a cell_header object of the given text.
@@ -130,10 +135,12 @@ cell_label <- function(text, units=NA, ...)
 #' cell_header("Yahoo")
 #' cell_header("Concentration", "mg/dl")
 #' cell_header("Concentration", "mg/dl", src="A")
-cell_header <- function(text, units=NA, ...)
+cell_header <- function(text, units=NULL, class=NULL, ...)
 {
-  cell(as.character(text), aspect=c("cell_header", "cell_label"),
-       units=as.character(units), ...)
+  cell(as.character(text),
+       class=c(class, "cell_header", "cell_label"),
+       units=units,
+       ...)
 }
 
 #' Create a cell_subheader object of the given text.
@@ -151,11 +158,12 @@ cell_header <- function(text, units=NA, ...)
 #' cell_subheader("Concentration")
 #' cell_subheader("Concentration", "mg/dl")
 #' cell_subheader("Concentration", "mg/dl", src="A")
-cell_subheader <- function(text, units=NA, aspect=NULL, ...)
+cell_subheader <- function(text, units=NULL, class=NULL, ...)
 {
   cell(as.character(text),
-       aspect=c(aspect, "cell_subheader", "cell_header", "cell_label"),
-       units=as.character(units), ...)
+       class=c(class, "cell_subheader", "cell_header", "cell_label"),
+       units=units,
+       ...)
 }
 
 #' Create a interquartile range cell object of the given data
@@ -186,7 +194,7 @@ cell_iqr <- function(x,
 
   if(is.na(format)) format <- format_guess(x)
   ql <- sapply(x, function(x) render_f(x, format))
-  cell(ql, aspect="cell_iqr", ...)
+  cell(ql, class="cell_iqr", ...)
 }
 
 #' Create named value cells
@@ -204,15 +212,15 @@ cell_iqr <- function(x,
 #' @export
 #' @examples
 #' cell_named_values(1.0, "one")
-cell_named_values <- function(values, names, aspect=NULL, sep=", ", ...)
+cell_named_values <- function(values, names, class=NULL, sep=", ", ...)
 {
   names(values) <- names
-  cell(values, aspect=c(aspect, "cell_value"), sep=sep, ...)
+  cell(values, class=c(class, "cell_value"), sep=sep, ...)
 }
 
-cell_range <- function(low, high, aspect=NULL, sep=", ", ...)
+cell_range <- function(low, high, class=NULL, sep=", ", ...)
 {
-  cell(c(low, high), aspect=c(aspect, "cell_range"), sep=sep, ...)
+  cell(c(low, high), class=c(class, "cell_range"), sep=sep, ...)
 }
 
 #' Create an cell_estimate object of the given estimate
@@ -225,7 +233,7 @@ cell_range <- function(low, high, aspect=NULL, sep=", ", ...)
 #' @param low Specifies a lower interval for the estimate.
 #' @param high Specifies an upper interval for the estimate.
 #' @param name character; An optional name to apply to the value
-#' @param aspect character; additional aspects to apply
+#' @param class character; additional classs to apply
 #' @param sep character; option separator character for the range
 #'
 #' @return A cell_estimate object.
@@ -233,11 +241,11 @@ cell_range <- function(low, high, aspect=NULL, sep=", ", ...)
 #' @examples
 #' cell_estimate(1.0, name="one")
 #' cell_estimate(1.0, 0.5, 1.5)
-cell_estimate <- function(value, low, high, name=NULL, aspect=NULL, sep=", ", ...)
+cell_estimate <- function(value, low, high, name=NULL, class=NULL, sep=", ", ...)
 {
   cell(list(cell_named_values(value, names=name),
             cell_range(low, high, sep=sep)),
-       aspect=c(aspect, "cell_estimate"),
+       class=c(class, "cell_estimate"),
        ...)
 }
 
@@ -256,13 +264,13 @@ cell_estimate <- function(value, low, high, name=NULL, aspect=NULL, sep=", ", ..
 #' @export
 #' @examples
 #' cell_fraction(1, 4, 0.25, 25)
-cell_fraction <- function(numerator, denominator, format=3, aspect=NULL, ...)
+cell_fraction <- function(numerator, denominator, format=3, class=NULL, ...)
 {
   ratio      <- render_f(numerator / denominator, format)
   percentage <- render_f(100 * numerator / denominator, format)
   cell_named_values(c(numerator, denominator, ratio, percentage),
                     c("numerator", "denominator", "ratio", "percentage"),
-                    aspect=c(aspect, "cell_fraction"),
+                    class=c(class, "cell_fraction"),
                     ...)
 }
 
@@ -279,9 +287,9 @@ cell_fraction <- function(numerator, denominator, format=3, aspect=NULL, ...)
 #' @export
 #' @examples
 #' cell_fstat(4.0, 10, 20, 0.004039541, reference=1,)
-cell_fstat <- function(f, n1, n2, p, aspect=NULL, ...)
+cell_fstat <- function(f, n1, n2, p, class=NULL, ...)
 {
-  cell_named_values(c(f, p), names=c(paste0("F_{",n1,",",n2,"}"), "P"), aspect=c(aspect, "cell_fstat", "statistics"), ...)
+  cell_named_values(c(f, p), names=c(paste0("F_{",n1,",",n2,"}"), "P"), class=c(class, "cell_fstat", "statistics"), ...)
 }
 
 #' Create an cell_chi2 (S3) object of the given statistic
@@ -298,11 +306,11 @@ cell_fstat <- function(f, n1, n2, p, aspect=NULL, ...)
 #' @export
 #' @examples
 #' cell_chi2(5.6, 2, 0.06081)
-cell_chi2 <- function(chi2, df, p, aspect=NULL, ...)
+cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
   cell_named_values(c(chi2, p),
                     c(paste0("\\chi^2_{",df,"}"), "P"),
-                    aspect=c(aspect, "cell_chi2", "statistics"),
+                    class=c(class, "cell_chi2", "statistics"),
                     ...)
 }
 
@@ -318,11 +326,11 @@ cell_chi2 <- function(chi2, df, p, aspect=NULL, ...)
 #' @export
 #' @examples
 #' cell_studentt(2.0, 20, 0.02963277)
-cell_studentt <- function(t, df, p, aspect=NULL, ...)
+cell_studentt <- function(t, df, p, class=NULL, ...)
 {
   cell_named_values(c(t, p),
                     c(paste0("t_{",df,"}"), "P"),
-                    aspect=c(aspect, "cell_studentt", "statistics"),
+                    class=c(class, "cell_studentt", "statistics"),
                     ...)
 }
 
@@ -340,11 +348,11 @@ cell_studentt <- function(t, df, p, aspect=NULL, ...)
 #' @export
 #' @examples
 #' cell_spearman(20, 0.2, 0.05)
-cell_spearman <- function(S, rho, p, aspect=NULL, ...)
+cell_spearman <- function(S, rho, p, class=NULL, ...)
 {
   cell_named_values(c(S, rho, p),
                     names=c("S", "\\rho", "P"),
-                    aspect=c(aspect, "cell_spearman", "statistics"),
+                    class=c(class, "cell_spearman", "statistics"),
                     ...)
 }
 
@@ -359,9 +367,9 @@ cell_spearman <- function(S, rho, p, aspect=NULL, ...)
 #' @export
 #' @examples
 #' cell_n(20)
-cell_n <- function(n, aspect=NULL, ...)
+cell_n <- function(n, class=NULL, ...)
 {
-  cell_named_values(n, "N", aspect=c(aspect, "cell_n"), ...)
+  cell_named_values(n, "N", class=c(class, "cell_n"), ...)
 }
 
 

@@ -115,24 +115,26 @@ new_header <- function(table_builder, attribute, sub, ...)
   old_hdr   <- attr(table_builder$table, attribute)
 
   # Either a header or subheader
-  hdr_class <- if (is.null(old_hdr) | !sub) "cell_header" else c("cell_subheader", "cell_header")
+  f <- if (is.null(old_hdr) | !sub) cell_header else cell_subheader
 
   # Convert every element to an appropriate cell from request
   new_hdr   <- lapply(args_flatten(...), FUN=function(x) {
-    value <-   cell(x, row=table_builder$row, col=table_builder$col)
-    attr(value, "class") <- c(hdr_class, attr(value,"class"))
-    value
+    f(x,
+      row=table_builder$row$value,
+      col=table_builder$col$value)
   })
 
   # If the old header is null, then create one
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
-    cell(list(new_hdr), class=c("cell_table"), embedded=FALSE)
+    hdr      <- cell_table(embedded=FALSE)
+    hdr[[1]] <- new_hdr
+    hdr
   } else { # extend existing
     old_hdr[[length(old_hdr)+1]] <- new_hdr
     old_hdr
   }
-
+  
   # Return table_builder for pipe operator
   table_builder
 }
