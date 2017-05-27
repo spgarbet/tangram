@@ -4,7 +4,7 @@
 \alias{cell_n}
 \title{Create an cell_n (S3) object of the given statistic}
 \usage{
-cell_n(n, aspect = NULL, ...)
+cell_n(n, class = NULL, ...)
 }
 \arguments{
 \item{n}{The value of the X^2 statistic}

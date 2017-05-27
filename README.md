@@ -82,8 +82,7 @@ This concludes the syntax phase of compiling a table. The next phase is where se
 
 ## Statistical Analysis and Summary
 
-The user now has the choice what semantic content is desired for constructing the statistical summary. One might appreciate the default summary statistics and asthetic layout of Hmisc. One might want to generate data ready for the New England Journal of Medicine or it might just be statistics about a particular model that is central to the idea.[^1]
-[^1] Idea: Why not take an R model directly as another route to table generation.
+The user now has the choice what semantic content is desired for constructing the statistical summary. One might appreciate the default summary statistics and asthetic layout of Hmisc. One might want to generate data ready for the New England Journal of Medicine or it might just be statistics about a particular model that is central to the idea.
 
 At this point, if statistical *p*-values are to be used a table should have a consistent viewpoint of what the null hypothesis is. A consistent viewpoint is essentially to a readers understanding the collection of information being presented. For example, Hmisc takes the viewpoint that the null hypothesis is indepedence of variables between row and column. Thus the table is exploring what possible relationships exist, and giving the reader a feel for the ranges of the data. Then based on what data type a variable is an appropriate statistical test is chosen.
 

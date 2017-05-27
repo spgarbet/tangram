@@ -17,9 +17,11 @@
 #######
 # Given the compiled tree of data, render as a text summary
 #' @include compile-cell.R
+#' @include compile.R
 summary.default <- function(object, ...) 
 {
   warning(paste("summary unhandled class : ", paste(base::class(object), collapse=', ')))
+  
   ""
 }
 
@@ -55,6 +57,18 @@ summary.cell_fraction <- function(x,...)
   den <- as.character(x['denominator'])
   num <- sprintf(paste("%",nchar(den),"s",sep=''), x['numerator'])
   paste0(x['ratio'], "  ", num, "/", den)
+}
+
+#' Create a text summary of a given table_builder
+#'
+#' @param object The table_builder to render to text
+#' @param ... additional arguments to renderer. Unused at present.
+#' @return A text string rendering of the given table
+#' @export
+#'
+summary.table_builder <- function(object,...)
+{
+  summary(table_flatten(object$table))
 }
 
 #' Create a text summary of a given table
@@ -118,9 +132,13 @@ summary.cell_table <- function(object,...)
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-#' @importFrom stringr str_pad
-#'
 print.cell_table <- function(x,...) {summary(x,...)}
 
-
+#' Print a text summary of a given table_builder
+#'
+#' @param x The table_builder to render to text
+#' @param ... additional arguments, unused at present
+#' @return A text string rendering of the given table
+#' @export
+print.table_builder <- function(x,...) {summary(x,...)}
 

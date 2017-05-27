@@ -4,7 +4,7 @@
 \alias{cell_header}
 \title{Create a cell_header object of the given text.}
 \usage{
-cell_header(text, units = NA, ...)
+cell_header(text, units = NULL, class = NULL, ...)
 }
 \arguments{
 \item{text}{character; The text of the label. May include a subset of LaTeX greek or math.}

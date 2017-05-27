@@ -2,9 +2,9 @@
 % Please edit documentation in R/compile-cell.R
 \name{cell_estimate}
 \alias{cell_estimate}
-\title{Create an cell_estimate object of the given estimate}
+\title{Create a cell_estimate object of the given estimate}
 \usage{
-cell_estimate(value, low, high, name = NULL, aspect = NULL, sep = ", ",
+cell_estimate(value, low, high, name = NULL, class = NULL, sep = ", ",
   ...)
 }
 \arguments{
@@ -16,7 +16,7 @@ cell_estimate(value, low, high, name = NULL, aspect = NULL, sep = ", ",
 
 \item{name}{character; An optional name to apply to the value}
 
-\item{aspect}{character; additional aspects to apply}
+\item{class}{character; additional classs to apply}
 
 \item{sep}{character; option separator character for the range}
 }

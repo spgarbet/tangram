@@ -4,7 +4,7 @@
 \alias{cell_chi2}
 \title{Create an cell_chi2 (S3) object of the given statistic}
 \usage{
-cell_chi2(chi2, df, p, aspect = NULL, ...)
+cell_chi2(chi2, df, p, class = NULL, ...)
 }
 \arguments{
 \item{chi2}{The value of the X^2 statistic}

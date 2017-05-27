@@ -107,7 +107,7 @@ rms_variable <- function(model.sum,
 {
   results <- model.anova[var,]
 
-  tbl <- new_table_builder(NA, NA)
+  tbl <- table_builder()
 
   tbl <- if(lowhigh) {
            col_header(tbl, "", "", model.name, "") %>%
@@ -159,7 +159,7 @@ rms_stats <- function(model.anova, lowhigh)
 
   padding <- function(tbl) if(lowhigh) add_col(tbl, "", "", "") else tbl
 
-  new_table_builder(NA, NA)                                   %>%
+  table_builder()                                             %>%
   row_header("All Nonlinear & Interaction Terms")             %>%
   padding()                                                   %>%
   add_col(cell_fstat(f   = form(anit['F'], "%.2f"),
@@ -190,7 +190,7 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
   results <- rms.model$stats
   padding <- function(x) if(lowhigh) add_col(x, "", "") else x
 
-  new_table_builder(NA, NA)                                   %>%
+  table_builder()                                             %>%
   row_header("Model Likelihood Ratio")                        %>%
   padding()                                                   %>%
   add_col(cell_estimate(form(results['Model L.R.'],rnd.stats),

@@ -4,7 +4,7 @@
 \alias{cell_table}
 \title{Create an empty table of cells}
 \usage{
-cell_table(rows, cols, embedded = TRUE)
+cell_table(rows = 1, cols = 1, embedded = TRUE)
 }
 \arguments{
 \item{rows}{An integer of the number of rows to create}

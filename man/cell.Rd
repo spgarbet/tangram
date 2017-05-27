@@ -16,7 +16,7 @@ The modified R object
 }
 \description{
 Any R object can be used as a cell value. Attributes
-are used to store additional aspects of that cell
+are used to store additional classs of that cell
 attached to the object. This is a helper function
 to attach all the additional attributes to the
 provided object
@@ -25,7 +25,7 @@ provided object
 Certain attributes have special meaning:
 - 'names' is appended to the front of a value, e.g. "P=" for a p-value.
 - 'sep' is used to join values, e.g. ", " for a list of values.
-- 'aspect' denotes special rendering handling, e.g. generally passed as CSS class to HTML5
+- 'class' denotes special rendering handling, e.g. generally passed as CSS class to HTML5
 - 'reference' a list of reference symbols to put inside the cell
 - 'row' and 'col' should refer to the row / column if key generation is needed
 - 'subrow' and 'subcol' further delinate the key value of a cell for key generation

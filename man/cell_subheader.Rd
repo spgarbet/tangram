@@ -4,7 +4,7 @@
 \alias{cell_subheader}
 \title{Create a cell_subheader object of the given text.}
 \usage{
-cell_subheader(text, units = NA, aspect = NULL, ...)
+cell_subheader(text, units = NULL, class = NULL, ...)
 }
 \arguments{
 \item{text}{character; The text of the label. May include a subset of LaTeX greek or math.}

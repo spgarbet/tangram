@@ -4,7 +4,7 @@
 \alias{cell_fstat}
 \title{Create an cell_fstat (S3) object of the given statistic}
 \usage{
-cell_fstat(f, n1, n2, p, aspect = NULL, ...)
+cell_fstat(f, n1, n2, p, class = NULL, ...)
 }
 \arguments{
 \item{f}{The value of the f-statistic}

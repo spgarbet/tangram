@@ -4,7 +4,7 @@
 \alias{cell_studentt}
 \title{Create an cell_studentt (S3) object of the given statistic}
 \usage{
-cell_studentt(t, df, p, aspect = NULL, ...)
+cell_studentt(t, df, p, class = NULL, ...)
 }
 \arguments{
 \item{t}{The value of the X^2 statistic}

@@ -4,7 +4,7 @@
 \alias{cell_spearman}
 \title{Create an cell_spearman (S3) object of the given statistic}
 \usage{
-cell_spearman(S, rho, p, aspect = NULL, ...)
+cell_spearman(S, rho, p, class = NULL, ...)
 }
 \arguments{
 \item{S}{The value of the spearman statistic}

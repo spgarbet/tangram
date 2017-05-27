@@ -98,17 +98,6 @@ args_flatten <- function(...)
   flat
 }
 
-#' Create a new header on a table
-#'
-#' Function to append a header object to a given attribute. Will create
-#' a new header if one doesn't exit, or append to existing
-#'
-#' @param table_builder The table builder object to modify
-#' @param attribute The header attribute name, i.e. row_header or col_header
-#' @param sub boolean indicating if this is a subheader
-#' @param ... All the header elements to add
-#' @return the modified table_builder
-#'
 new_header <- function(table_builder, attribute, sub, ...)
 {
   # Grab old header if it exists
@@ -120,8 +109,8 @@ new_header <- function(table_builder, attribute, sub, ...)
   # Convert every element to an appropriate cell from request
   new_hdr   <- lapply(args_flatten(...), FUN=function(x) {
     f(x,
-      row=table_builder$row$value,
-      col=table_builder$col$value)
+      row=table_builder$row,
+      col=table_builder$col)
   })
 
   # If the old header is null, then create one
@@ -139,96 +128,98 @@ new_header <- function(table_builder, attribute, sub, ...)
   table_builder
 }
 
-#' Create a new column header in a table
+#' Table Construction Toolset
+#' 
+#' These functions help build a table. A table can be embedded
+#' inside another table as a cell as well. The typical transform functions
+#' that provide bundles of functionality utilize this approach and each
+#' row column pair are rendered as a cell that is a table and later the
+#' whole table is flattened. 
+#' 
+#' This library is designed to use a core \code{table_builder} object that
+#' is passed from function to function using the pipe operator.
+#' First create a \code{table_builder} using the \code{table_builder()} function and
+#' use the operators to build out the table. The row and column given to
+#' the \code{table_builder} are what is used in later construction of an
+#' index key. The table_builder object contains an item table which
+#' is the current table being built.
 #'
-#' Function to append a column header to a table being built. The first call creates
-#' a column header, subsequent calls add sub headers to existing column header
+#' Column and row headers are attached as attributes to each table
+#' constructed are are tables in their own right that should match
+#' the proper dimension of the contained table. When later flattening
+#' a table of embedded tables, only the left and top most headers are 
+#' used.
+#' 
+#' The table builder also has a cursor which maintains the state
+#' of where cell items are being written in table construction. It
+#' is possible to move the cursor into undefined portions of the table.
+#' Therefore it is best to use cursor movement to move in defined
+#' rows or columns of information.
 #'
+#' @param col character; Value to use for indexing
+#' @param FUN the function to use in iteration
+#' @param n integer; Number of positions to move cursor, defaults to 1
+#' @param ncol integer; specifies desired col
+#' @param nrow integer; specifies desired row
+#' @param row character; Value to use for indexing
+#' @param sub logical; treat as subheader if after first header, defaults to TRUE
+#' @param subcol character; an additional specifier to use in indexing
+#' @param subrow character; an additional specifier to use in indexing
 #' @param table_builder The table builder object to modify
-#' @param ... All the column header elements to add
-#' @param sub treat as subheader if after first header, defaults to TRUE
+#' @param x any; a value to use for a cell in operation
+#' @param X list or vector; items to iterate over
+#' @param ... object; the elements to add or additional values to pass to FUN
 #' @return the modified table_builder
-#' @export
-#'
-col_header <- function(table_builder, ..., sub=TRUE) new_header(table_builder, "col_header", sub, ...)
-
-#' Create a new row header in a table.
-#'
-#' Function to append a row header to a table being built. The first call creates
-#' a row header, subsequent calls add sub headers to existing row header
-#'
-#' @param table_builder The table builder object to modify
-#' @param ... All the row header elements to add
-#' @param sub treat as subheader if after first, default to TRUE
-#' @return the modified table_builder
-#' @export
-#'
-row_header <- function(table_builder, ..., sub=TRUE) new_header(table_builder, "row_header", sub, ...)
-
-  #############################################################################
- ##
-## Table cursor, movement and manipulation. Loosely based on VT100
-
-
-#' Create empty table builder.
-#'
-#' Function to create a new table builder to use in continuations.
-#' This maintains a cursor state where values are being written to the
-#' table under construction, as well as references to the row and column
-#' for automated tracability when generating indexes.
-#'
-#' @param row The row node from the AST
-#' @param column The col node from the AST
-#' @return a table builder with 1 empty cell at position (1,1)
-#' @export
-#'
-#' @examples
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left)
-#'
-new_table_builder <- function(row, column)
-{
-  list(nrow=1, ncol=1, table=cell_table(1,1), row=row, col=column)
-}
-
-#' Write a single cell
-#'
-#' Function to write a value to the current position in the table builder
-#'
-#' @param table_builder The table builder to work on
-#' @param x the cell to write
-#' @param ... additional attributes to pass for traceback
-#' @return a table builder with the given cell written in the current cursor position
-#' @export
-#'
 #' @examples
 #' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% write_cell(tg_N(23))
-#'
+#' table_builder()                        %>% 
+#' col_header("One","Two","Three","Four") %>%
+#' row_header("A",   "B",   "C")          %>%
+#' write_cell("A1")                       %>%
+#' cursor_right()                         %>%
+#' add_col("A2", "A3")                    %>%
+#' home()                                 %>%
+#' new_line()                             %>%
+#' table_builder_apply(1:3, FUN=function(tb, x) {
+#'   tb %>% write_cell(paste0("B",x)) %>% cursor_right()
+#' })                                     %>%
+#' new_col()                              %>%
+#' add_row(paste0(c("A","B","C"), 4))     %>%
+#' cursor_up(2)                           %>%
+#' line_feed()                            %>%
+#' cursor_left(3)                         %>%
+#' add_col(paste0("C", 1:4))
+#' @rdname table_builder
+#' @export
+table_builder <- function(row=NA, column=NA)
+{
+  x <- list(nrow=1, ncol=1, table=cell_table(1,1), row=row, col=column)
+  class(x) <- c("table_builder", "list")
+  x
+}
+
+#' @rdname table_builder
+#' @export
+col_header <- function(table_builder, ..., sub=TRUE) new_header(table_builder, "col_header", sub, ...)
+
+#' @rdname table_builder
+#' @export
+row_header <- function(table_builder, ..., sub=TRUE) new_header(table_builder, "row_header", sub, ...)
+
+#' @rdname table_builder
+#' @export
 write_cell <- function(table_builder, x, ...)
 {
   if(table_builder$nrow > length(table_builder$table))
   {
     table_builder$table[[table_builder$nrow]] <- list()
   }
-  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- cell(x, row=table_builder$row$value, col=table_builder$col$value, ...)
+  table_builder$table[[table_builder$nrow]][[table_builder$ncol]] <- cell(x, row=table_builder$row, col=table_builder$col, ...)
   table_builder
 }
 
-#' Home the cursor.
-#'
-#' Return table builder cursor position to (1,1)
-#'
-#' @param table_builder The table builder to work on
-#' @return a table builder with the cursor at home
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% home()
-#'
 home <- function(table_builder)
 {
   table_builder$ncol <- 1
@@ -236,20 +227,8 @@ home <- function(table_builder)
   table_builder
 }
 
-#' Move cursor up
-#'
-#' Move table builder cursor up specified value (default 1)
-#'
-#' @param table_builder The table builder to work on
-#' @param n units to move cursor up
-#' @return a table builder with the cursor up n positions
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_up(2)
-#'
 cursor_up <- function(table_builder, n=1)
 {
   table_builder$nrow <- table_builder$nrow - n
@@ -257,20 +236,8 @@ cursor_up <- function(table_builder, n=1)
   table_builder
 }
 
-#' Move cursor down
-#'
-#' Move table builder cursor down specified value (default 1)
-#'
-#' @param table_builder The table builder to work on
-#' @param n units to move cursor down
-#' @return a table builder with the cursor down n positions
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_down(2)
-#'
 cursor_down <- function(table_builder, n=1)
 {
   table_builder$nrow <- table_builder$nrow + n
@@ -278,20 +245,8 @@ cursor_down <- function(table_builder, n=1)
   table_builder
 }
 
-#' Move cursor left
-#'
-#' Move table builder cursor left the specified value (default 1)
-#'
-#' @param table_builder The table builder to work on
-#' @param n units to move cursor left
-#' @return a table builder with the cursor left n positions
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_left(2)
-#'
 cursor_left <- function(table_builder, n=1)
 {
   table_builder$ncol <- table_builder$ncol - n
@@ -299,20 +254,8 @@ cursor_left <- function(table_builder, n=1)
   table_builder
 }
 
-#' Move cursor right
-#'
-#' Move table builder cursor right the specified value (default 1)
-#'
-#' @param table_builder The table builder to work on
-#' @param n units to move cursor right
-#' @return a table builder with the cursor right n positions
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% cursor_right(2)
-#'
 cursor_right <- function(table_builder, n=1)
 {
   table_builder$ncol <- table_builder$ncol + n
@@ -320,21 +263,8 @@ cursor_right <- function(table_builder, n=1)
   table_builder
 }
 
-#' Move cursor to position
-#'
-#' Move table builder cursor to the specified position
-#'
-#' @param table_builder The table builder to work on
-#' @param nrow The number of the row to move too
-#' @param ncol The number of the col to move too
-#' @return a table builder with the cursor at the specified position
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3)
-#'
 cursor_pos <- function(table_builder, nrow, ncol)
 {
   if(nrow <= 0 || ncol <= 0) stop("cursor_pos does not allow negative values")
@@ -343,53 +273,20 @@ cursor_pos <- function(table_builder, nrow, ncol)
   table_builder
 }
 
-#' Move cursor to first column
-#'
-#' Move table builder cursor to the first column, does not advance row
-#'
-#' @param table_builder The table builder to work on
-#' @return a table builder with the cursor at the first column
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% carriage_return()
-#'
 carriage_return <- function(table_builder)
 {
   table_builder$ncol <- 1
   table_builder
 }
 
-#' Move cursor to next line
-#' Move table builder cursor to the next line (does not alter column)
-#'
-#' @param table_builder The table builder to work on
-#' @param n optional number of line_feeds to perform
-#' @return a table builder with the cursor at the first column
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% cursor_pos(3,3) %>% line_feed()
-#'
 line_feed <- cursor_down
 
-#' Return to 1st column, next line
-#'
-#' Return table_builder to 1st column, and advance to next line
-#'
-#' @param table_builder The table builder to work on
-#' @return a table builder with the cursor at the first column on a new line
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% new_line()
-#'
 new_line <- function(table_builder)
 {
   table_builder     %>%
@@ -397,20 +294,8 @@ new_line <- function(table_builder)
   line_feed()
 }
 
-#' Open a new row
-#'
-#' Move table builder cursor to the bottom of all defined rows opening a new one
-#' in the first column
-#'
-#' @param table_builder The table builder to work on
-#' @return a table builder with the cursor at the first column
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% new_row()
-#'
 new_row <- function(table_builder)
 {
   table_builder %>%
@@ -418,19 +303,8 @@ new_row <- function(table_builder)
   cursor_down(length(table_builder$table))
 }
 
-#' Open a new column in 1st row
-#'
-#' Advance table builder cursor to the furthest right column on the top row and open a new column
-#'
-#' @param table_builder The table builder to work on
-#' @return a table builder with the cursor at the first column
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>% new_col()
-#'
 new_col <- function(table_builder)
 {
   table_builder %>%
@@ -438,26 +312,8 @@ new_col <- function(table_builder)
   cursor_right(length(table_builder$table[[1]]) )
 }
 
-#' Apply table building over variable
-#'
-#' Run a continuation function over a list of items.
-#' Similar to a foldl in ML
-#'
-#' @param table_builder The table builder to work on
-#' @param X list or vector of items to iterate
-#' @param FUN the function to iterate over
-#' @param ... additional arguments to pass to FUN
-#' @return a table builder with the cursor at the last position of the apply
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>%
-#' table_builder_apply(1:3, FUN=function(tb, x) {
-#'   tb %>% write_cell(tg_N(x)) %>% cursor_right()
-#' })
-#'
 table_builder_apply <- function(table_builder, X, FUN, ...)
 {
   sapply(X, FUN=function(x) {
@@ -466,23 +322,9 @@ table_builder_apply <- function(table_builder, X, FUN, ...)
   table_builder
 }
 
-#' Add columns
-#'
-#' Add all elements specified and advance to the next column after each addition
-#'
-#' @param table_builder The table builder to work on
-#' @param subrow optional additional specifier for sub element of AST row for traceabililty
-#' @param subcol optional additional specifier for sub element of AST col for traceabililty
-#' @param ... elements to add columnwise
-#' @return a table builder with the cursor at the column past the last addition
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>%
-#' add_col(tg_N(1:3))
-add_col <- function(table_builder, ..., subrow=NA, subcol=NA)
+add_col <- function(table_builder, ..., subrow=NULL, subcol=NULL)
 {
   table_builder %>%
   table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
@@ -492,23 +334,9 @@ add_col <- function(table_builder, ..., subrow=NA, subcol=NA)
   })
 }
 
-#' Add rows
-#'
-#' Add all elements specified and advance to the next row after each addition
-#'
-#' @param table_builder The table builder to work on
-#' @param subrow optional additional specifier for sub element of AST row for traceabililty
-#' @param subcol optional additional specifier for sub element of AST col for traceabililty
-#' @param ... elements to add rowwise
-#' @return a table builder with the cursor at the row past the last addition
+#' @rdname table_builder
 #' @export
-#'
-#' @examples
-#' library(magrittr)
-#' x <- Parser$new()$run(y ~ x)
-#' new_table_builder(x$right, x$left) %>%
-#' add_row(tg_N(1:3))
-add_row <- function(table_builder, ..., subrow=NA, subcol=NA)
+add_row <- function(table_builder, ..., subrow=NULL, subcol=NULL)
 {
   # Get flattened args list
   table_builder %>%

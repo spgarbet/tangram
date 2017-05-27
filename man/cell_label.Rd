@@ -4,7 +4,7 @@
 \alias{cell_label}
 \title{Create an cell_label (S3) object of the given text.}
 \usage{
-cell_label(text, units = NA, ...)
+cell_label(text, units = NULL, class = NULL, ...)
 }
 \arguments{
 \item{text}{character; The text of the label. May include a subset of LaTeX greek or math.}

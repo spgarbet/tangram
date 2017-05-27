@@ -4,7 +4,7 @@
 \alias{cell_named_values}
 \title{Create named value cells}
 \usage{
-cell_named_values(values, names, aspect = NULL, sep = ", ", ...)
+cell_named_values(values, names, class = NULL, sep = ", ", ...)
 }
 \arguments{
 \item{values}{vector; to create cell values from}
