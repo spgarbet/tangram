@@ -21,7 +21,7 @@
 \alias{add_row}
 \title{Table Construction Toolset}
 \usage{
-table_builder(row = NA, column = NA)
+table_builder(row = NA, column = NA, embedded = FALSE)
 
 col_header(table_builder, ..., sub = TRUE)
 

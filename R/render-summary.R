@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #######
-# Given the compiled tree of data, render as a text summary
+# The default method for rendering tangram objects
+# Not exported since this would impact core R.
 #' @include compile-cell.R
 #' @include compile.R
 summary.default <- function(object, ...)
@@ -25,8 +26,30 @@ summary.default <- function(object, ...)
   ""
 }
 
+#####################################################
+# The character method for rendering tangram objects
+# Not exported since this would impact core R.
 summary.character <- function(x, ...) x
 
+#' Render methods for tangram cell objects
+#' 
+#' Each of these methods will render the cell object as a text summary
+#'
+#' @param x object; the item to render
+#' @param ... additional arguments passed to summary
+#' @return the text summary
+#' @examples
+#' summary(cell_label("123"))
+#' summary(cell_iqr(rnorm(20)))
+#' summary(cell_estimate(2.1,0.8, 3.3))
+#' summary(cell_fraction(45, 137))
+#' summary(table_builder()   %>%
+#'         row_header("row") %>%
+#'         col_header(1,2,3) %>%
+#'         add_col("A","B","C"))
+#' summary(summary_table(drug~bili, pbc))
+#' @rdname summary
+#' @export
 summary.cell <- function(x, ...)
 {
   sep  <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
@@ -40,6 +63,8 @@ summary.cell <- function(x, ...)
   }
 }
 
+#' @rdname summary
+#' @export
 summary.cell_iqr <- function(x, ...) 
 {
   if(is.null(names(x)))
@@ -48,12 +73,23 @@ summary.cell_iqr <- function(x, ...)
     paste0(names(x)[1], "=", x[1], " *", x[2], "* ", x[3])
 }
 
-summary.cell_estimate <- function(x,...)
+#' @rdname summary
+#' @export
+summary.cell_range <- function(x, ...)
 {
-  x <- summary(x[[1]])
-  if(length(x) == 1) x else paste(x, " (", summary(x[[2]]), ")")
+  sep <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep") 
+  paste0("(", x[1], sep, x[2], ")")
 }
 
+#' @rdname summary
+#' @export
+summary.cell_estimate <- function(x,...)
+{
+  paste0(c(summary(x[[1]]), summary(x[[2]])), collapse=' ')
+}
+
+#' @rdname summary
+#' @export
 summary.cell_fraction <- function(x,...)
 {
   den <- as.character(x['denominator'])
@@ -61,26 +97,15 @@ summary.cell_fraction <- function(x,...)
   paste0(x['ratio'], "  ", num, "/", den)
 }
 
-#' Create a text summary of a given table_builder
-#'
-#' @param object The table_builder to render to text
-#' @param ... additional arguments to renderer. Unused at present.
-#' @return A text string rendering of the given table
+#' @rdname summary
 #' @export
-#'
 summary.table_builder <- function(object,...)
 {
   summary(table_flatten(object$table))
 }
 
-#' Create a text summary of a given table
-#'
-#' @param object The cell table to render to text
-#' @param ... additional arguments to renderer. Unused at present.
-#' @return A text string rendering of the given table
+#' @rdname summary
 #' @export
-#' @importFrom stringr str_pad
-#'
 summary.tangram <- function(object,...)
 {
   nrows <- rows(object)
@@ -134,7 +159,7 @@ summary.tangram <- function(object,...)
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.tangram <- function(x,...) {summary(x,...)}
+print.cell <- function(x,...) print(summary(x,...))
 
 #' Print a text summary of a given table_builder
 #'
@@ -142,5 +167,5 @@ print.tangram <- function(x,...) {summary(x,...)}
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.table_builder <- function(x,...) {summary(x,...)}
+print.table_builder <- function(x,...) print(summary(x,...))
 

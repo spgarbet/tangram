@@ -207,9 +207,9 @@ new_header <- function(table_builder, attribute, sub, ...)
 #' add_col(paste0("C", 1:4))
 #' @rdname table_builder
 #' @export
-table_builder <- function(row=NA, column=NA)
+table_builder <- function(row=NA, column=NA, embedded=FALSE)
 {
-  x <- list(nrow=1, ncol=1, table=tangram(1,1), row=row, col=column)
+  x <- list(nrow=1, ncol=1, table=tangram(1,1,embedded), row=row, col=column)
   class(x) <- c("table_builder", "list")
   x
 }
