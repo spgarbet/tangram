@@ -18,12 +18,14 @@
 # Given the compiled tree of data, render as a text summary
 #' @include compile-cell.R
 #' @include compile.R
-summary.default <- function(object, ...) 
+summary.default <- function(object, ...)
 {
   warning(paste("summary unhandled class : ", paste(base::class(object), collapse=', ')))
-  
+
   ""
 }
+
+summary.character <- function(x, ...) x
 
 summary.cell <- function(x, ...)
 {
@@ -79,7 +81,7 @@ summary.table_builder <- function(object,...)
 #' @export
 #' @importFrom stringr str_pad
 #'
-summary.cell_table <- function(object,...)
+summary.tangram <- function(object,...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -132,7 +134,7 @@ summary.cell_table <- function(object,...)
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.cell_table <- function(x,...) {summary(x,...)}
+print.tangram <- function(x,...) {summary(x,...)}
 
 #' Print a text summary of a given table_builder
 #'

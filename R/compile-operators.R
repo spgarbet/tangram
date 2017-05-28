@@ -104,23 +104,39 @@ new_header <- function(table_builder, attribute, sub, ...)
   old_hdr   <- attr(table_builder$table, attribute)
 
   # Either a header or subheader
-  f <- if (is.null(old_hdr) | !sub) cell_header else cell_subheader
+  hdr <- if (is.null(old_hdr) | !sub) cell_header else cell_subheader
 
   # Convert every element to an appropriate cell from request
   new_hdr   <- lapply(args_flatten(...), FUN=function(x) {
-    f(x,
-      row=table_builder$row,
-      col=table_builder$col)
+    hdr(x,
+        row=table_builder$row,
+        col=table_builder$col)
   })
-
+  
   # If the old header is null, then create one
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
-    hdr      <- cell_table(embedded=FALSE)
-    hdr[[1]] <- new_hdr
+    hdr      <- tangram(embedded=FALSE)
+    if(attribute == "col_header")
+    {
+      hdr[[1]] <- new_hdr
+    } else {
+      for(i in 1:length(new_hdr))
+      {
+        hdr[[i]] <- list(new_hdr[[i]])
+      }
+    }
     hdr
   } else { # extend existing
-    old_hdr[[length(old_hdr)+1]] <- new_hdr
+    if(attribute == "col_header")
+    {
+      old_hdr[[length(old_hdr)+1]] <- new_hdr
+    } else {
+      for(i in 1:length(new_hdr))
+      {
+        old_hdr[[i]][[length(old_hdr[[i]])+1]] <- new_hdr[[i]]
+      }
+    }
     old_hdr
   }
   
@@ -137,7 +153,7 @@ new_header <- function(table_builder, attribute, sub, ...)
 #' whole table is flattened. 
 #' 
 #' This library is designed to use a core \code{table_builder} object that
-#' is passed from function to function using the pipe operator.
+#' is passed from function to function using the pipe \code{\%>\%} operator.
 #' First create a \code{table_builder} using the \code{table_builder()} function and
 #' use the operators to build out the table. The row and column given to
 #' the \code{table_builder} are what is used in later construction of an
@@ -193,7 +209,7 @@ new_header <- function(table_builder, attribute, sub, ...)
 #' @export
 table_builder <- function(row=NA, column=NA)
 {
-  x <- list(nrow=1, ncol=1, table=cell_table(1,1), row=row, col=column)
+  x <- list(nrow=1, ncol=1, table=tangram(1,1), row=row, col=column)
   class(x) <- c("table_builder", "list")
   x
 }

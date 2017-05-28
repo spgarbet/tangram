@@ -45,21 +45,22 @@ cols.list <- function(object)
   }
 }
 
-#' Create an empty table of cells
+#' Create an empty table of cells, a tangram
 #'
 #' Create an empty list of lists to fill with desired table elements. Note that
 #' The initial size is not a limiting factor, the table can grow as needed later.
 #'
 #' @param rows An integer of the number of rows to create
 #' @param cols An integer of the number of cols to create
-#' @param embedded A boolean representing whether this table will is to be marked as embedded in another
+#' @param embedded logical; Will this table be embedded inside another
 #'
-#' @return An empty cell_table object.
+#' @return An empty tangram object.
 #' @export
-cell_table <- function(rows=1, cols=1, embedded=TRUE)
+tangram <- function(rows=1, cols=1, embedded=FALSE)
 {
+  # A list of lists
   cell(lapply(1:rows, function(x) as.list(rep(cell(""), cols))),
-       class= c("cell_table","list"),
+       class="tangram",
        embedded = embedded)
 }
 
@@ -107,7 +108,7 @@ cell.default <- function(x, ...)
 #' @param units character; An optional field that contains units
 #' @param ... optional extra information to attach
 #'
-#' @return A cell_table object
+#' @return A tangram object
 #' @export
 #'
 #' @examples

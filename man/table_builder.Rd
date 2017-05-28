@@ -96,7 +96,7 @@ whole table is flattened.
 }
 \details{
 This library is designed to use a core \code{table_builder} object that
-is passed from function to function using the pipe operator.
+is passed from function to function using the pipe \code{\%>\%} operator.
 First create a \code{table_builder} using the \code{table_builder()} function and
 use the operators to build out the table. The row and column given to
 the \code{table_builder} are what is used in later construction of an

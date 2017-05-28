@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-#' Given a cell_table object with embedded tables, flattens to a single table.
+#' Given a tangram object with embedded tables, flattens to a single table.
 #'
 #' Flattening function to expanded embedded tables inside table cells.
 #'
@@ -26,19 +26,30 @@
 #' @include parser.R
 table_flatten <- function(table)
 {
+  if(!attr(table, "embedded") && 
+     (!is.null(attr(table, "row_header")) ||
+      !is.null(attr(table, "col_header"))
+     ))
+  {
+      x <- tangram(1, 1, FALSE)
+      attr(table, "embedded") <- TRUE
+      x[[1]][[1]] <- table
+      table <- x
+  }
+       
   # Compute final size of table
   final_rows    <- 0
   final_cols    <- 0
   sapply(1:rows(table), FUN=function(row) {
     element <- table[[row]][[1]]
-    if(inherits(element, "cell_table") && attr(element, "embedded"))
+    if(inherits(element, "tangram") && attr(element, "embedded"))
       final_rows <<- final_rows + length(element)
     else
       final_rows <<- final_rows + 1
   })
   sapply(1:cols(table), FUN=function(col){
     element <- table[[1]][[col]]
-    if(inherits(element, "cell_table") && attr(element, "embedded"))
+    if(inherits(element, "tangram") && attr(element, "embedded"))
       final_cols <<- final_cols + length(element[[1]])
     else
       final_cols <<- final_cols + 1
@@ -52,14 +63,14 @@ table_flatten <- function(table)
   label_rows <- rows(col_label) # How many rows in the column header
   label_cols <- cols(row_label) # How many cols in the row headers
   # Allocate final table
-  new_tbl <- cell_table(final_rows+label_rows, final_cols+label_cols)
+  new_tbl <- tangram(final_rows+label_rows, final_cols+label_cols)
 
   # Fill in row labels
   output_row <- label_rows + 1
   sapply(1:rows(table), FUN=function(row){
     rlabel <- attr(table[[row]][[1]], "row_header") # Only take row labels from column 1
 
-    if(inherits(rlabel, "cell_table")) {
+    if(inherits(rlabel, "tangram")) {
       sapply(1:rows(rlabel), FUN=function(inner_row) {
         sapply(1:cols(rlabel), FUN=function(inner_col) {
           rl <- rlabel[[inner_row]][[inner_col]]
@@ -82,7 +93,7 @@ table_flatten <- function(table)
   sapply(1:cols(table), FUN=function(col){
     rlabel <- attr(table[[1]][[col]], "col_header") # Only take col labels from row 1
 
-    if(inherits(rlabel, "cell_table")) {
+    if(inherits(rlabel, "tangram")) {
       sapply(1:cols(rlabel), FUN=function(inner_col) {
         sapply(1:rows(rlabel), FUN=function(inner_row) {
           rl <- rlabel[[inner_row]][[inner_col]]
@@ -119,7 +130,7 @@ table_flatten <- function(table)
     sapply(1:cols(table), FUN=function(col) {
       element <- table[[row]][[col]]
 
-      if(inherits(element, "cell_table") && attr(element, "embedded"))
+      if(inherits(element, "tangram") && attr(element, "embedded"))
       {
         ## Need another double sapply here.
         sapply(element, FUN=function(inner_row)
@@ -160,7 +171,7 @@ cell_create_table <- function(ast, transforms)
 
   width  <- length(elements[[1]])
   height <- length(elements[[2]])
-  tbl    <- cell_table(height, width, FALSE)
+  tbl    <- tangram(height, width, FALSE)
 
   sapply(1:width, FUN=function(col_idx) {
     column <- elements[[1]][[col_idx]]
@@ -173,7 +184,7 @@ cell_create_table <- function(ast, transforms)
 
       transform <- transforms[[rowtype]][[coltype]]
 
-      tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value), row, column)$table
+      tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column)$table
     })
   })
 
@@ -307,7 +318,7 @@ summary_df <- function(data, colheader=NA)
   roffset <- if(any(is.na(colheader))) 1 else 2
   width   <- length(colnames(data)) + 1
   height  <- length(rownames(data)) + roffset
-  tbl     <- cell_table(height, width, FALSE)
+  tbl     <- tangram(height, width, FALSE)
 
   tbl[[1]][[1]] <- cell_header("")
   if(!any(is.na(colheader))) tbl[[2]][[1]] <- cell_subheader("")

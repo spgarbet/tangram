@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile.R
 \name{table_flatten}
 \alias{table_flatten}
-\title{Given a cell_table object with embedded tables, flattens to a single table.}
+\title{Given a tangram object with embedded tables, flattens to a single table.}
 \usage{
 table_flatten(table)
 }

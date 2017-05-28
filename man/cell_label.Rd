@@ -14,7 +14,7 @@ cell_label(text, units = NULL, class = NULL, ...)
 \item{...}{optional extra information to attach}
 }
 \value{
-A cell_table object
+A tangram object
 }
 \description{
 A cell_label object represents a label cell inside a table. It can
