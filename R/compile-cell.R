@@ -292,7 +292,7 @@ cell_fstat <- function(f, n1, n2, p, class=NULL, ...)
 cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
   cell_named_values(c(chi2, p),
-                    c(paste0("Χ^{2}_{",df,"}"), "P"),
+                    c(paste0("χ^{2}_{",df,"}"), "P"),
                     class=c(class, "cell_chi2", "statistics"),
                     ...)
 }
