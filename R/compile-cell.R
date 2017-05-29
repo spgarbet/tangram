@@ -45,25 +45,6 @@ cols.list <- function(object)
   }
 }
 
-#' Create an empty table of cells, a tangram
-#'
-#' Create an empty list of lists to fill with desired table elements. Note that
-#' The initial size is not a limiting factor, the table can grow as needed later.
-#'
-#' @param rows An integer of the number of rows to create
-#' @param cols An integer of the number of cols to create
-#' @param embedded logical; Will this table be embedded inside another
-#'
-#' @return An empty tangram object.
-#' @export
-tangram <- function(rows=1, cols=1, embedded=FALSE)
-{
-  # A list of lists
-  cell(lapply(1:rows, function(x) as.list(rep(cell(""), cols))),
-       class="tangram",
-       embedded = embedded)
-}
-
 #' Construct a table cell from an object
 #'
 #' Any R object can be used as a cell value. Attributes

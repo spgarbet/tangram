@@ -42,6 +42,7 @@ Collate:
     'hmisc-biVar.R'
     'compile-hmisc.R'
     'compile-operators.R'
+    'compile-post.R'
     'compile-rms.R'
     'render-latex-map.R'
     'dplr-latexify.R'

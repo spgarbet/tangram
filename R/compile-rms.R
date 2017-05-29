@@ -22,7 +22,7 @@
 #'
 ## Special thanks to Jennifer Thompson for providing the original code for this
 ## Function to determine label value given a string
-create.label <- function(v, label.data, data.set){
+create.label <- function(v, label.data, data){
   ## For rows involving interactions, replace variable names with labels (if using) and keep
   ##  all other default descriptions (eg, Nonlinear Interactions, f(A,B) vs. Af(B) + Bg(A))
   int.label.str <- NULL
@@ -30,7 +30,7 @@ create.label <- function(v, label.data, data.set){
   if(length(grep('*', v, fixed = TRUE)) > 0){
     ## Separate all pieces of interaction description; replace variable names with labels
     int.terms <- unlist(lapply(strsplit(v, ' ')[[1]], FUN = function(x){
-      if(x %in% names(data.set)){
+      if(x %in% names(data)){
         ifelse(x %in% label.data[,'variable'],
           label.data[match(x, label.data$variable), 'intlabel'],
           x)
@@ -49,7 +49,7 @@ create.label <- function(v, label.data, data.set){
       v))
 }
 
-extract_label_data <- function(object.anova, data.set, short.labels)
+extract_label_data <- function(object.anova, data, short.labels)
 {
   label.data <- NULL
 
@@ -58,19 +58,19 @@ extract_label_data <- function(object.anova, data.set, short.labels)
   ## Create indicator for whether shortened labels will be used; if so, create new column with
   ## original labels, replaced with short versions as indicated by names of short.labels
   use.short <- FALSE
-  if(!is.null(data.set)){
-    if('Labels' %in% names(Hmisc::contents(data.set)$contents)){
-      label.data <- data.frame(variable = names(data.set),
-                               varlabel = as.vector(Hmisc::contents(data.set)$contents$Labels),
+  if(!is.null(data)){
+    if('Labels' %in% names(Hmisc::contents(data)$contents)){
+      label.data <- data.frame(variable = names(data),
+                               varlabel = as.vector(Hmisc::contents(data)$contents$Labels),
                                stringsAsFactors = FALSE)
 
-      ## Remove and warn of any elements of short.labels that aren't in names(data.set)
-      if(length(setdiff(names(short.labels), names(data.set))) > 0){
-        message(paste("Note: these elements of short.labels do not appear in names(data.set):",
-                      paste(setdiff(names(short.labels), names(data.set)), collapse = ', ')))
+      ## Remove and warn of any elements of short.labels that aren't in names(data)
+      if(length(setdiff(names(short.labels), names(data))) > 0){
+        message(paste("Note: these elements of short.labels do not appear in names(data):",
+                      paste(setdiff(names(short.labels), names(data)), collapse = ', ')))
       }
 
-      short.labels <- short.labels[names(short.labels) %in% names(data.set)]
+      short.labels <- short.labels[names(short.labels) %in% names(data)]
       if(length(short.labels) > 0){
         use.short <- TRUE
 
@@ -91,7 +91,7 @@ extract_label_data <- function(object.anova, data.set, short.labels)
   label.data$intlabel <- if(use.short) label.data$shortlabel else label.data$varlabel
 
   unlist(lapply(1:nrow(object.anova), FUN = function(i){
-    ifelse(object.anova$var.line[i] != 1, '', create.label(object.anova$var[i], label.data, data.set))
+    ifelse(object.anova$var.line[i] != 1, '', create.label(object.anova$var[i], label.data, data))
   }))
 
   label.data
@@ -204,39 +204,28 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
   add_col("")
 }
 
-#' Combine information from summary.rms(), anova.rms(), and other rms object info to create a
-#' single pretty table of model results. The rms and Hmisc packages are required.
-#'
-#' @param rms.model Object of class rms, or list of named objects
-#' @param data.set Data frame from which to get variable labels. Defaults to NULL, in which case
-#' variable names will be used.
-#' @param short.labels Named vector of variable labels to replace in interaction rows. Must be in
-#' format c("variable name" = "shortened label").
-#' @param footnote A string to add to the table as a footnote.
-#' @param rnd.digits Number of digits to round reference, comparison, result and CI values to.
-#' Defaults to 2.
-#' @param rnd.stats Number of digits to round model LR, R2, etc to. Defaults to rnd.digits.
+#' @rdname tangram
 #' @export
-summary_rms <- function(rms.model,
-                        data.set = NULL,
+tangram.rms <- function(rms.model,
+                        ...,
+                        data         = NULL,
                         short.labels = NULL,
-                        footnote = NULL,
-                        rnd.digits = 2,
-                        rnd.stats  = rnd.digits)
+                        footnote     = NULL,
+                        rnd.digits   = 2,
+                        rnd.stats    = rnd.digits)
 {
   if(!requireNamespace("rms", quietly = TRUE)) {
-        stop("tangram::summary_rms requires the rms package, please install it.",
-             call. = FALSE)
-    }
-
-  # If the argument is not a list, make it so
-  if(!('list' %in% class(rms.model))) rms.model <- list(rms.model)
-
+    stop("tangram.rms requires the rms package, please install it.",
+         call. = FALSE)
+  }
+  
+  rms.model <- list(rms.model, ...)
+  
   # Check Arguments
   if(!all(sapply(rms.model, function(x) 'rms' %in% class(x)))){
     stop('rms.model(s) must be of class rms')
-  } else if(!(is.null(data.set) | 'data.frame' %in% class(data.set))){
-    stop('data.set must be of class data.frame')
+  } else if(!(is.null(data) | 'data.frame' %in% class(data))){
+    stop('data must be of class data.frame')
   }
 
   # Grab main variables from design
@@ -281,7 +270,7 @@ summary_rms <- function(rms.model,
 
   #############################
   # Get ready for labeling
-  label.data <- extract_label_data(model.anova[[1]], data.set, short.labels)
+  label.data <- extract_label_data(model.anova[[1]], data, short.labels)
 
   #############################
   # Commence building Table
@@ -289,7 +278,7 @@ summary_rms <- function(rms.model,
   for(row in 1:length(vars))
   {
     var <- vars[row]
-    label <- create.label(var, label.data, data.set)
+    label <- create.label(var, label.data, data)
     for(col in 1:length(rms.model))
     {
       master_table[[row]][[col]] <- rms_variable(

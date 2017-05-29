@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 #' Given a tangram object with embedded tables, flattens to a single table.
 #'
 #' Flattening function to expanded embedded tables inside table cells.
@@ -31,12 +32,12 @@ table_flatten <- function(table)
       !is.null(attr(table, "col_header"))
      ))
   {
-      x <- tangram(1, 1, FALSE)
-      attr(table, "embedded") <- TRUE
-      x[[1]][[1]] <- table
-      table <- x
+    x <- tangram(1, 1, FALSE)
+    attr(table, "embedded") <- TRUE
+    x[[1]][[1]] <- table
+    table <- x
   }
-       
+  
   # Compute final size of table
   final_rows    <- 0
   final_cols    <- 0
@@ -54,22 +55,22 @@ table_flatten <- function(table)
     else
       final_cols <<- final_cols + 1
   })
-
+  
   # Grab labels
   row_label <- attr(table[[1]][[1]], "row_header")
   col_label <- attr(table[[1]][[1]], "col_header")
-
+  
   # Set aside additional for labeling
   label_rows <- rows(col_label) # How many rows in the column header
   label_cols <- cols(row_label) # How many cols in the row headers
   # Allocate final table
   new_tbl <- tangram(final_rows+label_rows, final_cols+label_cols)
-
+  
   # Fill in row labels
   output_row <- label_rows + 1
   sapply(1:rows(table), FUN=function(row){
     rlabel <- attr(table[[row]][[1]], "row_header") # Only take row labels from column 1
-
+    
     if(inherits(rlabel, "tangram")) {
       sapply(1:rows(rlabel), FUN=function(inner_row) {
         sapply(1:cols(rlabel), FUN=function(inner_col) {
@@ -87,12 +88,12 @@ table_flatten <- function(table)
       output_row <<- output_row + 1
     }
   })
-
+  
   # Fill in col labels
   output_col <- label_cols + 1
   sapply(1:cols(table), FUN=function(col){
     rlabel <- attr(table[[1]][[col]], "col_header") # Only take col labels from row 1
-
+    
     if(inherits(rlabel, "tangram")) {
       sapply(1:cols(rlabel), FUN=function(inner_col) {
         sapply(1:rows(rlabel), FUN=function(inner_row) {
@@ -110,7 +111,7 @@ table_flatten <- function(table)
       output_col <<- output_col + 1
     }
   })
-
+  
   # Set label class in upper left corner, that represent headers
   sapply(1:label_rows, FUN=function(row){
     sapply(1:label_cols, FUN=function(col){
@@ -121,15 +122,15 @@ table_flatten <- function(table)
         cell_header("", parity="even")
     })
   })
-
-
+  
+  
   # Main loop to fill final from provided
   output_row <- label_rows + 1
   sapply(1:rows(table), FUN=function(row) {
     output_col <- label_cols + 1
     sapply(1:cols(table), FUN=function(col) {
       element <- table[[row]][[col]]
-
+      
       if(inherits(element, "tangram") && attr(element, "embedded"))
       {
         ## Need another double sapply here.
@@ -138,11 +139,11 @@ table_flatten <- function(table)
           sapply(inner_row, FUN=function(inner_element)
           {
             if(is.null(inner_element)) inner_element <- cell_label("")
-
+            
             attr(inner_element, "parity") <- ifelse(row %% 2==0,"even", "odd")
-
+            
             new_tbl[[output_row]][[output_col]] <<- inner_element
-
+            
             output_col <<- output_col + 1
           })
           output_col <<- output_col - length(inner_row)
@@ -157,163 +158,101 @@ table_flatten <- function(table)
         new_tbl[[output_row]][[output_col]] <<- element
       }
       output_col <<- output_col + length(element[[1]])
-
+      
     })
     output_row <<- output_row + length(table[[row]][[1]])
   })
-
+  
   new_tbl
 }
 
 cell_create_table <- function(ast, transforms)
 {
   elements <- ast$terms()
-
+  
   width  <- length(elements[[1]])
   height <- length(elements[[2]])
   tbl    <- tangram(height, width, FALSE)
-
+  
   sapply(1:width, FUN=function(col_idx) {
     column <- elements[[1]][[col_idx]]
-
+    
     sapply(1:height, FUN=function(row_idx) {
       row <- elements[[2]][[row_idx]]
-
+      
       rowtype <- if(is.na(row$type))    transforms[["Type"]](row$data)    else row$type
       coltype <- if(is.na(column$type)) transforms[["Type"]](column$data) else column$type
-
+      
       transform <- transforms[[rowtype]][[coltype]]
-
+      
       tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column)$table
     })
   })
-
+  
   flat <- table_flatten(tbl)
-
+  
   if(!is.null(transforms[["Footnote"]]))
   {
     attr(flat, "footnote") <- transforms[["Footnote"]]
   }
-
+  
   flat
 }
 
-#' Create a function to transform all cells of a table
+#' Table creation methods
 #'
-#' Given a function that operates on a table cell and returns
-#' the modified cell, return a function that given a table
-#' applies that function to all cells and returns the modified
-#' table.
+#' The tangram method is the principal method to create tables. It uses
+#' R3 method dispatch. If one specifies rows and columns, one gets an empty
+#' table of the given size. A formula or character will invoke the parser
+#' and process the specified data into a table like \code{Hmisc::summaryM}.
+#' Given an \code{rms} object it will summarize that model in a table. A
+#' \code{data.frame} is converted directly into a table as well for later
+#' rendering. Can create tables from summary.rms(), anova.rms(), and other rms object info to create a
+#' single pretty table of model results. The rms and Hmisc packages are required.
 #'
-#' @param FUN function to apply, must return the modified cell
-#' @param ... additional arguments to pass into function
-#' @return a table modification function
+#' @param after function or list of functions; one or more functions to further process an abstract table
+#' @param colheader character; Use as column headers in final table
+#' @param cols numeric; An integer of the number of cols to create
+#' @param data data.frame; data to use in table generation 
+#' @param embedded logical; Will this table be embedded inside another
+#' @param footnote character; A string to add to the table as a footnote.
+#' @param formula formula or character; the formula to apply for summarization
+#' @param rows numeric; An integer of the number of rows to create
+#' @param transforms list of lists of functions; that contain the transformation to apply for summarization
+#' @param rms.model rms; Object of class rms, or list of named objects
+#' @param rnd.digits numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.
+#' @param rnd.stats numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.
+#' @param short.labels numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").
+#' @param ... addition models or data supplied to table construction routines
+#' 
+#' @return A tangram object (a table).
+#' 
+#' @rdname tangram
 #' @export
-cell_transform <- function(FUN, ...)
+#' 
+#' @examples
+#' tangram(1, 1)
+#' tangram(data.frame(x=1:3, y=c('a','b','c')))
+#' tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc)
+#' tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
+tangram <- function(x, ...)
 {
-  function(table)
-  {
-    sapply(1:rows(table), function(row) {
-      sapply(1:cols(table), function(col) {
-        table[[row]][[col]] <<- FUN(table[[row]][[col]], ...)
-      })
-    })
-    table
-  }
+  UseMethod("tangram", x)
 }
 
-#' Delete a given column from a table
-#'
-#' Given a table, remove the specified column
-#' @param table the table to modify
-#' @param col the number of the column to drop
-#' @return the modified table
+#' @rdname tangram
 #' @export
-del_col <- function(table, col)
+tangram.numeric <- function(rows, cols, embedded=FALSE)
 {
-  sapply(1:length(table), function(row) {
-    cols <- length(table[[row]])
-    if(col < cols) sapply((col+1):cols, function(i) table[[row]][[i-1]] <<- table[[row]][[i]])
-    table[[row]][[cols]] <<- NULL
-  })
-  table
+  # A list of lists
+  cell(lapply(1:rows, function(x) as.list(rep(cell(""), cols))),
+       class="tangram",
+       embedded = embedded)
 }
 
-#' Delete a given row from a table
-#'
-#' Given a table, remove the specified row
-#' @param table the table to modify
-#' @param row the number of the row to drop
-#' @return the modified table
+#' @rdname tangram
 #' @export
-del_row <- function(table, row)
-{
-  rows <- length(table)
-  if(row < rows)
-    sapply((row+1):rows, function(i) table[[i-1]] <<- table[[i]])
-  table[[rows]] <- NULL
-  table
-}
-
-#' Drop all statistics columns from a table.
-#'
-#' Delete from a table all columns that contain statistics
-#'
-#' @param table the table to remove statistical columns
-#' @return the modified table
-#' @export
-drop_statistics <- function(table)
-{
-    columns <- (1:length(table[[1]]))[sapply(1:length(table[[1]]), function(col) {
-                 any(sapply(1:length(table), function(row) {
-                   "statistics" %in% class(table[[row]][[col]])
-                 }))
-               })]
-
-    # Deleting columns changes the number of columns, so do in reverse order
-    sapply(rev(columns), function(col) {table <<- del_col(table, col)})
-
-    table
-}
-
-#' Cleanup an intercept only model
-#'
-#' Cleanup an intercept only table that was generated from the hmisc default
-#' transform. This drops the statistics column, and modifies the header
-#' to eliminate blank space.
-#'
-#' @param table the table to modify
-#' @return the modified table
-#' @export
-hmisc_intercept_cleanup <- function(table)
-{
-  table <- drop_statistics(table)
-
-  # Roll up header here
-  sapply(1:length(table[[1]]), function(col)
-  {
-    up    <- table[[1]][[col]]
-    below <- table[[2]][[col]]
-
-    if(!("cell_label" %in% class(up)) ||
-       up$label == "")
-    {
-      class(below) <- class(below)[length(class(below))]
-      table[[1]][[col]] <<- below
-    }
-  })
-
-  del_row(table, 2)
-}
-
-#' Generate a table using a data frame directly
-#'
-#' Transform a data frame directly into a table
-#' @param data the data frame to use
-#' @param colheader vector of headers to use for columns
-#' @return table
-#' @export
-summary_df <- function(data, colheader=NA)
+tangram.data.frame <- function(data, colheader=NA)
 {
   roffset <- if(any(is.na(colheader))) 1 else 2
   width   <- length(colnames(data)) + 1
@@ -343,20 +282,9 @@ summary_df <- function(data, colheader=NA)
   tbl
 }
 
-#' Generate a summary table using a specified formula and data frame
-#'
-#' @param formula, the formula to apply for summarization
-#' @param data the data frame to use
-#' @param transforms a list of lists that contain the transformation to apply for summarization
-#' @param after one or more functions to further process an abstract table
-#' @return the table flattened
+#' @rdname tangram
 #' @export
-#'
-#' @examples
-#'
-#' summary_table("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
-#'
-summary_table <- function(formula, data, transforms=hmisc_style, after=NA)
+tangram.formula <- function(formula, data, transforms=hmisc_style, after=NA)
 {
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
@@ -379,3 +307,11 @@ summary_table <- function(formula, data, transforms=hmisc_style, after=NA)
 
   tbl
 }
+
+#' @rdname tangram
+#' @export 
+tangram.character <- function(formula, data, transforms=hmisc_style, after=NA)
+{
+  tangram.formula(formula, data, transforms, after)
+}
+  

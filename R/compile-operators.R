@@ -116,7 +116,7 @@ new_header <- function(table_builder, attribute, sub, ...)
   # If the old header is null, then create one
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
-    hdr      <- tangram(embedded=FALSE)
+    hdr      <- tangram(1,1,embedded=FALSE)
     if(attribute == "col_header")
     {
       hdr[[1]] <- new_hdr
