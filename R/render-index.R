@@ -23,17 +23,16 @@
 #' @export
 key <- function(x)
 {
-  if(is.null(attr(x, "row")) || is.null(attr(x, "col"))) return(NA)
+  if(is.null(attr(x, "row")) || is.null(attr(x, "col"))) return(NULL)
 
   row    <- attr(x, "row")
   col    <- attr(x, "col")
-  label  <- attr(x, "names")
   subrow <- attr(x, "subrow")
   subcol <- attr(x, "subcol")
 
-  rv <- if(is.null(subrow)) row$value else paste0(row$value, '[',subrow,']')
-  cv <- if(is.null(subcol)) col$value else paste0(col$value, '[',subcol,']')
-  if(is.null(label)) paste0(rv,":",cv) else paste0(rv,":",cv,":",paste0(label, collapse=''))
+  rv <- if(is.null(subrow)) row else paste0(row$value, '[',subrow,']')
+  cv <- if(is.null(subcol)) col else paste0(col$value, '[',subcol,']')
+  if(is.null(label)) paste0(rv,":",cv) else paste0(rv,":",cv)
 }
 
 #' Generate an index from a cell object
@@ -64,48 +63,38 @@ index_content <- function(object,caption,value)
   result
 }
 
-
 #' Generate an index from a cell object
 #'
 #' Given a cell class create an index representation. If no source
 #' is specified no index will be generated.
 #'
-#' @param object The cell for indexing
-#' @param caption an additional specifier for the object key
+#' @param object cell; The cell for indexing
+#' @param id character; an additional specifier for the object key
 #' @param ... additional arguments to renderer. Unused
 #' @return A matrix of strings containing key, source and value
 #' @export
 #'
-index.default <- function(object,caption, ...)
+index.default <- function(object, id, name=NULL, key.len=4, ...)
 {
-  if(!("src" %in% names(object))) return(NULL)
-  if(is.na(object$src)) return(NULL)
-  src <- paste(caption, object$src, sep=":")
-  nms <- names(object)
-  lapply(nms[!nms %in% c('label','src','units')],
-         function(y)
-         {
-           idx <- substr(base64encode(charToRaw(digest(c(src,y)))), 1, 4)
+  src <- key(object)
+  if(is.null(src)) return(NULL)
+  if(!is.null(id) || !is.na(id)) src <- paste(id, src, sep=":")
 
-           c(idx, paste(src, y, sep=':'), as.character(object[[y]]))
-           #paste(idx, paste(src, y, sep=':'), object[[y]], sep=",")
-         })
-}
-
-#' Generate an index from a cell_n object
-#'
-#' Given a cell_n class create an index representation. If no source
-#' is specified no index will be generated.
-#'
-#' @param object The cell_n for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-#'
-index.cell_n <- function(object, caption, ...)
-{
-  index_content(object, caption, object$n)
+  nms <- if(is.null(name)) names(object) else nms
+  if(is.null(nms)) return(NULL)
+  
+  value <- as.character(object[!is.na(nms) & nchar(nms) > 0])
+  nms   <- nms[!is.na(nms) & nchar(nms) > 0]
+  #value <- paste(nms, value, sep="=")
+  srcs  <- paste0(src, ":", nms)
+   
+  idx   <- vapply(srcs,
+                  function(x) substr(base64encode(charToRaw(digest(x))),1,key.len),
+                  "character")
+  
+  lapply(1:length(idx), function(i){
+    list(index=idx[i], src=srcs[i], value=value[i])
+  })
 }
 
 #' Generate an index from a cell_estimate object
