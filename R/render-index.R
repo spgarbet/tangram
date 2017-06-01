@@ -21,7 +21,7 @@
 #'
 #' @param x cell object to derive key for
 #' @export
-key <- function(x)
+key <- function(x, id)
 {
   if(is.null(attr(x, "row")) || is.null(attr(x, "col"))) return(NULL)
 
@@ -33,7 +33,7 @@ key <- function(x)
   rv <- if(is.null(subrow)) row else paste0(row, '[',subrow,']')
   cv <- if(is.null(subcol)) col else paste0(col, '[',subcol,']')
 
-  paste0(rv,":",cv)
+  paste0(id, ":", rv,":",cv)
 }
 
 #' Generate an index from a tangram or cell object
@@ -56,11 +56,12 @@ index <- function(object, ...)
 #'
 #' @param object The cell_table for indexing
 #' @param caption an additional specifier for the object key
+#' @param key.len numeric; length of keys generated (affects collision probability)
 #' @param ... additional arguments to renderer. Unused
 #' @return A matrix of strings containing key, source and value
 #' @export
 #'
-index.tangram <- function(object, id="tangram",...)
+index.tangram <- function(object, id="tangram", key.len=4, ...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -69,7 +70,7 @@ index.tangram <- function(object, id="tangram",...)
   result<-
   unlist(sapply(1:nrows, simplify=FALSE, FUN=function(row) {
     unlist(sapply(1:ncols, simplify=FALSE, FUN=function(col) {
-      c(index(object[[row]][[col]], id))
+      c(index(object[[row]][[col]], id, key.len=key.len))
     }))
   }))
 
@@ -91,14 +92,13 @@ index.tangram <- function(object, id="tangram",...)
 #' @return A matrix of strings containing key, source and value
 #' @export
 #'
-index.default <- function(object, id, name=NULL, key.len=4, ...)
+index.default <- function(object, id="tangram", name=NULL, key.len=4, ...)
 {
-  src <- key(object)
+  src <- key(object, id)
   if(is.null(src)) return(NULL)
-  if(!is.null(id) || !is.na(id)) src <- paste(id, src, sep=":")
 
-  nms <- if(is.null(name)) names(object) else nms
-  if(is.null(nms)) return(NULL)
+  nms <- if(is.null(name)) names(object)    else nms
+  nms <- if(is.null(nms))  paste0(class(object)[1], 1:length(object)) else nms
 
   value <- as.character(object[!is.na(nms) & nchar(nms) > 0])
   nms   <- nms[!is.na(nms) & nchar(nms) > 0]
@@ -114,17 +114,52 @@ index.default <- function(object, id, name=NULL, key.len=4, ...)
   })
 }
 
-
-#' @importFrom base64enc base64encode
-#' @importFrom digest digest
-index_content <- function(object,caption,value)
+#' Generate an index from a list object
+#'
+#' Given a cell class create an index representation. If no source
+#' is specified no index will be generated.
+#'
+#' @param object cell; The cell for indexing
+#' @param id character; an additional specifier for the object key
+#' @param key.len numeric; length of key to generate
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
+#' @export
+#'
+index.list <- function(object, id="tangram", key.len=4, ...)
 {
-  if(!("src" %in% names(object))) return(NULL)
-  if(is.na(object$src)) return(NULL)
-  src <- paste(caption, object$src, sep=":")
-  idx <- substr(base64encode(charToRaw(digest(src))), 1, 4)
+  x <- lapply(object,
+         function(i) {
+           attr(i, "row")    <- attr(object,"row")
+           attr(i, "col")    <- attr(object,"col")
+           attr(i, "subrow") <- attr(object,"subrow")
+           attr(i, "subcol") <- attr(object,"subcol")
+           index(i,id=id,key.len=key.len, ...)
+         })
 
-  result <- c(idx, src, value)
-  names(result) <- c("key", "src", "value")
-  result
+  do.call(c, x)
+}
+
+#' Generate an index from a label object
+#'
+#' Overrides to generate no indexing on labels
+#'
+#' @param object cell; The cell for indexing
+#' @param id character; an additional specifier for the object key
+#' @param key.len numeric; length of key to generate
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
+#' @export
+index.cell_label <- function(object, id="tangram", key.len=4, ...)
+{
+  cat("RENDERING ", object, "\n")
+  if("cell_value" %in% class(object))
+  {
+    cls <- class(object)
+    pos <- match("cell_label",cls) + 1
+    class(object) <- cls[pos:length(cls)]
+    index(object)
+  } else {
+    NULL
+  }
 }

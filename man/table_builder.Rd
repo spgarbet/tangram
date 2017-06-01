@@ -53,9 +53,9 @@ new_col(table_builder)
 
 table_builder_apply(table_builder, X, FUN, ...)
 
-add_col(table_builder, ..., subrow = NULL, subcol = NULL)
+add_col(table_builder, ...)
 
-add_row(table_builder, ..., subrow = NULL, subcol = NULL)
+add_row(table_builder, ...)
 }
 \arguments{
 \item{row}{character; Value to use for indexing}
@@ -78,11 +78,11 @@ add_row(table_builder, ..., subrow = NULL, subcol = NULL)
 
 \item{FUN}{the function to use in iteration}
 
-\item{subrow}{character; an additional specifier to use in indexing}
+\item{col}{character; Value to use for indexing}
 
 \item{subcol}{character; an additional specifier to use in indexing}
 
-\item{col}{character; Value to use for indexing}
+\item{subrow}{character; an additional specifier to use in indexing}
 }
 \value{
 the modified table_builder
@@ -106,7 +106,7 @@ is the current table being built.
 Column and row headers are attached as attributes to each table
 constructed are are tables in their own right that should match
 the proper dimension of the contained table. When later flattening
-a table of embedded tables, only the left and top most headers are 
+a table of embedded tables, only the left and top most headers are
 used.
 
 The table builder also has a cursor which maintains the state
@@ -117,7 +117,7 @@ rows or columns of information.
 }
 \examples{
 library(magrittr)
-table_builder()                        \%>\% 
+table_builder()                        \%>\%
 col_header("One","Two","Three","Four") \%>\%
 row_header("A",   "B",   "C")          \%>\%
 write_cell("A1")                       \%>\%

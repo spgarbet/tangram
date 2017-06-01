@@ -4,10 +4,12 @@
 \alias{index.tangram}
 \title{Generate an an index from a cell_table object}
 \usage{
-\method{index}{tangram}(object, id = "tangram", ...)
+\method{index}{tangram}(object, id = "tangram", key.len = 4, ...)
 }
 \arguments{
 \item{object}{The cell_table for indexing}
+
+\item{key.len}{numeric; length of keys generated (affects collision probability)}
 
 \item{...}{additional arguments to renderer. Unused}
 

@@ -112,7 +112,7 @@ new_header <- function(table_builder, attribute, sub, ...)
         row=table_builder$row,
         col=table_builder$col)
   })
-  
+
   # If the old header is null, then create one
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
@@ -139,19 +139,19 @@ new_header <- function(table_builder, attribute, sub, ...)
     }
     old_hdr
   }
-  
+
   # Return table_builder for pipe operator
   table_builder
 }
 
 #' Table Construction Toolset
-#' 
+#'
 #' These functions help build a table. A table can be embedded
 #' inside another table as a cell as well. The typical transform functions
 #' that provide bundles of functionality utilize this approach and each
 #' row column pair are rendered as a cell that is a table and later the
-#' whole table is flattened. 
-#' 
+#' whole table is flattened.
+#'
 #' This library is designed to use a core \code{table_builder} object that
 #' is passed from function to function using the pipe \code{\%>\%} operator.
 #' First create a \code{table_builder} using the \code{table_builder()} function and
@@ -163,9 +163,9 @@ new_header <- function(table_builder, attribute, sub, ...)
 #' Column and row headers are attached as attributes to each table
 #' constructed are are tables in their own right that should match
 #' the proper dimension of the contained table. When later flattening
-#' a table of embedded tables, only the left and top most headers are 
+#' a table of embedded tables, only the left and top most headers are
 #' used.
-#' 
+#'
 #' The table builder also has a cursor which maintains the state
 #' of where cell items are being written in table construction. It
 #' is possible to move the cursor into undefined portions of the table.
@@ -188,7 +188,7 @@ new_header <- function(table_builder, attribute, sub, ...)
 #' @return the modified table_builder
 #' @examples
 #' library(magrittr)
-#' table_builder()                        %>% 
+#' table_builder()                        %>%
 #' col_header("One","Two","Three","Four") %>%
 #' row_header("A",   "B",   "C")          %>%
 #' write_cell("A1")                       %>%
@@ -340,25 +340,25 @@ table_builder_apply <- function(table_builder, X, FUN, ...)
 
 #' @rdname table_builder
 #' @export
-add_col <- function(table_builder, ..., subrow=NULL, subcol=NULL)
+add_col <- function(table_builder, ...)
 {
   table_builder %>%
   table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
     tbl %>%
-    write_cell(object, subrow=subrow, subcol=subcol) %>%
+    write_cell(object) %>%
     cursor_right()
   })
 }
 
 #' @rdname table_builder
 #' @export
-add_row <- function(table_builder, ..., subrow=NULL, subcol=NULL)
+add_row <- function(table_builder, ...)
 {
   # Get flattened args list
   table_builder %>%
   table_builder_apply(args_flatten(...), FUN=function(tbl, object) {
     tbl %>%
-    write_cell(object, subrow=subrow, subcol=subcol) %>%
+    write_cell(object) %>%
     cursor_down()
   })
 }

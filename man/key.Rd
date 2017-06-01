@@ -4,7 +4,7 @@
 \alias{key}
 \title{Key derivation helper function}
 \usage{
-key(x)
+key(x, id)
 }
 \arguments{
 \item{x}{cell object to derive key for}
