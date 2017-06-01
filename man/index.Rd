@@ -2,7 +2,7 @@
 % Please edit documentation in R/render-index.R
 \name{index}
 \alias{index}
-\title{Generate an index from a cell object}
+\title{Generate an index from a tangram or cell object}
 \usage{
 index(object, ...)
 }
@@ -15,5 +15,5 @@ index(object, ...)
 A matrix of strings containing key, source and value
 }
 \description{
-Given a cell class create an index representation.
+Given a tangram object create an index representation.
 }

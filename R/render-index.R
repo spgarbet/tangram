@@ -1,16 +1,16 @@
 # tangram a general purpose table toolkit for R
 # Copyright (C) 2017 Shawn Garbett
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,14 +30,15 @@ key <- function(x)
   subrow <- attr(x, "subrow")
   subcol <- attr(x, "subcol")
 
-  rv <- if(is.null(subrow)) row else paste0(row$value, '[',subrow,']')
-  cv <- if(is.null(subcol)) col else paste0(col$value, '[',subcol,']')
-  if(is.null(label)) paste0(rv,":",cv) else paste0(rv,":",cv)
+  rv <- if(is.null(subrow)) row else paste0(row, '[',subrow,']')
+  cv <- if(is.null(subcol)) col else paste0(col, '[',subcol,']')
+
+  paste0(rv,":",cv)
 }
 
-#' Generate an index from a cell object
+#' Generate an index from a tangram or cell object
 #'
-#' Given a cell class create an index representation.
+#' Given a tangram object create an index representation.
 #'
 #' @param object The cell header to render to HTML5
 #' @param ... additional arguments to renderer. Unused
@@ -49,19 +50,35 @@ index <- function(object, ...)
   UseMethod("index", object)
 }
 
-#' @importFrom base64enc base64encode
-#' @importFrom digest digest
-index_content <- function(object,caption,value)
+#' Generate an an index from a cell_table object
+#'
+#' Given a tangram class create an index representation.
+#'
+#' @param object The cell_table for indexing
+#' @param caption an additional specifier for the object key
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
+#' @export
+#'
+index.tangram <- function(object, id="tangram",...)
 {
-  if(!("src" %in% names(object))) return(NULL)
-  if(is.na(object$src)) return(NULL)
-  src <- paste(caption, object$src, sep=":")
-  idx <- substr(base64encode(charToRaw(digest(src))), 1, 4)
+  nrows <- rows(object)
+  ncols <- cols(object)
 
-  result <- c(idx, src, value)
-  names(result) <- c("key", "src", "value")
+  # Render it all
+  result<-
+  unlist(sapply(1:nrows, simplify=FALSE, FUN=function(row) {
+    unlist(sapply(1:ncols, simplify=FALSE, FUN=function(col) {
+      c(index(object[[row]][[col]], id))
+    }))
+  }))
+
+  names(result) <- NULL
+  result <- matrix(result, ncol=3, byrow=TRUE)
+  colnames(result) <- c("key", "src", "value")
   result
 }
+
 
 #' Generate an index from a cell object
 #'
@@ -82,158 +99,32 @@ index.default <- function(object, id, name=NULL, key.len=4, ...)
 
   nms <- if(is.null(name)) names(object) else nms
   if(is.null(nms)) return(NULL)
-  
+
   value <- as.character(object[!is.na(nms) & nchar(nms) > 0])
   nms   <- nms[!is.na(nms) & nchar(nms) > 0]
   #value <- paste(nms, value, sep="=")
   srcs  <- paste0(src, ":", nms)
-   
+
   idx   <- vapply(srcs,
                   function(x) substr(base64encode(charToRaw(digest(x))),1,key.len),
                   "character")
-  
+
   lapply(1:length(idx), function(i){
     list(index=idx[i], src=srcs[i], value=value[i])
   })
 }
 
-#' Generate an index from a cell_estimate object
-#'
-#' Given a cell_estimate class create an index representation. If no source
-#' is specified no index will be generated.
-#'
-#' @param object The cell_estimate for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
 
-#'
-index.cell_estimate <- function(object, caption, ...)
+#' @importFrom base64enc base64encode
+#' @importFrom digest digest
+index_content <- function(object,caption,value)
 {
-  content <- if(is.na(object$low))
-    as.character(object$value)
-  else
-    paste(object$value,
-          " (",object$low,", ",object$high,")",
-          sep="")
+  if(!("src" %in% names(object))) return(NULL)
+  if(is.na(object$src)) return(NULL)
+  src <- paste(caption, object$src, sep=":")
+  idx <- substr(base64encode(charToRaw(digest(src))), 1, 4)
 
-  index_content(object, caption, content)
-}
-
-#' Generate an an index from a cell_quantile object
-#'
-#' Given a cell_quantile class create an index representation. If no source
-#' is specified no index will be generated.
-#'
-#' @param object The cell_quantile for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-#'
-index.cell_quantile <- function(object, caption, ...)
-{
-  content <-
-    paste(object$'50%',
-          " [",object$'25%',", ",object$'75%',"]",
-          sep="")
-
-  index_content(object, caption, content)
-}
-
-#' Generate an an index from a cell_fstat object
-#'
-#' Given a cell_fstat class create an index representation. If no source
-#' is specified no index will be generated.
-#'
-#' @param object The cell_fstat for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-#'
-index.cell_fstat <- function(object, caption, ...)
-{
-  content <-
-    paste("F=", object$f,", p = ", object$p, sep='')
-
-  index_content(object, caption, content)
-}
-
-#' Generate an an index from a cell_fraction object
-#'
-#' Given a cell_fraction class create an index representation. If no source
-#' is specified no index will be generated.
-#'
-#' @param object The cell_fraction for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-#'
-index.cell_fraction <- function(object, caption, ...)
-{
-  content <-
-    paste(round(object$numerator/object$denominator, 3),
-          "  ",
-          object$numerator,
-          "/",
-          object$denominator,
-          sep='')
-
-  index_content(object, caption, content)
-}
-
-#' Generate an an index from a cell_chi2 object
-#'
-#' Given a cell_chi2 class create an index representation. If no source
-#' is specified no index will be generated.
-#'
-#' @param object The cell_chi2 for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-#'
-index.cell_chi2 <- function(object, caption, ...)
-{
-  content <-
-    paste("chisq=",
-          object$chi2,
-          ", p=",
-          object$p,
-          sep='')
-
-  index_content(object, caption, content)
-}
-
-#' Generate an an index from a cell_table object
-#'
-#' Given a cell_table class create an index representation.
-#'
-#' @param object The cell_table for indexing
-#' @param caption an additional specifier for the object key
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-#'
-index.cell_table <- function(object, caption="Table",...)
-{
-  nrows <- rows(object)
-  ncols <- cols(object)
-
-  # Render it all
-  result<-
-  unlist(sapply(1:nrows, simplify=FALSE, FUN=function(row) {
-    unlist(sapply(1:ncols, simplify=FALSE, FUN=function(col) {
-      c(index(object[[row]][[col]], caption))
-    }))
-  }))
-
-  names(result) <- NULL
-  result <- matrix(result, ncol=3, byrow=TRUE)
-  colnames(result) <- c("key", "src", "value")
+  result <- c(idx, src, value)
+  names(result) <- c("key", "src", "value")
   result
 }
-

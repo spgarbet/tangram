@@ -4,12 +4,12 @@
 \alias{index.default}
 \title{Generate an index from a cell object}
 \usage{
-\method{index}{default}(object, caption, ...)
+\method{index}{default}(object, id, name = NULL, key.len = 4, ...)
 }
 \arguments{
-\item{object}{The cell for indexing}
+\item{object}{cell; The cell for indexing}
 
-\item{caption}{an additional specifier for the object key}
+\item{id}{character; an additional specifier for the object key}
 
 \item{...}{additional arguments to renderer. Unused}
 }
