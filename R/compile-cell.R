@@ -262,17 +262,17 @@ cell_fraction <- function(numerator, denominator, format=3, class=NULL, ...)
 #' A cell_fstat object contains a statistical result of an F-test.
 #'
 #' @param f The value of the f-statistic
-#' @param n1 1st dimension degrees of freedom
-#' @param n2 2nd dimension degrees of freedom
+#' @param df1 1st dimension degrees of freedom
+#' @param df2 2nd dimension degrees of freedom
 #' @param p The p-value of the resulting test
 #'
 #' @return A cell_fstat object.
 #' @export
 #' @examples
 #' cell_fstat(4.0, 10, 20, 0.004039541, reference=1,)
-cell_fstat <- function(f, n1, n2, p, class=NULL, ...)
+cell_fstat <- function(f, df1, df2, p, class=NULL, ...)
 {
-  cell_named_values(c(f, p), names=c(paste0("F_{",n1,",",n2,"}"), "P"), class=c(class, "cell_fstat", "statistics"), ...)
+  cell_named_values(c(f, df1, df2, p), names=c("F", "df1", "df2", "P"), class=c(class, "cell_fstat", "statistics"), ...)
 }
 
 #' Create an cell_chi2 (S3) object of the given statistic
@@ -291,8 +291,8 @@ cell_fstat <- function(f, n1, n2, p, class=NULL, ...)
 #' cell_chi2(5.6, 2, 0.06081)
 cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
-  cell_named_values(c(chi2, p),
-                    c(paste0("χ^{2}_{",df,"}"), "P"),
+  cell_named_values(c(chi2, df, p),
+                    c("χ^{2}", "df", "P"),
                     class=c(class, "cell_chi2", "statistics"),
                     ...)
 }
@@ -311,8 +311,8 @@ cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 #' cell_studentt(2.0, 20, 0.02963277)
 cell_studentt <- function(t, df, p, class=NULL, ...)
 {
-  cell_named_values(c(t, p),
-                    c(paste0("t_{",df,"}"), "P"),
+  cell_named_values(c(t, df, p),
+                    c("t", "df", "P"),
                     class=c(class, "cell_studentt", "statistics"),
                     ...)
 }

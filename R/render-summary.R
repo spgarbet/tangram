@@ -32,7 +32,7 @@ summary.default <- function(object, ...)
 summary.character <- function(x, ...) x
 
 #' Render methods for tangram cell objects
-#' 
+#'
 #' Each of these methods will render the cell object as a text summary
 #'
 #' @param x object; the item to render
@@ -53,7 +53,7 @@ summary.character <- function(x, ...) x
 summary.cell <- function(x, ...)
 {
   sep  <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
-  
+
   if(is.null(names(x)))
   {
     paste(x, collapse=sep)
@@ -65,7 +65,7 @@ summary.cell <- function(x, ...)
 
 #' @rdname summary
 #' @export
-summary.cell_iqr <- function(x, ...) 
+summary.cell_iqr <- function(x, ...)
 {
   if(is.null(names(x)))
     paste0(x[1], " *", x[2], "* ", x[3])
@@ -77,7 +77,7 @@ summary.cell_iqr <- function(x, ...)
 #' @export
 summary.cell_range <- function(x, ...)
 {
-  sep <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep") 
+  sep <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
   paste0("(", x[1], sep, x[2], ")")
 }
 
@@ -102,6 +102,25 @@ summary.cell_fraction <- function(x,...)
 summary.table_builder <- function(object,...)
 {
   summary(table_flatten(object$table))
+}
+
+#' @rdname summary
+#' @export
+summary.cell_fstat <- function(object, ...)
+{
+  paste0("F_{", object[2], ",", object[3], "}=", object[1], ", P=", object[4])
+}
+
+#' @rdname summary
+#' @export
+summary.cell_chi2 <- function(object, ...)
+{
+  paste0("X^2_", object[2], "=", object[1], ", P=", object[3])
+}
+
+summary.cell_studentt <- function(object, ...)
+{
+  paste0("t_", object[2], "=", object[1], ", P=", object[3])
 }
 
 #' @rdname summary

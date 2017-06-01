@@ -4,14 +4,14 @@
 \alias{cell_fstat}
 \title{Create an cell_fstat (S3) object of the given statistic}
 \usage{
-cell_fstat(f, n1, n2, p, class = NULL, ...)
+cell_fstat(f, df1, df2, p, class = NULL, ...)
 }
 \arguments{
 \item{f}{The value of the f-statistic}
 
-\item{n1}{1st dimension degrees of freedom}
+\item{df1}{1st dimension degrees of freedom}
 
-\item{n2}{2nd dimension degrees of freedom}
+\item{df2}{2nd dimension degrees of freedom}
 
 \item{p}{The p-value of the resulting test}
 }

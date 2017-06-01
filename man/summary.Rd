@@ -7,6 +7,8 @@
 \alias{summary.cell_estimate}
 \alias{summary.cell_fraction}
 \alias{summary.table_builder}
+\alias{summary.cell_fstat}
+\alias{summary.cell_chi2}
 \alias{summary.tangram}
 \title{Render methods for tangram cell objects}
 \usage{
@@ -21,6 +23,10 @@
 \method{summary}{cell_fraction}(x, ...)
 
 \method{summary}{table_builder}(object, ...)
+
+\method{summary}{cell_fstat}(object, ...)
+
+\method{summary}{cell_chi2}(object, ...)
 
 \method{summary}{tangram}(object, ...)
 }

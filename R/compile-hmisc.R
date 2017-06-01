@@ -50,8 +50,8 @@ summarize_kruskal_horz <- function(table, row, column)
   # Kruskal-Wallis via F-distribution
   test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
   fstat <- cell_fstat(f         = render_f(test['F'], "%.2f"),
-                      n1        = test['df1'],
-                      n2        = test['df2'],
+                      df1       = test['df1'],
+                      df2       = test['df2'],
                       p         = render_f(test['P'], "%1.3f"),
                       reference = "1")
 
@@ -87,8 +87,8 @@ summarize_kruskal_vert <- function(table, row, column)
   # Kruskal-Wallis via F-distribution
   test  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
   fstat <- cell_fstat(f   = render_f(test['F'], "%.2f"),
-                      n1  = test['df1'],
-                      n2  = test['df2'],
+                      df1 = test['df1'],
+                      df2 = test['df2'],
                       p   = render_f(test['P'], "%1.3f"),
                       reference = "1")
 
