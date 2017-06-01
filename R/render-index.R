@@ -14,6 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+copy_src <- function(x, y)
+{
+  attr(x, "row") <- attr(y, "row")
+  attr(x, "col") <- attr(y, "col")
+  attr(x, "subrow") <- attr(y, "subrow")
+  attr(x, "subcol") <- attr(y, "subcol")
+
+  x
+}
+
 #######
 # Given the compiled tree of data, render as a text index
 
@@ -102,7 +112,6 @@ index.default <- function(object, id="tangram", name=NULL, key.len=4, ...)
 
   value <- as.character(object[!is.na(nms) & nchar(nms) > 0])
   nms   <- nms[!is.na(nms) & nchar(nms) > 0]
-  #value <- paste(nms, value, sep="=")
   srcs  <- paste0(src, ":", nms)
 
   idx   <- vapply(srcs,
@@ -130,10 +139,7 @@ index.list <- function(object, id="tangram", key.len=4, ...)
 {
   x <- lapply(object,
          function(i) {
-           attr(i, "row")    <- attr(object,"row")
-           attr(i, "col")    <- attr(object,"col")
-           attr(i, "subrow") <- attr(object,"subrow")
-           attr(i, "subcol") <- attr(object,"subcol")
+           i <- copy_src(i, object)
            index(i,id=id,key.len=key.len, ...)
          })
 
@@ -152,7 +158,6 @@ index.list <- function(object, id="tangram", key.len=4, ...)
 #' @export
 index.cell_label <- function(object, id="tangram", key.len=4, ...)
 {
-  cat("RENDERING ", object, "\n")
   if("cell_value" %in% class(object))
   {
     cls <- class(object)
@@ -162,4 +167,24 @@ index.cell_label <- function(object, id="tangram", key.len=4, ...)
   } else {
     NULL
   }
+}
+
+#' Generate an index from a cell_fstat
+#'
+#' Overrides to generate no indexing on labels
+#'
+#' @param object cell; The cell for indexing
+#' @param id character; an additional specifier for the object key
+#' @param key.len numeric; length of key to generate
+#' @param ... additional arguments to renderer. Unused
+#' @return A matrix of strings containing key, source and value
+#' @export
+index.cell_fstat <- function(object, id="tangram", key.len=4, ...)
+{
+  f <- paste0("F_{",object[2], ",", object[3], "}=", object[1])
+  names(f) <- "F="
+  f <- copy_src(f, object)
+
+  c(index.default(object, id=id, key.len=key.len, ...),
+    index.default(f, id=id, key.len=key.len, ...))
 }
