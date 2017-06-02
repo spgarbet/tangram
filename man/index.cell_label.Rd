@@ -16,7 +16,7 @@
 \item{...}{additional arguments to renderer. Unused}
 }
 \value{
-A matrix of strings containing key, source and value
+A list of strings containing key, source and value
 }
 \description{
 Overrides to generate no indexing on labels

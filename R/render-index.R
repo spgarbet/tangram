@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+# Helper function to copy source attributes used in key generation
+# from y, to x and returns modified x.
 copy_src <- function(x, y)
 {
   attr(x, "row") <- attr(y, "row")
@@ -24,12 +27,22 @@ copy_src <- function(x, y)
   x
 }
 
-#######
-# Given the compiled tree of data, render as a text index
-
 #' Key derivation helper function
 #'
+#' This function should generate a string that uniquely identifies a piece
+#' of data present in a table. In a report with multiple tables the id
+#' is used to preserve uniqueness.
+#'
+#' This function relies on the object being keyed having at a minimum
+#' character attributes for \code{row} and \code{col}. Additional
+#' specifies for embedded tables are given with \code{subrow} and
+#' \code{subcol}. The \code{row} and \code{col} are automatically
+#' appended when using a \ref{\code{table_builder}}. However the
+#' \code{subrow} and \code{subcol} must be added by the user to
+#' a cell of a table.
+#'
 #' @param x cell object to derive key for
+#' @param id the unique id of the table being keyed
 #' @export
 key <- function(x, id)
 {
@@ -52,9 +65,8 @@ key <- function(x, id)
 #'
 #' @param object The cell header to render to HTML5
 #' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
+#' @return A matrix or list of strings containing key, source and value
 #' @export
-#'
 index <- function(object, ...)
 {
   UseMethod("index", object)
@@ -99,7 +111,7 @@ index.tangram <- function(object, id="tangram", key.len=4, ...)
 #' @param object cell; The cell for indexing
 #' @param id character; an additional specifier for the object key
 #' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
+#' @return A list of strings containing key, source and value
 #' @export
 #'
 index.default <- function(object, id="tangram", name=NULL, key.len=4, ...)
@@ -132,7 +144,7 @@ index.default <- function(object, id="tangram", name=NULL, key.len=4, ...)
 #' @param id character; an additional specifier for the object key
 #' @param key.len numeric; length of key to generate
 #' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
+#' @return A list of strings containing key, source and value
 #' @export
 #'
 index.list <- function(object, id="tangram", key.len=4, ...)
@@ -154,7 +166,7 @@ index.list <- function(object, id="tangram", key.len=4, ...)
 #' @param id character; an additional specifier for the object key
 #' @param key.len numeric; length of key to generate
 #' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
+#' @return A list of strings containing key, source and value
 #' @export
 index.cell_label <- function(object, id="tangram", key.len=4, ...)
 {

@@ -12,7 +12,7 @@ index(object, ...)
 \item{...}{additional arguments to renderer. Unused}
 }
 \value{
-A matrix of strings containing key, source and value
+A matrix or list of strings containing key, source and value
 }
 \description{
 Given a tangram object create an index representation.

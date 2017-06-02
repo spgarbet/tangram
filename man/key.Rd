@@ -8,7 +8,20 @@ key(x, id)
 }
 \arguments{
 \item{x}{cell object to derive key for}
+
+\item{id}{the unique id of the table being keyed}
 }
 \description{
-Key derivation helper function
+This function should generate a string that uniquely identifies a piece
+of data present in a table. In a report with multiple tables the id
+is used to preserve uniqueness.
+}
+\details{
+This function relies on the object being keyed having at a minimum
+character attributes for \code{row} and \code{col}. Additional
+specifies for embedded tables are given with \code{subrow} and
+\code{subcol}. The \code{row} and \code{col} are automatically
+appended when using a \ref{\code{table_builder}}. However the
+\code{subrow} and \code{subcol} must be added by the user to
+a cell of a table.
 }

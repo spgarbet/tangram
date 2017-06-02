@@ -15,7 +15,7 @@
 \item{...}{additional arguments to renderer. Unused}
 }
 \value{
-A matrix of strings containing key, source and value
+A list of strings containing key, source and value
 }
 \description{
 Given a cell class create an index representation. If no source
