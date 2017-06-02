@@ -167,7 +167,7 @@ summarize_chisq_single <- function(table, row, column)
                               subcol=col_category, subrow=row_category)) %>%
         new_col()
   })                                                         %>%
-  add_row(test)
+  add_row(cell(test, reference="2"))
 }
 
 #' Create a summarization for a categorical row versus a categorical column
@@ -231,7 +231,7 @@ summarize_chisq <- function(table, row, column)
       }) %>%
     new_col()
   })                                                         %>%
-  add_row(test,rep("", length(row_categories)))
+  add_row(cell(test, reference="2"),rep("", length(row_categories)))
 }
 
 #' Create a summarization for a numerical row versus a numerical column

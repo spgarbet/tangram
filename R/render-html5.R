@@ -14,14 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#######
-# Given the compiled tree of data, render as a text html5
+reference <- function(object)
+{
+  if(is.null(attr(object,"reference"))) "" else
+    paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
+}
 
 # Provide the clipboard copy javascript function
 clipboard_js <- function()
 {
   filename <- file.path(system.file(package="tangram"), "extdata", "js", "clipboard.min.js")
-  content <- readChar(filename, file.info(filename)$size)
+  content  <- readChar(filename, file.info(filename)$size)
 
   paste("<script type=\"text/javascript\">", content, "</script>", sep='')
 }
@@ -105,6 +108,21 @@ html5_class <- function(classes)
 html5.default <- function(object, id, ..., class=NA)
 {
   warning(paste("html5 unhandled class : ", base::class(object), collapse=', '))
+  html5.cell(object, id, ..., class=class)
+}
+
+#' Default conversion to HTML5 for a character cell
+#'
+#' Produces table cell
+#'
+#' @param object The cell to render to HTML5
+#' @param id A unique identifier for traceability
+#' @param ... additional arguments to renderer. Unused
+#' @param class An additional class attribute for the HTML5 element
+#' @return An empty html5 td of the given class
+#' @export
+html5.character <- function(object, id, ..., class=NA)
+{
   html5.cell(object, id, ..., class=class)
 }
 
@@ -240,7 +258,7 @@ html5.cell <- function(object, id, ..., class=NULL)
 
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"))),
-         ">", htmlEscape(x), "</td>")
+         ">", htmlEscape(x), reference(object), "</td>")
 }
 
 #' Convert an abstract cell_subheader object into an HTML5 string
@@ -274,7 +292,12 @@ html5.cell_header <- function(object, id, ..., class=NULL)
 {
   cls <- class(object)
   class(object) <- cls[2:length(cls)]
-  html5(object, id, ..., class=c(class, "header"))
+  if("cell_n" %in% class(object))
+  {
+    html5.cell_n(object, id, ..., class=c(class, "header"))
+  } else {
+    html5(object, id, ..., class=c(class, "header"))
+  }
 }
 
 
@@ -303,6 +326,7 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              "<span class=\"variable\">",
              htmlEscape(label),
              "</span>",
+             reference(object),
              "</td>")
   else
       paste0("<td ",
@@ -314,9 +338,9 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              "<span class=\"units\">",
              htmlEscape(attr(object,"units")),
              "</span>",
+             reference(object),
              "</td>")
 }
-
 
 #' Convert a cell_estimate object into an HTML5 string
 #'
@@ -331,12 +355,14 @@ html5.cell_label <- function(object, id, ..., class=NULL)
 html5.cell_estimate <- function(object, id, ..., class=NULL)
 {
   idx <- index(object, id)
+
   paste0("<td ",
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             ">",
           htmlEscape(object[[1]]),
           " (",htmlEscape(paste0(object[[2]], collapse = ", ")),")",
+          reference(object),
           "</td>")
 }
 
@@ -354,6 +380,7 @@ html5.cell_estimate <- function(object, id, ..., class=NULL)
 html5.cell_iqr <- function(object, id, ..., class=NULL)
 {
   idx <- index(object, id)
+  ref <- if(is.null(attr(object,"reference"))) "" else paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
 
   paste0("<td class=\"", attr(object, "parity"),"\"><span ",
          html5_class(c(class, attr(object, "parity"), "data", "quantile")),
@@ -364,129 +391,128 @@ html5.cell_iqr <- function(object, id, ..., class=NULL)
          htmlEscape(object[2]),
          "</span><span class=\"q75\">",
          htmlEscape(object[3]),
-         "</span></span></td>")
+         "</span></span>",
+         reference(object), "</td>")
 
 }
 
 
-#' #' Convert an abstract cell_n object into an HTML5 string
-#' #'
-#' #' Given a cell_n class create an HTML5 representation.
-#' #'
-#' #' @param object The cell n to render to HTML5
-#' #' @param id A unique identifier for traceability
-#' #' @param ... additional arguments to renderer. Unused
-#' #' @param class An additional class attribute for the HTML5 element
-#' #' @return A text string rendering of the given n as a <td> with several <span>'s.
-#' #' @export
-#' #'
-#' html5.cell_n <- function(object, id, ..., class=NA)
-#' {
-#'   idx <- index(object, id)
+#' Convert an abstract cell_n object into an HTML5 string
 #'
-#'   paste("<td ",
-#'         html5_class(c(class, attr(object, "parity"), "data", "N")),
-#'         " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
-#'         "><span class=\"N\">",
-#'         object$n,
-#'         "</span></td>",
-#'         sep='')
-#' }
+#' Given a cell_n class create an HTML5 representation.
 #'
+#' @param object The cell n to render to HTML5
+#' @param id A unique identifier for traceability
+#' @param ... additional arguments to renderer. Unused
+#' @param class An additional class attribute for the HTML5 element
+#' @return A text string rendering of the given n as a <td> with several <span>'s.
+#' @export
+#'
+html5.cell_n <- function(object, id, ..., class=NULL)
+{
+  ref <- if(is.null(attr(object,"reference"))) "" else paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
 
+  idx <- index(object, id)
+
+  paste0("<td ",
+         html5_class(c(class, attr(object, "parity"), "data", "N")),
+         " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
+         "><span class=\"N\">",
+         htmlEscape(object),
+         "</span>",
+         reference(object),
+         "</td>")
+}
+
+
+#' Convert a cell_fstat object into an HTML5 string
 #'
-#' #' Convert an abstract cell_fstat object into an HTML5 string
-#' #'
-#' #' Given a cell_fstat class create an HTML5 representation.
-#' #'
-#' #' @param object The cell fstat to render to HTML5
-#' #' @param id A unique identifier for traceability
-#' #' @param ... additional arguments to renderer. Unused
-#' #' @param class An additional class attribute for the HTML5 element
-#' #' @return A text string rendering of the given fstat as a <td> with several <span>'s.
-#' #' @export
-#' #'
-#' html5.cell_fstat <- function(object, id, ..., class=NA)
-#' {
-#'   ref <- if(is.na(object$reference)) "" else paste("<sup>", object$reference, "</sup>", sep="")
-#'   idx <- index(object, id)
-#'   paste(
-#'     "<td ",
-#'     html5_class(c(class, attr(object, "parity"), "data", "statistics")),
-#'     " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-#'     ">",
-#'     "<span class=\"statistic\"><span class=\"description\">F",
-#'     "<sub>",object$n1,",",object$n2,"</sub> = </span>",
-#'     render_f(object$f, object$format), ",</span>",
-#'     "<span class=\"pvalue\"><span class=\"description\">P = </span>",
-#'     render_f(object$p, object$format),
-#'     ref,
-#'     "</span>",
-#'     "</td>",
-#'     sep=""
-#'   )
-#' }
+#' Given a cell_fstat class create an HTML5 representation.
 #'
-#' #' Convert an abstract cell_fraction object into an HTML5 string
-#' #'
-#' #' Given a cell_fraction class create an HTML5 representation.
-#' #'
-#' #' @param object The cell fraction to render to HTML5
-#' #' @param id A unique identifier for traceability
-#' #' @param ... additional arguments to renderer. Unused
-#' #' @param class An additional class attribute for the HTML5 element
-#' #' @return A text string rendering of the given fraction as a <td> with several <span>'s.
-#' #' @export
-#' #'
-#' html5.cell_fraction <- function(object, id, ..., class=NA)
-#' {
-#'   idx        <- index(object, id)
-#'   ratio      <- gsub("\\.", "<div class=\"align\">.</div>", render_f(object$ratio))
-#'   percentage <- render_f(object$percentage)
-#'   den        <- as.character(object$denominator)
-#'   num        <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator) # Adds some spaces to match
+#' @param object The cell fstat to render to HTML5
+#' @param id A unique identifier for traceability
+#' @param ... additional arguments to renderer. Unused
+#' @param class An additional class attribute for the HTML5 element
+#' @return A text string rendering of the given fstat as a <td> with several <span>'s.
+#' @export
+html5.cell_fstat <- function(object, id, ..., class=NULL)
+{
+  idx <- index(object, id)
+  paste0(
+    "<td ",
+    html5_class(c(class, attr(object, "parity"), "data", "statistics")),
+    " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
+    ">",
+    "<span class=\"statistic\"><span class=\"description\">F",
+    "<sub>",object["df1"],",",object["df2"],"</sub> = </span>",
+    object["F"], ",</span>",
+    "<span class=\"pvalue\"><span class=\"description\">P = </span>",
+    object["P"],
+    reference(object),
+    "</span>",
+    "</td>"
+  )
+}
+
+
+#' Convert an abstract cell_fraction object into an HTML5 string
 #'
-#'   paste("<td class=\"", attr(object, "parity"),"\"><span ",
-#'               html5_class(c(class, attr(object, "parity"),  "fraction")),
-#'               " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"", ">",
-#'           "<span class=\"ratio\">",       ratio,      "</span>",
-#'           "<span class=\"percentage\">",  percentage, "</span>",
-#'           "<span class=\"numerator\">",   num,        "</span>",
-#'           "<span class=\"denominator\">", den,        "</span>",
-#'         "</span></td>",
-#'         sep="")
-#' }
+#' Given a cell_fraction class create an HTML5 representation.
 #'
-#' #' Convert an abstract cell_chi2 object into an HTML5 string
-#' #'
-#' #' Given a cell_chi2 class create an HTML5 representation.
-#' #'
-#' #' @param object The cell chi2 to render to HTML5
-#' #' @param id A unique identifier for traceability
-#' #' @param ... additional arguments to renderer. Unused
-#' #' @param class An additional class attribute for the HTML5 element
-#' #' @return A text string rendering of the given chi2 as a <td> with several <span>'s.
-#' #' @export
-#' #'
-#' html5.cell_chi2 <- function(object, id, ..., class=NA)
-#' {
-#'   idx <- index(object, id)
-#'   ref <- if(is.na(object$reference)) "" else paste("<sup>", object$reference, "</sup>", sep="")
-#'   paste("<td ",
-#'         html5_class(c(class, attr(object, "parity"), "data", "statistics")),
-#'         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-#'         ">",
-#'         "<span class=\"statistic\"><span class=\"description\"><span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
-#'         object$df,
-#'         "</span></span>",
-#'         " = </span>",
-#'         render_f(object$chi2),
-#'         ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
-#'         render_f(object$p),
-#'         ref,
-#'         "</span>",
-#'         "</td>",
-#'         sep=""
-#'   )
-#' }
+#' @param object The cell fraction to render to HTML5
+#' @param id A unique identifier for traceability
+#' @param ... additional arguments to renderer. Unused
+#' @param class An additional class attribute for the HTML5 element
+#' @return A text string rendering of the given fraction as a <td> with several <span>'s.
+#' @export
 #'
+html5.cell_fraction <- function(object, id, ..., class=NULL)
+{
+  idx        <- index(object, id)
+  ratio      <- gsub("\\.", "<div class=\"align\">.</div>", object["ratio"])
+  percentage <- object["percentage"]
+  den        <- object["denominator"]
+  num        <- sprintf(paste("%",nchar(den),"s",sep=''), object["numerator"]) # Adds some spaces to match
+
+  paste0("<td class=\"", attr(object, "parity"),"\"><span ",
+               html5_class(c(class, attr(object, "parity"),  "fraction")),
+               " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"", ">",
+           "<span class=\"ratio\">",       ratio,      "</span>",
+           "<span class=\"percentage\">",  percentage, "</span>",
+           "<span class=\"numerator\">",   num,        "</span>",
+           "<span class=\"denominator\">", den,        "</span>",
+         "</span>",reference(object),"</td>")
+}
+
+#' Convert an abstract cell_chi2 object into an HTML5 string
+#'
+#' Given a cell_chi2 class create an HTML5 representation.
+#'
+#' @param object The cell chi2 to render to HTML5
+#' @param id A unique identifier for traceability
+#' @param ... additional arguments to renderer. Unused
+#' @param class An additional class attribute for the HTML5 element
+#' @return A text string rendering of the given chi2 as a <td> with several <span>'s.
+#' @export
+#'
+html5.cell_chi2 <- function(object, id, ..., class=NULL)
+{
+  idx <- index(object, id)
+
+  paste0("<td ",
+         html5_class(c(class, attr(object, "parity"), "data", "statistics")),
+         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
+         ">",
+         "<span class=\"statistic\"><span class=\"description\"><span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
+         object[2],
+         "</span></span>",
+         " = </span>",
+         object[1],
+         ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
+         object[3],
+         "</span>",
+          reference(object),
+         "</td>"
+  )
+}
+
