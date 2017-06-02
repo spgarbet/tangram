@@ -169,22 +169,3 @@ index.cell_label <- function(object, id="tangram", key.len=4, ...)
   }
 }
 
-#' Generate an index from a cell_fstat
-#'
-#' Overrides to generate no indexing on labels
-#'
-#' @param object cell; The cell for indexing
-#' @param id character; an additional specifier for the object key
-#' @param key.len numeric; length of key to generate
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
-#' @export
-index.cell_fstat <- function(object, id="tangram", key.len=4, ...)
-{
-  f <- paste0("F_{",object[2], ",", object[3], "}=", object[1])
-  names(f) <- "F="
-  f <- copy_src(f, object)
-
-  c(index.default(object, id=id, key.len=key.len, ...),
-    index.default(f, id=id, key.len=key.len, ...))
-}
