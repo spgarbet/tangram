@@ -2,17 +2,17 @@
 % Please edit documentation in R/render-html5.R
 \name{html5}
 \alias{html5}
-\title{S3 html5 Method function for use on abstract table class}
+\title{S3 html5 Method function for use on a tangram to generate HTML5}
 \usage{
 html5(object, id, ...)
 }
 \arguments{
 \item{object}{The cell to render to HTML5}
 
-\item{id}{A unique identifier for traceability}
+\item{id}{A unique identifier for traceability in indexing}
 
 \item{...}{additional arguments to renderer.}
 }
 \description{
-S3 html5 Method function for use on abstract table class
+S3 html5 Method function for use on a tangram to generate HTML5
 }

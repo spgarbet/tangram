@@ -2,9 +2,9 @@
 % Please edit documentation in R/render-html5.R
 \name{html5.cell_estimate}
 \alias{html5.cell_estimate}
-\title{Convert an abstract cell_estimate object into an HTML5 string}
+\title{Convert a cell_estimate object into an HTML5 string}
 \usage{
-\method{html5}{cell_estimate}(object, id, ..., class = NA)
+\method{html5}{cell_estimate}(object, id, ..., class = NULL)
 }
 \arguments{
 \item{object}{The cell estimate to render to HTML5}

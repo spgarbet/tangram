@@ -22,7 +22,5 @@ to all CSS selectors (TODO: make this substitution more robust). The result is r
 as a string.
 }
 \examples{
-
 custom_css("lancet.css", "tbl1")
-
 }

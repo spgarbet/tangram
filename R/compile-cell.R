@@ -372,8 +372,8 @@ cell.aov <- function(x, format_p="%1.3f", ...)
 {
   test <- summary(x)[[1]]
   cell_fstat(f   = render_f(test$'F value'[1], "%.2f"),
-             n1  = test$Df[1],
-             n2  = test$Df[2],
+             df1 = test$Df[1],
+             df2  = test$Df[2],
              p   = render_f(test$'Pr(>F)'[1], format_p),
              ...)
 }

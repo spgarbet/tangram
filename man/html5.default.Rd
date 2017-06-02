@@ -16,8 +16,8 @@
 \item{class}{An additional class attribute for the HTML5 element}
 }
 \value{
-A text string rendering of the given cell as a <td> with several <span>'s.
+An empty html5 td of the given class
 }
 \description{
-Gives a warning and produces an empty cell
+Gives a warning and produces an empty <td></td> cell
 }

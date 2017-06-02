@@ -4,7 +4,7 @@
 \alias{html5.cell_subheader}
 \title{Convert an abstract cell_subheader object into an HTML5 string}
 \usage{
-\method{html5}{cell_subheader}(object, id, ...)
+\method{html5}{cell_subheader}(object, id, ..., class = NULL)
 }
 \arguments{
 \item{object}{The cell subheader to render to HTML5}

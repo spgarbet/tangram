@@ -4,7 +4,7 @@
 \alias{html5.cell}
 \title{Convert an abstract cell object into an HTML5 string}
 \usage{
-\method{html5}{cell}(object, id, ..., class = NA)
+\method{html5}{cell}(object, id, ..., class = NULL)
 }
 \arguments{
 \item{object}{The cell to render to HTML5}

@@ -2,9 +2,9 @@
 % Please edit documentation in R/render-html5.R
 \name{html5.cell_label}
 \alias{html5.cell_label}
-\title{Convert an abstract cell_label object into an HTML5 string}
+\title{Convert a cell_label object into an HTML5 string}
 \usage{
-\method{html5}{cell_label}(object, id, ..., class = NA)
+\method{html5}{cell_label}(object, id, ..., class = NULL)
 }
 \arguments{
 \item{object}{The cell label to render to HTML5}
