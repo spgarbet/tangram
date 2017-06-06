@@ -315,7 +315,7 @@ html5.cell_header <- function(object, id, ..., class=NULL)
 html5.cell_label <- function(object, id, ..., class=NULL)
 {
   # Turn leading spaces into a set of non breaking html space
-  label <- gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", object)
+  label <- gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", htmlEscape(object))
   # Turn "*" for interaction terms into a break
   label <- gsub("\\*", "&times;<br/>&nbsp;&nbsp;", label)
 
@@ -324,7 +324,7 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              html5_class(c(class, attr(object, "parity"), "tg-label")),
              ">",
              "<span class=\"variable\">",
-             htmlEscape(label),
+             label,
              "</span>",
              reference(object),
              "</td>")
@@ -333,7 +333,7 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              html5_class(c(class, attr(object, "parity"), "tg-label")),
              ">",
              "<span class=\"variable\">",
-             htmlEscape(label),
+             label,
              "</span>",
              "<span class=\"units\">",
              htmlEscape(attr(object,"units")),

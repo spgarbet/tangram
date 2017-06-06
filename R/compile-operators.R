@@ -117,26 +117,10 @@ new_header <- function(table_builder, attribute, sub, ...)
   attr(table_builder$table, attribute) <- if(is.null(old_hdr))
   {
     hdr      <- tangram(1,1,embedded=FALSE)
-    if(attribute == "col_header")
-    {
-      hdr[[1]] <- new_hdr
-    } else {
-      for(i in 1:length(new_hdr))
-      {
-        hdr[[i]] <- list(new_hdr[[i]])
-      }
-    }
+    hdr[[1]] <- new_hdr
     hdr
   } else { # extend existing
-    if(attribute == "col_header")
-    {
-      old_hdr[[length(old_hdr)+1]] <- new_hdr
-    } else {
-      for(i in 1:length(new_hdr))
-      {
-        old_hdr[[i]][[length(old_hdr[[i]])+1]] <- new_hdr[[i]]
-      }
-    }
+    old_hdr[[length(old_hdr)+1]] <- new_hdr
     old_hdr
   }
 
