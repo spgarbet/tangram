@@ -27,9 +27,13 @@
 #' @include parser.R
 table_flatten <- function(table)
 {
-  if((is.null(attr(table, "embedded"))    || !attr(table, "embedded"))            &&
-     (!is.null(attr(table, "row_header")) || !is.null(attr(table, "col_header")))
-    )
+#  if((is.null(attr(table, "embedded"))    || !attr(table, "embedded"))            &&
+#     (!is.null(attr(table, "row_header")) || !is.null(attr(table, "col_header")))
+#    )
+  if(!is.null(attr(table, "row_header")) ||
+     !is.null(attr(table, "col_header")) ||
+     !"tangram" %in% class(table[[1]][[1]])
+  )
   {
     x <- tangram(1, 1, FALSE)
     attr(table, "embedded") <- TRUE
@@ -140,6 +144,7 @@ table_flatten <- function(table)
 
       if(inherits(element, "tangram") && attr(element, "embedded"))
       {
+        n_cols <- length(element[[1]]) # Number of columns in first row
         ## Need another double sapply here.
         sapply(element, FUN=function(inner_row)
         {
@@ -153,7 +158,18 @@ table_flatten <- function(table)
 
             output_col <<- output_col + 1
           })
-          output_col <<- output_col - length(inner_row)
+          if(length(inner_row) < n_cols)
+          {
+            filler = n_cols - length(inner_row)
+            for(i in 1:filler)
+            {
+              i_ele <- cell_label("", parity=ifelse(row %% 2==0,"even", "odd"))
+              new_tbl[[output_row]][[output_col]] <<- i_ele
+              output_col <<- output_col + 1
+            }
+          }
+
+          output_col <<- output_col - n_cols
           output_row <<- output_row + 1
         })
         output_row <<- output_row - length(element)

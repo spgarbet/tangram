@@ -70,12 +70,14 @@ cols.table_builder <- function(object) cols(object$table)
 #' @param x R object to attach attributes too
 #' @param ... Each additional argument becomes an attribute for the object
 #' @return The modified R object
+#' @export
 #'
 cell <- function(x, ...)
 {
   UseMethod("cell", x)
 }
 
+#' @export
 cell.default <- function(x, ...)
 {
   attribs     <- list(...)
