@@ -1,16 +1,16 @@
 # tangram a general purpose table toolkit for R
 # Copyright (C) 2017 Shawn Garbett
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,17 +27,16 @@
 #' @include parser.R
 table_flatten <- function(table)
 {
-  if(!attr(table, "embedded") && 
-     (!is.null(attr(table, "row_header")) ||
-      !is.null(attr(table, "col_header"))
-     ))
+  if((is.null(attr(table, "embedded"))    || !attr(table, "embedded"))            &&
+     (!is.null(attr(table, "row_header")) || !is.null(attr(table, "col_header")))
+    )
   {
     x <- tangram(1, 1, FALSE)
     attr(table, "embedded") <- TRUE
     x[[1]][[1]] <- table
     table <- x
   }
-  
+
   # Compute final size of table
   final_rows    <- 0
   final_cols    <- 0
@@ -55,82 +54,90 @@ table_flatten <- function(table)
     else
       final_cols <<- final_cols + 1
   })
-  
+
   # Grab labels
   row_label <- attr(table[[1]][[1]], "row_header")
   col_label <- attr(table[[1]][[1]], "col_header")
-  
+
   # Set aside additional for labeling
-  label_rows <- rows(col_label) # How many rows in the column header
-  label_cols <- cols(row_label) # How many cols in the row headers
+  label_rows <- if(is.null(col_label)) 0 else rows(col_label) # How many rows in the column header
+  label_cols <- if(is.null(row_label)) 0 else cols(row_label) # How many cols in the row headers
   # Allocate final table
   new_tbl <- tangram(final_rows+label_rows, final_cols+label_cols)
-  
+
   # Fill in row labels
-  output_row <- label_rows + 1
-  sapply(1:rows(table), FUN=function(row){
-    rlabel <- attr(table[[row]][[1]], "row_header") # Only take row labels from column 1
-    
-    if(inherits(rlabel, "tangram")) {
-      sapply(1:rows(rlabel), FUN=function(inner_row) {
-        sapply(1:cols(rlabel), FUN=function(inner_col) {
-          rl <- rlabel[[inner_row]][[inner_col]]
-          attr(rl, "parity") <- ifelse(row %% 2==0, "even", "odd")
-          new_tbl[[output_row]][[inner_col]] <<- rl
-        })
-        output_row <<- output_row + 1
-      })
-    }
-    else
-    {
-      attr(rlabel, "parity") <- ifelse(row %% 2==0,"even", "odd")
-      new_tbl[[output_row]][[1]] <<- rlabel
-      output_row <<- output_row + 1
-    }
-  })
-  
-  # Fill in col labels
-  output_col <- label_cols + 1
-  sapply(1:cols(table), FUN=function(col){
-    rlabel <- attr(table[[1]][[col]], "col_header") # Only take col labels from row 1
-    
-    if(inherits(rlabel, "tangram")) {
-      sapply(1:cols(rlabel), FUN=function(inner_col) {
+  if(label_cols > 0)
+  {
+    output_row <- label_rows + 1
+    sapply(1:rows(table), FUN=function(row){
+      rlabel <- attr(table[[row]][[1]], "row_header") # Only take row labels from column 1
+
+      if(inherits(rlabel, "tangram")) {
         sapply(1:rows(rlabel), FUN=function(inner_row) {
-          rl <- rlabel[[inner_row]][[inner_col]]
-          attr(rl, "parity") <- "even"
-          new_tbl[[inner_row]][[output_col]] <<- rl
+          sapply(1:cols(rlabel), FUN=function(inner_col) {
+            rl <- rlabel[[inner_row]][[inner_col]]
+            attr(rl, "parity") <- ifelse(row %% 2==0, "even", "odd")
+            new_tbl[[output_row]][[inner_col]] <<- rl
+          })
+          output_row <<- output_row + 1
         })
-        output_col <<- output_col + 1
-      })
-    }
-    else
-    {
-      attr(rlabel, "parity") <- "even"
-      new_tbl[[1]][[output_col]] <<- rlabel
-      output_col <<- output_col + 1
-    }
-  })
-  
-  # Set label class in upper left corner, that represent headers
-  sapply(1:label_rows, FUN=function(row){
-    sapply(1:label_cols, FUN=function(col){
-      
-      new_tbl[[row]][[col]] <<- if(inherits(new_tbl[[row]][[label_cols+1]], "cell_subheader"))
-        cell_subheader("", parity="even")
+      }
       else
-        cell_header("", parity="even")
+      {
+        attr(rlabel, "parity") <- ifelse(row %% 2==0,"even", "odd")
+        new_tbl[[output_row]][[1]] <<- rlabel
+        output_row <<- output_row + 1
+      }
     })
-  })
-  
-  
+  }
+
+  # Fill in col labels
+  if(label_rows > 0)
+  {
+    output_col <- label_cols + 1
+    sapply(1:cols(table), FUN=function(col){
+      rlabel <- attr(table[[1]][[col]], "col_header") # Only take col labels from row 1
+
+      if(inherits(rlabel, "tangram")) {
+        sapply(1:cols(rlabel), FUN=function(inner_col) {
+          sapply(1:rows(rlabel), FUN=function(inner_row) {
+            rl <- rlabel[[inner_row]][[inner_col]]
+            attr(rl, "parity") <- "even"
+            new_tbl[[inner_row]][[output_col]] <<- rl
+          })
+          output_col <<- output_col + 1
+        })
+      }
+      else
+      {
+        attr(rlabel, "parity") <- "even"
+        new_tbl[[1]][[output_col]] <<- rlabel
+        output_col <<- output_col + 1
+      }
+    })
+  }
+
+  # Set label class in upper left corner, that represent headers
+  if(label_cols > 0 && label_rows > 0)
+  {
+    sapply(1:label_rows, FUN=function(row){
+      sapply(1:label_cols, FUN=function(col){
+
+        new_tbl[[row]][[col]] <<- if(inherits(new_tbl[[row]][[label_cols+1]], "cell_subheader"))
+          cell_subheader("", parity="even")
+        else
+          cell_header("", parity="even")
+      })
+    })
+  }
+
   # Main loop to fill final from provided
   output_row <- label_rows + 1
   sapply(1:rows(table), FUN=function(row) {
     output_col <- label_cols + 1
     sapply(1:cols(table), FUN=function(col) {
       element <- table[[row]][[col]]
-      
+
       if(inherits(element, "tangram") && attr(element, "embedded"))
       {
         ## Need another double sapply here.
@@ -139,11 +146,11 @@ table_flatten <- function(table)
           sapply(inner_row, FUN=function(inner_element)
           {
             if(is.null(inner_element)) inner_element <- cell_label("")
-            
+
             attr(inner_element, "parity") <- ifelse(row %% 2==0,"even", "odd")
-            
+
             new_tbl[[output_row]][[output_col]] <<- inner_element
-            
+
             output_col <<- output_col + 1
           })
           output_col <<- output_col - length(inner_row)
@@ -158,44 +165,44 @@ table_flatten <- function(table)
         new_tbl[[output_row]][[output_col]] <<- element
       }
       output_col <<- output_col + length(element[[1]])
-      
+
     })
     output_row <<- output_row + length(table[[row]][[1]])
   })
-  
+
   new_tbl
 }
 
 cell_create_table <- function(ast, transforms)
 {
   elements <- ast$terms()
-  
+
   width  <- length(elements[[1]])
   height <- length(elements[[2]])
   tbl    <- tangram(height, width, FALSE)
-  
+
   sapply(1:width, FUN=function(col_idx) {
     column <- elements[[1]][[col_idx]]
-    
+
     sapply(1:height, FUN=function(row_idx) {
       row <- elements[[2]][[row_idx]]
-      
+
       rowtype <- if(is.na(row$type))    transforms[["Type"]](row$data)    else row$type
       coltype <- if(is.na(column$type)) transforms[["Type"]](column$data) else column$type
-      
+
       transform <- transforms[[rowtype]][[coltype]]
-      
+
       tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column)$table
     })
   })
-  
+
   flat <- table_flatten(tbl)
-  
+
   if(!is.null(transforms[["Footnote"]]))
   {
     attr(flat, "footnote") <- transforms[["Footnote"]]
   }
-  
+
   flat
 }
 
@@ -213,7 +220,7 @@ cell_create_table <- function(ast, transforms)
 #' @param after function or list of functions; one or more functions to further process an abstract table
 #' @param colheader character; Use as column headers in final table
 #' @param cols numeric; An integer of the number of cols to create
-#' @param data data.frame; data to use in table generation 
+#' @param data data.frame; data to use in table generation
 #' @param embedded logical; Will this table be embedded inside another
 #' @param footnote character; A string to add to the table as a footnote.
 #' @param formula formula or character; the formula to apply for summarization
@@ -224,12 +231,12 @@ cell_create_table <- function(ast, transforms)
 #' @param rnd.stats numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.
 #' @param short.labels numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").
 #' @param ... addition models or data supplied to table construction routines
-#' 
+#'
 #' @return A tangram object (a table).
-#' 
+#'
 #' @rdname tangram
 #' @export
-#' 
+#'
 #' @examples
 #' tangram(1, 1)
 #' tangram(data.frame(x=1:3, y=c('a','b','c')))
@@ -309,9 +316,9 @@ tangram.formula <- function(formula, data, transforms=hmisc_style, after=NA)
 }
 
 #' @rdname tangram
-#' @export 
+#' @export
 tangram.character <- function(formula, data, transforms=hmisc_style, after=NA)
 {
   tangram.formula(formula, data, transforms, after)
 }
-  
+
