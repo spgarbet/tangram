@@ -1,16 +1,16 @@
 # tangram a general purpose table toolkit for R
 # Copyright (C) 2017 Shawn Garbett
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -18,46 +18,45 @@
 # Given the compiled tree of data, render as a text rmd
 #' @include compile-cell.R
 
-rmd.default <- function(object,...) ""
+rmd.default <- function(object,...) paste0(as.character(object), collapse=", ")
 
-rmd.cell_label <- function(object,...)
+rmd.cell <- function(object, ...)
 {
-  if(is.na(object$units))
+  sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
+
+  if(is.null(names(object)))
   {
-    if(length(object$label) == 0) return("") else return(object$label)
+    paste(object, collapse=sep)
   } else {
-    return(paste(object$label, " (", object$units, ")", sep=""))
+    name <- vapply(names(object), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
+    paste(paste0(name, as.character(object)), collapse=sep)
   }
 }
 
-rmd.cell_quantile <- function(object,...)
+rmd.cell_iqr <- function(object,...)
 {
-  paste(render_f(object$'25%',object$format),
-        " **", render_f(object$'50%', object$format), "** ",
-        render_f(object$'75%', object$format),
-        sep="")
+  paste0(object[1],
+         " **", object[2], "** ",
+         object[3])
 }
 
 
 rmd.cell_estimate <- function(object,...)
 {
-  if(is.na(object$low))
-    render_f(object$value)
-  else
-    paste(render_f(object$value)," (",render_f(object$low),", ",render_f(object$high),")", sep='')
+  paste0(rmd(object[[1]]), " ", rmd(object[[2]]))
 }
 
 rmd.cell_fstat <- function(object,...)
 {
-  paste("F<sub>",object$n1,",",object$n2,"</sub>=",render_f(object$f),", P=",render_f(object$p),sep="")
+  paste("F<sub>",object[2],",",object[3],"</sub>=",object[1],", P=",object[4],sep="")
 }
 
 rmd.cell_fraction <- function(object,...)
 {
-  x <- render_f(object$ratio)
-  den <- as.character(object$denominator)
-  num <- sprintf(paste("%",nchar(den),"s",sep=''), object$numerator)
-  paste(x, "  ",
+  den <- object["numerator"]
+
+  num <- paste0(rep("", nchar(den) - nchar(object["numerator"])), object["numerator"])
+  paste(object["ratio"], "  ",
         num,"/",den,
         sep="")
 }
@@ -65,30 +64,30 @@ rmd.cell_fraction <- function(object,...)
 rmd.cell_chi2 <- function(object,...)
 {
   paste("&chi;<span class=\"supsub\" style=\"display:inline-block;margin:-9em 0;vertical-align: -0.55em;line-height: 1.35em;font-size: x-small;text-align: left;\">2<br/>",
-        object$df,"</span>=",render_f(object$chi2),", P=",render_f(object$p),sep="")
+        object[2],"</span>=",object[1],", P=",object[3],sep="")
 }
 
 rmd.cell_studentt <- function(object,...)
 {
-  paste("T<sub>",object$df,"</sub>=",render_f(object$t), ", P=",render_f(object$p), sep="")
+  paste("T<sub>",object[2],"</sub>=",object[1], ", P=",object[3], sep="")
 }
 
 rmd.cell_spearman <- function(object,...)
 {
-  paste("S=",render_f(object$S),", P=",render_f(object$p), sep="")
+  paste("S=",render_f(object[1]),", P=",render_f(object[1]), sep="")
 }
 
 rmd.cell_n <- function(object,...)
 {
   if (inherits(object, "cell_header"))
-    paste("(N=",as.character(object$n),")",sep='')
+    paste0("(N=",as.character(object),")")
   else
-    as.character(object$n)
+    as.character(object)
 }
 
-#' Generate an Rmd table entry from a cell_table object
+#' Generate an Rmd table entry from a tangram object
 #'
-#' Given a cell_table object generate the corresponding piece of an Rmd table
+#' Given a tangram object generate the corresponding piece of an Rmd table
 #'
 #' @param object The cell_fstat for indexing
 #' @param ... additional arguments to renderer. Unused
@@ -96,7 +95,7 @@ rmd.cell_n <- function(object,...)
 #' @export
 #'
 #' @importFrom stringr str_pad
-rmd.cell_table <- function(object,...)
+rmd.tangram <- function(object,...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -144,4 +143,12 @@ rmd <- function(object, ...)
 {
   UseMethod("rmd", object)
 }
+
+#' @rdname summary
+#' @export
+rmd.table_builder <- function(object,...)
+{
+  rmd(table_flatten(object$table))
+}
+
 
