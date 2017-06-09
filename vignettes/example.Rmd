@@ -41,7 +41,6 @@ tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spid
 Or the same directly into an Rmarkdown pipe_table:
 
 ```{r, results="asis"}
-# TBD
 rmd(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc))
 ```
 
@@ -68,17 +67,14 @@ Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
 
-# BROKEN< MUST FIX
-# Lancet uses 4-digit p-values
-#p_digits_4 <- cell_transform(function(cell) {
-#  if("P" %in% names(cell)) cell$p <- form(cell$p, "%1.4f")
-#  cell
-#})
-
-#html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc,
-#      after=p_digits_4),
-#      fragment=TRUE, inline="lancet.css", caption = "HTML5 Table Lancet Style", id="tbl4"
-#      )
+tbl <- tangram("drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]", 
+              data=pbc,
+              pformat = 5)
+html5(tbl,
+      fragment=TRUE,
+      inline="lancet.css",
+      caption = "HTML5 Table Lancet Style", id="tbl4"
+      )
 ```
 
 ### Indexing

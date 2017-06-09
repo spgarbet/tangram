@@ -4,7 +4,7 @@
 \alias{cell.htest}
 \title{Construct hypothesis test cell}
 \usage{
-\method{cell}{htest}(x, format = 2, format_p = "\%1.3f", ...)
+\method{cell}{htest}(x, format = 2, pformat = "\%1.3f", ...)
 }
 \arguments{
 \item{x}{The htest object to convert to a rendereable cell}

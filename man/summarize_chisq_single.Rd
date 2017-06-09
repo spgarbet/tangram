@@ -4,7 +4,7 @@
 \alias{summarize_chisq_single}
 \title{Create a summarization for a binomial row versus a categorical column}
 \usage{
-summarize_chisq_single(table, row, column)
+summarize_chisq_single(table, row, column, pformat = NULL)
 }
 \arguments{
 \item{table}{The table object to modify}

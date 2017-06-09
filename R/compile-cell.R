@@ -376,13 +376,13 @@ cell_n <- function(n, class=NULL, ...)
 #' @export
 #' @examples
 #' tg(aov(rnorm(10) ~ rnorm(10)), list(value="A"), list(value="B"))
-cell.aov <- function(x, format_p="%1.3f", ...)
+cell.aov <- function(x, pformat="%1.3f", ...)
 {
   test <- summary(x)[[1]]
   cell_fstat(f   = render_f(test$'F value'[1], "%.2f"),
              df1 = test$Df[1],
              df2  = test$Df[2],
-             p   = render_f(test$'Pr(>F)'[1], format_p),
+             p   = render_f(test$'Pr(>F)'[1], pformat),
              ...)
 }
 
@@ -396,13 +396,13 @@ cell.aov <- function(x, format_p="%1.3f", ...)
 #' @export
 #' @examples
 #' tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
-cell.htest <- function(x, format=2, format_p="%1.3f", ...)
+cell.htest <- function(x, format=2, pformat="%1.3f", ...)
 {
   if(names(x$statistic) == "X-squared")
-    cell_chi2(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, format_p), ...)
+    cell_chi2(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, pformat), ...)
   else if(x$method == "Spearman's rank correlation rho")
-    cell_spearman(render_f(x$statistic, 0), x$parameter, render_f(x$p.value, format_p), ...)
+    cell_spearman(render_f(x$statistic, 0), x$parameter, render_f(x$p.value, pformat), ...)
   else
-    cell_studentt(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, format_p), ...)
+    cell_studentt(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, pformat), ...)
 }
 

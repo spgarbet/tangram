@@ -34,8 +34,10 @@
 #' @importFrom stats cor
 #' @importFrom stats cor.test
 #' @importFrom stats na.omit
-summarize_kruskal_horz <- function(table, row, column)
+summarize_kruskal_horz <- function(table, row, column, pformat=NULL)
 {
+  if(is.null(pformat)) pformat <- "%1.3f"
+
   datar      <- row$data
   datac      <- as.categorical(column$data)
   categories <- levels(datac)
@@ -52,7 +54,7 @@ summarize_kruskal_horz <- function(table, row, column)
   fstat <- cell_fstat(f         = render_f(test['F'], "%.2f"),
                       df1       = test['df1'],
                       df2       = test['df2'],
-                      p         = render_f(test['P'], "%1.3f"),
+                      p         = render_f(test['P'], pformat),
                       reference = "1")
 
   table                                          %>%
@@ -78,8 +80,10 @@ summarize_kruskal_horz <- function(table, row, column)
 #' @param column The column variable to use (numerical)
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column)
+summarize_kruskal_vert <- function(table, row, column, pformat)
 {
+  if(is.null(pformat)) pformat <- "%1.3f"
+
   datar      <- as.categorical(row$data)
   datac      <- column$data
   categories <- levels(datar)
@@ -89,7 +93,7 @@ summarize_kruskal_vert <- function(table, row, column)
   fstat <- cell_fstat(f   = render_f(test['F'], "%.2f"),
                       df1 = test['df1'],
                       df2 = test['df2'],
-                      p   = render_f(test['P'], "%1.3f"),
+                      p   = render_f(test['P'], pformat),
                       reference = "1")
 
   table                                                             %>%
@@ -119,8 +123,10 @@ summarize_kruskal_vert <- function(table, row, column)
 #' @param column The column variable to use (categorical)
 #' @return The modified table object
 #' @export
-summarize_chisq_single <- function(table, row, column)
+summarize_chisq_single <- function(table, row, column, pformat=NULL)
 {
+  if(is.null(pformat)) pformat <- "%1.3f"
+
   datar          <- as.categorical(row$data)
   datac          <- as.categorical(column$data)
 
@@ -167,7 +173,7 @@ summarize_chisq_single <- function(table, row, column)
                               subcol=col_category, subrow=row_category)) %>%
         new_col()
   })                                                         %>%
-  add_row(cell(test, reference="2"))
+  add_row(cell(test, reference="2", pformat=pformat))
 }
 
 #' Create a summarization for a categorical row versus a categorical column
@@ -180,12 +186,14 @@ summarize_chisq_single <- function(table, row, column)
 #' @param column The column variable to use (categorical)
 #' @return The modified table object
 #' @export
-summarize_chisq <- function(table, row, column)
+summarize_chisq <- function(table, row, column, pformat=NULL)
 {
+  if(is.null(pformat)) pformat <- "%1.3f"
+
   datar          <- as.categorical(row$data)
   datac          <- as.categorical(column$data)
 
-  if(length(levels(datar))==2) return(summarize_chisq_single(table, row, column))
+  if(length(levels(datar))==2) return(summarize_chisq_single(table, row, column, pformat))
 
   row_categories <- levels(datar)
   col_categories <- levels(datac)
@@ -231,7 +239,7 @@ summarize_chisq <- function(table, row, column)
       }) %>%
     new_col()
   })                                                         %>%
-  add_row(cell(test, reference="2"),rep("", length(row_categories)))
+  add_row(cell(test, reference="2",pformat=pformat),rep("", length(row_categories)))
 }
 
 #' Create a summarization for a numerical row versus a numerical column
@@ -244,8 +252,10 @@ summarize_chisq <- function(table, row, column)
 #' @param column The column variable to use (numerical)
 #' @return The modified table object
 #' @export
-summarize_spearman <- function(table, row, column)
+summarize_spearman <- function(table, row, column, pformat=NULL)
 {
+  if(is.null(pformat)) pformat <- "%1.3f"
+
   datar <- row$data
   datac <- column$data
 
@@ -257,7 +267,7 @@ summarize_spearman <- function(table, row, column)
   col_header("", "", "") %>%
   add_col(sum(!is.na(datar) & !is.na(datac))) %>%
   add_col(test$estimate) %>%
-  add_col(test)
+  add_col(cell(test, pformat=pformat))
 }
 
 apply_factors <- function(row, column)

@@ -16,10 +16,10 @@ tangram(x, ...)
 \method{tangram}{data.frame}(data, colheader = NA)
 
 \method{tangram}{formula}(formula, data, transforms = hmisc_style,
-  after = NA)
+  after = NA, ...)
 
 \method{tangram}{character}(formula, data, transforms = hmisc_style,
-  after = NA)
+  after = NA, ...)
 
 \method{tangram}{rms}(rms.model, ..., data = NULL, short.labels = NULL,
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits)
