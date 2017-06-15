@@ -17,6 +17,12 @@ an S3 rendereable cell that is a hypothesis test
 \description{
 Construct a cell from a hypothesis test
 }
+\details{
+Currently handles cor.test, t.test and chisq.test objects
+}
 \examples{
-tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
+cell(cor.test(rnorm(10), rnorm(10), method="spearman"))
+cell(cor.test(rnorm(10), rnorm(10)))
+cell(chisq.test(rpois(10,1)))
+cell(t.test(rnorm(10), rnorm(10)))
 }

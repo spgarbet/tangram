@@ -390,19 +390,24 @@ cell.aov <- function(x, pformat="%1.3f", ...)
 #'
 #' Construct a cell from a hypothesis test
 #'
+#' Currently handles cor.test, t.test and chisq.test objects
+#'
 #' @param x The htest object to convert to a rendereable cell
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
 #' @examples
-#' tg(t.test(rnorm(10),rnorm(10)), list(value="A"), list(value="B"))
+#' cell(cor.test(rnorm(10), rnorm(10), method="spearman"))
+#' cell(cor.test(rnorm(10), rnorm(10)))
+#' cell(chisq.test(rpois(10,1)))
+#' cell(t.test(rnorm(10), rnorm(10)))
 cell.htest <- function(x, format=2, pformat="%1.3f", ...)
 {
   if(names(x$statistic) == "X-squared")
     cell_chi2(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, pformat), ...)
   else if(x$method == "Spearman's rank correlation rho")
-    cell_spearman(render_f(x$statistic, 0), x$parameter, render_f(x$p.value, pformat), ...)
+    cell_spearman(as.character(x$statistic), render_f(x$estimate,format), render_f(x$p.value, pformat), ...)
   else
-    cell_studentt(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, pformat), ...)
+    cell_studentt(render_f(x$statistic, format), render_f(x$parameter[1],pformat), render_f(x$p.value, pformat), ...)
 }
 
