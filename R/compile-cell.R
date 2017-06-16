@@ -363,7 +363,6 @@ cell_n <- function(n, class=NULL, ...)
   cell_named_values(n, "N", class=c(class, "cell_n"), ...)
 }
 
-
 #' AOV model as cell
 #'
 #' Construct a cell from an analysis of variance model
@@ -375,7 +374,7 @@ cell_n <- function(n, class=NULL, ...)
 #' @return an S3 rendereable cell that is an F-statistic
 #' @export
 #' @examples
-#' tg(aov(rnorm(10) ~ rnorm(10)), list(value="A"), list(value="B"))
+#' cell(aov(x~y,data.frame(x=rnorm(10), y=rnorm(10))))
 cell.aov <- function(x, pformat="%1.3f", ...)
 {
   test <- summary(x)[[1]]
@@ -407,6 +406,8 @@ cell.htest <- function(x, format=2, pformat="%1.3f", ...)
     cell_chi2(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, pformat), ...)
   else if(x$method == "Spearman's rank correlation rho")
     cell_spearman(as.character(x$statistic), render_f(x$estimate,format), render_f(x$p.value, pformat), ...)
+#  else if(x$statistic) == "V") # wilcox.test
+# ????
   else
     cell_studentt(render_f(x$statistic, format), render_f(x$parameter[1],pformat), render_f(x$p.value, pformat), ...)
 }
