@@ -250,6 +250,7 @@ ASTPlus <- R6Class("ASTPlus",
   public  = list (
     left   = "ASTNode",
     right  = "ASTNode",
+    data   = "ASTPlus",
     initialize = function(left, right)
     {
       self$left   <- left
@@ -300,7 +301,7 @@ ASTMultiply <- R6Class("ASTMultiply",
     {
       self$left   <- left
       self$right  <- right
-      self$type   <- "Factors"
+      self$type   <- "ASTMultiply"
       self$value  <- ""
     },
     distribute = function()

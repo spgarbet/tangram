@@ -54,6 +54,13 @@ label(d1$procedure) <- "Ventral hernia procedure"
 d1$albumin[sample(1:N,100)] <- NA
 label(d1$albumin)   <- "Albumin"
 units(d1$albumin)   <- "g/dL"
+
+
+# Add a binary coded side effect variable
+d1$side_effect     <- sample(c(TRUE, FALSE, NA), N, replace=TRUE, prob=c(0.49, 0.49, 0.02))
+d1$reported_side_effects <- sample(1:256, N, replace=TRUE)
+d1$reported_side_effects[!d1$side_effect] <- NA
+
 ```
 
 A function that performs the appropriate statistical test and returns a table cell is very helpful. In this case determination of the appropriate $\chi^2$ test over pairs of columns in a grid of numbers.
@@ -82,7 +89,7 @@ In this example we are only considering N categories as row and M categories as 
 Further this example seeks to avoid use of the `%>%` operator for instructional purposes.
 
 ```{r, echo="TRUE"}
-fda_cat_by_cat <- function(tb, row, col)
+fda_cat_by_cat <- function(tb, row, col, ...)
 {
   grid   <- table(row$data, col$data)
   
@@ -146,7 +153,7 @@ wilcoxTests <- function(x, y)
 Similarly we create a table builder for continuous by M category summaries. The resulting table is (4) X (2M). There is a row for the row variable name, and the mean, median and standard deviation. Column's are the same as above.
 
 ```{r, echo=TRUE}
-fda_cont_by_cat <- function(tb, row, col)
+fda_cont_by_cat <- function(tb, row, col, ...)
 {
   datar          <- row$data
   datac          <- col$data
@@ -215,4 +222,50 @@ tbl2 <- tangram(modality ~ procedure + category + prior + albumin, d1, transform
 html5(tbl2, fragment=TRUE, inline="nejm.css", caption = "FDA Table 2", id="tbl2")
 ```
 
-And the requested table tranform for FDA work is complete.
+A tricky binary coded varible for reported side effects needs treatment. In this instance we only want the category in which side effects appeary, i.e. only those individuals with side effects is to be reported. The variable contains a binary number in which each bit represents a different side effect reported. 
+
+I have chosen to handle this in the formula syntax with the `*` operator for now. I have debated adding the traditional `|` denoting nested models to the formula syntax, but at present even handling the `*` properly is complicated and incomplete.
+
+Secondly additional variables are passed down to the transform which can make use of them. This is useful now for passing in a binary transform table.
+
+```{r, echo="TRUE"}
+side_effect_key = list(
+  "Repetative Uttering of Wut?",
+  "Excessive Sweating",
+  "Hairy Navel",
+  "Breaking Voice",
+  "Beiber Fever",
+  "Swiftaphila",
+  "Akward Elbows",
+  "Veruca"
+)
+
+fda_binary <- function(tb, row, col, ...)
+{
+  cat("DO IT HERE!\n")
+}
+
+fda_data_type <- function(x, category_threshold=NA)
+{ 
+  if(is.categorical(x,category_threshold))  "Categorical" else
+  if(is.numeric(x))                         "Numerical"   else
+  stop(paste("Unsupported class/type - ",class(x), typeof(x)))
+}
+
+fda <- list(
+  Type        = fda_data_type,
+  Numerical   = fda_cont_by_cat,
+  Categorical = fda_cat_by_cat,
+  ASTMultiply = fda_binary,
+  Footnote    = "Count (Percent) format. ^1^ χ^2^ minus one. ^2^ Fisher exact. ^3^ Wilcoxon rank sum"
+)
+```
+
+Now we have 3 different pieces completed.
+
+```{r, results="asis"}
+tbl3 <- tangram(modality ~ procedure + category + prior + albumin + side_effect*reported_side_effects, d1, transforms=fda,  binary_key=side_effect_key)
+html5(tbl3, fragment=TRUE, inline="nejm.css", caption = "FDA Table 3", id="tbl3")
+```
+
+And the requested table tranforms for FDA work is complete.

@@ -203,11 +203,15 @@ cell_create_table <- function(ast, transforms, ...)
     sapply(1:height, FUN=function(row_idx) {
       row <- elements[[2]][[row_idx]]
 
-      rowtype <- if(is.na(row$type))    transforms[["Type"]](row$data)    else row$type
-      coltype <- if(is.na(column$type)) transforms[["Type"]](column$data) else column$type
+      rowtype <- if(is.na(row$type))    
+                   transforms[["Type"]](row$data) else row$type
+      coltype <- if(is.na(column$type))
+                   transforms[["Type"]](column$data) else column$type
 
-      transform <- transforms[[rowtype]][[coltype]]
-
+      transform <- if("list" %in% class(transforms[[rowtype]]))
+        transforms[[rowtype]][[coltype]] else
+        transforms[[rowtype]]
+      
       tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, ...)$table
     })
   })
