@@ -29,6 +29,6 @@ additionally contain an interval with a low and high of a
 specified width.
 }
 \examples{
-cell_estimate(1.0, name="one")
 cell_estimate(1.0, 0.5, 1.5)
+cell_estimate(1.0, 0.5, 1.5, name="one")
 }

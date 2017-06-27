@@ -22,7 +22,7 @@
 #' @include render-latex-map.R
 #' @importFrom stringi stri_trans_nfc
 #' @importFrom stringi stri_trans_nfd
-#' @importFrom utils captureOutput
+#' @importFrom utils capture.output
 latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
                      quotes = c("straight", "curved"),
                      packages = c("fontenc", "textcomp")) {
@@ -31,7 +31,7 @@ latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
     ## in a way which preserves the hex notation.
     encBytes <- Encoding(y) == "bytes"
     if (any(encBytes)) {
-        y[encBytes] <- captureOutput(cat(y[encBytes], sep = "\n"))
+        y[encBytes] <- capture.output(cat(y[encBytes], sep = "\n"))
     }
     ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
     ## processing of accented characters. Doing this early to

@@ -231,8 +231,8 @@ cell_range <- function(low, high, class=NULL, sep=", ", ...)
 #' @return A cell_estimate object.
 #' @export
 #' @examples
-#' cell_estimate(1.0, name="one")
 #' cell_estimate(1.0, 0.5, 1.5)
+#' cell_estimate(1.0, 0.5, 1.5, name="one")
 cell_estimate <- function(value, low, high, name=NULL, class=NULL, sep=", ", ...)
 {
   cell(list(cell_named_values(value, names=name),
