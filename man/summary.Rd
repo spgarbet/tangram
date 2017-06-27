@@ -15,15 +15,15 @@
 \usage{
 \method{rmd}{table_builder}(object, ...)
 
-\method{summary}{cell}(x, ...)
+\method{summary}{cell}(object, ...)
 
-\method{summary}{cell_iqr}(x, ...)
+\method{summary}{cell_iqr}(object, ...)
 
-\method{summary}{cell_range}(x, ...)
+\method{summary}{cell_range}(object, ...)
 
-\method{summary}{cell_estimate}(x, ...)
+\method{summary}{cell_estimate}(object, ...)
 
-\method{summary}{cell_fraction}(x, ...)
+\method{summary}{cell_fraction}(object, ...)
 
 \method{summary}{table_builder}(object, ...)
 
@@ -34,9 +34,9 @@
 \method{summary}{tangram}(object, ...)
 }
 \arguments{
-\item{...}{additional arguments passed to summary}
+\item{object}{object; the item to render}
 
-\item{x}{object; the item to render}
+\item{...}{additional arguments passed to summary}
 }
 \value{
 the text summary

@@ -7,9 +7,9 @@
 \method{print}{cell}(x, ...)
 }
 \arguments{
-\item{x}{The cell table to render to text}
-
 \item{...}{additional arguments, unused at present}
+
+\item{object}{The cell table to render to text}
 }
 \value{
 A text string rendering of the given table

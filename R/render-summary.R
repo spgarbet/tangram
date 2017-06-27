@@ -29,13 +29,13 @@ summary.default <- function(object, ...)
 #####################################################
 # The character method for rendering tangram objects
 # Not exported since this would impact core R.
-summary.character <- function(x, ...) x
+summary.character <- function(object, ...) object
 
 #' Render methods for tangram cell objects
 #'
 #' Each of these methods will render the cell object as a text summary
 #'
-#' @param x object; the item to render
+#' @param object object; the item to render
 #' @param ... additional arguments passed to summary
 #' @return the text summary
 #' @examples
@@ -50,51 +50,51 @@ summary.character <- function(x, ...) x
 #' summary(tangram(drug~bili, pbc))
 #' @rdname summary
 #' @export
-summary.cell <- function(x, ...)
+summary.cell <- function(object, ...)
 {
-  sep  <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
+  sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
 
-  if(is.null(names(x)))
+  if(is.null(names(object)))
   {
-    paste(x, collapse=sep)
+    paste(object, collapse=sep)
   } else {
-    name <- vapply(names(x), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
-    paste(paste0(name, as.character(x)), collapse=sep)
+    name <- vapply(names(object), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
+    paste(paste0(name, as.character(object)), collapse=sep)
   }
 }
 
 #' @rdname summary
 #' @export
-summary.cell_iqr <- function(x, ...)
+summary.cell_iqr <- function(object, ...)
 {
-  if(is.null(names(x)))
-    paste0(x[1], " *", x[2], "* ", x[3])
+  if(is.null(names(object)))
+    paste0(object[1], " *", object[2], "* ", object[3])
   else
-    paste0(names(x)[1], "=", x[1], " *", x[2], "* ", x[3])
+    paste0(names(object)[1], "=", object[1], " *", object[2], "* ", object[3])
 }
 
 #' @rdname summary
 #' @export
-summary.cell_range <- function(x, ...)
+summary.cell_range <- function(object, ...)
 {
-  sep <- if(is.null(attr(x, "sep"))) ", " else attr(x, "sep")
-  paste0("(", x[1], sep, x[2], ")")
+  sep <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
+  paste0("(", object[1], sep, object[2], ")")
 }
 
 #' @rdname summary
 #' @export
-summary.cell_estimate <- function(x,...)
+summary.cell_estimate <- function(object,...)
 {
-  paste0(c(summary(x[[1]]), summary(x[[2]])), collapse=' ')
+  paste0(c(summary(object[[1]]), summary(object[[2]])), collapse=' ')
 }
 
 #' @rdname summary
 #' @export
-summary.cell_fraction <- function(x,...)
+summary.cell_fraction <- function(object,...)
 {
-  den <- as.character(x['denominator'])
-  num <- sprintf(paste("%",nchar(den),"s",sep=''), x['numerator'])
-  paste0(x['ratio'], "  ", num, "/", den)
+  den <- as.character(object['denominator'])
+  num <- sprintf(paste("%",nchar(den),"s",sep=''), object['numerator'])
+  paste0(object['ratio'], "  ", num, "/", den)
 }
 
 #' @rdname summary
@@ -174,7 +174,7 @@ summary.tangram <- function(object,...)
 
 #' Print a text summary of a given table
 #'
-#' @param x The cell table to render to text
+#' @param object The cell table to render to text
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export

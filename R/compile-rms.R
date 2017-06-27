@@ -206,14 +206,16 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
 
 #' @rdname tangram
 #' @export
-tangram.rms <- function(rms.model,
-                        ...,
+tangram.rms <- function(x,
                         data         = NULL,
                         short.labels = NULL,
                         footnote     = NULL,
                         rnd.digits   = 2,
-                        rnd.stats    = rnd.digits)
+                        rnd.stats    = rnd.digits,
+                        ...)
 {
+  rms.model <- x
+
   if(!requireNamespace("rms", quietly = TRUE)) {
     stop("tangram.rms requires the rms package, please install it.",
          call. = FALSE)

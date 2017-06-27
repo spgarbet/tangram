@@ -203,7 +203,7 @@ cell_create_table <- function(ast, transforms, ...)
     sapply(1:height, FUN=function(row_idx) {
       row <- elements[[2]][[row_idx]]
 
-      rowtype <- if(is.na(row$type))    
+      rowtype <- if(is.na(row$type))
                    transforms[["Type"]](row$data) else row$type
       coltype <- if(is.na(column$type))
                    transforms[["Type"]](column$data) else column$type
@@ -211,7 +211,7 @@ cell_create_table <- function(ast, transforms, ...)
       transform <- if("list" %in% class(transforms[[rowtype]]))
         transforms[[rowtype]][[coltype]] else
         transforms[[rowtype]]
-      
+
       tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, ...)$table
     })
   })
@@ -237,14 +237,12 @@ cell_create_table <- function(ast, transforms, ...)
 #' rendering. Can create tables from summary.rms(), anova.rms(), and other rms object info to create a
 #' single pretty table of model results. The rms and Hmisc packages are required.
 #'
+#' @param x object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows
 #' @param after function or list of functions; one or more functions to further process an abstract table
 #' @param colheader character; Use as column headers in final table
 #' @param cols numeric; An integer of the number of cols to create
-#' @param data data.frame; data to use in table generation
 #' @param embedded logical; Will this table be embedded inside another
 #' @param footnote character; A string to add to the table as a footnote.
-#' @param formula formula or character; the formula to apply for summarization
-#' @param rows numeric; An integer of the number of rows to create
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization
 #' @param rms.model rms; Object of class rms, or list of named objects
 #' @param rnd.digits numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.
@@ -269,21 +267,21 @@ tangram <- function(x, ...)
 
 #' @rdname tangram
 #' @export
-tangram.numeric <- function(rows, cols, embedded=FALSE)
+tangram.numeric <- function(x, cols, embedded=FALSE, ...)
 {
   # A list of lists
-  cell(lapply(1:rows, function(x) as.list(rep(cell(""), cols))),
+  cell(lapply(1:x, function(x) as.list(rep(cell(""), cols))),
        class="tangram",
        embedded = embedded)
 }
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(data, colheader=NA)
+tangram.data.frame <- function(x, colheader=NA, ...)
 {
   roffset <- if(any(is.na(colheader))) 1 else 2
-  width   <- length(colnames(data)) + 1
-  height  <- length(rownames(data)) + roffset
+  width   <- length(colnames(x)) + 1
+  height  <- length(rownames(x)) + roffset
   tbl     <- tangram(height, width, FALSE)
 
   tbl[[1]][[1]] <- cell_header("")
@@ -292,18 +290,18 @@ tangram.data.frame <- function(data, colheader=NA)
   sapply(2:width, FUN=function(col_idx) {
     if(any(is.na(colheader)))
     {
-      tbl[[1]][[col_idx]] <<- cell_header(colnames(data)[col_idx-1])
+      tbl[[1]][[col_idx]] <<- cell_header(colnames(x)[col_idx-1])
     } else {
       tbl[[1]][[col_idx]] <<- cell_header(colheader[col_idx-1])
-      tbl[[2]][[col_idx]] <<- cell_subheader(colnames(data)[col_idx-1])
+      tbl[[2]][[col_idx]] <<- cell_subheader(colnames(x)[col_idx-1])
     }
     sapply((roffset+1):height, FUN=function(row_idx) {
-       tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(data[row_idx-roffset,col_idx-1]))
+       tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(x[row_idx-roffset,col_idx-1]))
     })
   })
 
   sapply((roffset+1):height, FUN=function(row_idx) {
-    tbl[[row_idx]][[1]] <<- cell_header(rownames(data)[row_idx-roffset])
+    tbl[[row_idx]][[1]] <<- cell_header(rownames(x)[row_idx-roffset])
   })
 
   tbl
@@ -311,7 +309,7 @@ tangram.data.frame <- function(data, colheader=NA)
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(formula, data, transforms=hmisc_style, after=NA, ...)
+tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, ...)
 {
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
@@ -324,7 +322,7 @@ tangram.formula <- function(formula, data, transforms=hmisc_style, after=NA, ...
     )
   }
 
-  tbl <- cell_create_table(Parser$new()$run(formula)$reduce(data)$distribute(),
+  tbl <- cell_create_table(Parser$new()$run(x)$reduce(data)$distribute(),
                            transforms,
                            ...)
 
@@ -338,8 +336,8 @@ tangram.formula <- function(formula, data, transforms=hmisc_style, after=NA, ...
 
 #' @rdname tangram
 #' @export
-tangram.character <- function(formula, data, transforms=hmisc_style, after=NA, ...)
+tangram.character <- function(x, data, transforms=hmisc_style, after=NA, ...)
 {
-  tangram.formula(formula, data, transforms, after, ...)
+  tangram.formula(x, data, transforms, after, ...)
 }
 

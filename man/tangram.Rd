@@ -11,39 +11,33 @@
 \usage{
 tangram(x, ...)
 
-\method{tangram}{numeric}(rows, cols, embedded = FALSE)
+\method{tangram}{numeric}(x, cols, embedded = FALSE, ...)
 
-\method{tangram}{data.frame}(data, colheader = NA)
+\method{tangram}{data.frame}(x, colheader = NA, ...)
 
-\method{tangram}{formula}(formula, data, transforms = hmisc_style,
-  after = NA, ...)
+\method{tangram}{formula}(x, data, transforms = hmisc_style, after = NA,
+  ...)
 
-\method{tangram}{character}(formula, data, transforms = hmisc_style,
-  after = NA, ...)
+\method{tangram}{character}(x, data, transforms = hmisc_style, after = NA,
+  ...)
 
-\method{tangram}{rms}(rms.model, ..., data = NULL, short.labels = NULL,
-  footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits)
+\method{tangram}{rms}(x, data = NULL, short.labels = NULL,
+  footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits, ...)
 }
 \arguments{
-\item{...}{addition models or data supplied to table construction routines}
+\item{x}{object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows}
 
-\item{rows}{numeric; An integer of the number of rows to create}
+\item{...}{addition models or data supplied to table construction routines}
 
 \item{cols}{numeric; An integer of the number of cols to create}
 
 \item{embedded}{logical; Will this table be embedded inside another}
 
-\item{data}{data.frame; data to use in table generation}
-
 \item{colheader}{character; Use as column headers in final table}
-
-\item{formula}{formula or character; the formula to apply for summarization}
 
 \item{transforms}{list of lists of functions; that contain the transformation to apply for summarization}
 
 \item{after}{function or list of functions; one or more functions to further process an abstract table}
-
-\item{rms.model}{rms; Object of class rms, or list of named objects}
 
 \item{short.labels}{numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").}
 
@@ -52,6 +46,8 @@ tangram(x, ...)
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
+
+\item{rms.model}{rms; Object of class rms, or list of named objects}
 }
 \value{
 A tangram object (a table).
