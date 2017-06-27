@@ -300,7 +300,7 @@ cell_fstat <- function(f, df1, df2, p, class=NULL, ...)
 cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
   cell_named_values(c(chi2, df, p),
-                    c("χ^{2}", "df", "P"),
+                    c("\U03C7^{2}", "df", "P"),
                     class=c(class, "cell_chi2", "statistics"),
                     ...)
 }
@@ -342,7 +342,7 @@ cell_studentt <- function(t, df, p, class=NULL, ...)
 cell_spearman <- function(S, rho, p, class=NULL, ...)
 {
   cell_named_values(c(S, rho, p),
-                    names=c("S", "ρ", "P"),
+                    names=c("S", "\U03A1", "P"),
                     class=c(class, "cell_spearman", "statistics"),
                     ...)
 }
