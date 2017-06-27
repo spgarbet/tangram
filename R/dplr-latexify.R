@@ -22,6 +22,7 @@
 #' @include render-latex-map.R
 #' @importFrom stringi stri_trans_nfc
 #' @importFrom stringi stri_trans_nfd
+#' @importFrom utils captureOutput
 latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
                      quotes = c("straight", "curved"),
                      packages = c("fontenc", "textcomp")) {
