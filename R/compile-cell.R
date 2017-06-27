@@ -27,17 +27,17 @@ cols <- function(x)
 }
 
 #' @export
-rows.list <- function(object)
+rows.list <- function(x)
 {
-  length(object)
+  length(x)
 }
 
 #' @export
-cols.list <- function(object)
+cols.list <- function(x)
 {
-  if(length(object) >= 1)
+  if(length(x) >= 1)
   {
-    length(object[[1]])
+    length(x[[1]])
   }
   else
   {
@@ -46,10 +46,10 @@ cols.list <- function(object)
 }
 
 #' @export
-rows.table_builder <- function(object) rows(object$table)
+rows.table_builder <- function(x) rows(x$table)
 
 #' @export
-cols.table_builder <- function(object) cols(object$table)
+cols.table_builder <- function(x) cols(x$table)
 
 #' Construct a table cell from an object
 #'

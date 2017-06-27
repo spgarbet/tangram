@@ -72,11 +72,11 @@ index <- function(object, ...)
   UseMethod("index", object)
 }
 
-#' Generate an an index from a cell_table object
+#' Generate an an index from a tangram object
 #'
 #' Given a tangram class create an index representation.
 #'
-#' @param object The cell_table for indexing
+#' @param object The tangram for indexing
 #' @param caption an additional specifier for the object key
 #' @param key.len numeric; length of keys generated (affects collision probability)
 #' @param ... additional arguments to renderer. Unused

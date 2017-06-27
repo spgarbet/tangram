@@ -1,16 +1,16 @@
 # tangram a general purpose table toolkit for R
 # Copyright (C) 2017 Shawn Garbett
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -218,9 +218,9 @@ tangram.rms <- function(rms.model,
     stop("tangram.rms requires the rms package, please install it.",
          call. = FALSE)
   }
-  
+
   rms.model <- list(rms.model, ...)
-  
+
   # Check Arguments
   if(!all(sapply(rms.model, function(x) 'rms' %in% class(x)))){
     stop('rms.model(s) must be of class rms')
@@ -274,7 +274,7 @@ tangram.rms <- function(rms.model,
 
   #############################
   # Commence building Table
-  master_table <- cell_table(length(vars)+2, length(rms.model), FALSE)
+  master_table <- tangram(length(vars)+2, length(rms.model), FALSE)
   for(row in 1:length(vars))
   {
     var <- vars[row]

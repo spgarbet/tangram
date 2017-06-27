@@ -253,9 +253,9 @@ rtf <- function(object, id, ...)
   UseMethod("rtf", object)
 }
 
-#' Convert an abstract table object into an RTF string or file
+#' Convert a tangram into an RTF string or file
 #'
-#' Given a cell_table class, a series of conversion creates an rtf
+#' Given a tangram class, a series of conversion creates an rtf
 #' representation of the table.
 #'
 #' @param object The cell table to render to RTF
@@ -267,11 +267,12 @@ rtf <- function(object, id, ...)
 #' @param filename A filename to write resulting rtf file to
 #' @param append A boolean for whether or not to append to given filename
 #' @param point Main font point size
-#' @param ... additional arguments to renderer. Unused
+#' @param ... additional arguments Fto renderer. Unused
 #' @return A text string rendering of the given table
+#' @importFrom utils tail
 #' @export
 #'
-rtf.cell_table <- function(
+rtf.tangram <- function(
   object,
   id       = NA,
   caption  = NA,

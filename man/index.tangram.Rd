@@ -2,12 +2,12 @@
 % Please edit documentation in R/render-index.R
 \name{index.tangram}
 \alias{index.tangram}
-\title{Generate an an index from a cell_table object}
+\title{Generate an an index from a tangram object}
 \usage{
 \method{index}{tangram}(object, id = "tangram", key.len = 4, ...)
 }
 \arguments{
-\item{object}{The cell_table for indexing}
+\item{object}{The tangram for indexing}
 
 \item{key.len}{numeric; length of keys generated (affects collision probability)}
 
