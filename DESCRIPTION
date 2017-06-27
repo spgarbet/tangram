@@ -23,7 +23,7 @@ Author: Shawn Garbett [aut, cre],
   Jennifer Thompson [ctb],
   Frank Harrell [ctb]
 Maintainer: Shawn Garbett <Shawn.Garbett@Vanderbilt.edu>
-Depends: R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr
+Depends: R (>= 3.2.3), R6, stringr, base64enc, digest, magrittr, htmltools
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
