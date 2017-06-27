@@ -20,7 +20,8 @@
 ## It seems that Sweave needs doublebackslash = TRUE
 ## but knitr needs doublebackslash = FALSE.
 #' @include render-latex-map.R
-#' @import stringi
+#' @importFrom stringi stri_trans_nfc
+#' @importFrom stringi stri_trans_nfd
 latexify <- function(x, doublebackslash = TRUE, dashdash = TRUE,
                      quotes = c("straight", "curved"),
                      packages = c("fontenc", "textcomp")) {

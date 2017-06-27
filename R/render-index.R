@@ -114,6 +114,8 @@ index.tangram <- function(object, id="tangram", key.len=4, ...)
 #' @return A list of strings containing key, source and value
 #' @export
 #'
+#' @importFrom base64enc base64encode
+#' @importFrom digest digest
 index.default <- function(object, id="tangram", name=NULL, key.len=4, ...)
 {
   src <- key(object, id)
