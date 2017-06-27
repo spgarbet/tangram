@@ -37,7 +37,7 @@ copy_src <- function(x, y)
 #' character attributes for \code{row} and \code{col}. Additional
 #' specifies for embedded tables are given with \code{subrow} and
 #' \code{subcol}. The \code{row} and \code{col} are automatically
-#' appended when using a \ref{\code{table_builder}}. However the
+#' appended when using a \code{table_builder}. However the
 #' \code{subrow} and \code{subcol} must be added by the user to
 #' a cell of a table.
 #'
