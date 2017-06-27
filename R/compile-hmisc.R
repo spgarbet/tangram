@@ -22,6 +22,7 @@
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
 #' @importFrom magrittr "%>%"
@@ -78,6 +79,7 @@ summarize_kruskal_horz <- function(table, row, column, pformat=NULL)
 #' @param table The table object to modify
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (numerical)
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
 summarize_kruskal_vert <- function(table, row, column, pformat)
@@ -121,6 +123,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat)
 #' @param table The table object to modify
 #' @param row The row variable object to use (binomial)
 #' @param column The column variable to use (categorical)
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
 summarize_chisq_single <- function(table, row, column, pformat=NULL)
@@ -184,6 +187,7 @@ summarize_chisq_single <- function(table, row, column, pformat=NULL)
 #' @param table The table object to modify
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (categorical)
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
 summarize_chisq <- function(table, row, column, pformat=NULL)
@@ -250,6 +254,7 @@ summarize_chisq <- function(table, row, column, pformat=NULL)
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (numerical)
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
 summarize_spearman <- function(table, row, column, pformat=NULL)

@@ -7,9 +7,9 @@
 \method{print}{cell}(x, ...)
 }
 \arguments{
-\item{...}{additional arguments, unused at present}
+\item{x}{The tangram to render to text}
 
-\item{object}{The cell table to render to text}
+\item{...}{additional arguments, unused at present}
 }
 \value{
 A text string rendering of the given table

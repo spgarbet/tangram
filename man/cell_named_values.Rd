@@ -11,6 +11,8 @@ cell_named_values(values, names, class = NULL, sep = ", ", ...)
 
 \item{names}{character; names to apply to values}
 
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
+
 \item{sep}{character; separator to use when rendering}
 
 \item{...}{additional attributes to attach to cell}

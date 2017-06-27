@@ -12,6 +12,8 @@ summarize_spearman(table, row, column, pformat = NULL)
 \item{row}{The row variable object to use (numerical)}
 
 \item{column}{The column variable to use (numerical)}
+
+\item{pformat}{numeric or character; A formatting directive to be applied to p-values}
 }
 \value{
 The modified table object

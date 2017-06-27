@@ -14,6 +14,10 @@ cell_fstat(f, df1, df2, p, class = NULL, ...)
 \item{df2}{2nd dimension degrees of freedom}
 
 \item{p}{The p-value of the resulting test}
+
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
+
+\item{...}{optional extra information to attach}
 }
 \value{
 A cell_fstat object.

@@ -7,15 +7,15 @@
 cell_fraction(numerator, denominator, format = 3, class = NULL, ...)
 }
 \arguments{
-\item{numerator}{The value of the numerator}
+\item{numerator}{numeric; The value of the numerator}
 
-\item{denominator}{The value of the denominator}
+\item{denominator}{numeric; The value of the denominator}
 
-\item{ratio}{The ratio of the two}
+\item{format}{numeric or character; a string formatting directive}
 
-\item{percentage}{The percentage this represents}
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 
-\item{src}{An optional field for traceability of the source of the field}
+\item{...}{optional extra information to attach}
 }
 \value{
 A cell_fraction object.

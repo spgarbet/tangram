@@ -12,6 +12,10 @@
 
 \item{id}{character; an additional specifier for the object key}
 
+\item{name}{character; optional names of elements inside object}
+
+\item{key.len}{numeric; length of generated key}
+
 \item{...}{additional arguments to renderer. Unused}
 }
 \value{

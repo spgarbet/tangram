@@ -77,7 +77,7 @@ index <- function(object, ...)
 #' Given a tangram class create an index representation.
 #'
 #' @param object The tangram for indexing
-#' @param caption an additional specifier for the object key
+#' @param id an additional specifier for the object key
 #' @param key.len numeric; length of keys generated (affects collision probability)
 #' @param ... additional arguments to renderer. Unused
 #' @return A matrix of strings containing key, source and value
@@ -110,6 +110,8 @@ index.tangram <- function(object, id="tangram", key.len=4, ...)
 #'
 #' @param object cell; The cell for indexing
 #' @param id character; an additional specifier for the object key
+#' @param name character; optional names of elements inside object
+#' @param key.len numeric; length of generated key
 #' @param ... additional arguments to renderer. Unused
 #' @return A list of strings containing key, source and value
 #' @export

@@ -12,6 +12,8 @@
 \item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
+
+\item{class}{additional class attributes for CSS rendering}
 }
 \value{
 A text string rendering of the given subheader as a <td> with several <span>'s.

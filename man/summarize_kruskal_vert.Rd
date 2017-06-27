@@ -12,6 +12,8 @@ summarize_kruskal_vert(table, row, column, pformat)
 \item{row}{The row variable object to use (categorical)}
 
 \item{column}{The column variable to use (numerical)}
+
+\item{pformat}{numeric or character; A formatting directive to be applied to p-values}
 }
 \value{
 The modified table object

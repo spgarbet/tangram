@@ -268,6 +268,7 @@ html5.cell <- function(object, id, ..., class=NULL)
 #'
 #' @param object The cell subheader to render to HTML5
 #' @param id A unique identifier for traceability
+#' @param class additional class attributes for CSS rendering
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given subheader as a <td> with several <span>'s.
 #' @importFrom htmltools htmlEscape
@@ -285,6 +286,7 @@ html5.cell_subheader <- function(object, id, ..., class=NULL)
 #'
 #' @param object The cell subheader to render to HTML5
 #' @param id A unique identifier for traceability
+#' @param class additional class attributes for CSS rendering
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given subheader as a <td> with several <span>'s.
 #' @importFrom htmltools htmlEscape

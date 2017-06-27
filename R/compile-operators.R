@@ -156,15 +156,14 @@ new_header <- function(table_builder, attribute, sub, ...)
 #' Therefore it is best to use cursor movement to move in defined
 #' rows or columns of information.
 #'
-#' @param col character; Value to use for indexing
+#' @param column character; Value to use for indexing
+#' @param embedded logical; is this to be embedded in another table
 #' @param FUN the function to use in iteration
 #' @param n integer; Number of positions to move cursor, defaults to 1
 #' @param ncol integer; specifies desired col
 #' @param nrow integer; specifies desired row
 #' @param row character; Value to use for indexing
 #' @param sub logical; treat as subheader if after first header, defaults to TRUE
-#' @param subcol character; an additional specifier to use in indexing
-#' @param subrow character; an additional specifier to use in indexing
 #' @param table_builder The table builder object to modify
 #' @param x any; a value to use for a cell in operation
 #' @param X list or vector; items to iterate over

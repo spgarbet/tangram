@@ -11,6 +11,8 @@ cell_header(text, units = NULL, class = NULL, ...)
 
 \item{units}{character; An optional field that contains units}
 
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
+
 \item{...}{optional extra information to attach}
 }
 \value{

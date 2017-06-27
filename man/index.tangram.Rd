@@ -9,11 +9,11 @@
 \arguments{
 \item{object}{The tangram for indexing}
 
+\item{id}{an additional specifier for the object key}
+
 \item{key.len}{numeric; length of keys generated (affects collision probability)}
 
 \item{...}{additional arguments to renderer. Unused}
-
-\item{caption}{an additional specifier for the object key}
 }
 \value{
 A matrix of strings containing key, source and value

@@ -9,7 +9,9 @@ cell_n(n, class = NULL, ...)
 \arguments{
 \item{n}{The value of the X^2 statistic}
 
-\item{src}{An optional field for traceability of the source of the field}
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
+
+\item{...}{optional extra information to attach}
 }
 \value{
 A cell_n object.

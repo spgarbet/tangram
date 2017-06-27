@@ -60,6 +60,10 @@ add_row(table_builder, ...)
 \arguments{
 \item{row}{character; Value to use for indexing}
 
+\item{column}{character; Value to use for indexing}
+
+\item{embedded}{logical; is this to be embedded in another table}
+
 \item{table_builder}{The table builder object to modify}
 
 \item{...}{object; the elements to add or additional values to pass to FUN}
@@ -77,12 +81,6 @@ add_row(table_builder, ...)
 \item{X}{list or vector; items to iterate over}
 
 \item{FUN}{the function to use in iteration}
-
-\item{col}{character; Value to use for indexing}
-
-\item{subcol}{character; an additional specifier to use in indexing}
-
-\item{subrow}{character; an additional specifier to use in indexing}
 }
 \value{
 the modified table_builder

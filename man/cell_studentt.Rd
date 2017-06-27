@@ -12,6 +12,10 @@ cell_studentt(t, df, p, class = NULL, ...)
 \item{df}{degrees of freedom}
 
 \item{p}{p-value of resulting test}
+
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
+
+\item{...}{optional extra information to attach}
 }
 \value{
 A cell_studentt object.

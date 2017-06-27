@@ -9,11 +9,9 @@
 \arguments{
 \item{x}{The aov object to turn into a renderable cell}
 
+\item{pformat}{numeric or character; A formatting directive to be applied to p-values}
+
 \item{...}{additional specifiers for identifying this cell (see key)}
-
-\item{row}{The AST row of that is generating this cell}
-
-\item{column}{The AST column that is generating this cell}
 }
 \value{
 an S3 rendereable cell that is an F-statistic

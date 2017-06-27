@@ -25,7 +25,7 @@ tangram(x, ...)
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits, ...)
 }
 \arguments{
-\item{x}{object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows}
+\item{x}{object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows, an rms.model}
 
 \item{...}{addition models or data supplied to table construction routines}
 
@@ -34,6 +34,8 @@ tangram(x, ...)
 \item{embedded}{logical; Will this table be embedded inside another}
 
 \item{colheader}{character; Use as column headers in final table}
+
+\item{data}{data.frame; data to use for rendering tangram object}
 
 \item{transforms}{list of lists of functions; that contain the transformation to apply for summarization}
 
@@ -46,8 +48,6 @@ tangram(x, ...)
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
-
-\item{rms.model}{rms; Object of class rms, or list of named objects}
 }
 \value{
 A tangram object (a table).

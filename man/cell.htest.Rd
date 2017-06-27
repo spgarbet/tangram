@@ -9,6 +9,10 @@
 \arguments{
 \item{x}{The htest object to convert to a rendereable cell}
 
+\item{format}{numeric or character; A formatting directive applied to statistics}
+
+\item{pformat}{numeric or character; A formatting directive to be applied to p-values}
+
 \item{...}{additional specifiers for identifying this cell (see key)}
 }
 \value{

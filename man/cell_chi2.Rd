@@ -13,9 +13,9 @@ cell_chi2(chi2, df, p, class = NULL, ...)
 
 \item{p}{p-value of resulting test}
 
-\item{reference}{A possible reference number for use in a table key}
+\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 
-\item{src}{An optional field for traceability of the source of the field}
+\item{...}{optional extra information to attach}
 }
 \value{
 A cell_chi2 object.

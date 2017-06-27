@@ -14,12 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#' S3 object to return number of rows/cols in object
+#'
+#' Number of rows/cols in provided object
+#'
+#' @param x object; object to determine requested count
+#' @rdname rowscols
+#'
 #' @export
 rows <- function(x)
 {
   UseMethod("rows", x)
 }
 
+#' @rdname rowscols
 #' @export
 cols <- function(x)
 {
@@ -27,12 +35,14 @@ cols <- function(x)
 }
 
 #' @export
+#' @rdname rowscols
 rows.list <- function(x)
 {
   length(x)
 }
 
 #' @export
+#' @rdname rowscols
 cols.list <- function(x)
 {
   if(length(x) >= 1)
@@ -46,9 +56,11 @@ cols.list <- function(x)
 }
 
 #' @export
+#' @rdname rowscols
 rows.table_builder <- function(x) rows(x$table)
 
 #' @export
+#' @rdname rowscols
 cols.table_builder <- function(x) cols(x$table)
 
 #' Construct a table cell from an object
@@ -95,6 +107,7 @@ cell.default <- function(x, ...)
 #'
 #' @param text character; The text of the label. May include a subset of LaTeX greek or math.
 #' @param units character; An optional field that contains units
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... optional extra information to attach
 #'
 #' @return A tangram object
@@ -118,6 +131,7 @@ cell_label <- function(text, units=NULL, class=NULL, ...)
 #'
 #' @param text character; The text of the label. May include a subset of LaTeX greek or math.
 #' @param units character; An optional field that contains units
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... optional extra information to attach
 #'
 #' @return A cell_header object
@@ -141,6 +155,7 @@ cell_header <- function(text, units=NULL, class=NULL, ...)
 #'
 #' @param text character; The text of the label. May include a subset of LaTeX greek or math.
 #' @param units character; An optional field that contains units
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... optional extra information to attach
 #'
 #' @return A cell_subheader object.
@@ -198,8 +213,8 @@ cell_iqr <- function(x,
 #' @param values vector; to create cell values from
 #' @param names character; names to apply to values
 #' @param sep character; separator to use when rendering
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... additional attributes to attach to cell
-#'
 #' @return A cell object with named values
 #' @export
 #' @examples
@@ -210,6 +225,20 @@ cell_named_values <- function(values, names, class=NULL, sep=", ", ...)
   cell(values, class=c(class, "cell_value"), sep=sep, ...)
 }
 
+#' Create a cell representing a range
+#'
+#' Useful for things such as confidence intervals.
+#'
+#' @param low character or numeric; lower value of range
+#' @param high character or numeric; upper value of range
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param sep character; separator to use when rendering
+#' @param ... additional attributes to attach to cell
+#'
+#' @return A cell object denoting a range
+#' @export
+#' @examples
+#' cell_range(-1.0, 1.0)
 cell_range <- function(low, high, class=NULL, sep=", ", ...)
 {
   cell(c(low, high), class=c(class, "cell_range"), sep=sep, ...)
@@ -227,6 +256,7 @@ cell_range <- function(low, high, class=NULL, sep=", ", ...)
 #' @param name character; An optional name to apply to the value
 #' @param class character; additional classs to apply
 #' @param sep character; option separator character for the range
+#' @param ... optional extra information to attach
 #'
 #' @return A cell_estimate object.
 #' @export
@@ -246,12 +276,11 @@ cell_estimate <- function(value, low, high, name=NULL, class=NULL, sep=", ", ...
 #'
 #' A cell_fraction object contains a statistical result of a fraction/percentage.
 #'
-#' @param numerator The value of the numerator
-#' @param denominator The value of the denominator
-#' @param ratio The ratio of the two
-#' @param percentage The percentage this represents
-#' @param src An optional field for traceability of the source of the field
-#'
+#' @param numerator numeric; The value of the numerator
+#' @param denominator numeric; The value of the denominator
+#' @param format numeric or character; a string formatting directive
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
 #' @return A cell_fraction object.
 #' @export
 #' @examples
@@ -274,7 +303,8 @@ cell_fraction <- function(numerator, denominator, format=3, class=NULL, ...)
 #' @param df1 1st dimension degrees of freedom
 #' @param df2 2nd dimension degrees of freedom
 #' @param p The p-value of the resulting test
-#'
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
 #' @return A cell_fstat object.
 #' @export
 #' @examples
@@ -291,9 +321,8 @@ cell_fstat <- function(f, df1, df2, p, class=NULL, ...)
 #' @param chi2 The value of the X^2 statistic
 #' @param df degrees of freedom
 #' @param p p-value of resulting test
-#' @param reference A possible reference number for use in a table key
-#' @param src An optional field for traceability of the source of the field
-#'
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
 #' @return A cell_chi2 object.
 #' @export
 #' @examples
@@ -313,7 +342,8 @@ cell_chi2 <- function(chi2, df, p, class=NULL, ...)
 #' @param t The value of the X^2 statistic
 #' @param df degrees of freedom
 #' @param p p-value of resulting test
-#'
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
 #' @return A cell_studentt object.
 #' @export
 #' @examples
@@ -333,9 +363,8 @@ cell_studentt <- function(t, df, p, class=NULL, ...)
 #' @param S The value of the spearman statistic
 #' @param rho The rho value of the test
 #' @param p p-value of resulting test
-#' @param reference A possible reference number for use in a table key
-#' @param src An optional field for traceability of the source of the field
-#'
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
 #' @return A cell_spearman object.
 #' @export
 #' @examples
@@ -353,8 +382,8 @@ cell_spearman <- function(S, rho, p, class=NULL, ...)
 #' A cell_n object contains a statistical result of an X^2-test.
 #'
 #' @param n The value of the X^2 statistic
-#' @param src An optional field for traceability of the source of the field
-#'
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
 #' @return A cell_n object.
 #' @export
 #' @examples
@@ -369,8 +398,7 @@ cell_n <- function(n, class=NULL, ...)
 #' Construct a cell from an analysis of variance model
 #'
 #' @param x The aov object to turn into a renderable cell
-#' @param row The AST row of that is generating this cell
-#' @param column The AST column that is generating this cell
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is an F-statistic
 #' @export
@@ -393,6 +421,8 @@ cell.aov <- function(x, pformat="%1.3f", ...)
 #' Currently handles cor.test, t.test and chisq.test objects
 #'
 #' @param x The htest object to convert to a rendereable cell
+#' @param format numeric or character; A formatting directive applied to statistics
+#' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export

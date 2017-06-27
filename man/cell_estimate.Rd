@@ -19,6 +19,8 @@ cell_estimate(value, low, high, name = NULL, class = NULL, sep = ", ",
 \item{class}{character; additional classs to apply}
 
 \item{sep}{character; option separator character for the range}
+
+\item{...}{optional extra information to attach}
 }
 \value{
 A cell_estimate object.

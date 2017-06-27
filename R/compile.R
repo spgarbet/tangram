@@ -237,14 +237,14 @@ cell_create_table <- function(ast, transforms, ...)
 #' rendering. Can create tables from summary.rms(), anova.rms(), and other rms object info to create a
 #' single pretty table of model results. The rms and Hmisc packages are required.
 #'
-#' @param x object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows
+#' @param x object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows, an rms.model
 #' @param after function or list of functions; one or more functions to further process an abstract table
 #' @param colheader character; Use as column headers in final table
 #' @param cols numeric; An integer of the number of cols to create
+#' @param data data.frame; data to use for rendering tangram object
 #' @param embedded logical; Will this table be embedded inside another
 #' @param footnote character; A string to add to the table as a footnote.
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization
-#' @param rms.model rms; Object of class rms, or list of named objects
 #' @param rnd.digits numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.
 #' @param rnd.stats numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.
 #' @param short.labels numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").
