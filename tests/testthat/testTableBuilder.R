@@ -30,95 +30,86 @@ test_that("Flattening arguments does not flatten cells",
 })
 
 test_that("row_header creates a new header with class cell_header in elements for first call", {
-  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
-        row_header(NA, tg_N(1,2,3))
+  tb <- table_builder(list(value="A"), list(value="B")) %>%
+        row_header(NA, c(1,2,3))
 
   x <- attr(tb$table, "row_header")
 
-  expect_equal(class(x), c("cell_table", "cell"))
-  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(class(x), c("tangram", "cell", "list"))
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell", "logical"))
 
-  expect_true(x[[1]][[2]]$n == 1)
-  expect_equal(x[[1]][[2]]$src, "A:B:N")
-  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_n", "cell"))
+  expect_true(x[[1]][[2]] == 1)
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell", "numeric"))
 
-  expect_true(x[[1]][[3]]$n == 2)
-  expect_equal(x[[1]][[3]]$src, "A:B:N")
+  expect_true(x[[1]][[3]] == 2)
 
-  expect_true(x[[1]][[4]]$n == 3)
-  expect_equal(x[[1]][[4]]$src, "A:B:N")
+  expect_true(x[[1]][[4]] == 3)
 })
 
 
 test_that("col_header creates a new header with class cell_header in elements for first call", {
-  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
-        col_header("Jim", tg_N(1,2,3))
+  tb <- table_builder(list(value="A"), list(value="B")) %>%
+        col_header("Jim", c(1,2,3))
 
   x <- attr(tb$table, "col_header")
 
-  expect_equal(class(x), c("cell_table", "cell"))
-  expect_equal(x[[1]][[1]]$label, "Jim")
-  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
+  expect_equal(class(x), c("tangram", "cell", "list"))
+  expect_true(x[[1]][[1]] == "Jim")
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell", "character"))
 
-  expect_true(x[[1]][[2]]$n == 1)
-  expect_equal(x[[1]][[2]]$src, "A:B:N")
-  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_n", "cell"))
+  expect_true(x[[1]][[2]] == 1)
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell", "numeric"))
 
-  expect_true(x[[1]][[3]]$n == 2)
-  expect_equal(x[[1]][[3]]$src, "A:B:N")
+  expect_true(x[[1]][[3]] == 2)
 
-  expect_true(x[[1]][[4]]$n == 3)
-  expect_equal(x[[1]][[4]]$src, "A:B:N")
+  expect_true(x[[1]][[4]] == 3)
 })
 
 test_that("row_header creates a new header with class cell_subheader in elements for later call", {
-  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
+  tb <- table_builder(list(value="A"), list(value="B")) %>%
         row_header("First", NA) %>%
-        row_header("Second", tg_quantile(rnorm(20),NA))
+        row_header("Second", cell_iqr(quantile(rnorm(20),NA)))
 
   x <- attr(tb$table, "row_header")
 
-  expect_equal(class(x), c("cell_table", "cell"))
+  expect_equal(class(x), c("tangram", "cell", "list"))
   expect_equal(length(x), 2)
   expect_equal(length(x[[1]]), 2)
   expect_equal(length(x[[2]]), 2)
 
-  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
-  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell"))
-  expect_equal(class(x[[2]][[1]]), c("cell_subheader", "cell_header", "cell_label", "cell"))
-  expect_equal(class(x[[2]][[2]]), c("cell_subheader", "cell_header", "cell_quantile", "cell"))
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell", "character"))
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell", "logical"))
+  expect_equal(class(x[[2]][[1]]), c("cell_subheader", "cell_header", "cell_label", "cell", "character"))
+  expect_equal(class(x[[2]][[2]]), c("cell_subheader", "cell_header", "cell_label", "cell_iqr", "cell", "character"))
 
-  expect_equal(x[[2]][[2]]$src, "A:B:quantile")
 })
 
 test_that("col_header creates a new header with class cell_subheader in elements for later call", {
-  tb <- new_table_builder(list(value="A"), list(value="B")) %>%
+  tb <- table_builder(list(value="A"), list(value="B")) %>%
         col_header("First", NA) %>%
-        col_header("Second", tg_quantile(rnorm(20),NA))
+        col_header("Second", cell_iqr(quantile(rnorm(20),NA)))
 
   x <- attr(tb$table, "col_header")
 
-  expect_equal(class(x), c("cell_table", "cell"))
+  expect_equal(class(x), c("tangram", "cell", "list"))
   expect_equal(length(x), 2)
   expect_equal(length(x[[1]]), 2)
   expect_equal(length(x[[2]]), 2)
 
-  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell"))
-  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell"))
-  expect_equal(class(x[[2]][[1]]), c("cell_subheader", "cell_header", "cell_label", "cell"))
-  expect_equal(class(x[[2]][[2]]), c("cell_subheader", "cell_header", "cell_quantile", "cell"))
-
-  expect_equal(x[[2]][[2]]$src, "A:B:quantile")
+  expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell", "character"))
+  expect_equal(class(x[[1]][[2]]), c("cell_header", "cell_label", "cell", "logical"))
+  expect_equal(class(x[[2]][[1]]), c("cell_subheader", "cell_header", "cell_label", "cell", "character"))
+  expect_equal(class(x[[2]][[2]]), c("cell_subheader", "cell_header", "cell_label", "cell_iqr", "cell", "character"))
 })
 
 test_that("New Table Builder returns an empty 1x1 table",
 {
-  tb <- new_table_builder("A", "B")
+  tb <- table_builder("A", "B")
 
-  expect_true(inherits(tb$table, "cell_table"))
+  expect_true(inherits(tb$table, "tangram"))
   expect_equal(length(tb$table), 1)
   expect_equal(length(tb$table[[1]]), 1)
-  expect_equal(class(tb$table[[1]][[1]]), "cell")
+  expect_equal(class(tb$table[[1]][[1]]), "character")
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 1)
   expect_equal(tb$row, "A")
@@ -126,21 +117,21 @@ test_that("New Table Builder returns an empty 1x1 table",
 })
 
 test_that("home moves the cursor to 1,1", {
-  tb <- new_table_builder("A", "B") %>% cursor_down() %>% cursor_right() %>% home()
+  tb <- table_builder("A", "B") %>% cursor_down() %>% cursor_right() %>% home()
 
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 1)
 })
 
 test_that("cursor_right moves the cursor 1 to the right", {
-  tb <- new_table_builder("A", "B") %>% cursor_right()
+  tb <- table_builder("A", "B") %>% cursor_right()
 
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 2)
 })
 
 test_that("cursor_right moves the cursor n to the right", {
-  tb <- new_table_builder("A", "B") %>% cursor_right(23)
+  tb <- table_builder("A", "B") %>% cursor_right(23)
 
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 24)
@@ -151,21 +142,21 @@ test_that("cursor_right moves the cursor n to the right", {
 })
 
 test_that("cursor_right errors when request to move beyond left most column via a negative value", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10)
 
   expect_error(cursor_right(tb, -10))
   expect_error(home(tb) %>% cursor_right(-1))
 })
 
 test_that("cursor_down moves the cursor 1 down", {
-  tb <- new_table_builder("A", "B") %>% cursor_down()
+  tb <- table_builder("A", "B") %>% cursor_down()
 
   expect_equal(tb$nrow, 2)
   expect_equal(tb$ncol, 1)
 })
 
 test_that("cursor_down moves the cursor n down", {
-  tb <- new_table_builder("A", "B") %>% cursor_down(23)
+  tb <- table_builder("A", "B") %>% cursor_down(23)
 
   expect_equal(tb$nrow, 24)
   expect_equal(tb$ncol, 1)
@@ -176,7 +167,7 @@ test_that("cursor_down moves the cursor n down", {
 })
 
 test_that("cursor_down errors when requested to move above top row via a negative value", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10)
 
   expect_error(cursor_down(tb, -10))
   expect_error(home(tb) %>% cursor_down(-1))
@@ -184,49 +175,49 @@ test_that("cursor_down errors when requested to move above top row via a negativ
 
 
 test_that("cursor_left moves the cursor 1 to the left", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_left()
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_left()
 
   expect_equal(tb$nrow, 10)
   expect_equal(tb$ncol, 9)
 })
 
 test_that("cursor_left moves the cursor n to the left", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_left(5)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_left(5)
 
   expect_equal(tb$nrow, 10)
   expect_equal(tb$ncol, 5)
 })
 
 test_that("cursor_left errors when request to move beyond left most column", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10)
 
   expect_error(cursor_left(tb, 10))
   expect_error(home(tb) %>% cursor_left(1))
 })
 
 test_that("cursor_up moves the cursor 1 up", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_up()
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_up()
 
   expect_equal(tb$nrow, 9)
   expect_equal(tb$ncol, 10)
 })
 
 test_that("cursor_up moves the cursor n up", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_up(5)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10) %>% cursor_up(5)
 
   expect_equal(tb$nrow, 5)
   expect_equal(tb$ncol, 10)
 })
 
 test_that("cursor_up errors when request to move beyond top most column", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10)
 
   expect_error(cursor_up(tb, 10))
   expect_error(home(tb) %>% cursor_up(1))
 })
 
 test_that("cursor_pos positions cursor correctly and doesn't allow negative values", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10)
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10)
 
   expect_equal(tb$nrow, 10)
   expect_equal(tb$ncol, 10)
@@ -236,35 +227,35 @@ test_that("cursor_pos positions cursor correctly and doesn't allow negative valu
 })
 
 test_that("carriage return goes to first column without advancing row", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% carriage_return()
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10) %>% carriage_return()
 
   expect_equal(tb$nrow, 10)
   expect_equal(tb$ncol, 1)
 })
 
 test_that("line_feed moves the cursor 1 down", {
-  tb <- new_table_builder("A", "B") %>% line_feed()
+  tb <- table_builder("A", "B") %>% line_feed()
 
   expect_equal(tb$nrow, 2)
   expect_equal(tb$ncol, 1)
 })
 
 test_that("line_feed moves the cursor n down", {
-  tb <- new_table_builder("A", "B") %>% line_feed(23)
+  tb <- table_builder("A", "B") %>% line_feed(23)
 
   expect_equal(tb$nrow, 24)
   expect_equal(tb$ncol, 1)
 })
 
 test_that("new_line both moves down a line and returns to first column", {
-  tb <- new_table_builder("A", "B") %>% cursor_pos(10, 10) %>% new_line()
+  tb <- table_builder("A", "B") %>% cursor_pos(10, 10) %>% new_line()
 
   expect_equal(tb$nrow, 11)
   expect_equal(tb$ncol, 1)
 })
 
 test_that("new_row opens a new row at the bottom", {
-   tb <- new_table_builder("A", "B") %>% cursor_right()
+   tb <- table_builder("A", "B") %>% cursor_right()
 
    tb$table[[1]] <- list("A", "B")
    tb$table[[3]] <- list("C")
@@ -276,7 +267,7 @@ test_that("new_row opens a new row at the bottom", {
 })
 
 test_that("new_col opens a new col at right of the top most defined col", {
-   tb <- new_table_builder("A", "B") %>% cursor_down(2)
+   tb <- table_builder("A", "B") %>% cursor_down(2)
 
    tb$table[[1]] <- list("A", "B")
    tb$table[[3]] <- list("C")
@@ -288,7 +279,7 @@ test_that("new_col opens a new col at right of the top most defined col", {
 })
 
 test_that("table_builder_apply works over a vector", {
-   tb <- new_table_builder("A", "B") %>%
+   tb <- table_builder("A", "B") %>%
          table_builder_apply(1:3, FUN=function(tbl, x) {
            tbl %>% cursor_down(x) %>% cursor_right(x)
          })
@@ -299,13 +290,12 @@ test_that("table_builder_apply works over a vector", {
 
 test_that("write_cell writes to table with key info",
 {
-  tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
-          write_cell(tg_N(2), subrow="S", subcol="T")
+  tb   <- table_builder(list(value="A"), list(value="B")) %>%
+          write_cell(cell_n(2), subrow="S", subcol="T")
   cell <- tb$table[[1]][[1]]
 
   expect_true(inherits(cell, "cell_n"))
   expect_true(inherits(cell, "cell"))
-  expect_equal(cell$src, "A[S]:B[T]:N")
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 1)
   expect_equal(length(tb$table), 1)
@@ -313,28 +303,22 @@ test_that("write_cell writes to table with key info",
 })
 
 test_that("add_col will add a single column", {
-  tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
-          add_col(tg_quantile(rnorm(50),NA), subrow="S", subcol="T")
+  tb   <- table_builder(list(value="A"), list(value="B")) %>%
+          add_col(cell_iqr(quantile(rnorm(50),NA), subrow="S", subcol="T"))
 
-  expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:quantile")
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 2)
 })
 
 test_that("add_col will add multiple columns as cells", {
-  tb   <- new_table_builder(list(value="A"), list(value="B")) %>%
-    add_col(tg_quantile(rnorm(50),NA),
-            tg_N(4),
-            tg_fraction(1,2),
-            aov(y ~ x, data=data.frame(x=rnorm(10), y=rnorm(10))),
-            t.test(rnorm(10)),
-            subrow="S", subcol="T")
+  tb   <- table_builder(list(value="A"), list(value="B")) %>%
+    add_col(cell_iqr(quantile(rnorm(50),NA), subrow="S", subcol="T"),
+            cell_n(4),
+            cell_fraction(1,2),
+            cell(aov(y ~ x, data=data.frame(x=rnorm(10), y=rnorm(10)))),
+            cell(t.test(rnorm(10)))
+ )
 
-  expect_equal(tb$table[[1]][[1]]$src, "A[S]:B[T]:quantile")
-  expect_equal(tb$table[[1]][[2]]$src, "A[S]:B[T]:N")
-  expect_equal(tb$table[[1]][[3]]$src, "A[S]:B[T]:fraction")
-  expect_equal(tb$table[[1]][[4]]$src, "A[S]:B[T]:aov")
-  expect_equal(tb$table[[1]][[5]]$src, "A[S]:B[T]:htest")
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 6)
 })
