@@ -53,5 +53,5 @@ summary(table_builder()   \%>\%
         row_header("row") \%>\%
         col_header(1,2,3) \%>\%
         add_col("A","B","C"))
-summary(summary_table(drug~bili, pbc))
+summary(tangram(drug~bili, pbc))
 }

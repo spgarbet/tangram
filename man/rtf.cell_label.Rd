@@ -12,6 +12,8 @@
 \item{id}{A string caption for the table}
 
 \item{...}{additional arguments to renderer. Unused}
+
+\item{point}{size of main font for cell label}
 }
 \value{
 An RTF text string rendering of the given label.

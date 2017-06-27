@@ -41,7 +41,7 @@ library(Hmisc)
 
 getHdata(pbc)
 
-table <- summary_table(drug ~ bili + albumin + stage + protime + sex + age + spiders, data = pbc)
+table <- tangram(drug ~ bili + albumin + stage + protime + sex + age + spiders, data = pbc)
 
 table
 html5(table)

@@ -47,7 +47,7 @@ summary.character <- function(x, ...) x
 #'         row_header("row") %>%
 #'         col_header(1,2,3) %>%
 #'         add_col("A","B","C"))
-#' summary(summary_table(drug~bili, pbc))
+#' summary(tangram(drug~bili, pbc))
 #' @rdname summary
 #' @export
 summary.cell <- function(x, ...)
