@@ -1,5 +1,9 @@
 # A Grammar of Tables 'tangram'
 
+## Release Notes
+
+Jun 27 2017 v0.3 A major refactor, cells in the table object are no longer 'special' and are just straight S3 objects. Two adapter layers of code are deleted, interface is stablizing. Used `tangram` as an S3 object and replaced various table generating calls to a single overloaded function.
+
 ## Goal
 
 The idea of creating a quick summary of a data set has been around a good while. The use of a statistical formulas to create summaries exists in SAS in PROC REPORT, and in the R package Hmisc. The SAS has a rich syntax which allows for generation of a wide array of summary tables, but is limited to a subset of SAS functions. The SAS generation is further limited to a fairly crude appearing table, with limited options for output generation. Hmisc offers wonderful output, but is fixed in the analysis that can be performed.

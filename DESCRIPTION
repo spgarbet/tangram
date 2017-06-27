@@ -50,7 +50,6 @@ Collate:
     'render-html5.R'
     'render-index.R'
     'render-rmd.R'
-    'render-rtf.R'
     'render-summary.R'
 NeedsCompilation: no
 Packaged: 2017-04-25 20:16:25 UTC; garbetsp
