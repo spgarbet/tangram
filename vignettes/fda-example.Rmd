@@ -1,0 +1,271 @@
+---
+title: "Tom's Take Two"
+author: "Shawn Garbett"
+date: "June 6, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tangram)
+library(Hmisc)
+
+
+```
+
+## FDA Table Tranforms using tangram
+
+### Random Data
+
+First some random data to work with (real data is confidential).
+
+```{r, echo="TRUE"}
+# Make up some data
+N    <- 10000
+d1   <- data.frame(
+  id        = 1:N,
+  procedure = sample(c("A","B","C","D","E","F","G",NA),
+                     N,
+                     replace=TRUE,
+                     prob=c(rep(0.14,7), 0.02)),
+  category  = sample(c("D","E", NA),     N, replace=TRUE, prob=c(0.49, 0.49, 0.02)),
+  prior     = pmin(rpois(N, 1), 5),
+  modality  = sample(c("X","Y","Z", NA), N, replace=TRUE, prob=c(0.33, 0.33, 0.33, 0.01)),
+  albumin   = rnorm(N, 3.5, 0.4)
+) 
+
+map_procedure_cat <- c(
+  "Incisional", 
+  "Parastomal", 
+  "Incisional and Parastomal", 
+  "Epigastric (primary hernia)", 
+  "Umbilical (primary hernia)", 
+  "Spigelian (primary hernia)", 
+  "Lumbar (primary hernia)"
+)
+
+d1$prior            <- factor(d1$prior, levels=0:5, labels=c("0", "1", "2", "3", "4", "5+"))
+
+d1$procedure        <- factor(d1$procedure, labels=map_procedure_cat)
+label(d1$prior)     <- "Number of prior hernia repairs (among recurrent)"
+label(d1$category)  <- "Primary or recurrent"
+label(d1$procedure) <- "Ventral hernia procedure"
+
+d1$albumin[sample(1:N,100)] <- NA
+label(d1$albumin)   <- "Albumin"
+units(d1$albumin)   <- "g/dL"
+
+
+# Add a binary coded side effect variable
+d1$side_effect     <- sample(c(TRUE, FALSE, NA), N, replace=TRUE, prob=c(0.49, 0.49, 0.02))
+d1$reported_side_effects <- sample(1:256, N, replace=TRUE)
+d1$reported_side_effects[!d1$side_effect] <- NA
+
+```
+
+A function that performs the appropriate statistical test and returns a table cell is very helpful. In this case determination of the appropriate $\chi^2$ test over pairs of columns in a grid of numbers.
+
+```{r, echo="TRUE"}
+chiTests <- function(grid)
+{
+  lapply(2:dim(grid)[2], FUN=function(i){
+    consider <- grid[,c(1, i)]
+    if(min(consider) >= 1)
+    {
+      test   <- suppressWarnings(chisq.test(consider, correct=FALSE))
+      stat   <- unname(test$statistic) * (sum(consider)-1) / sum(consider)
+      cell(render_f(pchisq(stat, test$parameter, lower.tail=FALSE), 3), reference=1)
+    }
+    else
+    {
+      cell(render_f(fisher.test(consider, simulate.p.value=TRUE, B=1e7)$p.value, 3), reference=2)
+    }
+  })
+}
+```
+
+In this example we are only considering N categories as row and M categories as column. The resulting table is (N+1) X (2M). More specifically a row for the name of the row variable and row for each category present in the row. There is a column for the count (percentage) of each column variable, then pair-wise comparisons with the first category following by the count of missing. Statistical tests only appear in the first row.
+
+Further this example seeks to avoid use of the `%>%` operator for instructional purposes.
+
+```{r, echo="TRUE"}
+fda_cat_by_cat <- function(tb, row, col, ...)
+{
+  grid   <- table(row$data, col$data)
+  
+  tests  <- chiTests(grid)
+  colN   <- lapply(colnames(grid), function(cat) cell_n(sum(grid[,cat]), subcol=cat))
+  rowlbl <- lapply(rownames(grid), function(x) paste("  ", x))
+  versus <- paste(colnames(grid)[1], "vs.", colnames(grid)[2:length(colnames(grid))])
+
+  # Now construct the table by add rows to each column
+  tb <- tb                                             %>%
+  col_header(colnames(grid), versus, "Missing")        %>%
+  col_header(colN, rep("P-value", length(versus)), "") %>%
+  row_header(derive_label(row))
+  
+  for(nm in rowlbl) tb <- row_header(tb, nm)
+  
+  for(colnm in colnames(grid))
+  {
+    denom <- sum(grid[,colnm])
+    tb <- add_row(tb, "")
+
+    for(rownm in rownames(grid))
+    {
+      numer <- grid[rownm, colnm]
+      tb    <- add_row(tb, 
+        cell(paste0(numer, " (", render_f(100*numer/denom, 1), ")"),
+             subcol = colnm,
+             subrow = rownm)
+      )
+    }
+    
+    tb <- new_col(tb)
+  }
+  
+  tb <- add_col(tb, tests)
+  tb <- add_col(tb, length(row$data)-sum(grid))
+}
+```
+
+Using this any variables that are factors can be used now to generate a table and render to HTML5.
+
+```{r, results="asis"}
+tbl1 <- tangram("modality ~ procedure + category + prior", d1, transforms=fda_cat_by_cat)
+html5(tbl1, fragment=TRUE, inline="nejm.css", caption = "FDA Table 1", id="tbl1")
+```
+
+Next it is needed to allow for row variables that are continuous. We begin with the helper function that creates cells for the tests given the data for a row (x) and colunn (y). In this case we make no distribution assumption about the continuous variable and apply a Wilcoxon rank sum test. 
+
+```{r, echo=TRUE}
+wilcoxTests <- function(x, y)
+{
+  lvls <- levels(y)
+  
+  lapply(2:length(lvls), FUN=function(i){
+    test <- wilcox.test(x[y==lvls[1]], x[y==lvls[i]])
+    cell(render_f(test$p.value, 3), reference=3)
+  })
+}
+```
+
+Similarly we create a table builder for continuous by M category summaries. The resulting table is (4) X (2M). There is a row for the row variable name, and the mean, median and standard deviation. Column's are the same as above.
+
+```{r, echo=TRUE}
+fda_cont_by_cat <- function(tb, row, col, ...)
+{
+  datar          <- row$data
+  datac          <- col$data
+  
+  lvls           <- levels(datac)
+
+  colN   <- lapply(lvls, function(cat)
+    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat))
+  versus <- paste(lvls[1], "vs.", lvls[2:length(lvls)])
+
+  # Now construct the table by add rows to each column
+  tb <- col_header(tb, lvls, versus, "Missing")
+  tb <- col_header(tb, colN, rep("P-value", length(versus)), "")
+  tb <- row_header(tb, derive_label(row))
+  
+  for(nm in c("Mean", "Median", "SD")) tb <- row_header(tb, paste0("  ",nm))
+  
+  # Summary
+  for(colnm in lvls)
+  {
+    d     <- datar[datac == colnm & !is.na(datac)]
+    tb    <- add_row(tb, "")
+    tb    <- add_row(tb, render_f(mean(d, na.rm=TRUE),   row$format))
+    tb    <- add_row(tb, render_f(median(d, na.rm=TRUE), row$format))
+    tb    <- add_row(tb, render_f(sd(d, na.rm=TRUE),     row$format))
+    
+    tb    <- new_col(tb)
+  }
+  
+  # Tests
+  tests <- wilcoxTests(datar, datac)
+  tb <- add_col(tb, tests)
+  tb <- add_col(tb, length(datar)-sum(!is.na(datar) & !is.na(datac)))
+  
+  tb
+}
+```
+
+This step bundles the two together and based on type of variable decides which transform to
+apply. We use the hmisc type determination function as a quick guide. Note that some transforms
+are unsupported as we there was no requirement to provide those cross product tables of variables.
+
+Further we add some descriptive footnotes.
+
+```{r, echo=TRUE}
+unsupported <- function(tb, row, col) stop("unsupported type", row$value, "X", col$value)
+fda <- list(
+  Type = hmisc_data_type,
+  Numerical   = list(
+                  Numerical   = unsupported,
+                  Categorical = fda_cont_by_cat
+            ),
+  Categorical = list(
+                  Numerical   = unsupported,
+                  Categorical = fda_cat_by_cat
+            ),
+  Footnote    = "Count (Percent) format. ^1^ χ^2^ minus one. ^2^ Fisher exact. ^3^ Wilcoxon rank sum"
+)
+
+```
+
+Now a rendering with two forms of information is possible. 
+
+```{r, results="asis"}
+tbl2 <- tangram(modality ~ procedure + category + prior + albumin, d1, transforms=fda)
+html5(tbl2, fragment=TRUE, inline="nejm.css", caption = "FDA Table 2", id="tbl2")
+```
+
+A tricky binary coded varible for reported side effects needs treatment. In this instance we only want the category in which side effects appeary, i.e. only those individuals with side effects is to be reported. The variable contains a binary number in which each bit represents a different side effect reported. 
+
+I have chosen to handle this in the formula syntax with the `*` operator for now. I have debated adding the traditional `|` denoting nested models to the formula syntax, but at present even handling the `*` properly is complicated and incomplete.
+
+Secondly additional variables are passed down to the transform which can make use of them. This is useful now for passing in a binary transform table.
+
+```{r, echo="TRUE"}
+side_effect_key = list(
+  "Repetative Uttering of Wut?",
+  "Excessive Sweating",
+  "Hairy Navel",
+  "Breaking Voice",
+  "Beiber Fever",
+  "Swiftaphila",
+  "Akward Elbows",
+  "Veruca"
+)
+
+fda_binary <- function(tb, row, col, ...)
+{
+  cat("DO IT HERE!\n")
+}
+
+fda_data_type <- function(x, category_threshold=NA)
+{ 
+  if(is.categorical(x,category_threshold))  "Categorical" else
+  if(is.numeric(x))                         "Numerical"   else
+  stop(paste("Unsupported class/type - ",class(x), typeof(x)))
+}
+
+fda <- list(
+  Type        = fda_data_type,
+  Numerical   = fda_cont_by_cat,
+  Categorical = fda_cat_by_cat,
+  ASTMultiply = fda_binary,
+  Footnote    = "Count (Percent) format. ^1^ χ^2^ minus one. ^2^ Fisher exact. ^3^ Wilcoxon rank sum"
+)
+```
+
+Now we have 3 different pieces completed.
+
+```{r, results="asis"}
+tbl3 <- tangram(modality ~ procedure + category + prior + albumin + side_effect*reported_side_effects, d1, transforms=fda,  binary_key=side_effect_key)
+html5(tbl3, fragment=TRUE, inline="nejm.css", caption = "FDA Table 3", id="tbl3")
+```
+
+And the requested table tranforms for FDA work is complete.
