@@ -1,7 +1,7 @@
 ---
-title: "Tom's Take Two"
+title: "FDA Work Example"
 author: "Shawn Garbett"
-date: "June 6, 2017"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -14,6 +14,22 @@ library(Hmisc)
 ```
 
 ## FDA Table Tranforms using tangram
+
+This is an example project showing how tangram can meet the needs of a fictional FDA report. It's based on some actual work that is currently embargoed. From clinical trial data many tables of various summaries are required. So the goal is to demonstrate the work required to create a series of consistent tables using tangram for a project.
+
+This example shows a few interesting things:
+
+* One can add *any* additional arguments to a tangram transform. The point of this library is flexibility and extensibility.
+* Further, the statistical tests are *not* defined by the library. This is being provided by the user.
+* It doesn't use the more targeted `cell_*` functions like `cell_chi_test`, since the formatting of these was not the desired.
+* This shows the need for some additional care around P-values. Fancy display of *p*-values is complicated and since this is targetted at statistical users I'm going to spend some time on this.
+* It's not a simple single table transform, and there are really 3 subcategories of table information that produce the full table.
+* Short cut in bundle definition is demonstrated in which the column type is ignored since in this case all columns specified are factors. This was known a priori based on the incoming data.
+* Full passing of formatting information is not done as this wasn't required.
+
+This work will most likely evolve into a tranform bundle inside the library that is available for anyone to use. To do this requires more work and consideration of every possible cross product of types that could be thrown at this transform and proper treatment of format specifiers. For the current effort this is not required and the format of the data/transform is constrained heavily by the problem at hand.
+
+I hope that over time transforms that are useful to a broader audience get defined and encourage submissions to add to this library.
 
 ### Random Data
 
@@ -87,7 +103,9 @@ chiTests <- function(grid)
 
 In this example we are only considering N categories as row and M categories as column. The resulting table is (N+1) X (2M). More specifically a row for the name of the row variable and row for each category present in the row. There is a column for the count (percentage) of each column variable, then pair-wise comparisons with the first category following by the count of missing. Statistical tests only appear in the first row.
 
-Further this example seeks to avoid use of the `%>%` operator for instructional purposes.
+The additional logical argument `display_percent` is specified to turn on and off the display of percents. By default it's TRUE and additional arguments passed to `tangram` are pushed down into these transforms so one is free to define *any* additional variables being passed in and out of transforms.
+
+Further this example seeks to avoid use of the `%>%` operator for instructional purposes, unlike the original example of using table_builder operators.
 
 ```{r, echo="TRUE"}
 fda_cat_by_cat <- function(tb, row, col, display_percent=TRUE, ...)
@@ -100,10 +118,9 @@ fda_cat_by_cat <- function(tb, row, col, display_percent=TRUE, ...)
   versus <- paste(colnames(grid)[1], "vs.", colnames(grid)[2:length(colnames(grid))])
 
   # Now construct the table by add rows to each column
-  tb <- tb                                             %>%
-  col_header(colnames(grid), versus, "Missing")        %>%
-  col_header(colN, rep("P-value", length(versus)), "") %>%
-  row_header(derive_label(row))
+  tb <- col_header(tb, colnames(grid), versus, "Missing")
+  tb <- col_header(tb, colN, rep("P-value", length(versus)), "")
+  tb <- row_header(tb, derive_label(row))
   
   for(nm in rowlbl) tb <- row_header(tb, nm)
   
@@ -226,7 +243,9 @@ A tricky binary coded varible for reported side effects needs treatment. In this
 
 I have chosen to handle this in the formula syntax with the `*` operator for now. I have debated adding the traditional `|` denoting nested models to the formula syntax, but at present even handling the `*` properly is complicated and incomplete.
 
-Secondly additional variables are passed down to the transform which can make use of them. This is useful now for passing in a binary transform table.
+Secondly as mentioned above additional variables are passed down to the transform which can make use of them. This is useful now for passing in a binary transform table (but it would be used for all transforms if multiple existed in a table, further refinement of list of lists could be used if needed).
+
+The basic approach is to expand the data into a long form, then pass to original cat X cat function using the display_percent logical to turn that off.
 
 ```{r, echo="TRUE"}
 side_effect_key = list(
@@ -290,3 +309,161 @@ html5(tbl3, fragment=TRUE, inline="nejm.css", caption = "FDA Table 3", id="tbl3"
 ```
 
 And the requested table tranforms for FDA work is complete.
+
+Here is the final version of the code:
+
+```{r, results="asis"}
+
+  ###############################################################
+ # Statistical tests as table cells
+#
+chiTests <- function(grid)
+{
+  lapply(2:dim(grid)[2], FUN=function(i){
+    consider <- grid[,c(1, i)]
+    if(min(consider) >= 1)
+    {
+      test   <- suppressWarnings(chisq.test(consider, correct=FALSE))
+      stat   <- unname(test$statistic) * (sum(consider)-1) / sum(consider)
+      cell(render_f(pchisq(stat, test$parameter, lower.tail=FALSE), 3), reference=1)
+    }
+    else
+    {
+      cell(render_f(fisher.test(consider, simulate.p.value=TRUE, B=1e7)$p.value, 3), reference=2)
+    }
+  })
+}
+
+wilcoxTests <- function(x, y)
+{
+  lvls <- levels(y)
+  
+  lapply(2:length(lvls), FUN=function(i){
+    test <- wilcox.test(x[y==lvls[1]], x[y==lvls[i]])
+    cell(render_f(test$p.value, 3), reference=3)
+  })
+}
+
+  ###############################################################
+ # Row/Column from abstract syntax tree transforms to tables
+#
+fda_cat_by_cat <- function(tb, row, col, display_percent=TRUE, ...)
+{
+  grid   <- table(row$data, col$data)
+  
+  tests  <- chiTests(grid)
+  colN   <- lapply(colnames(grid), function(cat) cell_n(sum(grid[,cat]), subcol=cat))
+  rowlbl <- lapply(rownames(grid), function(x) paste("  ", x))
+  versus <- paste(colnames(grid)[1], "vs.", colnames(grid)[2:length(colnames(grid))])
+
+  # Now construct the table by add rows to each column
+  tb <- col_header(tb, colnames(grid), versus, "Missing")
+  tb <- col_header(tb, colN, rep("P-value", length(versus)), "")
+  tb <- row_header(tb, derive_label(row))
+  
+  for(nm in rowlbl) tb <- row_header(tb, nm)
+  
+  for(colnm in colnames(grid))
+  {
+    denom <- sum(grid[,colnm])
+    tb <- add_row(tb, "")
+
+    for(rownm in rownames(grid))
+    {
+      numer <- grid[rownm, colnm]
+      x     <- if(display_percent) paste0(numer, " (", render_f(100*numer/denom, 1), ")") else
+                                   as.character(numer)
+        
+      tb    <- add_row(tb, cell(x, subcol = colnm, subrow = rownm))
+    }
+    
+    tb <- new_col(tb)
+  }
+  
+  tb <- add_col(tb, tests)
+  tb <- add_col(tb, length(row$data)-sum(grid))
+}
+
+fda_cont_by_cat <- function(tb, row, col, ...)
+{
+  datar          <- row$data
+  datac          <- col$data
+  
+  lvls           <- levels(datac)
+
+  colN   <- lapply(lvls, function(cat)
+    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat))
+  versus <- paste(lvls[1], "vs.", lvls[2:length(lvls)])
+
+  # Now construct the table by add rows to each column
+  tb <- col_header(tb, lvls, versus, "Missing")
+  tb <- col_header(tb, colN, rep("P-value", length(versus)), "")
+  tb <- row_header(tb, derive_label(row))
+  
+  for(nm in c("Mean", "Median", "SD")) tb <- row_header(tb, paste0("  ",nm))
+  
+  # Summary
+  for(colnm in lvls)
+  {
+    d     <- datar[datac == colnm & !is.na(datac)]
+    tb    <- add_row(tb, "")
+    tb    <- add_row(tb, render_f(mean(d, na.rm=TRUE),   row$format))
+    tb    <- add_row(tb, render_f(median(d, na.rm=TRUE), row$format))
+    tb    <- add_row(tb, render_f(sd(d, na.rm=TRUE),     row$format))
+    
+    tb    <- new_col(tb)
+  }
+  
+  # Tests
+  tests <- wilcoxTests(datar, datac)
+  tb <- add_col(tb, tests)
+  tb <- add_col(tb, length(datar)-sum(!is.na(datar) & !is.na(datac)))
+  
+  tb
+}
+
+fda_binary <- function(tb, row, col, binary_key=list(), ...)
+{
+  inside    <- row$right$data   # Grouped inside the right hand side of '*' assuming logical
+  inside[is.na(inside)] <- FALSE
+  datar     <- row$left$data[inside]  # Data to further group
+  datac     <- col$data[inside]
+  
+  # Expand for counting
+  x         <- rep(datar, each=length(binary_key))
+  y         <- rep(datac, each=length(binary_key))
+  key       <- rep(1:length(binary_key), length(datar))
+  present   <- bitwAnd(x, 2^(key-1)) > 0
+  
+  # Filter down
+  x         <- factor(sapply(key[present], function(x) binary_key[[x]]))
+  y         <- y[present]
+  
+  rname     <- paste0(row$left$name(), " N=", sum(inside))
+
+  fda_cat_by_cat(tb, list(data=x, name=function() rname), list(data=y, name=col$name),
+                 display_percent=FALSE)
+}
+
+  ###############################################################
+ # Data typing function to use with above
+#
+fda_data_type <- function(x, category_threshold=NA)
+{ 
+  if(is.categorical(x,category_threshold))  "Categorical" else
+  if(is.numeric(x))                         "Numerical"   else
+  stop(paste("Unsupported class/type - ",class(x), typeof(x)))
+}
+
+  ###############################################################
+ #
+# Bring it all together into a useable bundle of transforms
+fda <- list(
+  Type        = fda_data_type,
+  Numerical   = fda_cont_by_cat,
+  Categorical = fda_cat_by_cat,
+  ASTMultiply = fda_binary,
+  Footnote    = "Count (Percent) format. ^1^ χ^2^ minus one. ^2^ Fisher exact. ^3^ Wilcoxon rank sum"
+)
+
+```
