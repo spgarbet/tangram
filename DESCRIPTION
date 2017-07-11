@@ -49,6 +49,7 @@ Collate:
     'dplr-latexify.R'
     'render-html5.R'
     'render-index.R'
+    'render-latex.R'
     'render-rmd.R'
     'render-rtf.R'
     'render-summary.R'
