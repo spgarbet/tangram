@@ -14,23 +14,36 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-sub_table <- list(
-#  c("\u0020", "\\\\space{}"),
-  c("\u0023", "\\\\#"),
-#  c("\u0024", "\\\\textdollar{}"),
+# Since this supports a subset of Rmarkdown, the special characters #$*\^_`~ must be
+# escaped to be captured by this translation table.
+gsub_table <- list(
+  # Brace conversion happens first!
+  c("\u007B",     "\\\\lbrace"),
+  c("\u007D",     "\\\\rbrace{}"),
+  c("\\\\lbrace", "\\\\lbrace{}"),
+
+  # Space Conversions
+  c("\u000a\u000a", "\\\\vspace{5mm}"),             # 2 Newlines   -> vspace
+  c("\u000d\u000a\u000d\u000a", "\\\\vspace{5mm}"), # 2 CR/Newline -> vspace
+
+  # Mostly orderly UNICODE Conversions
+  c("\\\\\u0023", "\\\\#"),
+  c("\\\u0024", "\\\\textdollar{}"),
   c("\u0025", "\\\\%"),
-  c("\u0026", "\\\\&amp;"),
+  c("\u0026", "\\\\&"),
   c("\u0027", "\\\\textquotesingle{}"),
-  c("\\\u002A", "\\\\ast{}"),
+  c("\\\\\\\u002A", "\\\\ast{}"), # The escape is deep with this one
+  c("\u003C", "\\\\textless{}"),
+  c("\u003E", "\\\\textgreater{}"),
+# Defered till all escaped characters are handled
 #  c("\\\u005C", "\\\\textbackslash{}"),
-#  c("\u005E", "\\\\^{}"),
-#  c("\u005F", "\\\\_"),
-  c("\u0060", "\\\\textasciigrave{}"),
-#  c("\u007B", "\\\\lbrace{}"),
+  c("\\\\\\\u005E", "\\\\textasciicircum{}"),
+  c("\\\\\\\u005F", "\\\\_"),
+  c("\\\\\\\u0060", "\\\\textasciigrave{}"),
   c("\\\u007C", "\\\\vert{}"),
-#  c("\u007D", "\\\\rbrace{}"),
-  c("\u007E", "\\\\textasciitilde{}"),
-  c("\u00A0", "~"),# no-break space (NBSP)
+  c("\\\\\\\u007E", "\\\\textasciitilde{}"),
+# NBSP handled below special handling
+#  c("\u00A0",                 "~"),
   c("\u00A1", "\\\\textexclamdown{}"),
   c("\u00A2", "\\\\textcent{}"),
   c("\u00A3", "\\\\textsterling{}"),
@@ -2392,5 +2405,37 @@ sub_table <- list(
   c("\uFB03", "ffi"),
   c("\uFB04", "ffl"),
   c("\uFB05", "\u017ft"),
-  c("\uFB06", "st")
+  c("\uFB06", "st"),
+
+  ###################################################
+  # Remaining Special Handling
+  c("(?![[:space:]])[[:cntrl:]]", ""), # Remove control characters remaining
+  c("[[:space:]]+", " "),              # Convert any sequence of whitespace to a single space.
+
+  c("\\\\\\\\", "\\\\textbackslash{}"), # Deferred backslash escape from above list
+
+  # Subset of markdown syntax
+  c("\\*\\*([^\\*]+)\\*\\*",  "\\\\textbf{\\1}"), # Bold
+  c("__([^_]+)__",            "\\\\textbf{\\1}"),
+  c("\\*([^\\*]+)\\*",        "\\\\textit{\\1}"), # Italic
+  c("_([^_]+)_",              "\\\\textit{\\1}"),
+  c("`([^`]+)`",              "\\\\texttt{\\1}"), # Inline Code
+  c("~~([^~]+)~~",            "\\\\sout{\\1}"),   # Strikethrough (require ulem package)
+  c("~([^~]+)~",              "_{\\1}"),          # Subscript
+  c("\u00A0",                 "~"),               # no-break space (NBSP) must be handled after subscripting
+  c("\\^([^\\^]+)\\^",        "^{\\1}"),          # Superscript
+
+  c("^# (.*)",                "\\\\Huge{\\1}"),   # Header 1
+  c("^## (.*)",               "\\\\huge{\\1}"),   # Header 2
+  c("^### (.*)",              "\\\\LARGE{\\1}"),  # Header 3
+  c("^#### (.*)",             "\\\\Large{\\1}"),  # Header 4
+  c("^##### (.*)",            "\\\\large{\\1}"),  # Header 5
+  c("^###### (.*)",           "\\1"),             # Header 6
+
+  c("---",                    "\\\\textemdash{}"),
+  c("--",                     "\\\\textendash{}"),
+  c("\\.\\.\\.",              "\\\\ldots{}"),
+  c("\\*\\*\\*",              "\\\\hrule{}")
+
 )
+
