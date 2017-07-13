@@ -1,7 +1,7 @@
 # Test Rmd Escaped specials
 
 test_that("Escaped hash",        expect_true(latexify("\\#")  == "\\#"))
-test_that("Escaped dollar",      expect_true(latexify("\\\\") == "\\textbackslash{}"))
+test_that("Escaped dollar",      expect_true(latexify("\\$")  == "\\textdollar{}"))
 test_that("Escaped asterisk",    expect_true(latexify("\\*")  == "\\ast{}"))
 test_that("Escaped backslash",   expect_true(latexify("\\\\") == "\\textbackslash{}"))
 test_that("Escaped caret",       expect_true(latexify("\\^")  == "\\textasciicircum{}"))
@@ -38,4 +38,9 @@ test_that("header 6",            expect_true(latexify("###### big stuff")   == "
 # Test Regex Specials as well
 test_that("regex specials",      expect_true(latexify(".?+()-")             == ".?+()-"))
 
+# Test that things between dollar signs are ignored
+test_that("Escapes math", {
+  expect_true(latexify("blah \\* $a^{23}_{\\cos(\\theta)}$ blah \\$") ==
+              "blah \\ast{} \\[a^{23}_{\\cos(\\theta)}\\] blah \\textdollar{}")
+})
 

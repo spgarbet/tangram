@@ -22,9 +22,8 @@
 #' @param object object; the item to render to latex
 #' @param ... additional arguments
 #' @return the LaTeX rendering
-#'
-#' @include dplr-latexify.R
 #' @include compile-cell.R
+#' @include render-latex-map.R
 #'
 #' @examples
 #' latex(cell_label("123"))
