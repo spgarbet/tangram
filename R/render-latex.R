@@ -125,9 +125,62 @@ latex.cell_subheader <- function(object, ...)
   class(object) <- cls[3:length(cls)]
 
   if(inherits(object, "cell_n"))
-    paste0("{\\scriptsize N=", latex.cell_n(object, ...), "}")
+    paste0("{\\scriptsize $N=", latex.cell_n(object, ...), "$}")
   else # Peel down to cell_label
     paste0("{\\scriptsize ",   latex(object, ...), "}")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_iqr <- function(object,...)
+{
+  paste0("{\\scriptsize ", latexify(object[1]), "}~",
+         latexify(object[2]),
+         "~{\\scriptsize ", latexify(object[3]), "}")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_estimate <- function(object,...)
+{
+  paste0("(", latex(object[1]), ",~", latex(object[2]), ")")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_fstat <- function(object,...)
+{
+  paste0("$F_{",object[2],",",object[3],"}=",object[1],",~P=",object[4],"$")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_fraction <- function(object,...)
+{
+  den <- object["denominator"]
+  num <- object["numerator"]
+  paste0(object["ratio"], "~$\\frac{", num, "}{", den, "}$")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_chi2 <- function(object,...)
+{
+  paste0("$\\chi^2_{", object[2], "}=", object[1], ",~P=",object[3],"$")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_studentt <- function(object,...)
+{
+  paste0("$T_{", object[2], "}=", object[1], ",~P=",object[3],"$")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_spearman <- function(object,...)
+{
+  paste0("$S=", object[1], ",~P=",object[3],"$")
 }
 
 #' @rdname latex

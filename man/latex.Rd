@@ -8,6 +8,13 @@
 \alias{latex.cell_n}
 \alias{latex.cell_header}
 \alias{latex.cell_subheader}
+\alias{latex.cell_iqr}
+\alias{latex.cell_estimate}
+\alias{latex.cell_fstat}
+\alias{latex.cell_fraction}
+\alias{latex.cell_chi2}
+\alias{latex.cell_studentt}
+\alias{latex.cell_spearman}
 \alias{latex.tangram}
 \title{Render to LaTeX methods for tangram cell objects}
 \usage{
@@ -24,6 +31,20 @@ latex(object, ...)
 \method{latex}{cell_header}(object, ...)
 
 \method{latex}{cell_subheader}(object, ...)
+
+\method{latex}{cell_iqr}(object, ...)
+
+\method{latex}{cell_estimate}(object, ...)
+
+\method{latex}{cell_fstat}(object, ...)
+
+\method{latex}{cell_fraction}(object, ...)
+
+\method{latex}{cell_chi2}(object, ...)
+
+\method{latex}{cell_studentt}(object, ...)
+
+\method{latex}{cell_spearman}(object, ...)
 
 \method{latex}{tangram}(object, caption = "Table", footnote = NULL,
   fragment = FALSE, filename = NULL, append = FALSE, na.blank = TRUE,

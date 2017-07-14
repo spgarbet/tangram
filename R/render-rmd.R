@@ -43,38 +43,34 @@ rmd.cell_iqr <- function(object,...)
 
 rmd.cell_estimate <- function(object,...)
 {
-  paste0(rmd(object[[1]]), " ", rmd(object[[2]]))
+  paste0("(", rmd(object[1]), ", ", rmd(object[2]), ")")
 }
 
 rmd.cell_fstat <- function(object,...)
 {
-  paste("F<sub>",object[2],",",object[3],"</sub>=",object[1],", P=",object[4],sep="")
+  paste0("F<sub>",object[2],",",object[3],"</sub>=",object[1],", P=",object[4])
 }
 
 rmd.cell_fraction <- function(object,...)
 {
-  den <- object["numerator"]
-
+  den <- object["denominator"]
   num <- paste0(rep("", nchar(den) - nchar(object["numerator"])), object["numerator"])
-  paste(object["ratio"], "  ",
-        num,"/",den,
-        sep="")
+  paste0(object["ratio"], "  ", num,"/",den)
 }
 
 rmd.cell_chi2 <- function(object,...)
 {
-  paste("&chi;<span class=\"supsub\" style=\"display:inline-block;margin:-9em 0;vertical-align: -0.55em;line-height: 1.35em;font-size: x-small;text-align: left;\">2<br/>",
-        object[2],"</span>=",object[1],", P=",object[3],sep="")
+  paste0("\u03a7^2^~", object[2], "~=", object[1], ", P=", object[3])
 }
 
 rmd.cell_studentt <- function(object,...)
 {
-  paste("T<sub>",object[2],"</sub>=",object[1], ", P=",object[3], sep="")
+  paste0("T~",object[2],"~=",object[1], ", P=",object[3])
 }
 
 rmd.cell_spearman <- function(object,...)
 {
-  paste("S=",render_f(object[1]),", P=",render_f(object[1]), sep="")
+  paste0("S=",object[1],", P=",object[1])
 }
 
 rmd.cell_n <- function(object,...)
