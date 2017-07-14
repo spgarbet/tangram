@@ -2421,9 +2421,9 @@ gsub_table <- list(
   c("_([^_]+)_",              "\\\\textit{\\1}"),
   c("`([^`]+)`",              "\\\\texttt{\\1}"), # Inline Code
   c("~~([^~]+)~~",            "\\\\sout{\\1}"),   # Strikethrough (require ulem package)
-  c("~([^~]+)~",              "_{\\1}"),          # Subscript
+  c("~([^~]+)~",              "\\\\textsubscript{\\1}"),           # Subscript
   c("\u00A0",                 "~"),               # no-break space (NBSP) must be handled after subscripting
-  c("\\^([^\\^]+)\\^",        "^{\\1}"),          # Superscript
+  c("\\^([^\\^]+)\\^",        "\\\\textsuperscript{\\1}"),          # Superscript
 
   c("^# (.*)",                "\\\\Huge{\\1}"),   # Header 1
   c("^## (.*)",               "\\\\huge{\\1}"),   # Header 2

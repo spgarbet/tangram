@@ -2,9 +2,17 @@
 % Please edit documentation in R/render-latex.R
 \name{latex.default}
 \alias{latex.default}
+\alias{latex.cell}
+\alias{latex.tangram}
 \title{Render to LaTeX methods for tangram cell objects}
 \usage{
 latex.default(object, ...)
+
+latex.cell(object, ...)
+
+latex.tangram(object, caption = "Table", footnote = NULL,
+  fragment = FALSE, file = NULL, append = FALSE, na.blank = TRUE,
+  cgroup.just = NULL, ...)
 }
 \arguments{
 \item{object}{object; the item to render to latex}
