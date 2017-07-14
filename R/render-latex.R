@@ -37,6 +37,13 @@
 #' latex(tangram(drug~bili, pbc))
 #' @rdname latex
 #' @export
+latex <- function(object, ...)
+{
+  UseMethod("latex", object)
+}
+
+#' @rdname latex
+#' @export
 latex.default <- function(object, ...)
 {
   warning(paste("summary unhandled class : ", paste(base::class(object), collapse=', ')))
@@ -61,11 +68,75 @@ latex.cell <- function(object, ...)
 
 #' @rdname latex
 #' @export
+latex.cell_label <- function(object, ...)
+{
+  # Turn "*" for interaction terms into a break
+  label <- gsub("\\\\\\*", "$\\times$\n\n\u00a0\u00a0", object)
+
+  # Turn leading spaces into a set of non breaking html space
+  label <- gsub("^\\s+", "\u00a0\u00a0\u00a0\u00a0", label)
+
+  label <- latexify(label)
+
+  if(is.null(attr(object, 'units')))
+    label
+  else
+    paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}")
+}
+
+latex.logical <- function(object, na.blank=TRUE, ...)
+{
+  if(is.na(object))
+  {
+    if(na.blank) "" else "NA"
+  } else {
+    as.character(object)
+  }
+}
+
+#' @rdname latex
+#' @export
+latex.cell_n <- function(object, ...)
+{
+  #idx <- index(object, id)
+  latexify(object)
+}
+
+#' @rdname latex
+#' @export
+latex.cell_header <- function(object, ...)
+{
+  cls <- class(object)
+
+  class(object) <- cls[2:length(cls)]
+
+  if(inherits(object, "cell_n"))
+    paste0("\\textbf{N=", latex.cell_n(object, id, ...), "}")
+  else # Peel down to cell_label
+    paste0("\\textbf{",  latex(object, id, ...), "}")
+}
+
+#' @rdname latex
+#' @export
+latex.cell_subheader <- function(object, ...)
+{
+  cls <- class(object)
+
+  class(object) <- cls[3:length(cls)]
+
+  if(inherits(object, "cell_n"))
+    paste0("{\\scriptsize N=", latex.cell_n(object, ...), "}")
+  else # Peel down to cell_label
+    paste0("{\\scriptsize ",   latex(object, ...), "}")
+}
+
+#' @rdname latex
+#' @export
 latex.tangram <- function(object,
                           caption="Table",
                           footnote=NULL,
                           fragment=FALSE,
-                          file=NULL,
+                          filename=NULL,
                           append=FALSE,
                           na.blank=TRUE,
                           cgroup.just=NULL,
@@ -73,7 +144,7 @@ latex.tangram <- function(object,
 {
   header <- if(fragment) "" else
               paste0("\\documentclass{report}\n",
-                     "\\usepackage{geometry,ulem}\n",
+                     "\\usepackage{geometry}\n",
                      "\\begin{document}\n"
                      )
   footer <- if(fragment) "" else "\\end{document}"
@@ -100,14 +171,7 @@ latex.tangram <- function(object,
       text[row,col] <<- latex(object[[row]][[col]], na.blank, ...)
     })
   })
-  if(last_header_row > 1 )
-  {
-    sapply(2:last_header_row, FUN=function(row) {
-      sapply(1:ncols, FUN=function(col) {
-        text[row,col] <<- paste0("{\\scriptsize ", text[row,col], "}")
-      })
-    })
-  }
+
   pasty <- apply(text, 1, function(x) paste0(paste(x, collapse=" & "), "\\\\\n"))
 
   if(is.null(cgroup.just)) cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
@@ -127,5 +191,9 @@ latex.tangram <- function(object,
                     "\\end{center}\n",
                     "\\end{table}\n")
 
-  paste0(header, tableHdr, tableBdy, footnote, footer, sep="\n")
+  result <- paste0(header, tableHdr, tableBdy, footnote, footer, sep="\n")
+
+  if(!is.null(filename)) cat(result, file=filename, append=append)
+
+  result
 }
