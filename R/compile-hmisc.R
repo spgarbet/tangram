@@ -35,7 +35,7 @@
 #' @importFrom stats cor
 #' @importFrom stats cor.test
 #' @importFrom stats na.omit
-summarize_kruskal_horz <- function(table, row, column, pformat=NULL)
+summarize_kruskal_horz <- function(table, row, column, pformat=NULL, msd=FALSE, quant=c(0.25, 0.5, 0.75), ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
@@ -66,7 +66,7 @@ summarize_kruskal_horz <- function(table, row, column, pformat=NULL)
   table_builder_apply(categories, function(tbl, category) {
      x <- datar[datac == category]
 
-     add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category))
+     add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
   })                                             %>%
   add_col(fstat)
 }
@@ -82,7 +82,7 @@ summarize_kruskal_horz <- function(table, row, column, pformat=NULL)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column, pformat)
+summarize_kruskal_vert <- function(table, row, column, pformat=NULL, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
@@ -126,7 +126,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
-summarize_chisq_single <- function(table, row, column, pformat=NULL)
+summarize_chisq_single <- function(table, row, column, pformat=NULL, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
@@ -190,7 +190,7 @@ summarize_chisq_single <- function(table, row, column, pformat=NULL)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
-summarize_chisq <- function(table, row, column, pformat=NULL)
+summarize_chisq <- function(table, row, column, pformat=NULL, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
@@ -257,7 +257,7 @@ summarize_chisq <- function(table, row, column, pformat=NULL)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @return The modified table object
 #' @export
-summarize_spearman <- function(table, row, column, pformat=NULL)
+summarize_spearman <- function(table, row, column, pformat=NULL, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 

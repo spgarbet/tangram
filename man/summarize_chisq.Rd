@@ -4,7 +4,7 @@
 \alias{summarize_chisq}
 \title{Create a summarization for a categorical row versus a categorical column}
 \usage{
-summarize_chisq(table, row, column, pformat = NULL)
+summarize_chisq(table, row, column, pformat = NULL, ...)
 }
 \arguments{
 \item{table}{The table object to modify}

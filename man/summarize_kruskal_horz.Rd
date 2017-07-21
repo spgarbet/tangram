@@ -4,7 +4,8 @@
 \alias{summarize_kruskal_horz}
 \title{Create a summarization for a categorical set of column versus a numerical row}
 \usage{
-summarize_kruskal_horz(table, row, column, pformat = NULL)
+summarize_kruskal_horz(table, row, column, pformat = NULL, msd = FALSE,
+  quant = c(0.25, 0.5, 0.75), ...)
 }
 \arguments{
 \item{table}{The table object to modify}
