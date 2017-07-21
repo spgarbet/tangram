@@ -279,6 +279,14 @@ tangram.numeric <- function(x, cols, embedded=FALSE, ...)
 #' @export
 tangram.data.frame <- function(x, colheader=NA, ...)
 {
+  cls <- sapply(names(x), function(y) class(x[1,y]))
+  # Check for non-character
+  if(any(cls != "character"))
+  {
+    nms <- names(cls)[cls != "character"]
+    return(tangram(paste0("1~", paste0(nms, collapse='+')), x))
+  }
+
   roffset <- if(any(is.na(colheader))) 1 else 2
   width   <- length(colnames(x)) + 1
   height  <- length(rownames(x)) + roffset
