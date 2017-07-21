@@ -41,7 +41,7 @@ tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spid
 Or the same directly into an Rmarkdown pipe_table:
 
 ```{r, results="asis"}
-rmd(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc))
+#rmd(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc))
 ```
 
 Notice that stage in the formula wasn't stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.
@@ -50,7 +50,7 @@ It also supports HTML5, with styling fragments
 
 ### Hmisc Style Example
 ```{r, results="asis"}
-html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc),
+html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc, msd=TRUE, quant=seq(0, 1, 0.25)),
       fragment=TRUE, inline="hmisc.css", caption = "HTML5 Table Hmisc Style", id="tbl2")
 ```
 

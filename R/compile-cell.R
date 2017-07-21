@@ -194,13 +194,19 @@ cell_iqr <- function(x,
                      na.rm  = TRUE,
                      names  = FALSE,
                      type   = 8,
+                     msd    = FALSE,
+                     quant  = c(0.25, 0.50, 0.75),
                      ...
                           )
 {
-  x <- quantile(x,  c(0.25, 0.50, 0.75), na.rm, names, type)
+  if(length(quant) %% 2 == 0) stop("cell_iqr quant argument must be an odd length")
 
-  if(is.na(format)) format <- format_guess(x)
-  ql <- sapply(x, function(x) render_f(x, format))
+  y <- quantile(x, quant, na.rm, names, type)
+
+  if(is.na(format)) format <- format_guess(y)
+  ql <- sapply(y, function(x) render_f(x, format))
+  if(msd) attr(ql, "msd") <- c(render_f(mean(x, na.rm=TRUE), format),
+                               render_f(sd(x, na.rm=TRUE) / sqrt(length(x)), format))
   cell(ql, class="cell_iqr", ...)
 }
 
@@ -431,14 +437,17 @@ cell.aov <- function(x, pformat="%1.3f", ...)
 #' cell(cor.test(rnorm(10), rnorm(10)))
 #' cell(chisq.test(rpois(10,1)))
 #' cell(t.test(rnorm(10), rnorm(10)))
-cell.htest <- function(x, format=2, pformat="%1.3f", ...)
+cell.htest <- function(x, format=2, pformat="%1.3f", reference=NULL, ...)
 {
+  #reference <- if(is.null(reference)) "" else paste0("^^",reference, "^^")
   if(names(x$statistic) == "X-squared")
     cell_chi2(render_f(x$statistic, format), x$parameter[1], render_f(x$p.value, pformat), ...)
   else if(x$method == "Spearman's rank correlation rho")
     cell_spearman(as.character(x$statistic), render_f(x$estimate,format), render_f(x$p.value, pformat), ...)
-#  else if(x$statistic) == "V") # wilcox.test
-# ????
+  else if(names(x$statistic) == "V") # wilcox.test
+    cell(paste0("V=", x$statistic, ", P=", render_f(x$p.value, pformat)),
+         reference=reference,
+         class="statistics", ...)
   else
     cell_studentt(render_f(x$statistic, format), render_f(x$parameter[1],pformat), render_f(x$p.value, pformat), ...)
 }

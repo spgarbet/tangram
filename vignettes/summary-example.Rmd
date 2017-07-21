@@ -1,0 +1,61 @@
+---
+title: "Summary"
+author: "Shawn Garbett"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+vignette: >
+  %\VignetteIndexEntry{Summary Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+<style type="text/css">
+
+body, td {
+   font-size: 12px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 10px
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tangram)
+```
+Our team here at Vanderbilt replies quite a bit on exploratory data analysis, and thus summary statistics are an important first step. One of the tools we've brought to bear on this is `tangram` which allows for customized statistical tables. Customization aside, the question is how can I quickly get a set of summary statistics into an Rmd document quickly and painlessly using `tangram`?
+
+Turns out it's easy! Statistics are presentable at the console or the same table layout is available in HTML5, LaTeX or RTF and styleable to your choice of styles.
+
+# History
+
+`tangram` was originally developed as a replacement to `Hmisc::summaryM` as we needed to be able to index values and trace them through a Colloboration process. However to do that, a framework was invented that allowed for complete user customization at each step of the pipeline: Parsing, Transformation, and Rendering. Parsing takes an R formula and generates an Abstract Syntax Tree (AST) which contains pieces of a data frame. This in an of itself is a useable piece outside of table generation. Getting this AST generation to match exactly the syntax of R formulas is ongoing. Care has been taken to make sure that no semantics are present in the AST, i.e. the meaning of anything in side a formula is not coded into the AST representation. Semantic meaning is given by the transform specified. The default being `summaryM`. The cross product of each term on each side creates a set of rows and columns that are passed to a transform given by list of list by data type. Data typing is also a customizable part of a transform bundle. The final abstract table object is renderable to a wide variety of formats, and once again this is user customizable. See the trend here, everything is overrideable such that my opinions about how things should be done are not enforced upon the end user. My opinions on statistics or summaries are not a limiting factor of the library.
+
+Finding out the interfaces inside this package has been quite a journey of discovery. An early proof of concept has been going through refactoring, which each effort deleting more and more code and increasing functionality with each pass. The interface between these layers has begun to stablize and refactors in areas aren't spilling over in major ways. To this end, the internal representation is a modified version of Markdown. There's still a lot of work to do to fully realize the vision, but what's available now is useful, and useful is the most important piece of any model or tool.
+
+# Quick Summaries!
+
+It by default will take a data frame, and if there exist columns that are of class `cell` it will render directly as a table. Otherwise, it will generate a summary versus an intercept model.
+
+```{r iris1, comment=''}
+tangram(iris)
+```
+
+It's clear that a better breakdown model is possible since `Species` is a factor. One can then switch to a formula interface.
+
+```{r iris2, comment=''}
+iris_descrip <- tangram(Species ~ Petal.Length + Petal.Width + Sepal.Length + Sepal.Width, iris)
+iris_descrip
+```
+
+Maybe now with that set of descriptive statistics, one is ready to include it in an Rmd for colloborator consumption. Same object, different renderer is called.
+
+```{r, results="asis"}
+html5(iris_descrip,
+      fragment=TRUE, inline="nejm.css", caption = "Iris Stats", id="tbl_iris")
+```
+
+

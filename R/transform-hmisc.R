@@ -51,12 +51,19 @@ summarize_kruskal_horz <- function(table, row, column, pformat=NULL, msd=FALSE, 
   })
 
   # Kruskal-Wallis via F-distribution
-  test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
-  fstat <- cell_fstat(f         = render_f(test['F'], "%.2f"),
-                      df1       = test['df1'],
-                      df2       = test['df2'],
-                      p         = render_f(test['P'], pformat),
-                      reference = "1")
+  stat <- if(length(categories) == 1)
+  {
+    cell(wilcox.test(datar), pformat=pformat, reference="3")
+  }
+  else
+  {
+    test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
+    cell_fstat(f         = render_f(test['F'], "%.2f"),
+               df1       = test['df1'],
+               df2       = test['df2'],
+               p         = render_f(test['P'], pformat),
+               reference = "1")
+  }
 
   table                                          %>%
   row_header(derive_label(row))                  %>%
@@ -68,7 +75,7 @@ summarize_kruskal_horz <- function(table, row, column, pformat=NULL, msd=FALSE, 
 
      add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
   })                                             %>%
-  add_col(fstat)
+  add_col(stat)
 }
 
 #' Create a summarization for a categorical row versus a numerical column

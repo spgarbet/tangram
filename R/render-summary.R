@@ -67,10 +67,17 @@ summary.cell <- function(object, ...)
 #' @export
 summary.cell_iqr <- function(object, ...)
 {
-  if(is.null(names(object)))
-    paste0(object[1], " *", object[2], "* ", object[3])
-  else
-    paste0(names(object)[1], "=", object[1], " *", object[2], "* ", object[3])
+  mid <- floor(length(object)/2) + 1
+  y <- as.character(object)
+  x <- y[mid] <- paste0("*", y[mid], "*")
+
+  result <- paste0(y, collapse=' ')
+
+  z <- attr(object, "msd")
+  if(is.null(z)) result else
+  {
+    paste0(result, ' ', z[1], '\u00b1', z[2])
+  }
 }
 
 #' @rdname summary
@@ -188,3 +195,7 @@ print.cell <- function(x,...) print(summary(x,...))
 #' @export
 print.table_builder <- function(x,...) print(summary(x,...))
 
+### Notes on making text rendering of histograms
+# map <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2587")
+# h <- hist(rexp(200))
+# paste0(map[floor(h$density*8/max(h$density))+1], collapse='')

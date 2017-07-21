@@ -385,18 +385,27 @@ html5.cell_iqr <- function(object, id, ..., class=NULL)
   idx <- index(object, id)
   ref <- if(is.null(attr(object,"reference"))) "" else paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
 
-  paste0("<td class=\"", attr(object, "parity"),"\"><span ",
-         html5_class(c(class, attr(object, "parity"), "data", "quantile")),
-         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
-         "><span class=\"q25\">",
-         htmlEscape(object[1]),
-         "</span><span class=\"q50\">",
-         htmlEscape(object[2]),
-         "</span><span class=\"q75\">",
-         htmlEscape(object[3]),
-         "</span></span>",
-         reference(object), "</td>")
+  mid <- floor(length(object)/2) + 1
+  y <- as.character(object)
+  x <- y[mid] <- paste0("*", y[mid], "*")
 
+  result <- paste0(y, collapse=' ')
+
+  z <- attr(object, "msd")
+
+  result <-
+      paste0("<td class=\"", attr(object, "parity"),"\"><span ",
+         html5_class(c(class, attr(object, "parity"), "data", "quantile")),
+         ">",
+         paste0("<span class=\"q25\">", htmlEscape(object[1:(mid-1)]), "</span>", collapse=""),
+         "<span class=\"q50\">", htmlEscape(object[mid]), "</span>",
+         paste0("<span class=\"q75\">", htmlEscape(object[(mid+1):length(object)]), "</span>", collapse=""),
+         reference(object))
+
+  if(is.null(z)) paste0(result, "</td>") else
+  {
+    paste0(result, '<br/><span>', htmlEscape(z[1]), '&plusmn;', htmlEscape(z[2]), "</span></td>")
+  }
 }
 
 
