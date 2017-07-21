@@ -284,7 +284,7 @@ tangram.data.frame <- function(x, colheader=NA, ...)
   if(any(cls != "character"))
   {
     nms <- names(cls)[cls != "character"]
-    return(tangram(paste0("1~", paste0(nms, collapse='+')), x))
+    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=seq(0,1,0.25), msd=TRUE, ...))
   }
 
   roffset <- if(any(is.na(colheader))) 1 else 2
