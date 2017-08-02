@@ -188,7 +188,7 @@ latex.cell_spearman <- function(object,...)
 latex.tangram <- function(object,
                           caption="Table",
                           footnote=NULL,
-                          fragment=FALSE,
+                          fragment=TRUE,
                           filename=NULL,
                           append=FALSE,
                           na.blank=TRUE,
@@ -229,24 +229,24 @@ latex.tangram <- function(object,
 
   if(is.null(cgroup.just)) cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
 
-  tableHdr <- paste("\\begin{table}[!tbp]",
-                     paste0("\\caption{",caption,"}"),
-                     "\\begin{center}",
+  tableHdr <- paste("\\bigskip\\begin{minipage}{\\linewidth}\\centering",
                      paste0("\\begin{tabular}{",cgroup.just,"}"),
-                     "\\hline",
+                     "\\hline\\hline",
                       if(last_header_row == 0) "" else
-                        paste0(paste0(as.vector(pasty)[1:last_header_row], collapse=''), "\\hline\\hline "),
+                        paste0(paste0(as.vector(pasty)[1:last_header_row], collapse=''), "\\hline "),
                      sep="\n"
                      )
 
   tableBdy <- paste0(paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''),
-                    "\\end{tabular}\n",
-                    "\\end{center}\n",
-                    "\\end{table}\n")
+                    "\\hline\\hline\n",
+                    "\\end{tabular}\\par\\bigskip\n",
+                    latexify(caption),
+                    "\\end{minipage}\n")
 
   result <- paste0(header, tableHdr, tableBdy, footnote, footer, sep="\n")
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 
-  result
+  cat(result)
+  invisible(result)
 }

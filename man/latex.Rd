@@ -47,7 +47,7 @@ latex(object, ...)
 \method{latex}{cell_spearman}(object, ...)
 
 \method{latex}{tangram}(object, caption = "Table", footnote = NULL,
-  fragment = FALSE, filename = NULL, append = FALSE, na.blank = TRUE,
+  fragment = TRUE, filename = NULL, append = FALSE, na.blank = TRUE,
   cgroup.just = NULL, ...)
 }
 \arguments{
