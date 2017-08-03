@@ -53,7 +53,7 @@ summarize_kruskal_horz <- function(table, row, column, pformat=NULL, msd=FALSE, 
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
   {
-    cell(wilcox.test(datar), pformat=pformat, reference="3")
+    cell(suppressWarnings(wilcox.test(datar)), pformat=pformat, reference="3")
   }
   else
   {
@@ -153,7 +153,7 @@ summarize_chisq_single <- function(table, row, column, pformat=NULL, ...)
   validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)})) # Negative logic deals with NAs
   validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
   y        <- y[validrow,validcol]
-  test     <- suppressWarnings(chisq.test(y, correct=FALSE))
+  test <- if(length(y) < 2) NA else suppressWarnings(chisq.test(y, correct=FALSE))
 
   # More complex name derivation
   name <- row$name()
@@ -219,7 +219,7 @@ summarize_chisq <- function(table, row, column, pformat=NULL, ...)
   validcol <- which(!apply(y,2,FUN = function(x){all(x == 0)}))
   validrow <- which(!apply(y,1,FUN = function(x){all(x == 0)}))
   y        <- y[validrow,validcol]
-  test     <- suppressWarnings(chisq.test(y, correct=FALSE))
+  test <- if(length(y) < 2) NA else suppressWarnings(chisq.test(y, correct=FALSE))
 
   labels   <- lapply(row_categories, FUN=function(x) paste("  ", x))
 

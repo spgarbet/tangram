@@ -283,7 +283,7 @@ tangram.data.frame <- function(x, colheader=NA, ...)
   # Check for non-character
   if(any(cls != "character"))
   {
-    nms <- names(cls)[cls != "character"]
+    nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
     return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=seq(0,1,0.25), msd=TRUE, ...))
   }
 
