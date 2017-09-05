@@ -42,17 +42,17 @@ rtf.default <- function(object, id, ...)
 rtf.cell_label <- function(object, id, ..., point=18)
 {
   # Turn leading spaces into a set of non breaking html space
-  label <- gsub("^\\s+", "    ", object$label)
+  label <- gsub("^\\s+", "    ", object)
   # Turn "*" for interaction terms into a break
   label <- gsub("\\*", "X\n  ", label)
 
-  if(is.na(object$units))
+  if(is.null(attr(object, "units")))
       label
   else
       paste0(label,
             " {\\fs", round(point*1.6),
             "\\i\\b0 ",
-            object$units,
+            attr(object, "units"),
             "}"
             )
 }
@@ -71,7 +71,7 @@ rtf.cell_n <- function(object, id, ...)
 {
   idx <- index(object, id)
 
-  as.character(object$n)
+  as.character(object)
 }
 
 #' Convert an abstract cell_header object into an RTF string
@@ -120,7 +120,7 @@ rtf.cell_subheader <- function(object, id, ..., point=9)
     paste0("{", fontsize, rtf(object, id, ...), "}")
 }
 
-#' Convert an abstract cell_quantile object into an RTF string
+#' Convert an abstract cell_iqr object into an RTF string
 #'
 #' Given a cell_quantile class create an RTF representation.
 #'
@@ -130,21 +130,19 @@ rtf.cell_subheader <- function(object, id, ..., point=9)
 #' @return An RTF string rendering of the given quantile.
 #' @export
 #'
-rtf.cell_quantile <- function(object, id, ..., point=9)
+rtf.cell_iqr <- function(object, id, ..., point=9)
 {
   idx <- index(object, id)
 
   small <- paste0("\\fs", round(point*1.6), " ")
   large <- paste0("\\fs", round(point*2.0), " ")
 
-  paste0("{",small,
-        render_f(object$'25%', object$format),
-        " \\b",large,
-        render_f(object$'50%', object$format),
-        "\\b0",small," ",
-        render_f(object$'75%', object$format),
-        "}"
-  )
+  mid   <- floor(length(object)/2) + 1
+  paste0("{",
+                 small, paste0(object[1:(mid-1)], collapse=''),
+         " \\b", large, paste0(object[mid], collapse=''),
+         " \\b0",small, paste0(object[(mid+1):length(object)], collapse=''),
+         "}")
 }
 
 dttm_datetime <- function()
@@ -200,17 +198,16 @@ comments <- function(object, id)
 #'
 rtf.cell_fstat <- function(object, id, ...)
 {
-  ref <- if(is.na(object$reference)) "" else paste0("{\\super ", object$reference, "}")
+  reference <- attr(object, "reference")
+  ref <- if(is.null(reference)) "" else paste0("{\\super ", reference, "}")
   idx <- comments(object, id)
 
   paste0(
     "{",
       "{\\*\\atrfstart 1}",
       "F{\\sub ",
-      object$n1,",",object$n2, "}=",
-      render_f(object$f, object$format),
-      ", P=",
-      render_f(object$p, object$format),
+      object[2],",",object[3], "}=",object[1],
+      ", P=", object[4],
     "}",
     idx,
     ref
