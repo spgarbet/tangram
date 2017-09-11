@@ -11,7 +11,26 @@ rtf(object, id, ...)
 
 \item{id}{A unique identifier for the table (strongly recommended). If not provided, caption will be used.}
 
-\item{...}{additional arguments to renderer.}
+\item{...}{additional arguments to renderer. Unused at present.}
+
+\item{caption}{A string caption for the table}
+
+\item{fragment}{A boolean flag that determines whether a fragment or a complete RTF document is generatedf}
+
+\item{id}{A unique identifier for the table (strongly recommended).}
+
+\item{widths}{RTF requires specified left margin and column widths, this allows user control over these (inches)}
+
+\item{footnote}{Any footnotes to include under the table.}
+
+\item{filename}{A filename to write resulting rtf file to}
+
+\item{append}{A boolean for whether or not to append to given filename}
+
+\item{point}{Main font point size}
+}
+\value{
+A text string rendering of the given table
 }
 \description{
 S3 rtf Method function for use on abstract table class

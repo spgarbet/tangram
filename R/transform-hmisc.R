@@ -195,16 +195,18 @@ summarize_chisq_single <- function(table, row, column, pformat=NULL, ...)
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (categorical)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @return The modified table object
 #' @export
-summarize_chisq <- function(table, row, column, pformat=NULL, ...)
+summarize_chisq <- function(table, row, column, pformat=NULL, collapse_single=TRUE, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
   datar          <- as.categorical(row$data)
   datac          <- as.categorical(column$data)
 
-  if(length(levels(datar))==2) return(summarize_chisq_single(table, row, column, pformat))
+  if(collapse_single && length(levels(datar))==2)
+    return(summarize_chisq_single(table, row, column, pformat))
 
   row_categories <- levels(datar)
   col_categories <- levels(datac)
