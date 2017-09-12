@@ -189,7 +189,7 @@ table_flatten <- function(table)
   new_tbl
 }
 
-cell_create_table <- function(ast, transforms, ...)
+cell_create_table <- function(ast, transforms, digits, ...)
 {
   elements <- ast$terms()
 
@@ -211,6 +211,10 @@ cell_create_table <- function(ast, transforms, ...)
       transform <- if("list" %in% class(transforms[[rowtype]]))
         transforms[[rowtype]][[coltype]] else
         transforms[[rowtype]]
+
+      if(is.na(row$format)) row$format <- digits
+
+      print(row$format)
 
       tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, ...)$table
     })
@@ -317,7 +321,7 @@ tangram.data.frame <- function(x, colheader=NA, ...)
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, ...)
+tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA, ...)
 {
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
@@ -332,6 +336,7 @@ tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, ...)
 
   tbl <- cell_create_table(Parser$new()$run(x)$reduce(data)$distribute(),
                            transforms,
+                           digits,
                            ...)
 
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
@@ -344,8 +349,8 @@ tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, ...)
 
 #' @rdname tangram
 #' @export
-tangram.character <- function(x, data, transforms=hmisc_style, after=NA, ...)
+tangram.character <- function(x, data, transforms=hmisc_style, after=NA, digits=NA, ...)
 {
-  tangram.formula(x, data, transforms, after, ...)
+  tangram.formula(x, data, transforms, after, digits, ...)
 }
 
