@@ -232,7 +232,7 @@ summarize_chisq <- function(table, row, column, pformat=NULL, collapse_single=TR
   row_header(derive_label(row))                              %>%
   table_builder_apply(labels, FUN=
     function(tbl, row_name) {tbl %>% row_header(row_name)})  %>%
-  add_col(sum(!is.na(datar) & !is.na(datac)))                %>%
+  add_col(sum(!is.na(datar)))                                %>%
   table_builder_apply(col_categories, FUN=function(table, col_category) {
     denominator <- length(datac[datac == col_category & !is.na(datac)])
     table <- add_row(table, "")
