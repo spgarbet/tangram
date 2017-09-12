@@ -48,7 +48,7 @@ latex(object, ...)
 
 \method{latex}{tangram}(object, caption = "Table", footnote = NULL,
   fragment = TRUE, filename = NULL, append = FALSE, na.blank = TRUE,
-  cgroup.just = NULL, ...)
+  cgroup.just = NULL, arraystretch = 1.2, ...)
 }
 \arguments{
 \item{object}{object; the item to render to latex}

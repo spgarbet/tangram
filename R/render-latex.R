@@ -193,6 +193,7 @@ latex.tangram <- function(object,
                           append=FALSE,
                           na.blank=TRUE,
                           cgroup.just=NULL,
+                          arraystretch=1.2,
                           ...)
 {
   header <- if(fragment) "" else
@@ -230,7 +231,7 @@ latex.tangram <- function(object,
   if(is.null(cgroup.just)) cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
 
   tableHdr <- paste("\\bigskip\\begin{minipage}{\\linewidth}\\centering",
-                     paste0("\\begin{tabular}{",cgroup.just,"}"),
+                     paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "} \\begin{tabular}{",cgroup.just,"}"),
                      "\\hline\\hline",
                       if(last_header_row == 0) "" else
                         paste0(paste0(as.vector(pasty)[1:last_header_row], collapse=''), "\\hline "),
@@ -239,7 +240,7 @@ latex.tangram <- function(object,
 
   tableBdy <- paste0(paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''),
                     "\\hline\\hline\n",
-                    "\\end{tabular}\\par\\bigskip\n",
+                    "\\end{tabular} } \\par\\bigskip\n",
                     latexify(caption),
                     "\\end{minipage}\n")
 
