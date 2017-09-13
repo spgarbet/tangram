@@ -214,8 +214,6 @@ cell_create_table <- function(ast, transforms, digits, ...)
 
       if(is.na(row$format)) row$format <- digits
 
-      print(row$format)
-
       tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, ...)$table
     })
   })
