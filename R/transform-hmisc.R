@@ -172,8 +172,8 @@ summarize_chisq <- function(table,
 
   # Compute overall N values for each category
   # length(datac[datac == cat & !is.na(datac)])
-  subN   <- lapply(colnames(grid), FUN=function(cat)
-    cell_n( sum(column$data == cat), subcol=cat)
+  subN <- lapply(colnames(grid), FUN=function(cat)
+    cell_n( sum(column$data == cat, na.rm=TRUE), subcol=cat)
   )
 
   if(!is.null(overall))
