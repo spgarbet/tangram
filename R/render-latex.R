@@ -134,9 +134,9 @@ latex.cell_subheader <- function(object, ...)
 #' @export
 latex.cell_iqr <- function(object,...)
 {
-  paste0("{\\scriptsize ", latexify(object[1]), "}~",
+  paste0("{\\scriptsize ", latexify(object[1]), "}~\\textbf{",
          latexify(object[2]),
-         "~{\\scriptsize ", latexify(object[3]), "}")
+         "}~{\\scriptsize ", latexify(object[3]), "}")
 }
 
 #' @rdname latex
