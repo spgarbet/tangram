@@ -42,7 +42,7 @@ derive_label <- function(node)
           {
             l <- l2
           } else {
-            l     <- u2[1,2]
+            l     <- trimws(u2[1,2])
             units <- u2[1,3]
           }
         }

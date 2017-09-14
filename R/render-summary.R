@@ -65,6 +65,14 @@ summary.cell <- function(object, ...)
 
 #' @rdname summary
 #' @export
+summary.cell_label <- function(object, ...)
+{
+  units <- attr(object, "units")
+  if(is.null(units)) object else paste0(object, " (", units, ")")
+}
+
+#' @rdname summary
+#' @export
 summary.cell_iqr <- function(object, ...)
 {
   mid <- floor(length(object)/2) + 1
@@ -164,19 +172,22 @@ summary.tangram <- function(object,...)
 
   pasty <- apply(text, 1, function(x) paste(x, collapse="  "))
 
-  cat(paste(rep("=",nchar(pasty[1])),collapse=''),'\n')
+  result <- paste0(paste0(rep("=",nchar(pasty[1])), collapse=''), '\n')
+
   for(row in pasty)
   {
-    cat(row,'\n')
+    result <- paste0(result, row, '\n')
     if(last_header_row > 0              &&
        length(pasty) >= last_header_row &&
        row == pasty[last_header_row])
     {
-      cat(paste(rep("-",nchar(pasty[1])),collapse=''),'\n')
+      result <- paste0(result, paste0(rep("-",nchar(pasty[1])),collapse=''),'\n')
     }
   }
-  cat(paste(rep("=",nchar(pasty[1])),collapse=''),'\n')
+  result <- paste0(result, paste0(rep("=",nchar(pasty[1])),collapse=''), '\n')
 
+  cat(result)
+  invisible(NULL)
 }
 
 #' Print a text summary of a given table
@@ -185,7 +196,7 @@ summary.tangram <- function(object,...)
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.cell <- function(x,...) print(summary(x,...))
+print.cell <- function(x,...) summary(x,...)
 
 #' Print a text summary of a given table_builder
 #'
@@ -193,7 +204,7 @@ print.cell <- function(x,...) print(summary(x,...))
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.table_builder <- function(x,...) print(summary(x,...))
+print.table_builder <- function(x,...) summary(x,...)
 
 ### Notes on making text rendering of histograms
 # map <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2587")

@@ -96,7 +96,7 @@ cell.default <- function(x, ...)
   add_class   <- if("class" %in% names(attribs)) attribs[['class']] else NULL
   final_class <- if(inherits(x, "cell")) c(add_class, class(x)) else c(add_class, "cell", class(x))
   for(i in names(attribs)) attr(x, i) <- attribs[[i]]
-  class(x) <- final_class
+  class(x) <- unique(final_class)
   x
 }
 
@@ -142,6 +142,7 @@ cell_label <- function(text, units=NULL, class=NULL, ...)
 #' cell_header("Concentration", "mg/dl", src="A")
 cell_header <- function(text, units=NULL, class=NULL, ...)
 {
+  if(is.null(units)) units <- attr(text, "units")
   cell(text,
        class=c(class, "cell_header", "cell_label"),
        units=units,
@@ -166,6 +167,7 @@ cell_header <- function(text, units=NULL, class=NULL, ...)
 #' cell_subheader("Concentration", "mg/dl", src="A")
 cell_subheader <- function(text, units=NULL, class=NULL, ...)
 {
+  if(is.null(units)) units <- attr(text, "units")
   cell(text,
        class=c(class, "cell_subheader", "cell_header", "cell_label"),
        units=units,

@@ -3,6 +3,7 @@
 \name{rmd.table_builder}
 \alias{rmd.table_builder}
 \alias{summary.cell}
+\alias{summary.cell_label}
 \alias{summary.cell_iqr}
 \alias{summary.cell_range}
 \alias{summary.cell_estimate}
@@ -16,6 +17,8 @@
 \method{rmd}{table_builder}(object, ...)
 
 \method{summary}{cell}(object, ...)
+
+\method{summary}{cell_label}(object, ...)
 
 \method{summary}{cell_iqr}(object, ...)
 
