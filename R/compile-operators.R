@@ -31,7 +31,7 @@
 derive_label <- function(node)
 {
   l <- node$name()
-  units <- NA
+  units <- NULL
   try({
         l2 <- attr(node$data, "label")
         if(!is.null(l2))
