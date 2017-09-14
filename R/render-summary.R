@@ -15,25 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #######
-# The default method for rendering tangram objects
-# Not exported since this would impact core R.
-#' @include compile-cell.R
-#' @include compile.R
-summary.default <- function(object, ...)
-{
-  warning(paste("summary unhandled class : ", paste(base::class(object), collapse=', ')))
-
-  ""
-}
-
-#####################################################
-# The character method for rendering tangram objects
-# Not exported since this would impact core R.
-summary.character <- function(object, ...) object
-
-#' Render methods for tangram cell objects
-#'
-#' Each of these methods will render the cell object as a text summary
+#' The default method for rendering tangram objects
+#' A tangram is a summary, so it returns itself. Otherwise convert to a text representation.
 #'
 #' @param object object; the item to render
 #' @param ... additional arguments passed to summary
@@ -48,6 +31,16 @@ summary.character <- function(object, ...) object
 #'         col_header(1,2,3) %>%
 #'         add_col("A","B","C"))
 #' summary(tangram(drug~bili, pbc))
+#' @include compile-cell.R
+#' @include compile.R
+#' @rdname summary
+#' @export
+summary.tangram <- function(object, ...) object
+
+#' @rdname summary
+#' @export
+summary.table_builder <- function(object,...) summary(table_flatten(object$table))
+
 #' @rdname summary
 #' @export
 summary.cell <- function(object, ...)
@@ -114,13 +107,6 @@ summary.cell_fraction <- function(object,...)
 
 #' @rdname summary
 #' @export
-summary.table_builder <- function(object,...)
-{
-  summary(table_flatten(object$table))
-}
-
-#' @rdname summary
-#' @export
 summary.cell_fstat <- function(object, ...)
 {
   paste0("F_{", object[2], ",", object[3], "}=", object[1], ", P=", object[4])
@@ -138,9 +124,32 @@ summary.cell_studentt <- function(object, ...)
   paste0("t_", object[2], "=", object[1], ", P=", object[3])
 }
 
-#' @rdname summary
+#######
+#' Print methods for tangram objects
+#'
+#' @param object object; the item to render
+#' @param ... additional arguments passed to summary
+#' @return the text summary
+#' @examples
+#' print(cell_label("123"))
+#' print(cell_iqr(rnorm(20)))
+#' print(cell_estimate(2.1,0.8, 3.3))
+#' print(cell_fraction(45, 137))
+#' print(table_builder()   %>%
+#'         row_header("row") %>%
+#'         col_header(1,2,3) %>%
+#'         add_col("A","B","C"))
+#' print(tangram(drug~bili, pbc))
+#' @rdname print
 #' @export
-summary.tangram <- function(object,...)
+print.cell <- function(object, ...)
+{
+  cat(summary(object, ...))
+}
+
+#' @rdname print
+#' @export
+print.tangram <- function(object,...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -187,16 +196,8 @@ summary.tangram <- function(object,...)
   result <- paste0(result, paste0(rep("=",nchar(pasty[1])),collapse=''), '\n')
 
   cat(result)
-  invisible(NULL)
+  invisible(result)
 }
-
-#' Print a text summary of a given table
-#'
-#' @param x The tangram to render to text
-#' @param ... additional arguments, unused at present
-#' @return A text string rendering of the given table
-#' @export
-print.cell <- function(x,...) summary(x,...)
 
 #' Print a text summary of a given table_builder
 #'
@@ -204,7 +205,7 @@ print.cell <- function(x,...) summary(x,...)
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.table_builder <- function(x,...) summary(x,...)
+print.table_builder <- function(x,...) print(summary(x,...))
 
 ### Notes on making text rendering of histograms
 # map <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2587")

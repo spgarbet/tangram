@@ -2,19 +2,24 @@
 % Please edit documentation in R/render-rmd.R, R/render-summary.R
 \name{rmd.table_builder}
 \alias{rmd.table_builder}
+\alias{summary.tangram}
+\alias{summary.table_builder}
 \alias{summary.cell}
 \alias{summary.cell_label}
 \alias{summary.cell_iqr}
 \alias{summary.cell_range}
 \alias{summary.cell_estimate}
 \alias{summary.cell_fraction}
-\alias{summary.table_builder}
 \alias{summary.cell_fstat}
 \alias{summary.cell_chi2}
-\alias{summary.tangram}
-\title{Render methods for tangram cell objects}
+\title{The default method for rendering tangram objects
+A tangram is a summary, so it returns itself. Otherwise convert to a text representation.}
 \usage{
 \method{rmd}{table_builder}(object, ...)
+
+\method{summary}{tangram}(object, ...)
+
+\method{summary}{table_builder}(object, ...)
 
 \method{summary}{cell}(object, ...)
 
@@ -28,13 +33,9 @@
 
 \method{summary}{cell_fraction}(object, ...)
 
-\method{summary}{table_builder}(object, ...)
-
 \method{summary}{cell_fstat}(object, ...)
 
 \method{summary}{cell_chi2}(object, ...)
-
-\method{summary}{tangram}(object, ...)
 }
 \arguments{
 \item{object}{object; the item to render}
@@ -45,7 +46,8 @@
 the text summary
 }
 \description{
-Each of these methods will render the cell object as a text summary
+The default method for rendering tangram objects
+A tangram is a summary, so it returns itself. Otherwise convert to a text representation.
 }
 \examples{
 summary(cell_label("123"))
