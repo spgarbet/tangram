@@ -24,8 +24,8 @@ pre {
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-data(pbc)
 library(tangram)
+data(pbc)
 ```
 
 ## A Grammar of Tables

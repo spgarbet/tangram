@@ -5,12 +5,12 @@
 \alias{print.tangram}
 \title{Print methods for tangram objects}
 \usage{
-\method{print}{cell}(object, ...)
+\method{print}{cell}(x, ...)
 
-\method{print}{tangram}(object, ...)
+\method{print}{tangram}(x, ...)
 }
 \arguments{
-\item{object}{object; the item to render}
+\item{x}{object; the item to render}
 
 \item{...}{additional arguments passed to summary}
 }

@@ -111,9 +111,9 @@ latex.cell_header <- function(object, ...)
   class(object) <- cls[2:length(cls)]
 
   if(inherits(object, "cell_n"))
-    paste0("\\textbf{N=", latex.cell_n(object, id, ...), "}")
+    paste0("\\textbf{N=", latex.cell_n(object, ...), "}")
   else # Peel down to cell_label
-    paste0("\\textbf{",  latex(object, id, ...), "}")
+    paste0("\\textbf{",  latex(object, ...), "}")
 }
 
 #' @rdname latex

@@ -188,6 +188,7 @@ cell_subheader <- function(text, units=NULL, class=NULL, ...)
 #' @return A cell_quantile object.
 #' @export
 #' @importFrom stats quantile
+#' @importFrom stats sd
 #' @examples
 #' require(stats)
 #' cell_iqr(rnorm(100), '3')

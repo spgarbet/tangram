@@ -35,6 +35,7 @@
 #' @importFrom stats cor
 #' @importFrom stats cor.test
 #' @importFrom stats na.omit
+#' @importFrom stats wilcox.test
 summarize_kruskal_horz <- function(table,
                                    row,
                                    column,

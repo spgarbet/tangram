@@ -24,7 +24,6 @@ pre {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
-data(pbc)
 ```
 
 <style type="text/css">
@@ -67,13 +66,18 @@ Supposed that further in addition to the lancet style one really wanted a shade 
 Here's an example similary to summaryM from Hmisc to get us started:
 
 ### Table 1
+```{r}
+head(pbc)
+```
+
 ```{r, results="asis"}
-html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc),
+html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", tangram::pbc),
       fragment=TRUE, caption = "Hmisc::PBC", id="tbl2")
 ```
 
 ###  Table 2
 ```{r, results='asis'}
+set.seed(1234)
 x <- round(rnorm(375, 79, 10))
 y <- round(rnorm(375, 80,  9))
 y[rbinom(375, 1, prob=0.05)] <- NA

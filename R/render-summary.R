@@ -193,7 +193,7 @@ summary.cell_studentt <- function(object, ...)
 #######
 #' Print methods for tangram objects
 #'
-#' @param object object; the item to render
+#' @param x object; the item to render
 #' @param ... additional arguments passed to summary
 #' @return the text summary
 #' @examples
@@ -208,25 +208,25 @@ summary.cell_studentt <- function(object, ...)
 #' print(tangram(drug~bili, pbc))
 #' @rdname print
 #' @export
-print.cell <- function(object, ...)
+print.cell <- function(x, ...)
 {
-  cat(summary(object, ...))
+  cat(summary(x, ...))
 }
 
 #' @rdname print
 #' @export
-print.tangram <- function(object,...)
+print.tangram <- function(x,...)
 {
-  nrows <- rows(object)
-  ncols <- cols(object)
+  nrows <- rows(x)
+  ncols <- cols(x)
 
   text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
   last_header_row <- 0 # Current Header Row
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
-      if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- summary(object[[row]][[col]])
+      if(last_header_row == 0 && !inherits(x[[row]][[col]], "cell_header")) last_header_row <<- row - 1
+      text[row,col] <<- summary(x[[row]][[col]])
     })
   })
 
