@@ -345,4 +345,28 @@ add_row <- function(table_builder, ...)
     cursor_down()
   })
 }
+#'
+#' #' @export
+#' cbind.tangram <- function(..., deparse.level=1)
+#' {
+#'
+#' }
+#'
+#' #' @export
+#' cbind.table_builder <- function(..., deparse.level=1)
+#' {
+#'
+#' }
+#'
+#' #' @export
+#' rbind.tangram <- function(..., deparse.level=1)
+#' {
+#'
+#' }
+#'
+#' #' @export
+#' rbind.table_builder <- function(..., deparse.level=1)
+#' {
+#'
+#' }
 
