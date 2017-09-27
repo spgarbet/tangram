@@ -283,7 +283,7 @@ tangram.data.frame <- function(x, colheader=NA, ...)
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
   # Check for non-character
-  if(any(cls != "character"))
+  if(any(!cls %in% c("character", "NULL") ))
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
     return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=seq(0,1,0.25), msd=TRUE, ...))
@@ -294,7 +294,7 @@ tangram.data.frame <- function(x, colheader=NA, ...)
   height  <- length(rownames(x)) + roffset
   tbl     <- tangram(height, width, FALSE)
 
-  tbl[[1]][[1]] <- cell_header("")
+
   if(!any(is.na(colheader))) tbl[[2]][[1]] <- cell_subheader("")
 
   sapply(2:width, FUN=function(col_idx) {
@@ -310,9 +310,13 @@ tangram.data.frame <- function(x, colheader=NA, ...)
     })
   })
 
-  sapply((roffset+1):height, FUN=function(row_idx) {
-    tbl[[row_idx]][[1]] <<- cell_header(rownames(x)[row_idx-roffset])
-  })
+  if(any(rownames(x) != as.character(1:(height - 1))))
+  {
+    tbl[[1]][[1]] <- cell_header("")
+    sapply((roffset+1):height, FUN=function(row_idx) {
+      tbl[[row_idx]][[1]] <<- cell_header(rownames(x)[row_idx-roffset])
+    })
+  }
 
   tbl
 }
