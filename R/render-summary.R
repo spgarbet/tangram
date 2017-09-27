@@ -14,6 +14,72 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+textsub_table <-list(
+  c("\u00A0",                                "  "),       # Special spaces
+  c("(^|[^\\\\])~((\\\\.|[^~\\\\])*)~",      "\\1_\\2"),  # Subscript
+  c("(^|[^\\\\])\\^((\\\\.|[^~\\\\])*)\\^",  "\\1^\\2"),  # Superscript
+  c("\\\\(.)",                               "\\1")       # convert escaped characters
+)
+
+#' @importFrom stringi stri_trans_nfc
+#' @importFrom stringi stri_trans_nfd
+#' @importFrom utils capture.output
+textify <- function(x)
+{
+  y <- as.character(x)          # Make sure a character string was passed
+  if(nchar(y) == 0) return("")  # Abort early for zero characters
+
+  ## Kludge for converting from "byte" to the current encoding
+  ## in a way which preserves the hex notation.
+  encBytes <- Encoding(y) == "bytes"
+  if (any(encBytes)) y[encBytes] <- capture.output(cat(y[encBytes], sep = "\n"))
+
+  ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
+  ## processing of accented characters. Doing this early to
+  ## circumvent pecularities in gsub() (and nchar()) when working in
+  ## the C locale.
+  y <- stri_trans_nfd(y)
+
+  # Convert strikethrough
+  y <- "~~one~~ other \\~~ ~~two~~"
+  pieces <- strsplit(y, "(?<!\\\\)~~", perl=TRUE)[[1]] # Strikethrough
+  if(length(pieces) > 1)
+  {
+    subs <- seq(2, length(pieces), by=2)
+    pieces[subs] <- sapply(pieces[subs], function(x) {
+      gsub("(\\\\.|.)", "\\1\u0336", x, perl=TRUE)
+    })
+  }
+  y <- paste0(pieces, collapse="")
+
+  ## Run all conversions as appropriate not inside "$"
+  pieces  <- strsplit(y, "(?<!\\\\)\\$", perl=TRUE)[[1]]
+  if(length(pieces) > 0)
+  {
+    subs <- seq(1, length(pieces), by=2)
+    pieces[subs] <- sapply(pieces[subs], function(x) {
+      Reduce(function(u, v) gsub(v[1], v[2], u, perl=TRUE), textsub_table, x)
+    })
+  }
+
+  for(i in 1:length(pieces))
+  {
+    if((i %% 2) != 0)
+    {
+      for (subst in textsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+    }
+  }
+  y <- paste0(pieces, collapse="")
+
+
+
+  ## Convert result to UTF-8 NFC encoding, although most non-ASCII
+  ## content has probably been converted to LaTeX commands.
+  stri_trans_nfc(y)
+}
+
+
+
 #######
 #' The default method for rendering tangram objects
 #' A tangram is a summary, so it returns itself. Otherwise convert to a text representation.
