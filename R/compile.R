@@ -272,9 +272,11 @@ tangram <- function(x, ...)
 tangram.numeric <- function(x, cols, embedded=FALSE, ...)
 {
   # A list of lists
-  cell(lapply(1:x, function(x) as.list(rep(cell(""), cols))),
-       class="tangram",
-       embedded = embedded)
+  result <- lapply(1:x, function(x) {lapply(1:cols, function(y) cell("")) })
+  class(result) <- c("tangram", "list")
+  attr(result, "embedded") <- embedded
+
+  result
 }
 
 #' @rdname tangram

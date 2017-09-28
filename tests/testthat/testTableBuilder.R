@@ -35,7 +35,7 @@ test_that("row_header creates a new header with class cell_header in elements fo
 
   x <- attr(tb$table, "row_header")
 
-  expect_equal(class(x), c("tangram", "cell", "list"))
+  expect_equal(class(x), c("tangram", "list"))
   expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell", "logical"))
 
   expect_true(x[[1]][[2]] == 1)
@@ -53,7 +53,7 @@ test_that("col_header creates a new header with class cell_header in elements fo
 
   x <- attr(tb$table, "col_header")
 
-  expect_equal(class(x), c("tangram", "cell", "list"))
+  expect_equal(class(x), c("tangram", "list"))
   expect_true(x[[1]][[1]] == "Jim")
   expect_equal(class(x[[1]][[1]]), c("cell_header", "cell_label", "cell", "character"))
 
@@ -72,7 +72,7 @@ test_that("row_header creates a new header with class cell_subheader in elements
 
   x <- attr(tb$table, "row_header")
 
-  expect_equal(class(x), c("tangram", "cell", "list"))
+  expect_equal(class(x), c("tangram", "list"))
   expect_equal(length(x), 2)
   expect_equal(length(x[[1]]), 2)
   expect_equal(length(x[[2]]), 2)
@@ -91,7 +91,7 @@ test_that("col_header creates a new header with class cell_subheader in elements
 
   x <- attr(tb$table, "col_header")
 
-  expect_equal(class(x), c("tangram", "cell", "list"))
+  expect_equal(class(x), c("tangram", "list"))
   expect_equal(length(x), 2)
   expect_equal(length(x[[1]]), 2)
   expect_equal(length(x[[2]]), 2)
@@ -109,7 +109,7 @@ test_that("New Table Builder returns an empty 1x1 table",
   expect_true(inherits(tb$table, "tangram"))
   expect_equal(length(tb$table), 1)
   expect_equal(length(tb$table[[1]]), 1)
-  expect_equal(class(tb$table[[1]][[1]]), "character")
+  expect_equal(class(tb$table[[1]][[1]]), c("cell", "character"))
   expect_equal(tb$nrow, 1)
   expect_equal(tb$ncol, 1)
   expect_equal(tb$row, "A")
