@@ -54,6 +54,22 @@ latex(object, ...)
 \item{object}{object; the item to render to latex}
 
 \item{...}{additional arguments}
+
+\item{caption}{character; Caption to display on table}
+
+\item{footnote}{character; Footnote to include on table}
+
+\item{fragment}{logical; Is this a complete LaTeX document or just the table fragment}
+
+\item{filename}{character; filename to write LaTex into}
+
+\item{append}{logical; Should the write be an append operation or overwrite}
+
+\item{na.blank}{logical; Should NA's be displayed as blanks}
+
+\item{cgroup.just}{character; The text of the column justification used in the table}
+
+\item{arraystretch}{numeric; The arraystretch parameter used for vertical spacing}
 }
 \value{
 the LaTeX rendering

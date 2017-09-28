@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{The cell label to render to RTF}
 
-\item{id}{A string caption for the table}
+\item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
 

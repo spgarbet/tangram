@@ -17,6 +17,10 @@ summarize_chisq(table, row, column, pformat = NULL, collapse_single = TRUE,
 \item{pformat}{numeric or character; A formatting directive to be applied to p-values}
 
 \item{collapse_single}{logical; default TRUE. Categorical variables with a two values collapse to single row.}
+
+\item{overall}{logical; Include the overall summary column}
+
+\item{...}{absorbs extra parameters. Currently unused.}
 }
 \value{
 The modified table object

@@ -12,6 +12,8 @@
 \item{id}{A unique identifier for traceability}
 
 \item{...}{additional arguments to renderer. Unused}
+
+\item{point}{numeric; The font point size to use in display}
 }
 \value{
 An RTF string rendering of the given header

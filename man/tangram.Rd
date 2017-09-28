@@ -41,6 +41,8 @@ tangram(x, ...)
 
 \item{after}{function or list of functions; one or more functions to further process an abstract table}
 
+\item{digits}{numeric; default number of digits to use for display of numerics}
+
 \item{short.labels}{numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").}
 
 \item{footnote}{character; A string to add to the table as a footnote.}

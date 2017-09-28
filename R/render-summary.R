@@ -271,7 +271,7 @@ print.tangram <- function(x,...)
 #' @param ... additional arguments, unused at present
 #' @return A text string rendering of the given table
 #' @export
-print.table_builder <- function(x,...) print(summary(x,...))
+print.table_builder <- function(x,...) print(summary(x$table,...))
 
 ### Notes on making text rendering of histograms
 # map <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2587")

@@ -14,6 +14,8 @@
 
 \item{pformat}{numeric or character; A formatting directive to be applied to p-values}
 
+\item{reference}{numeric or character; A reference indicator for this test}
+
 \item{...}{additional specifiers for identifying this cell (see key)}
 }
 \value{

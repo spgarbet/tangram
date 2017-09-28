@@ -20,6 +20,14 @@
 #' Each of these methods will render the cell object as a LaTeX fragment
 #'
 #' @param object object; the item to render to latex
+#' @param caption character; Caption to display on table
+#' @param footnote character; Footnote to include on table
+#' @param fragment logical; Is this a complete LaTeX document or just the table fragment
+#' @param filename character; filename to write LaTex into
+#' @param append logical; Should the write be an append operation or overwrite
+#' @param na.blank logical; Should NA's be displayed as blanks
+#' @param cgroup.just character; The text of the column justification used in the table
+#' @param arraystretch numeric; The arraystretch parameter used for vertical spacing
 #' @param ... additional arguments
 #' @return the LaTeX rendering
 #' @include compile-cell.R

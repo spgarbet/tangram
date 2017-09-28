@@ -15,6 +15,14 @@ summarize_kruskal_horz(table, row, column, pformat = NULL, msd = FALSE,
 \item{column}{The column variable to use (categorical)}
 
 \item{pformat}{numeric or character; A formatting directive to be applied to p-values}
+
+\item{msd}{logical; Include mean and standard deviation with quantile statistics}
+
+\item{quant}{numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.}
+
+\item{overall}{logical; Include overall summary statistics for a categorical column}
+
+\item{...}{absorbs additional arugments. Unused at present.}
 }
 \value{
 The modified table object

@@ -23,6 +23,10 @@
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param msd logical; Include mean and standard deviation with quantile statistics
+#' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
+#' @param overall logical; Include overall summary statistics for a categorical column
+#' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
 #' @importFrom magrittr "%>%"
@@ -104,6 +108,7 @@ summarize_kruskal_horz <- function(table,
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (numerical)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
 summarize_kruskal_vert <- function(table, row, column, pformat=NULL, ...)
@@ -149,6 +154,8 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, ...)
 #' @param column The column variable to use (categorical)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
 #' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
+#' @param overall logical; Include the overall summary column
+#' @param ... absorbs extra parameters. Currently unused.
 #' @return The modified table object
 #' @export
 summarize_chisq <- function(table,
@@ -258,6 +265,7 @@ summarize_chisq <- function(table,
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (numerical)
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param ... absorbs additional arguments. Unused at present.
 #' @return The modified table object
 #' @export
 summarize_spearman <- function(table, row, column, pformat=NULL, ...)

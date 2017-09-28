@@ -244,6 +244,7 @@ cell_create_table <- function(ast, transforms, digits, ...)
 #' @param colheader character; Use as column headers in final table
 #' @param cols numeric; An integer of the number of cols to create
 #' @param data data.frame; data to use for rendering tangram object
+#' @param digits numeric; default number of digits to use for display of numerics
 #' @param embedded logical; Will this table be embedded inside another
 #' @param footnote character; A string to add to the table as a footnote.
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization

@@ -18,6 +18,10 @@ cell_iqr(x, format = NA, na.rm = TRUE, names = FALSE, type = 8,
 
 \item{type}{integer; specify algorithm to use in constructing quantile. See quantile for more information.}
 
+\item{msd}{logical; compute an msd attribute containing mean and standard deviation}
+
+\item{quant}{numeric; The quantiles to display. Should be an odd length vector, since the center value is highlighted.}
+
 \item{...}{additional arguments to constructing cell}
 }
 \value{

@@ -34,7 +34,7 @@ rtf.default <- function(object, id, ...)
 #' Given a cell_label class create an RTF representation.
 #'
 #' @param object The cell label to render to RTF
-#' @param id A string caption for the table
+#' @param id A unique identifier for traceability
 #' @param point size of main font for cell label
 #' @param ... additional arguments to renderer. Unused
 #' @return An RTF text string rendering of the given label.
@@ -103,6 +103,7 @@ rtf.cell_header <- function(object, id, ...)
 #' @param object The cell header to render to RTF
 #' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
+#' @param point numeric; The font point size to use in display
 #' @return An RTF string rendering of the given header
 #' @export
 #'
@@ -127,6 +128,7 @@ rtf.cell_subheader <- function(object, id, ..., point=9)
 #' @param object The cell quantile to render to RTF
 #' @param id A unique identifier for traceability
 #' @param ... additional arguments to renderer. Unused
+#' @param point numeric; The font point size to use in display
 #' @return An RTF string rendering of the given quantile.
 #' @export
 #'
@@ -242,14 +244,6 @@ est_column_widths <- function(object)
 #'
 #' @param object The cell to render to RTF
 #' @param id A unique identifier for the table (strongly recommended). If not provided, caption will be used.
-#' @param caption A string caption for the table
-#' @param fragment A boolean flag that determines whether a fragment or a complete RTF document is generatedf
-#' @param id A unique identifier for the table (strongly recommended).
-#' @param widths RTF requires specified left margin and column widths, this allows user control over these (inches)
-#' @param footnote Any footnotes to include under the table.
-#' @param filename A filename to write resulting rtf file to
-#' @param append A boolean for whether or not to append to given filename
-#' @param point Main font point size
 #' @param ... additional arguments to renderer. Unused at present.
 #' @return A text string rendering of the given table
 #' @export

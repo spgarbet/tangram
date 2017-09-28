@@ -183,6 +183,8 @@ cell_subheader <- function(text, units=NULL, class=NULL, ...)
 #' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
 #' @param names logical; if true, the result has a names attribute. Set to FALSE for speedup with many probs.
 #' @param type integer; specify algorithm to use in constructing quantile. See quantile for more information.
+#' @param msd logical; compute an msd attribute containing mean and standard deviation
+#' @param quant numeric; The quantiles to display. Should be an odd length vector, since the center value is highlighted.
 #' @param ... additional arguments to constructing cell
 #'
 #' @return A cell_quantile object.
@@ -432,6 +434,7 @@ cell.aov <- function(x, pformat="%1.3f", ...)
 #' @param x The htest object to convert to a rendereable cell
 #' @param format numeric or character; A formatting directive applied to statistics
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param reference numeric or character; A reference indicator for this test
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export
