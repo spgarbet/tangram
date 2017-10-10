@@ -13,7 +13,8 @@ tangram(x, ...)
 
 \method{tangram}{numeric}(x, cols, embedded = FALSE, ...)
 
-\method{tangram}{data.frame}(x, colheader = NA, ...)
+\method{tangram}{data.frame}(x, colheader = NA, ..., quant = seq(0, 1,
+  0.25), msd = TRUE)
 
 \method{tangram}{formula}(x, data, transforms = hmisc_style, after = NA,
   digits = NA, ...)

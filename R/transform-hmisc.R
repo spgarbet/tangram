@@ -334,7 +334,7 @@ hmisc_style <- list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq
             ),
-  Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis test. ^2^Pearson test"
+  Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
 )
 
 #' Mayo Clinic Primary Biliary Cirrhosis Data

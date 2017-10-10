@@ -282,14 +282,14 @@ tangram.numeric <- function(x, cols, embedded=FALSE, ...)
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, colheader=NA, ...)
+tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TRUE)
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
   # Check for non-character
   if(any(!cls %in% c("character", "NULL") ))
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
-    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=seq(0,1,0.25), msd=TRUE, ...))
+    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=quant, msd=msd, ...))
   }
 
   roffset <- if(any(is.na(colheader))) 1 else 2

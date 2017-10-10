@@ -75,7 +75,7 @@ body .figbody {
 .quantile .q25 {
   order: 2
 }
-.quantile .q75:before {content: "-";}
+.quantile .q75:before {content: ",";}
 .quantile .q75 {order: 3}
 .quantile .q75:after {content: ")";}
 tbody .variable {
