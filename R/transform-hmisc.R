@@ -47,6 +47,7 @@ summarize_kruskal_horz <- function(table,
                                    msd=FALSE,
                                    quant=c(0.25, 0.5, 0.75),
                                    overall=NULL,
+                                   test=TRUE,
                                    ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
@@ -75,26 +76,29 @@ summarize_kruskal_horz <- function(table,
   }
   else
   {
-    test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
-    cell_fstat(f         = render_f(test['F'], "%.2f"),
-               df1       = test['df1'],
-               df2       = test['df2'],
-               p         = render_f(test['P'], pformat),
+    stat  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
+    cell_fstat(f         = render_f(stat['F'], "%.2f"),
+               df1       = stat['df1'],
+               df2       = stat['df2'],
+               p         = render_f(stat['P'], pformat),
                reference = "1")
   }
 
-  tbl <- table                                   %>%
-  row_header(derive_label(row))                  %>%
-  col_header("N", categories, "Test Statistic")  %>%
-  col_header("",  subN,       ""              )  %>%
-  add_col(cell_n(sum(!is.na(datar)),name=NULL))            %>%
+  tbl <- row_header(table, derive_label(row))
+  tbl <- if(test) {
+    col_header(table, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
+  } else {
+    col_header(table, "N", categories)  %>% col_header("", subN)
+  }
+
+  add_col(tbl, cell_n(sum(!is.na(datar)),name=NULL)) %>%
   table_builder_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
      add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
   })
 
-  tbl <- add_col(tbl, stat)
+  if(test) tbl <- add_col(tbl, stat)
 
   tbl
 }
@@ -111,7 +115,7 @@ summarize_kruskal_horz <- function(table,
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column, pformat=NULL, ...)
+summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
@@ -120,16 +124,17 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, ...)
   categories <- levels(datar)
 
   # Kruskal-Wallis via F-distribution
-  test  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
-  fstat <- cell_fstat(f   = render_f(test['F'], "%.2f"),
-                      df1 = test['df1'],
-                      df2 = test['df2'],
-                      p   = render_f(test['P'], pformat),
+  stat  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
+  fstat <- cell_fstat(f   = render_f(stat['F'], "%.2f"),
+                      df1 = stat['df1'],
+                      df2 = stat['df2'],
+                      p   = render_f(stat['P'], pformat),
                       reference = "1")
 
-  table                                                             %>%
-  col_header("N", derive_label(column), "Test Statistic")           %>%
-  row_header(derive_label(row))                                     %>%
+  tbl <- if(test) col_header(table, "N", derive_label(column), "Test Statistic") else
+                  col_header(table, "N", derive_label(column))
+
+  row_header(tbl, derive_label(row))                                %>%
 # FIXME Need to handle single case consistent with chisq
   new_line()                                                        %>%
   table_builder_apply(categories, FUN=function(tbl, category) {
@@ -140,8 +145,11 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, ...)
     add_col(cell_iqr(x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
   })                                                                %>%
-  cursor_pos(1, 3)                                                  %>%
-  add_col(fstat)
+  cursor_pos(1, 3)
+
+  if(test) tbl <- add_col(tbl, fstat)
+
+  tbl
 }
 
 #' Create a summarization for a categorical row versus a categorical column
@@ -164,6 +172,7 @@ summarize_chisq <- function(table,
                             pformat=NULL,
                             collapse_single=TRUE,
                             overall=NULL,
+                            test=TRUE,
                             ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
@@ -171,7 +180,7 @@ summarize_chisq <- function(table,
   grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
   validrow      <- which(!apply(grid,1,FUN = function(x){all(x == 0)}))
-  test          <- if(length(grid[validrow,validcol]) < 2) NA else suppressWarnings(chisq.test(grid[validrow,validcol], correct=FALSE))
+  stat          <- if(length(grid[validrow,validcol]) < 2) NA else suppressWarnings(chisq.test(grid[validrow,validcol], correct=FALSE))
   ncol          <- dim(grid)[2]
   nrow          <- dim(grid)[1]
 
@@ -219,8 +228,13 @@ summarize_chisq <- function(table,
   }
 
   # Column Headers
-  table <- col_header(table, "N", colnames(grid), "Test Statistic")
-  table <- col_header(table, "", subN, "")
+  if(test) {
+    table <- col_header(table, "N", colnames(grid), "Test Statistic")
+    table <- col_header(table, "", subN, "")
+  } else {
+    table <- col_header(table, "N", colnames(grid))
+    table <- col_header(table, "", subN)
+  }
 
   # Row Headers
   if(nrow > 1) table <- row_header(table, derive_label(row)) # Deal with single
@@ -248,10 +262,13 @@ summarize_chisq <- function(table,
   }
 
   # Finally add the stats
-  table <- add_row(table, cell(test, reference="2", pformat=pformat))
+  if(test)
+  {
+    table <- add_row(table, cell(stat, reference="2", pformat=pformat))
 
-  # Fill in blank cells in stats column
-  if(nrow > 1) table <- add_row(table, rep("", nrow))
+    # Fill in blank cells in stats column
+    if(nrow > 1) table <- add_row(table, rep("", nrow))
+  }
 
   table
 }
@@ -268,22 +285,31 @@ summarize_chisq <- function(table,
 #' @param ... absorbs additional arguments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_spearman <- function(table, row, column, pformat=NULL, ...)
+summarize_spearman <- function(table, row, column, pformat=NULL, test=TRUE, ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
 
   datar <- row$data
   datac <- column$data
 
-  test  <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
+  stat  <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
 
-  table %>%
-  row_header(derive_label(row)) %>%
-  col_header("N", derive_label(column), "Test Statistic") %>%
-  col_header("", "", "") %>%
-  add_col(sum(!is.na(datar) & !is.na(datac))) %>%
-  add_col(test$estimate) %>%
-  add_col(cell(test, pformat=pformat))
+  tbl <- row_header(table, derive_label(row))
+
+  tbl <- if(test) {
+    tbl <- col_header(tbl, "N", derive_label(column), "Test Statistic")
+    tbl <- col_header(tbl, "", "", "")
+  } else {
+    tbl <- col_header(tbl, "N", derive_label(column))
+    tbl <- col_header(tbl, "", "")
+  }
+
+  tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
+  tbl <- add_col(tbl, stat$estimate)
+
+  if(test) tbl <- add_col(tbl, cell(stat, pformat=pformat))
+
+  tbl
 }
 
 apply_factors <- function(row, column)
