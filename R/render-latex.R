@@ -163,11 +163,15 @@ latex.cell_fstat <- function(object,...)
 
 #' @rdname latex
 #' @export
-latex.cell_fraction <- function(object,...)
+latex.cell_fraction <- function(object,style="",...)
 {
   den <- object["denominator"]
   num <- object["numerator"]
-  paste0(object["ratio"], "~$\\frac{", num, "}{", den, "}$")
+
+  if(style=="nejm")
+    paste0(num, " (", object["percentage"], "\\%)")
+  else
+    paste0(object["ratio"], "~$\\frac{", num, "}{", den, "}$")
 }
 
 #' @rdname latex
@@ -203,6 +207,7 @@ latex.tangram <- function(object,
                           cgroup.just=NULL,
                           arraystretch=1.2,
                           pct_width=1.0,
+                          style="",
                           ...)
 {
   header <- if(fragment) "" else
@@ -211,6 +216,12 @@ latex.tangram <- function(object,
                      "\\begin{document}\n"
                      )
   footer <- if(fragment) "" else "\\end{document}"
+
+  stylehdr <- if(style=="nejm") paste("\\definecolor{nejm-yellow}{RGB}{255,251,237}",
+                                      "\\definecolor{nejm-header}{RGB}{247,244,239}",
+                                      "{\\fontfamily{cmss}\\selectfont", sep='\n') else ""
+
+  styleftr <- if(style=="nejm") "}" else ""
 
   if(is.null(footnote) && !is.null(attr(object, "footnote")))
     footnote <- attr(object, "footnote")
@@ -231,29 +242,36 @@ latex.tangram <- function(object,
         last_header_row <<- row - 1
         last_header_col <<- col - 1
       }
-      text[row,col] <<- latex(object[[row]][[col]], na.blank, ...)
+      text[row,col] <<- latex(object[[row]][[col]], na.blank, style=style, ...)
     })
   })
 
   pasty <- apply(text, 1, function(x) paste0(paste(x, collapse=" & "), "\\\\\n"))
 
-  if(is.null(cgroup.just)) cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
+  if(is.null(cgroup.just)) {
+    cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
+    if(style=="nejm") cgroup.just <- paste0("|", cgroup.just, "|")
+  }
 
-  tableHdr <- paste(paste0("\\bigskip\\begin{minipage}{",pct_width,"\\linewidth}\\centering"),
-                    paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "} \\begin{tabular}{",cgroup.just,"}"),
-                    "\\hline\\hline",
+  tableHdr <- paste(stylehdr,
+                    paste0("\\bigskip\\begin{minipage}{",pct_width,"\\linewidth}\\centering"),
+                    paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "}"),
+                    paste0(if(style=="nejm") "\\rowcolors{2}{nejm-yellow}{white}\n" else "", "\\begin{tabular}{",cgroup.just,"}"),
+                    if(style=="nejm") {
+                      paste0("\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",caption,"} \\\\\n\\hline")
+                      } else "\\hline\\hline",
                     if(last_header_row == 0) "" else
-                       paste0(paste0(as.vector(pasty)[1:last_header_row], collapse=''), "\\hline "),
+                       paste0(paste0(as.vector(pasty)[1:last_header_row], collapse=''), if(style=="nejm") "" else "\\hline "),
                     sep="\n"
                     )
 
   tableBdy <- paste0(paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''),
-                    "\\hline\\hline\n",
+                    if(style=="nejm") "\\hline\n" else "\\hline\\hline\n",
                     "\\end{tabular} } \\par\\bigskip\n",
-                    latexify(caption),
-                    "\\end{minipage}\n")
+                    if(style=="nejm") "" else latexify(caption),
+                    "\\end{minipage}")
 
-  result <- paste0(header, tableHdr, tableBdy, footnote, footer, sep="\n")
+  result <- paste0(header, tableHdr, tableBdy, footnote, footer, styleftr, sep="\n")
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 
