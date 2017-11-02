@@ -210,23 +210,28 @@ latex.tangram <- function(object,
                           style="",
                           ...)
 {
-  header <- if(fragment) "" else
-              paste0("\\documentclass{report}\n",
-                     "\\usepackage{geometry}\n",
-                     "\\begin{document}\n"
-                     )
-  footer <- if(fragment) "" else "\\end{document}"
+  if(is.null(footnote) && !is.null(attr(object, "footnote"))) footnote <- attr(object, "footnote")
+  footnote <- if(is.null(footnote)) "" else paste0(latexify(paste0(footnote, collapse="\n\n")), "\n")
 
-  stylehdr <- if(style=="nejm") paste("\\definecolor{nejm-yellow}{RGB}{255,251,237}",
-                                      "\\definecolor{nejm-header}{RGB}{247,244,239}",
-                                      "{\\fontfamily{cmss}\\selectfont", sep='\n') else ""
+  result <- ""
+  if(!fragment) result <- paste(result,
+                                "\\documentclass{report}",
+                                "\\usepackage{geometry}",
+                                "\\begin{document}",
+                                sep="\n")
+  if(style=="nejm") result <- if(style=="nejm") paste0(result,
+                                                      "\\definecolor{nejm-yellow}{RGB}{255,251,237}\n",
+                                                      "\\definecolor{nejm-header}{RGB}{247,244,239}\n")
+  result <- paste0(result, "\\begin{table}[h!]\n\\centering\n")
 
-  styleftr <- if(style=="nejm") "}" else ""
+  if(style=="nejm") result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
-  if(is.null(footnote) && !is.null(attr(object, "footnote")))
-    footnote <- attr(object, "footnote")
-  footnote <- if(is.null(footnote)) "" else
-    paste0(latexify(paste0(footnote, collapse="\n\n")), "\n")
+
+#  if(pct_width != 1.0)
+#    stylehdr <- paste(stylehdr,
+#                      paste0("\\bigskip\\begin{minipage}{",pct_width,"\\linewidth}\\centering"),
+#                      paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "}"),
+#                      sep='\n')
 
   nrows <- rows(object)
   ncols <- cols(object)
@@ -253,25 +258,37 @@ latex.tangram <- function(object,
     if(style=="nejm") cgroup.just <- paste0("|", cgroup.just, "|")
   }
 
-  tableHdr <- paste(stylehdr,
-                    paste0("\\bigskip\\begin{minipage}{",pct_width,"\\linewidth}\\centering"),
-                    paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "}"),
-                    paste0(if(style=="nejm") "\\rowcolors{2}{nejm-yellow}{white}\n" else "", "\\begin{tabular}{",cgroup.just,"}"),
-                    if(style=="nejm") {
-                      paste0("\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",caption,"} \\\\\n\\hline")
-                      } else "\\hline\\hline",
-                    if(last_header_row == 0) "" else
-                       paste0(paste0(as.vector(pasty)[1:last_header_row], collapse=''), if(style=="nejm") "" else "\\hline "),
-                    sep="\n"
-                    )
+  if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
+  result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
+  result <- if(style=="nejm"){
+              paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",latexify(caption),"} \\\\\n\\hline\n")
+            } else {
+              paste0(result, "\\hline\\hline\n")
+            }
 
-  tableBdy <- paste0(paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''),
-                    if(style=="nejm") "\\hline\n" else "\\hline\\hline\n",
-                    "\\end{tabular} } \\par\\bigskip\n",
-                    if(style=="nejm") "" else latexify(caption),
-                    "\\end{minipage}")
+  if(last_header_row > 0) result <- paste0(result, paste0(as.vector(pasty)[1:last_header_row], collapse=''))
+  if(style!="nejm") result <- paste0(result, "\\hline\n")
 
-  result <- paste0(header, tableHdr, tableBdy, footnote, footer, styleftr, sep="\n")
+  result <- paste0(result, paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''))
+
+  result <- paste0(result, if(style=="nejm") "\\hline\n" else "\\hline\\hline\n")
+
+  result <- paste0(result, "\\end{tabular}\n")
+
+  if(style=="nejm") result <- paste0(result, "}\n")
+
+  result <- paste0(result, "\\caption{",latexify(caption),"}\n")
+
+  result <- paste0(result, "\\end{table}\n")
+
+  if(!fragment) result <- paste0(result, "\\end{document}\n")
+
+
+#  tableBdy <- paste0(paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''),
+#                    ,
+#                    "\\end{tabular} }",
+#                    paste0("\\caption{", latexify(caption), "}\\end{table}"),
+#                    if(pct_width != 1.0) "} \\end{minipage}" else "")
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 

@@ -38,7 +38,7 @@ latex(object, ...)
 
 \method{latex}{cell_fstat}(object, ...)
 
-\method{latex}{cell_fraction}(object, ...)
+\method{latex}{cell_fraction}(object, style = "", ...)
 
 \method{latex}{cell_chi2}(object, ...)
 
@@ -48,7 +48,8 @@ latex(object, ...)
 
 \method{latex}{tangram}(object, caption = "Table", footnote = NULL,
   fragment = TRUE, filename = NULL, append = FALSE, na.blank = TRUE,
-  cgroup.just = NULL, arraystretch = 1.2, ...)
+  cgroup.just = NULL, arraystretch = 1.2, pct_width = 1, style = "",
+  ...)
 }
 \arguments{
 \item{object}{object; the item to render to latex}
