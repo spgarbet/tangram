@@ -279,16 +279,10 @@ latex.tangram <- function(object,
 
   result <- paste0(result, "\\caption{",latexify(caption),"}\n")
 
+  if(nchar(footnote) > 0) result <- paste0(result, "\n\n",footnote,"\n")
   result <- paste0(result, "\\end{table}\n")
 
   if(!fragment) result <- paste0(result, "\\end{document}\n")
-
-
-#  tableBdy <- paste0(paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''),
-#                    ,
-#                    "\\end{tabular} }",
-#                    paste0("\\caption{", latexify(caption), "}\\end{table}"),
-#                    if(pct_width != 1.0) "} \\end{minipage}" else "")
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 
