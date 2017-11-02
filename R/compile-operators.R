@@ -345,19 +345,26 @@ add_row <- function(table_builder, ...)
     cursor_down()
   })
 }
-#'
-#' #' @export
-#' cbind.tangram <- function(..., deparse.level=1)
-#' {
-#'
-#' }
-#'
-#' #' @export
-#' cbind.table_builder <- function(..., deparse.level=1)
-#' {
-#'
-#' }
+#
+# #' @export
+# cbind.tangram <- function(..., deparse.level=1)
+# {
+#
+# }
+#
+# #' @export
+# cbind.table_builder <- function(..., deparse.level=1)
+# {
+#
+# }
 
+#' An rbind for generated tables
+#'
+#' Execute the equivalent of an rbind for generated tables
+#'
+#' @param ... tangram objects to rbind
+#' @param deparse.level numeric; not used
+#' @return A merged tangram object
 #' @export
 rbind.tangram <- function(..., deparse.level=1)
 {
