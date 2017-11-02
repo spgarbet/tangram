@@ -357,13 +357,27 @@ add_row <- function(table_builder, ...)
 #' {
 #'
 #' }
-#'
-#' #' @export
-#' rbind.tangram <- function(..., deparse.level=1)
-#' {
-#'
-#' }
-#'
+
+#' @export
+rbind.tangram <- function(..., deparse.level=1)
+{
+  elements <- list(...)
+  x <- NULL
+  for(i in 2:length(elements))
+  {
+    z <- elements[[i]]
+    len <- length(z[[1]])
+    while("cell_header" %in% class(z[[1]][[len]])) z <- del_row(z, 1)
+    x <- c(elements[[i-1]], z)
+  }
+
+  class(x) <- c("tangram", "list")
+  attr(x, "embedded") <- FALSE
+  attr(x, "footnote") <- attr(elements[[i]], "footnote")
+
+  x
+}
+
 #' #' @export
 #' rbind.table_builder <- function(..., deparse.level=1)
 #' {
