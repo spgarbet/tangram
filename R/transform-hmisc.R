@@ -91,7 +91,7 @@ summarize_kruskal_horz <- function(table,
     col_header(tbl, "N", categories)  %>% col_header("", subN)
   }
 
-  add_col(tbl, cell_n(sum(!is.na(datar)),name=NULL)) %>%
+  tbl <- add_col(tbl, cell_n(sum(!is.na(datar)),name=NULL)) %>%
   table_builder_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
@@ -233,11 +233,11 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
   tbl <- if(test) col_header(table, "N", derive_label(column), "Test Statistic") else
                   col_header(table, "N", derive_label(column))
 
-  row_header(tbl, derive_label(row))                                %>%
+  tbl <- row_header(tbl, derive_label(row))                          %>%
 # FIXME Need to handle single case consistent with chisq
   new_line()                                                        %>%
   table_builder_apply(categories, FUN=function(tbl, category) {
-    x <- datac[datar == categories[category]]
+    x <- datac[datar == category]
     tbl                                                  %>%
     row_header(category)                                 %>%
     add_col(cell(length(x), subcol=category))            %>%

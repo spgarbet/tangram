@@ -4,7 +4,7 @@
 \alias{summarize_spearman}
 \title{Create a summarization for a numerical row versus a numerical column}
 \usage{
-summarize_spearman(table, row, column, pformat = NULL, ...)
+summarize_spearman(table, row, column, pformat = NULL, test = TRUE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
