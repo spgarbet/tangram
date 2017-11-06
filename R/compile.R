@@ -328,6 +328,9 @@ tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TR
 #' @export
 tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA, ...)
 {
+  if(class(data) != "data.frame") data <- as.data.frame(data)
+  if(class(data) != "data.frame") stop("data must be supplied as data frame")
+
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
   {
