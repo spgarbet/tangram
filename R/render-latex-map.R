@@ -883,7 +883,7 @@ gsub_table <- list(
   c("\u2245", "\\\\cong{}"),
   c("\u2246", "\\\\approxnotequal{}"),
   c("\u2247", "\\\\not\\\\cong{}"),
-  c("\u2248", "\\\\approx{}"),
+  c("\u2248", "$\\\\approx{}$"),
   c("\u2249", "\\\\not\\\\approx{}"),
   c("\u224A", "\\\\approxeq{}"),
   c("\u224B", "\\\\tildetrpl{}"),
