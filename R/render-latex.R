@@ -227,7 +227,7 @@ latex.tangram <- function(object,
   if(style=="nejm") result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
 
-#  if(pct_width != 1.0)
+  if(pct_width != 1.0) result <- paste0(result, "\\scalebox{", pct_width, "}{\n")
 #    stylehdr <- paste(stylehdr,
 #                      paste0("\\bigskip\\begin{minipage}{",pct_width,"\\linewidth}\\centering"),
 #                      paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "}"),
@@ -274,6 +274,8 @@ latex.tangram <- function(object,
   result <- paste0(result, if(style=="nejm") "\\hline\n" else "\\hline\\hline\n")
 
   result <- paste0(result, "\\end{tabular}\n")
+
+  if(pct_width != 1.0) result <- paste0(result, "}\n")
 
   if(style=="nejm") result <- paste0(result, "}\n")
 
