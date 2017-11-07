@@ -272,6 +272,7 @@ summarize_chisq <- function(table,
                             collapse_single=TRUE,
                             overall=NULL,
                             test=TRUE,
+                            row_percents=FALSE,
                             ...)
 {
   if(is.null(pformat)) pformat <- "%1.3f"
@@ -283,7 +284,11 @@ summarize_chisq <- function(table,
   ncol          <- dim(grid)[2]
   nrow          <- dim(grid)[1]
 
-  denominators  <- matrix(rep(colSums(grid), nrow), ncol=ncol, byrow=TRUE)
+  denominators  <- if(row_percents)
+                     matrix(rep(rowSums(grid), ncol), ncol=ncol, byrow=FALSE)
+                   else
+                     matrix(rep(colSums(grid), nrow), ncol=ncol, byrow=TRUE)
+
   rowlabels     <- rownames(grid)
 
   # Compute overall N values for each category

@@ -5,7 +5,7 @@
 \title{Create a summarization for a categorical row versus a categorical column}
 \usage{
 summarize_chisq(table, row, column, pformat = NULL, collapse_single = TRUE,
-  overall = NULL, test = TRUE, ...)
+  overall = NULL, test = TRUE, row_percents = FALSE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
