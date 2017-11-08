@@ -6,6 +6,7 @@
 \alias{tangram.data.frame}
 \alias{tangram.formula}
 \alias{tangram.character}
+\alias{tangram.table}
 \alias{tangram.rms}
 \title{Table creation methods}
 \usage{
@@ -21,6 +22,8 @@ tangram(x, ...)
 
 \method{tangram}{character}(x, data, transforms = hmisc_style, after = NA,
   digits = NA, ...)
+
+\method{tangram}{table}(x, ...)
 
 \method{tangram}{rms}(x, data = NULL, short.labels = NULL,
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits, ...)

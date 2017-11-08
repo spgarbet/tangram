@@ -362,3 +362,33 @@ tangram.character <- function(x, data, transforms=hmisc_style, after=NA, digits=
   tangram.formula(x, data, transforms, after, digits, ...)
 }
 
+#' @rdname tangram
+#' @export
+tangram.table <- function(x, ...)
+{
+  tbl <- tangram(1,1)
+
+  if(is.null(dim(x)) || length(dim(x)) == 1)
+  {
+    tbl[[1]][[1]] <- cell_header("")
+    sapply(1:length(x), function(i) tbl[[1]][[i+1]] <<- cell_header(names(x)[i]))
+    tbl[[2]] <- list(cell_header(if(is.null(attr(x, "label"))) "" else attr(x, "label")))
+    sapply(1:length(x), function(i) tbl[[2]][[i+1]] <<- cell(as.numeric(x[i])))
+  } else if(length(dim(x)) == 2)
+  {
+    tbl[[1]][[1]] <- cell_header("")
+    sapply(1:(dim(x)[1]), function(i) tbl[[1]][[i+1]] <<- cell_header(colnames(x)[i]))
+
+    sapply(1:(dim(x)[1]), function(i) {
+      tbl[[i+1]] <<- list(cell_header(if(is.null(rownames(x))) "" else rownames(x)[i]))
+      sapply(1:(dim(x)[2]), function(j) tbl[[i+1]][[j+1]] <<- cell(as.numeric(x[i,j])))
+    })
+  } else
+  {
+    stop("Tables above 2 dimensions are not supported.")
+  }
+
+  tbl
+}
+
+
