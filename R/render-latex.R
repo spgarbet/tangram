@@ -14,6 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+latexreference <- function(object)
+{
+  if(is.null(attr(object,"reference"))) "" else
+    paste0("\\textsuperscript{", htmlEscape(attr(object, "reference")), "}")
+}
+
 
 #' Render to LaTeX methods for tangram cell objects
 #'
@@ -89,7 +95,7 @@ latex.cell_label <- function(object, ...)
   if(is.null(attr(object, 'units')))
     label
   else
-    paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}")
+    paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}", latexreference(object))
 }
 
 latex.logical <- function(object, na.blank=TRUE, ...)
@@ -121,7 +127,7 @@ latex.cell_header <- function(object, ...)
   if(inherits(object, "cell_n"))
     paste0("\\textbf{N=", latex.cell_n(object, ...), "}")
   else # Peel down to cell_label
-    paste0("\\textbf{",  latex(object, ...), "}")
+    paste0("\\textbf{",  latex(object, ...), "}", latexreference(object))
 }
 
 #' @rdname latex
@@ -135,7 +141,7 @@ latex.cell_subheader <- function(object, ...)
   if(inherits(object, "cell_n"))
     paste0("{\\scriptsize $N=", latex.cell_n(object, ...), "$}")
   else # Peel down to cell_label
-    paste0("{\\scriptsize ",   latex(object, ...), "}")
+    paste0("{\\scriptsize ",   latex(object, ...), "}", latexreference(object))
 }
 
 #' @rdname latex
@@ -144,21 +150,21 @@ latex.cell_iqr <- function(object,...)
 {
   paste0("{\\scriptsize ", latexify(object[1]), "}~\\textbf{",
          latexify(object[2]),
-         "}~{\\scriptsize ", latexify(object[3]), "}")
+         "}~{\\scriptsize ", latexify(object[3]), "}", latexreference(object))
 }
 
 #' @rdname latex
 #' @export
 latex.cell_estimate <- function(object,...)
 {
-  paste0("(", latex(object[1]), ",~", latex(object[2]), ")")
+  paste0("(", latex(object[1]), ",~", latex(object[2]), ")", latexreference(object))
 }
 
 #' @rdname latex
 #' @export
 latex.cell_fstat <- function(object,...)
 {
-  paste0("$F_{",object[2],",",object[3],"}=",object[1],",~P=",object[4],"$")
+  paste0("$F_{",object[2],",",object[3],"}=",object[1],",~P=",object[4],"$", latexreference(object))
 }
 
 #' @rdname latex
@@ -169,30 +175,33 @@ latex.cell_fraction <- function(object,style="",...)
   num <- object["numerator"]
 
   if(style=="nejm")
-    paste0(num, " (", object["percentage"], "\\%)")
+    paste0(num, " (", object["percentage"], "\\%)", latexreference(object))
   else
-    paste0(object["ratio"], "~$\\frac{", num, "}{", den, "}$")
+    paste0(object["ratio"], "~$\\frac{", num, "}{", den, "}$", latexreference(object))
 }
 
 #' @rdname latex
 #' @export
-latex.cell_chi2 <- function(object,...)
+latex.cell_chi2 <- function(object,style="",...)
 {
-  paste0("$\\chi^2_{", object[2], "}=", object[1], ",~P=",object[3],"$")
+  if(style=="nejm")
+    paste0(object[3], latexreference(object))
+  else
+    paste0("$\\chi^2_{", object[2], "}=", object[1], ",~P=",object[3],"$", latexreference(object))
 }
 
 #' @rdname latex
 #' @export
 latex.cell_studentt <- function(object,...)
 {
-  paste0("$T_{", object[2], "}=", object[1], ",~P=",object[3],"$")
+  paste0("$T_{", object[2], "}=", object[1], ",~P=",object[3],"$", latexreference(object))
 }
 
 #' @rdname latex
 #' @export
 latex.cell_spearman <- function(object,...)
 {
-  paste0("$S=", object[1], ",~P=",object[3],"$")
+  paste0("$S=", object[1], ",~P=",object[3],"$", latexreference(object))
 }
 
 #' @rdname latex

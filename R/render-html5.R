@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #' @importFrom htmltools htmlEscape
-reference <- function(object)
+htmlreference <- function(object)
 {
   if(is.null(attr(object,"reference"))) "" else
     paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
@@ -259,7 +259,7 @@ html5.cell <- function(object, id, ..., class=NULL)
 
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"))),
-         ">", htmlEscape(x), reference(object), "</td>")
+         ">", htmlEscape(x), htmlreference(object), "</td>")
 }
 
 #' Convert an abstract cell_subheader object into an HTML5 string
@@ -329,7 +329,7 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              "<span class=\"variable\">",
              label,
              "</span>",
-             reference(object),
+             htmlreference(object),
              "</td>")
   else
       paste0("<td ",
@@ -341,7 +341,7 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              "<span class=\"units\">",
              htmlEscape(attr(object,"units")),
              "</span>",
-             reference(object),
+             htmlreference(object),
              "</td>")
 }
 
@@ -365,7 +365,7 @@ html5.cell_estimate <- function(object, id, ..., class=NULL)
             ">",
           htmlEscape(object[[1]]),
           " (",htmlEscape(paste0(object[[2]], collapse = ", ")),")",
-          reference(object),
+          htmlreference(object),
           "</td>")
 }
 
@@ -383,7 +383,7 @@ html5.cell_estimate <- function(object, id, ..., class=NULL)
 html5.cell_iqr <- function(object, id, ..., class=NULL)
 {
   idx <- index(object, id)
-  ref <- if(is.null(attr(object,"reference"))) "" else paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
+  ref <- if(is.null(attr(object,"htmlreference"))) "" else paste0("<sup>", htmlEscape(attr(object, "htmlreference")), "</sup>")
 
   mid <- floor(length(object)/2) + 1
   y <- as.character(object)
@@ -400,7 +400,7 @@ html5.cell_iqr <- function(object, id, ..., class=NULL)
          paste0("<span class=\"q25\">", htmlEscape(object[1:(mid-1)]), "</span>", collapse=""),
          "<span class=\"q50\">", htmlEscape(object[mid]), "</span>",
          paste0("<span class=\"q75\">", htmlEscape(object[(mid+1):length(object)]), "</span>", collapse=""),
-         reference(object))
+         htmlreference(object))
 
   if(is.null(z)) paste0(result, "</td>") else
   {
@@ -422,7 +422,7 @@ html5.cell_iqr <- function(object, id, ..., class=NULL)
 #'
 html5.cell_n <- function(object, id, ..., class=NULL)
 {
-  ref <- if(is.null(attr(object,"reference"))) "" else paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
+  ref <- if(is.null(attr(object,"htmlreference"))) "" else paste0("<sup>", htmlEscape(attr(object, "htmlreference")), "</sup>")
 
   idx <- index(object, id)
 
@@ -432,7 +432,7 @@ html5.cell_n <- function(object, id, ..., class=NULL)
          "><span class=\"N\">",
          htmlEscape(object),
          "</span>",
-         reference(object),
+         htmlreference(object),
          "</td>")
 }
 
@@ -460,7 +460,7 @@ html5.cell_fstat <- function(object, id, ..., class=NULL)
     object["F"], ",</span>",
     "<span class=\"pvalue\"><span class=\"description\">P = </span>",
     object["P"],
-    reference(object),
+    htmlreference(object),
     "</span>",
     "</td>"
   )
@@ -493,7 +493,7 @@ html5.cell_fraction <- function(object, id, ..., class=NULL)
            "<span class=\"percentage\">",  percentage, "</span>",
            "<span class=\"numerator\">",   num,        "</span>",
            "<span class=\"denominator\">", den,        "</span>",
-         "</span>",reference(object),"</td>")
+         "</span>",htmlreference(object),"</td>")
 }
 
 #' Convert an abstract cell_chi2 object into an HTML5 string
@@ -523,7 +523,7 @@ html5.cell_chi2 <- function(object, id, ..., class=NULL)
          ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
          object[3],
          "</span>",
-          reference(object),
+          htmlreference(object),
          "</td>"
   )
 }

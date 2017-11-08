@@ -40,7 +40,7 @@ latex(object, ...)
 
 \method{latex}{cell_fraction}(object, style = "", ...)
 
-\method{latex}{cell_chi2}(object, ...)
+\method{latex}{cell_chi2}(object, style = "", ...)
 
 \method{latex}{cell_studentt}(object, ...)
 
