@@ -21,24 +21,18 @@
 #'
 #' @param object The cell header to render to HTML5
 #' @param ... additional arguments to renderer. Unused
-#' @return A matrix or list of strings containing key, source and value
+#' @return A string containing the csv file
+#' @rdname csv
 #' @export
 csv <- function(object, ...)
 {
   UseMethod("csv", object)
 }
 
-#' Generate an an index from a tangram object
-#'
-#' Given a tangram class create an index representation.
-#'
-#' @param object The tangram for indexing
-#' @param id an additional specifier for the object key
-#' @param key.len numeric; length of keys generated (affects collision probability)
-#' @param ... additional arguments to renderer. Unused
-#' @return A matrix of strings containing key, source and value
+#' @param file File to write result into
+#' @param sep separator to use
+#' @rdname csv
 #' @export
-#'
 csv.tangram <- function(object, file=NULL, sep=',', ...)
 {
   nrows <- rows(object)
@@ -52,12 +46,32 @@ csv.tangram <- function(object, file=NULL, sep=',', ...)
     }),collapse=sep)
   }), collapse="\n")
 
-  result
+  if(!is.null(file)) write(result, file=file)
+
+  invisible(result)
 }
 
+#' @rdname csv
+#' @export
+csv.cell_subheader <- function(object, ...)
+{
+  if(nchar(object) < 1) object <- " "
+  paste0("\"_", object, "_\"")
+}
 
-csv.numeric   <- function(object, ...) as.character(object)
+#' @rdname csv
+#' @export
+csv.cell_header <- function(object, ...)
+{
+  if(nchar(object) < 1) object <- " "
+  paste0("\"**", object, "**\"")
+}
 
-csv.default <- function(object, ...) paste0("\"", object, "\"")
+#' @rdname csv
+#' @export
+csv.default <- function(object, ...) paste0("\"", summary(object), "\"", collapse='')
 
+#' @rdname csv
+#' @export
+csv.table_builder <- function(object,...) csv(table_flatten(object$table))
 
