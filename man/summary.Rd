@@ -12,6 +12,7 @@
 \alias{summary.cell_fraction}
 \alias{summary.cell_fstat}
 \alias{summary.cell_chi2}
+\alias{summary.cell_studentt}
 \title{The default method for rendering tangram objects
 A tangram is a summary, so it returns itself. Otherwise convert to a text representation.}
 \usage{
@@ -36,6 +37,8 @@ A tangram is a summary, so it returns itself. Otherwise convert to a text repres
 \method{summary}{cell_fstat}(object, ...)
 
 \method{summary}{cell_chi2}(object, ...)
+
+\method{summary}{cell_studentt}(object, ...)
 }
 \arguments{
 \item{object}{object; the item to render}

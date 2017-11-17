@@ -5,6 +5,9 @@
 \alias{csv.tangram}
 \alias{csv.cell_subheader}
 \alias{csv.cell_header}
+\alias{csv.cell_fstat}
+\alias{csv.cell_chi2}
+\alias{csv.cell_studentt}
 \alias{csv.default}
 \alias{csv.table_builder}
 \title{Generate an csv from a tangram or cell object}
@@ -16,6 +19,12 @@ csv(object, ...)
 \method{csv}{cell_subheader}(object, ...)
 
 \method{csv}{cell_header}(object, ...)
+
+\method{csv}{cell_fstat}(object, ...)
+
+\method{csv}{cell_chi2}(object, ...)
+
+\method{csv}{cell_studentt}(object, ...)
 
 \method{csv}{default}(object, ...)
 

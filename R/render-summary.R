@@ -185,6 +185,8 @@ summary.cell_chi2 <- function(object, ...)
   paste0("X^2_", object[2], "=", object[1], ", P=", object[3])
 }
 
+#' @rdname summary
+#' @export
 summary.cell_studentt <- function(object, ...)
 {
   paste0("t_", object[2], "=", object[1], ", P=", object[3])
