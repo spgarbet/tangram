@@ -337,7 +337,12 @@ tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA
     transforms <- list(
       Type = function(x) {"Data"}, # Short circuit data type determination
       Data = list(
-        Data = transforms
+        Data = transforms,
+        ASTMultiply = transforms
+      ),
+      ASTMultiply = list(
+        Data = transforms,
+        ASTMultiply = transforms
       )
     )
   }
