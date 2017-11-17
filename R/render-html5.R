@@ -249,6 +249,12 @@ html5.cell <- function(object, id, ..., class=NULL)
 {
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
 
+  if(is.null(class))
+  {
+    idx <- match("cell", base::class(object))
+    if(idx > 1) class <- base::class(object)[1:(idx-1)]
+  }
+
   x <- if(is.null(names(object)))
   {
     paste(object, collapse=sep)
