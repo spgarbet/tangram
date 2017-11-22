@@ -286,19 +286,19 @@ tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TR
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
   # Check for non-character
-  if(any(!cls %in% c("character", "NULL") ))
+  if(any(!cls %in% c("character", "NULL", "labelled") ))
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
     return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=quant, msd=msd, ...))
   }
 
-  roffset <- if(any(is.na(colheader))) 1 else 2
+  roffset <- 1 #if(any(is.na(colheader))) 1 else 2
   width   <- length(colnames(x)) + 1
   height  <- length(rownames(x)) + roffset
   tbl     <- tangram(height, width, FALSE)
 
-
-  if(!any(is.na(colheader))) tbl[[2]][[1]] <- cell_subheader("")
+  #FIXME: This needs to work with Hmisc Labels if possible
+  #if(!any(is.na(colheader))) tbl[[2]][[1]] <- cell_subheader("")
 
   sapply(2:width, FUN=function(col_idx) {
     if(any(is.na(colheader)))
@@ -306,7 +306,7 @@ tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TR
       tbl[[1]][[col_idx]] <<- cell_header(colnames(x)[col_idx-1])
     } else {
       tbl[[1]][[col_idx]] <<- cell_header(colheader[col_idx-1])
-      tbl[[2]][[col_idx]] <<- cell_subheader(colnames(x)[col_idx-1])
+      #tbl[[2]][[col_idx]] <<- cell_subheader(colnames(x)[col_idx-1])
     }
     sapply((roffset+1):height, FUN=function(row_idx) {
        tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(x[row_idx-roffset,col_idx-1]))
