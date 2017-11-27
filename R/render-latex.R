@@ -148,9 +148,21 @@ latex.cell_subheader <- function(object, ...)
 #' @export
 latex.cell_iqr <- function(object,...)
 {
-  paste0("{\\scriptsize ", latexify(object[1]), "}~\\textbf{",
-         latexify(object[2]),
-         "}~{\\scriptsize ", latexify(object[3]), "}", latexreference(object))
+  mid        <- floor(length(object)/2) + 1
+  ltx        <- sapply(object, latexify)
+  results    <- paste0(
+    "{\\scriptsize ",
+    ltx[1:(mid-1)],
+    "}~\\textbf{",
+    ltx[mid],"}~{\\scriptsize ",
+    ltx[(mid+1):length(ltx)], "}",
+    latexreference(object),
+    collapse=' '
+  )
+
+  z <- attr(object, "msd")
+
+  if(is.null(z)) results else paste0(results, ' ', z[1], '$\\pm$', z[2])
 }
 
 #' @rdname latex
