@@ -48,8 +48,8 @@ latex(object, ...)
 
 \method{latex}{tangram}(object, caption = "Table", footnote = NULL,
   fragment = TRUE, filename = NULL, append = FALSE, na.blank = TRUE,
-  cgroup.just = NULL, arraystretch = 1.2, pct_width = 1, style = "",
-  ...)
+  cgroup.just = NULL, arraystretch = 1.2, pct_width = 1,
+  placement = "H", style = "", ...)
 }
 \arguments{
 \item{object}{object; the item to render to latex}

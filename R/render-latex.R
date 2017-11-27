@@ -228,6 +228,7 @@ latex.tangram <- function(object,
                           cgroup.just=NULL,
                           arraystretch=1.2,
                           pct_width=1.0,
+                          placement="H",
                           style="",
                           ...)
 {
@@ -243,7 +244,7 @@ latex.tangram <- function(object,
   if(style=="nejm") result <- if(style=="nejm") paste0(result,
                                                       "\\definecolor{nejm-yellow}{RGB}{255,251,237}\n",
                                                       "\\definecolor{nejm-header}{RGB}{247,244,239}\n")
-  result <- paste0(result, "\\begin{table}[h!]\n\\centering\n")
+  result <- paste0(result, "\\begin{table}[",placement,"]\n\\centering\n")
 
   if(style=="nejm") result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
