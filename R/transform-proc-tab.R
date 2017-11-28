@@ -52,13 +52,28 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
   row_d <- data_node(row)
   col_d <- data_node(column)
   
-
   if(is.null(row_d) && is.null(col_d)) stop("No numerical term specified in formula")
   
   # Construct col header here
+  len    <- sapply(col_f, function(n) length(n$levels))
+  breaks <- cumprod(rev(len))
+  breaks <- c(rev(breaks[1:(length(breaks)-1)]), 1) 
+  for(i in 1:length(breaks)) col_f[[i]]$gap <- breaks[i] -1
+  reps <- len*breaks
+  reps <- reps[1]/reps
+  for(i in 1:length(breaks)) col_f[[i]]$rep <- reps[i]
+  hdrs <- lapply(col_f, function(i) {
+    rep(as.vector(sapply(i$levels, function(j) {
+      c(paste0(i$factor,":",j$name), rep("", i$gap))
+    })), i$rep)
+  })
+  
+  sapply(hdrs, function(i){
+    table <<- col_header(table, i)
+  })
   
   # Recursive application here?
-  
+
   # Function application depends on formula
   ele <- if(!is.null(row_d) && !is.null(col_d))
   {
