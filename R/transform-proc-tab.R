@@ -43,6 +43,43 @@ data_node <- function(node)
   }
 }
 
+construct_headers <- function(factors)
+{
+  # Figure out length of each factor
+  len    <- sapply(factors, function(n) length(n$levels))
+  # Determine size of breaks for each factor
+  breaks <- cumprod(rev(len))
+  breaks <- c(rev(breaks[1:(length(breaks)-1)]), 1) 
+  for(i in 1:length(breaks)) factors[[i]]$gap <- breaks[i] -1
+  # How many times each factor repeats based on length and breaks
+  reps <- len*breaks
+  reps <- reps[1]/reps
+  for(i in 1:length(breaks)) factors[[i]]$rep <- reps[i]
+  
+  # Now construct the lists of headers
+  hdrs <- lapply(factors, function(i) {
+    rep(as.vector(sapply(i$levels, function(j) {
+      c(j$name, rep("", i$gap))
+    })), i$rep)
+  })
+  
+  for(i in 1:length(hdrs)) {
+    hdrs[[i]][1] <- paste0(factors[[i]]$factor, ": ", hdrs[[i]][1])
+  }
+  
+  hdrs
+}
+
+construct_selectors <- function(factors)
+{
+  n      <- length(factors[[1]]$levels[[1]]$selector)
+  levels <- lapply(factors, function(i) sapply(i$levels, function(j) j$selector))
+  Reduce(x=levels,
+         init=list(rep(TRUE, n)),
+         f=function(i,j) {
+    
+  })
+}
 
 proc_tab <- function(table, row, column, fun=NULL, ...)
 {
@@ -54,35 +91,24 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
   
   if(is.null(row_d) && is.null(col_d)) stop("No numerical term specified in formula")
   
-  # Construct col header here
-  len    <- sapply(col_f, function(n) length(n$levels))
-  breaks <- cumprod(rev(len))
-  breaks <- c(rev(breaks[1:(length(breaks)-1)]), 1) 
-  for(i in 1:length(breaks)) col_f[[i]]$gap <- breaks[i] -1
-  reps <- len*breaks
-  reps <- reps[1]/reps
-  for(i in 1:length(breaks)) col_f[[i]]$rep <- reps[i]
-  hdrs <- lapply(col_f, function(i) {
-    rep(as.vector(sapply(i$levels, function(j) {
-      c(paste0(i$factor,":",j$name), rep("", i$gap))
-    })), i$rep)
-  })
+  sapply(construct_headers(column), function(i) table <<- col_header(table, i))
   
-  sapply(hdrs, function(i){
-    table <<- col_header(table, i)
+  sapply(construct_selectors(row_f), function(row){
+    sapply(construct_selectors(col_f), function(col) {
+      
+    })
   })
   
   # Recursive application here?
 
   # Function application depends on formula
-  ele <- if(!is.null(row_d) && !is.null(col_d))
+  elm <- if(!is.null(row_d) && !is.null(col_d))
   {
     fun(row_d, col_d, selector)
   } else {
     if(is.null(row_d)) fun(col_d, selector) else fun(row_d, selector)
   }
-  
-  ele <- if("cell" %in% class(ele)) ele else cell(ele)
+  elm <- if("cell" %in% class(elm)) elm else cell(elm)
   
   table
 }
