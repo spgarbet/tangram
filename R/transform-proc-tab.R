@@ -83,6 +83,7 @@ construct_selectors <- function(factors)
   })
 }
 
+#' @export
 proc_tab <- function(table, row, column, fun=NULL, ...)
 {
   row_f <- node_2_factors(row)
@@ -93,9 +94,17 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
 
   if(is.null(row_d) && is.null(col_d)) stop("No numerical term specified in formula")
 
-  sapply(construct_headers(column), function(i) table <<- col_header(table, i))
+  sapply(construct_headers(col_f), function(i) table <<- col_header(table, i))
 
-  sapply(construct_selectors(row_f), function(row){
+  row_hdrs <- construct_headers(row_f)
+  row_selc <- construct_selectors(row_f)
+
+  for(i in 1:length(row_hdrs))
+  {
+    row <- row_selc[,i]
+
+    table <- row_header(table, sapply(row_hdrs, function(j) j[i]))
+
     sapply(construct_selectors(col_f), function(col) {
       selector <- row & col
 
@@ -110,8 +119,8 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
 
       table <<- add_col(table, elm)
     })
-    table <<- new_row(table)
-  })
+    table <- new_line(table)
+  }
 
   table
 }
