@@ -8,13 +8,13 @@ node_2_factors <- function(node)
     l <- node_2_factors(node$left)
     if(is.null(l)) return(NULL)
     r <- node_2_factors(node$right)
-    if(is.null(r)) return(list(l))
+    if(is.null(r)) return(l)
 
-    if("factor" %in% names(r)) list(l,r) else c(list(l), r)
+    if("factor" %in% names(r)) list(l,r) else c(l, r)
   } else {
     if(hmisc_data_type(node$data) == "Numerical") return(NULL)
 
-    list(
+    list(list(
       factor=derive_label(node),
       levels=lapply(levels(factor(node$data)), function(x)
       {
@@ -23,7 +23,7 @@ node_2_factors <- function(node)
             name     = as.character(x),
             selector = node$data == x
           )
-      })
+      }))
     )
   }
 }
@@ -48,7 +48,7 @@ construct_headers <- function(factors)
   len    <- sapply(factors, function(n) length(n$levels))
   # Determine size of breaks for each factor
   breaks <- cumprod(rev(len))
-  breaks <- c(rev(breaks[1:(length(breaks)-1)]), 1)
+  breaks <- if(length(breaks) > 1) c(rev(breaks[1:(length(breaks)-1)]), 1) else 1
   for(i in 1:length(breaks)) factors[[i]]$gap <- breaks[i] -1
   # How many times each factor repeats based on length and breaks
   reps <- len*breaks
@@ -98,6 +98,7 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
 
   row_hdrs <- construct_headers(row_f)
   row_selc <- construct_selectors(row_f)
+  col_selc <- construct_selectors(col_f)
 
   for(i in 1:length(row_hdrs))
   {
@@ -105,8 +106,9 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
 
     table <- row_header(table, sapply(row_hdrs, function(j) j[i]))
 
-    sapply(construct_selectors(col_f), function(col) {
-      selector <- row & col
+    for(j in 1:(dim(col_selc)[2]))
+    {
+      selector <- row & col_selc[,j]
 
       # Function application depends on formula
       elm <- if(!is.null(row_d) && !is.null(col_d))
@@ -117,8 +119,8 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
       }
       elm <- if("cell" %in% class(elm)) elm else cell(elm)
 
-      table <<- add_col(table, elm)
-    })
+      table <- add_col(table, elm)
+    }
     table <- new_line(table)
   }
 
