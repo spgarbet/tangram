@@ -100,7 +100,7 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
   row_selc <- construct_selectors(row_f)
   col_selc <- construct_selectors(col_f)
 
-  for(i in 1:length(row_hdrs))
+  for(i in 1:length(row_hdrs[[1]]))
   {
     row <- row_selc[,i]
 
