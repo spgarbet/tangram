@@ -62,9 +62,9 @@ construct_headers <- function(factors)
     })), i$rep)
   })
 
-  for(i in 1:length(hdrs)) {
-    hdrs[[i]][1] <- paste0(factors[[i]]$factor, ": ", hdrs[[i]][1])
-  }
+  #for(i in 1:length(hdrs)) {
+  #  hdrs[[i]][1] <- paste0(factors[[i]]$factor, ": ", hdrs[[i]][1])
+  #}
 
   hdrs
 }
@@ -73,7 +73,7 @@ construct_selectors <- function(factors)
 {
   n      <- length(factors[[1]]$levels[[1]]$selector)
   levels <- lapply(factors, function(i) sapply(i$levels, function(j) j$selector))
-  Reduce(x=levels,
+  result <- Reduce(x=levels,
          init=matrix(rep(TRUE, n)),
          f=function(i,j) {
      di <- dim(i)[2]
@@ -81,6 +81,7 @@ construct_selectors <- function(factors)
      #matrix(rep(i, dim(j)[2]), nrow=dim(i)[1]) & matrix(rep(j, dim(i)[2]), nrow=dim(i)[1])
      i[,rep(1:di, each=dj)] & j[,rep(1:dj, times=di)]
   })
+  as.matrix(result)
 }
 
 #' @export
