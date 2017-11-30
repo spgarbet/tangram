@@ -85,7 +85,7 @@ construct_selectors <- function(factors)
 }
 
 #' @export
-proc_tab <- function(table, row, column, fun=NULL, ...)
+proc_tab <- function(table, row, column, fun=NULL, overall=FALSE, ...)
 {
   row_f <- node_2_factors(row)
   col_f <- node_2_factors(column)
@@ -95,33 +95,49 @@ proc_tab <- function(table, row, column, fun=NULL, ...)
 
   if(is.null(row_d) && is.null(col_d)) stop("No numerical term specified in formula")
 
-  sapply(construct_headers(col_f), function(i) table <<- col_header(table, i))
+  col_hdrs <- construct_headers(col_f)
+  for(i in 1:length(col_hdrs))
+  {
+    table <- if(i == 1) {
+      if(overall) col_header(table, "N", col_hdrs[[i]], "Overall")  else col_header(table, "N", col_hdrs[[i]])
+    } else {
+      if(overall) col_header(table, "", col_hdrs[[i]], "") else col_header(table, "", col_hdrs[[i]])
+    }
+  }
 
   row_hdrs <- construct_headers(row_f)
   row_selc <- construct_selectors(row_f)
   col_selc <- construct_selectors(col_f)
+  
+  table <- row_header(table, cell_header(derive_label(row_d)), rep("", length(row_hdrs)))
+  table <- add_col(table, rep("", (dim(col_selc)[2])+(if(overall) 2 else 1)))
+  table <- new_row(table)
+  
+  # Define the function of the selector (Tricky due to multiple cases of col/row)
+  g <- function(selc)
+  {
+    elm <- if(!is.null(row_d) && !is.null(col_d))
+    {
+      fun(row_d, col_d, selc)
+    } else {
+      if(is.null(row_d)) fun(col_d, selc) else fun(row_d, selc)
+    }
+    if("cell" %in% class(elm)) elm else cell(elm)
+  }
 
+  # Now load the cells with the proc func execution
   for(i in 1:length(row_hdrs[[1]]))
   {
     row <- row_selc[,i]
 
-    table <- row_header(table, sapply(row_hdrs, function(j) j[i]))
+    table <- row_header(table, "", sapply(row_hdrs, function(j) cell_subheader(j[i])))
+    
+    table <- add_col(table, cell_n(sum(row,na.rm=TRUE)))
 
-    for(j in 1:(dim(col_selc)[2]))
-    {
-      selector <- row & col_selc[,j]
-
-      # Function application depends on formula
-      elm <- if(!is.null(row_d) && !is.null(col_d))
-      {
-        fun(row_d, col_d, selector)
-      } else {
-        if(is.null(row_d)) fun(col_d, selector) else fun(row_d, selector)
-      }
-      elm <- if("cell" %in% class(elm)) elm else cell(elm)
-
-      table <- add_col(table, elm)
-    }
+    for(j in 1:(dim(col_selc)[2])) table <- add_col(table, g(row & col_selc[,j]))
+    
+    if(overall) table <- add_col(table, g(row))
+    
     table <- new_line(table)
   }
 
