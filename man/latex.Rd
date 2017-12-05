@@ -36,7 +36,7 @@ latex(object, ...)
 
 \method{latex}{cell_estimate}(object, ...)
 
-\method{latex}{cell_fstat}(object, ...)
+\method{latex}{cell_fstat}(object, style = "", ...)
 
 \method{latex}{cell_fraction}(object, style = "", ...)
 

@@ -174,9 +174,12 @@ latex.cell_estimate <- function(object,...)
 
 #' @rdname latex
 #' @export
-latex.cell_fstat <- function(object,...)
+latex.cell_fstat <- function(object,style="",...)
 {
-  paste0("$F_{",object[2],",",object[3],"}=",object[1],",~P=",object[4],"$", latexreference(object))
+  if(style=="nejm")
+    paste0("$",object[4],"$", latexreference(object))
+  else
+    paste0("$F_{",object[2],",",object[3],"}=",object[1],",~P=",object[4],"$", latexreference(object))
 }
 
 #' @rdname latex

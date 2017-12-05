@@ -2486,7 +2486,7 @@ latexify <- function(x)
   {
     if( (i %% 2) == 0)
     {
-      pieces[i] <- paste0("\\[", pieces[i], "\\]")
+      pieces[i] <- paste0("$", pieces[i], "$")
     } else # Odd, run gsub conversions
     {
       for (subst in gsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
