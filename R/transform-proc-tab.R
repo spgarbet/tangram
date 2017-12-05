@@ -132,7 +132,9 @@ proc_tab <- function(table, row, column, fun=NULL, overall=FALSE, ...)
 
     table <- row_header(table, "", sapply(row_hdrs, function(j) cell_subheader(j[i])))
     
-    table <- add_col(table, cell_n(sum(row,na.rm=TRUE)))
+    n <- sum(apply(col_selc, 1, any) & row, na.rm=TRUE)
+    
+    table <- add_col(table, cell_n(n))
 
     for(j in 1:(dim(col_selc)[2])) table <- add_col(table, g(row & col_selc[,j]))
     

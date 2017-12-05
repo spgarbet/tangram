@@ -95,7 +95,12 @@ summarize_kruskal_horz <- function(table,
   table_builder_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
-     add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
+     if(sum(!is.na(x)) > 0) {
+       add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
+     } else {
+       add_col(tbl, "")
+     }
+     
   })
 
   if(test) tbl <- add_col(tbl, stat)
