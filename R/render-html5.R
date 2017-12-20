@@ -265,7 +265,13 @@ html5.cell <- function(object, id, ..., class=NULL)
 
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"))),
-         ">", htmlEscape(x), htmlreference(object), "</td>")
+         ">", my_html_escape(x), htmlreference(object), "</td>")
+}
+
+#' @importFrom htmltools htmlEscape
+my_html_escape <- function(x)
+{
+  gsub("\\^(.)\\^", "<sup>\\1</sup>", htmlEscape(x), fixed=FALSE)
 }
 
 #' Convert an abstract cell_subheader object into an HTML5 string
@@ -277,7 +283,6 @@ html5.cell <- function(object, id, ..., class=NULL)
 #' @param class additional class attributes for CSS rendering
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given subheader as a <td> with several <span>'s.
-#' @importFrom htmltools htmlEscape
 #' @export
 html5.cell_subheader <- function(object, id, ..., class=NULL)
 {
@@ -295,7 +300,6 @@ html5.cell_subheader <- function(object, id, ..., class=NULL)
 #' @param class additional class attributes for CSS rendering
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given subheader as a <td> with several <span>'s.
-#' @importFrom htmltools htmlEscape
 #' @export
 html5.cell_header <- function(object, id, ..., class=NULL)
 {
@@ -319,12 +323,11 @@ html5.cell_header <- function(object, id, ..., class=NULL)
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given label as a <td> with several <span>'s.
-#' @importFrom htmltools htmlEscape
 #' @export
 html5.cell_label <- function(object, id, ..., class=NULL)
 {
   # Turn leading spaces into a set of non breaking html space
-  label <- gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", htmlEscape(object))
+  label <- gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", my_html_escape(object))
   # Turn "*" for interaction terms into a break
   label <- gsub("\\*", "&times;<br/>&nbsp;&nbsp;", label)
 
@@ -345,7 +348,7 @@ html5.cell_label <- function(object, id, ..., class=NULL)
              label,
              "</span>",
              "<span class=\"units\">",
-             htmlEscape(attr(object,"units")),
+             my_html_escape(attr(object,"units")),
              "</span>",
              htmlreference(object),
              "</td>")
@@ -369,8 +372,8 @@ html5.cell_estimate <- function(object, id, ..., class=NULL)
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
             " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             ">",
-          htmlEscape(object[[1]]),
-          " (",htmlEscape(paste0(object[[2]], collapse = ", ")),")",
+          my_html_escape(object[[1]]),
+          " (",my_html_escape(paste0(object[[2]], collapse = ", ")),")",
           htmlreference(object),
           "</td>")
 }
@@ -403,14 +406,14 @@ html5.cell_iqr <- function(object, id, ..., class=NULL)
       paste0("<td class=\"", attr(object, "parity"),"\"><span ",
          html5_class(c(class, attr(object, "parity"), "data", "quantile")),
          ">",
-         paste0("<span class=\"q25\">", htmlEscape(object[1:(mid-1)]), "</span>", collapse=""),
-         "<span class=\"q50\">", htmlEscape(object[mid]), "</span>",
-         paste0("<span class=\"q75\">", htmlEscape(object[(mid+1):length(object)]), "</span>", collapse=""),
+         paste0("<span class=\"q25\">", my_html_escape(object[1:(mid-1)]), "</span>", collapse=""),
+         "<span class=\"q50\">", my_html_escape(object[mid]), "</span>",
+         paste0("<span class=\"q75\">", my_html_escape(object[(mid+1):length(object)]), "</span>", collapse=""),
          htmlreference(object))
 
   if(is.null(z)) paste0(result, "</td>") else
   {
-    paste0(result, '<br/><span>', htmlEscape(z[1]), '&plusmn;', htmlEscape(z[2]), "</span></td>")
+    paste0(result, '<br/><span>', my_html_escape(z[1]), '&plusmn;', my_html_escape(z[2]), "</span></td>")
   }
 }
 
@@ -436,7 +439,7 @@ html5.cell_n <- function(object, id, ..., class=NULL)
          html5_class(c(class, attr(object, "parity"), "data", "N")),
          " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
          "><span class=\"N\">",
-         htmlEscape(object),
+         my_html_escape(object),
          "</span>",
          htmlreference(object),
          "</td>")
