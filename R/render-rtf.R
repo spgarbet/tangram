@@ -148,11 +148,20 @@ rtf.cell_iqr <- function(object, id, ..., point=9)
   large <- paste0("\\fs", round(point*2.0), " ")
 
   mid   <- floor(length(object)/2) + 1
-  paste0("{",
-                 small, paste0(object[1:(mid-1)], collapse=''),
-         " \\b", large, paste0(object[mid], collapse=''),
-         " \\b0",small, paste0(object[(mid+1):length(object)], collapse=''),
-         "}")
+  # Hmisc style
+  # paste0("{",
+  #                small, paste0(object[1:(mid-1)], collapse=''),
+  #        " \\b", large, paste0(object[mid], collapse=''),
+  #        " \\b0",small, paste0(object[(mid+1):length(object)], collapse=''),
+  #        "}")
+  paste0(
+    paste0(object[mid], collapse=''),
+    " [",
+    paste0(object[1:(mid-1)], collapse=''),
+    ", ",
+    paste0(object[(mid+1):length(object)], collapse=''),
+    "]"
+  )
 }
 
 
