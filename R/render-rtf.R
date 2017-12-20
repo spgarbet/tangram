@@ -405,5 +405,5 @@ rtf.tangram <- function(
 
   if(!is.na(filename)) cat(result, file=filename, append=append)
 
-  result
+  invisible(result)
 }
