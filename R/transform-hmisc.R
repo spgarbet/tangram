@@ -22,7 +22,7 @@
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
-#' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall logical; Include overall summary statistics for a categorical column
@@ -50,7 +50,7 @@ summarize_kruskal_horz <- function(table,
                                    test=TRUE,
                                    ...)
 {
-  if(is.null(pformat)) pformat <- "%1.3f"
+  pformat <- pfunc(pformat)
 
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
@@ -80,7 +80,7 @@ summarize_kruskal_horz <- function(table,
     cell_fstat(f         = render_f(stat['F'], "%.2f"),
                df1       = stat['df1'],
                df2       = stat['df2'],
-               p         = render_f(stat['P'], pformat),
+               p         = pformat(stat['P']),
                reference = "1")
   }
 
@@ -100,7 +100,7 @@ summarize_kruskal_horz <- function(table,
      } else {
        add_col(tbl, "")
      }
-     
+
   })
 
   if(test) tbl <- add_col(tbl, stat)
@@ -116,7 +116,7 @@ summarize_kruskal_horz <- function(table,
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
-#' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall logical; Include overall summary statistics for a categorical column
@@ -144,7 +144,7 @@ summarize_nejm_horz <-    function(table,
                                    test=TRUE,
                                    ...)
 {
-  if(is.null(pformat)) pformat <- "%1.3f"
+  pformat <- pfunc(pformat)
 
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
@@ -174,7 +174,7 @@ summarize_nejm_horz <-    function(table,
     cell_fstat(f         = render_f(stat['F'], "%.2f"),
                df1       = stat['df1'],
                df2       = stat['df2'],
-               p         = render_f(stat['P'], pformat),
+               p         = pformat(stat['P']),
                reference = "1")
   }
 
@@ -215,13 +215,13 @@ summarize_nejm_horz <-    function(table,
 #' @param table The table object to modify
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (numerical)
-#' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
 summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, ...)
 {
-  if(is.null(pformat)) pformat <- "%1.3f"
+  pformat <- pfunc(pformat)
 
   datar      <- as.categorical(row$data)
   datac      <- column$data
@@ -232,7 +232,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
   fstat <- cell_fstat(f   = render_f(stat['F'], "%.2f"),
                       df1 = stat['df1'],
                       df2 = stat['df2'],
-                      p   = render_f(stat['P'], pformat),
+                      p   = pformat(stat['P']),
                       reference = "1")
 
   tbl <- if(test) col_header(table, "N", derive_label(column), "Test Statistic") else
@@ -264,7 +264,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
 #' @param table The table object to modify
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (categorical)
-#' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param overall logical; Include the overall summary column
 #' @param ... absorbs extra parameters. Currently unused.
@@ -280,7 +280,7 @@ summarize_chisq <- function(table,
                             row_percents=FALSE,
                             ...)
 {
-  if(is.null(pformat)) pformat <- "%1.3f"
+  pformat <- pfunc(pformat)
 
   grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
@@ -390,13 +390,13 @@ summarize_chisq <- function(table,
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (numerical)
-#' @param pformat numeric or character; A formatting directive to be applied to p-values
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param ... absorbs additional arguments. Unused at present.
 #' @return The modified table object
 #' @export
 summarize_spearman <- function(table, row, column, pformat=NULL, test=TRUE, ...)
 {
-  if(is.null(pformat)) pformat <- "%1.3f"
+  pformat <- pfunc(pformat)
 
   datar <- row$data
   datac <- column$data
@@ -416,7 +416,7 @@ summarize_spearman <- function(table, row, column, pformat=NULL, test=TRUE, ...)
   tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
   tbl <- add_col(tbl, render_f(stat$estimate, row$format))
 
-  if(test) tbl <- add_col(tbl, cell(stat, pformat=pformat))
+  if(test) tbl <- add_col(tbl, cell(pformat(stat)))
 
   tbl
 }
