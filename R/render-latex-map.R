@@ -6,7 +6,6 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -59,7 +58,7 @@ gsub_table <- list(
   c("\u00AD", "\\\\-"),
   c("\u00AE", "\\\\textregistered{}"),
   c("\u00AF", "\\\\textasciimacron{}"),
-  c("\u00B0", "$\\\\textdegree{}$"),
+  c("\u00B0", "\\\\textdegree{}"),
   c("\u00B1", "$\\\\pm{}$"),
   c("\u00B2", "${^2}$"),
   c("\u00B3", "${^3}$"),
@@ -840,7 +839,7 @@ gsub_table <- list(
   c("\u2214", "\\\\dotplus{}"),
   c("\u2216", "\\\\setminus{}"),
   c("\u2217", "\\\\textasteriskcentered{}"),
-  c("\u2218", "\\\\circ{}"),
+  c("\u2218", "$\\\\circ{}$"),
   c("\u2219", "\\\\bullet{}"),
   c("\u221A", "\\\\surd{}"),
   c("\u221D", "\\\\propto{}"),

@@ -306,7 +306,8 @@ latex.tangram <- function(object,
 
   result <- paste0(result, "\\caption{",latexify(caption),"}\n")
 
-  if(nchar(footnote) > 0) result <- paste0(result, "\n\n",footnote,"\n")
+  if(nchar(footnote) > 0) result <- paste0(result, "\n\n\\vspace{0.2cm}\n\\raggedright{\\begin{footnotesize}",footnote,"\\end{footnotesize}}\n")
+
   result <- paste0(result, "\\end{table}\n")
 
   if(!fragment) result <- paste0(result, "\\end{document}\n")
