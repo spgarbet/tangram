@@ -15,7 +15,7 @@ tangram(x, ...)
 \method{tangram}{numeric}(x, cols, embedded = FALSE, ...)
 
 \method{tangram}{data.frame}(x, colheader = NA, ..., quant = seq(0, 1,
-  0.25), msd = TRUE)
+  0.25), msd = TRUE, as.character = NULL)
 
 \method{tangram}{formula}(x, data, transforms = hmisc_style, after = NA,
   digits = NA, ...)

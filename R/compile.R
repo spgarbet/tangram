@@ -282,43 +282,45 @@ tangram.numeric <- function(x, cols, embedded=FALSE, ...)
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TRUE)
+tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TRUE, as.character=NULL)
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
+
+  if(is.null(as.character)) as.character <- !any(!cls %in% c("character", "NULL", "labelled"))
+
   # Check for non-character
-  if(any(!cls %in% c("character", "NULL", "labelled") ))
+  if(!as.character)
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
     return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=quant, msd=msd, ...))
   }
 
-  roffset <- 1 #if(any(is.na(colheader))) 1 else 2
   width   <- length(colnames(x)) + 1
-  height  <- length(rownames(x)) + roffset
+  height  <- length(rownames(x)) + 1
   tbl     <- tangram(height, width, FALSE)
-
-  #FIXME: This needs to work with Hmisc Labels if possible
-  #if(!any(is.na(colheader))) tbl[[2]][[1]] <- cell_subheader("")
 
   sapply(2:width, FUN=function(col_idx) {
     if(any(is.na(colheader)))
     {
-      tbl[[1]][[col_idx]] <<- cell_header(colnames(x)[col_idx-1])
+      lbl <- attr(x[,col_idx-1], "label")
+      if(is.null(lbl)) lbl <- colnames(x)[col_idx-1]
+      tbl[[1]][[col_idx]] <<- cell_header(lbl)
     } else {
       tbl[[1]][[col_idx]] <<- cell_header(colheader[col_idx-1])
-      #tbl[[2]][[col_idx]] <<- cell_subheader(colnames(x)[col_idx-1])
     }
-    sapply((roffset+1):height, FUN=function(row_idx) {
-       tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(x[row_idx-roffset,col_idx-1]))
+    sapply(2:height, FUN=function(row_idx) {
+       tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(x[row_idx-1,col_idx-1]))
     })
   })
 
   if(any(rownames(x) != as.character(1:(height - 1))))
   {
     tbl[[1]][[1]] <- cell_header("")
-    sapply((roffset+1):height, FUN=function(row_idx) {
-      tbl[[row_idx]][[1]] <<- cell_header(rownames(x)[row_idx-roffset])
+    sapply(2:height, FUN=function(row_idx) {
+      tbl[[row_idx]][[1]] <<- cell_header(rownames(x)[row_idx-1])
     })
+  } else {
+    tbl <- del_col(tbl, 1)
   }
 
   tbl
