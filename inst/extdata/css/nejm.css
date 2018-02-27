@@ -49,6 +49,8 @@ body .figbody {
 .quantile {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 .quantile .q50 {
   order: 1;
@@ -58,7 +60,7 @@ body .figbody {
 .quantile .q25 {
   order: 2
 }
-.quantile .q75:before {content: ",";}
+.quantile .q75:before {content: ", ";}
 .quantile .q75 {order: 3}
 .quantile .q75:after {content: ")";}
 tbody .variable {
@@ -77,6 +79,8 @@ tbody .variable {
 .fraction {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 .fraction .numerator   { order: 1 }
 .fraction .denominator:before {content: "/";}

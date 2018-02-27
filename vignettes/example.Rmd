@@ -20,6 +20,8 @@ code.r{
 pre {
   font-size: 10px
 }
+
+#tbl3 .statistic {display: none;}
 </style>
 
 ```{r setup, include=FALSE}
