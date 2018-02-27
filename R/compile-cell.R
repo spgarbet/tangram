@@ -23,7 +23,16 @@ pfunc <- function(pformat)
 
   function(p)
   {
-    render_f(p, pformat)
+    if(is.na(p) || is.nan(p) || p <0 || p>1) return("NA")
+
+    y <- render_f(p, pformat)
+
+    # Check for all zeros once formated
+    test <- grep("[^0\\.]+", y)
+    if(length(test) > 0) return(y) # It's good!
+
+    # Otherwise, append less than
+    paste0("<", substr(y, 1, nchar(y)-1), "1")
   }
 }
 
