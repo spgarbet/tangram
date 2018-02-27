@@ -244,7 +244,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
   table_builder_apply(categories, FUN=function(tbl, category) {
     x <- datac[datar == category]
     tbl                                                  %>%
-    row_header(category)                                 %>%
+    row_header(paste0("  ", category))                   %>%
     add_col(cell(length(x), subcol=category))            %>%
     add_col(cell_iqr(x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
