@@ -416,7 +416,7 @@ summarize_spearman <- function(table, row, column, pformat=NULL, test=TRUE, ...)
   tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
   tbl <- add_col(tbl, render_f(stat$estimate, row$format))
 
-  if(test) tbl <- add_col(tbl, cell(stat))
+  if(test) tbl <- add_col(tbl, cell(stat, pformat=pformat))
 
   tbl
 }

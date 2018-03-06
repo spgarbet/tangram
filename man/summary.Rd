@@ -6,6 +6,7 @@
 \alias{summary.table_builder}
 \alias{summary.cell}
 \alias{summary.cell_label}
+\alias{summary.cell_spearman}
 \alias{summary.cell_iqr}
 \alias{summary.cell_range}
 \alias{summary.cell_estimate}
@@ -25,6 +26,8 @@ A tangram is a summary, so it returns itself. Otherwise convert to a text repres
 \method{summary}{cell}(object, ...)
 
 \method{summary}{cell_label}(object, ...)
+
+\method{summary}{cell_spearman}(object, ...)
 
 \method{summary}{cell_iqr}(object, ...)
 
