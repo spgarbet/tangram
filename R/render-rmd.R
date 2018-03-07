@@ -173,8 +173,6 @@ rmd.tangram <- function(object, key=FALSE, ...)
   cat(gsub("-\\|", ":|", gsub("[^\\|]", "-", pasty[1])), '\n')
 
   for(row in pasty[2:nrows]) cat(row, '\n')
-
-  pasty
 }
 
 #' @rdname summary
