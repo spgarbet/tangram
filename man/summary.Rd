@@ -17,7 +17,7 @@
 \title{The default method for rendering tangram objects
 A tangram is a summary, so it returns itself. Otherwise convert to a text representation.}
 \usage{
-\method{rmd}{table_builder}(object, ...)
+\method{rmd}{table_builder}(object, key = FALSE, ...)
 
 \method{summary}{tangram}(object, ...)
 

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+word_ref <- function(idx) paste(idx$index, idx$src)
 
 # Helper function to copy source attributes used in key generation
 # from y, to x and returns modified x.

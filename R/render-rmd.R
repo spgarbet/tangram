@@ -18,9 +18,24 @@
 # Given the compiled tree of data, render as a text rmd
 #' @include compile-cell.R
 
-rmd.default <- function(object,...) paste0(as.character(object), collapse=", ")
+#' Generate an Rmd table entry from a cell object
+#'
+#' Given a cell object generate the corresponding piece of an Rmd table
+#'
+#' @param object The cell_fstat for indexing
+#' @param ... additional arguments to renderer. Unused
+#' @return A string representation of the table
+#' @export
+rmd <- function(object, key=FALSE, ...)
+{
+  UseMethod("rmd", object)
+}
 
-rmd.cell <- function(object, ...)
+#' @export
+rmd.default <- function(object, key=FALSE, ...) paste0(as.character(object), collapse=", ")
+
+#' @export
+rmd.cell <- function(object, key=FALSE, ...)
 {
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
 
@@ -33,52 +48,87 @@ rmd.cell <- function(object, ...)
   }
 }
 
-rmd.cell_iqr <- function(object,...)
+#' @export
+rmd.cell_iqr <- function(object, key=FALSE, ...)
 {
-  paste0(object[1],
-         " **", object[2], "** ",
-         object[3])
+  if(key)
+  {
+    idx <- index(object, ...)
+    paste0("((",    object[1], "))%", word_ref(idx[[1]]), "%",
+           " **((", object[2], "))%", word_ref(idx[[2]]), "%** ",
+           "((",    object[3], "))%", word_ref(idx[[3]]), "%"
+           )
+  } else
+  {
+    paste0(object[1],
+           " **", object[2], "** ",
+           object[3])
+  }
 }
 
-
-rmd.cell_estimate <- function(object,...)
+#' @export
+rmd.cell_estimate <- function(object, key=FALSE, ...)
 {
   paste0("(", rmd(object[1]), ", ", rmd(object[2]), ")")
 }
 
-rmd.cell_fstat <- function(object,...)
+#' @export
+rmd.cell_fstat <- function(object, key=FALSE, ...)
 {
   paste0("F~",object[2],",",object[3],"~=",object[1],", P=",object[4])
 }
 
-rmd.cell_fraction <- function(object,...)
+#' @export
+rmd.cell_fraction <- function(object, key=FALSE, ...)
 {
   den <- object["denominator"]
   num <- paste0(rep("", nchar(den) - nchar(object["numerator"])), object["numerator"])
   paste0(object["ratio"], "  ", num,"/",den)
 }
 
-rmd.cell_chi2 <- function(object,...)
+#' @export
+rmd.cell_chi2 <- function(object, key=FALSE, ...)
 {
-  paste0("X^2^~", object[2], "~=", object[1], ", P=", object[3])
+  if(key)
+  {
+    idx <- index(object, ...)
+    paste0("X^2^~((", object[2], "))%", word_ref(idx[[2]]), "%",
+           "~=((", object[1], "))%",    word_ref(idx[[1]]), "%",
+           ", P=((", object[3], "))%",  word_ref(idx[[3]]), "%")
+  } else
+  {
+    paste0("X^2^~", object[2],
+           "~=", object[1],
+           ", P=", object[3])
+  }
 }
 
-rmd.cell_studentt <- function(object,...)
+#' @export
+rmd.cell_studentt <- function(object, key=FALSE, ...)
 {
+  idx <- index(object, key=FALSE, ...)
+
   paste0("T~",object[2],"~=",object[1], ", P=",object[3])
 }
 
-rmd.cell_spearman <- function(object,...)
+#' @export
+rmd.cell_spearman <- function(object, key=FALSE, ...)
 {
   paste0("S=",object[1],", P=",object[1])
 }
 
-rmd.cell_n <- function(object,...)
+#' @export
+rmd.cell_n <- function(object, key=FALSE, ...)
 {
-  if (inherits(object, "cell_header"))
-    paste0("(N=",as.character(object),")")
-  else
+  rep <- if(key)
+  {
+    idx <- index(object, ...)
+    paste0("((", as.character(object), "))%", word_ref(idx[[1]]), "%")
+  } else
+  {
     as.character(object)
+  }
+  if (inherits(object, "cell_header")) paste0("(N=",rep,")") else rep
 }
 
 #' Generate an Rmd table entry from a tangram object
@@ -91,7 +141,7 @@ rmd.cell_n <- function(object,...)
 #' @export
 #'
 #' @importFrom stringr str_pad
-rmd.tangram <- function(object,...)
+rmd.tangram <- function(object, key=FALSE, ...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -102,7 +152,7 @@ rmd.tangram <- function(object,...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- rmd(object[[row]][[col]])
+      text[row,col] <<- rmd(object[[row]][[col]], key=key, ...)
     })
   })
 
@@ -124,27 +174,14 @@ rmd.tangram <- function(object,...)
 
   for(row in pasty[2:nrows]) cat(row, '\n')
 
-}
-
-#' Generate an Rmd table entry from a cell object
-#'
-#' Given a cell object generate the corresponding piece of an Rmd table
-#'
-#' @param object The cell_fstat for indexing
-#' @param ... additional arguments to renderer. Unused
-#' @return A string representation of the table
-#' @export
-#'
-rmd <- function(object, ...)
-{
-  UseMethod("rmd", object)
+  pasty
 }
 
 #' @rdname summary
 #' @export
-rmd.table_builder <- function(object,...)
+rmd.table_builder <- function(object, key=FALSE, ...)
 {
-  rmd(table_flatten(object$table))
+  rmd(table_flatten(object$table), key=key, ...)
 }
 
 

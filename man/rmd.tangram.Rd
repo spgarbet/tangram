@@ -4,7 +4,7 @@
 \alias{rmd.tangram}
 \title{Generate an Rmd table entry from a tangram object}
 \usage{
-\method{rmd}{tangram}(object, ...)
+\method{rmd}{tangram}(object, key = FALSE, ...)
 }
 \arguments{
 \item{object}{The cell_fstat for indexing}
