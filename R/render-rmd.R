@@ -48,7 +48,7 @@ rmd.cell_estimate <- function(object,...)
 
 rmd.cell_fstat <- function(object,...)
 {
-  paste0("F<sub>",object[2],",",object[3],"</sub>=",object[1],", P=",object[4])
+  paste0("F~",object[2],",",object[3],"~=",object[1],", P=",object[4])
 }
 
 rmd.cell_fraction <- function(object,...)
@@ -60,7 +60,7 @@ rmd.cell_fraction <- function(object,...)
 
 rmd.cell_chi2 <- function(object,...)
 {
-  paste0("\u03a7^2^~", object[2], "~=", object[1], ", P=", object[3])
+  paste0("X^2^~", object[2], "~=", object[1], ", P=", object[3])
 }
 
 rmd.cell_studentt <- function(object,...)
