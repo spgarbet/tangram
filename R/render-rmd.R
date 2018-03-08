@@ -92,8 +92,8 @@ rmd.cell_chi2 <- function(object, key=FALSE, ...)
   if(key)
   {
     idx <- index(object, ...)
-    paste0("X^2^~((", object[2], "))%", word_ref(idx[[2]]), "%",
-           "~=((", object[1], "))%",    word_ref(idx[[1]]), "%",
+    paste0("X((~", object[2], "~))%", word_ref(idx[[2]]), "%^2^",
+           "=((", object[1], "))%",    word_ref(idx[[1]]), "%",
            ", P=((", object[3], "))%",  word_ref(idx[[3]]), "%")
   } else
   {
