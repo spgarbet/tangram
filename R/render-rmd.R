@@ -141,7 +141,7 @@ rmd.cell_n <- function(object, key=FALSE, ...)
 #' @export
 #'
 #' @importFrom stringr str_pad
-rmd.tangram <- function(object, key=FALSE, ...)
+rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -152,7 +152,7 @@ rmd.tangram <- function(object, key=FALSE, ...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- rmd(object[[row]][[col]], key=key, ...)
+      text[row,col] <<- rmd(object[[row]][[col]], key=!is.null(key), ...)
     })
   })
 
@@ -173,6 +173,8 @@ rmd.tangram <- function(object, key=FALSE, ...)
   cat(gsub("-\\|", ":|", gsub("[^\\|]", "-", pasty[1])), '\n')
 
   for(row in pasty[2:nrows]) cat(row, '\n')
+
+  if(!is.null(key)) write.csv(index(object, ...), key, colnames=FALSE, append=append)
 }
 
 #' @rdname summary
