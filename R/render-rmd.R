@@ -174,7 +174,7 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
 
   for(row in pasty[2:nrows]) cat(row, '\n')
 
-  if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.name=FALSE, append=append, sep=",")
+  if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.name=FALSE, append=append, sep=",", quote=FALSE)
 }
 
 #' @rdname summary
