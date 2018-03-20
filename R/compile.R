@@ -309,7 +309,18 @@ tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TR
       tbl[[1]][[col_idx]] <<- cell_header(colheader[col_idx-1])
     }
     sapply(2:height, FUN=function(row_idx) {
-       tbl[[row_idx]][[col_idx]] <<- cell_label(trimws(x[row_idx-1,col_idx-1]))
+      if(col_idx > 2)
+      {
+        tbl[[row_idx]][[col_idx]] <<- cell(
+          trimws(x[row_idx-1,col_idx-1],which="right"),
+          class="data",
+          parity=ifelse(row_idx %% 2==0, "even", "odd"))
+      } else
+      {
+        tbl[[row_idx]][[col_idx]] <<- cell_header(
+          trimws(x[row_idx-1,col_idx-1],which="right"),
+          parity=ifelse(row_idx %% 2==0, "even", "odd"))
+      }
     })
   })
 

@@ -323,11 +323,18 @@ html5.cell_header <- function(object, id, ..., class=NULL)
 #' @param ... additional arguments to renderer. Unused
 #' @param class An additional class attribute for the HTML5 element
 #' @return A text string rendering of the given label as a <td> with several <span>'s.
+#' @importFrom stringr str_match
 #' @export
 html5.cell_label <- function(object, id, ..., class=NULL)
 {
   # Turn leading spaces into a set of non breaking html space
-  label <- gsub("^\\s+", "&nbsp;&nbsp;&nbsp;&nbsp;", my_html_escape(object))
+  leading <- nchar(stringr::str_match(object, "^\\s+")[1,1])
+  if(is.na(leading)) leading <- 0
+  leading <- ceiling(leading/2)
+
+  label <- gsub("^\\s+",
+                paste0(rep("&nbsp;&nbsp;&nbsp;&nbsp;", leading), collapse=""),
+                my_html_escape(object))
   # Turn "*" for interaction terms into a break
   label <- gsub("\\*", "&times;<br/>&nbsp;&nbsp;", label)
 
