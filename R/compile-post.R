@@ -121,3 +121,42 @@ hmisc_intercept_cleanup <- function(table)
 
   del_row(table, 2)
 }
+
+#' Add indentations to left column row headers
+#'
+#' Add indentations to left column row headers. Note: will only work on cell_header cells.
+#'
+#' @param table Output of tangram::tangram()
+#' @param positions numeric; A vector of numeric row numbers for the rows that need to be indented. Defaults to NULL which indents all.
+#' @param amounts numeric; Specifies number of spaces to add. A vector that is either a single value or vector of the same size as the height of the table. If positions is specified then it must be the same length. Defaults to 2, which each pair of spaces converts naturally in rendering to HTML, LaTeX, etc..
+#' @return the modified table
+#' @export
+#' @examples
+#' x <- tangram(drug ~ bili + albumin, pbc)
+#' add_indent(x)
+#' add_indent(x, amounts=10)
+#' add_indent(x, amounts=c(0, 0, 2, 4))
+#' add_indent(x, positions=c(3))
+#' add_indent(x, positions=c(3, 4), amounts=c(4, 2))
+add_indent <- function(table, positions=NULL, amounts=2)
+{
+  if(!is.null(positions) && length(amounts) > 1 && length(positions) != length(amounts)) stop("tangram::add_indent positions length must match amounts length")
+  if(is.null(positions)) positions <- 1:length(table)
+  if(length(amounts) == 1) amounts <- rep(amounts, length(positions))
+  for(i in 1:length(positions))
+  {
+    position <- positions[i]
+    amount   <- amounts[i]
+
+    if("cell_header" %in% class(table[[position]][[1]]) && nchar(table[[position]][[1]]) > 0)
+    {
+      x <- paste0(paste(rep(" ", amount), collapse=""), table[[position]][[1]])
+      class(x) <- class(table[[position]][[1]])
+      attributes(x) <- attributes(table[[position]][[1]])
+
+      table[[position]][[1]] <- x
+    }
+  }
+
+  table
+}
