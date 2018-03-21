@@ -376,12 +376,16 @@ cbind.tangram <- function(..., deparse.level=1)
   x
 }
 
-#
-# #' @export
-# cbind.table_builder <- function(..., deparse.level=1)
-# {
-#
-# }
+#' Provide a "|" operator for cbind of tangram tables
+#'
+#' The pipe operator provides an cbind for tangram tables
+#'
+#' @param x left argument for rbind
+#' @param y right argument for rbind
+#' @return A column wise merged tangram object
+#' @export
+"|.tangram" <- function(x, y) cbind(x,y)
+
 
 #' An rbind for generated tables tangram objects.
 #'
@@ -410,9 +414,12 @@ rbind.tangram <- function(..., deparse.level=1)
   x
 }
 
-#' #' @export
-#' rbind.table_builder <- function(..., deparse.level=1)
-#' {
+#' Provide a "+" operator for rbind of tangram tables
 #'
-#' }
-
+#' The plus operator provides an rbind for tangram tables
+#'
+#' @param x left argument for rbind
+#' @param y right argument for rbind
+#' @return A row wise merged tangram object
+#' @export
+"+.tangram" <- function(x, y) rbind(x,y)
