@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile-operators.R
 \name{rbind.tangram}
 \alias{rbind.tangram}
-\title{An rbind for generated tables}
+\title{An rbind for generated tables tangram objects.}
 \usage{
 \method{rbind}{tangram}(..., deparse.level = 1)
 }

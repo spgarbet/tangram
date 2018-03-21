@@ -345,12 +345,37 @@ add_row <- function(table_builder, ...)
     cursor_down()
   })
 }
-#
-# #' @export
-# cbind.tangram <- function(..., deparse.level=1)
-# {
-#
-# }
+
+#' A cbind for generated table tangram objects.
+#'
+#' Execute the equivalent of an cbind for generated tables
+#'
+#' @param ... tangram objects to cbind
+#' @param deparse.level numeric; not used
+#' @return A merged tangram object
+#' @export
+cbind.tangram <- function(..., deparse.level=1)
+{
+  elements <- list(...)
+
+  x <- elements[[1]]
+
+  for(i in 2:length(elements))
+  {
+    z <- elements[[i]]
+    len <- length(z)
+
+    if(len != length(x)) warning("Mismatched row size in cbind.tangram")
+
+    for(j in 1:len)
+    {
+      x[[j]] <- c(x[[j]], z[[j]])
+    }
+  }
+
+  x
+}
+
 #
 # #' @export
 # cbind.table_builder <- function(..., deparse.level=1)
@@ -358,7 +383,7 @@ add_row <- function(table_builder, ...)
 #
 # }
 
-#' An rbind for generated tables
+#' An rbind for generated tables tangram objects.
 #'
 #' Execute the equivalent of an rbind for generated tables
 #'
