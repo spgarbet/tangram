@@ -179,7 +179,7 @@ html5.tangram <- function(object, id=NA, caption=NA, css=NA, fragment=TRUE, inli
   }
   footnote <- if(is.na(footnote)) "" else
   {
-    paste("<div class=\"footnote\">", footnote, "</div>", sep='')
+    paste("<div class=\"footnote\">", paste(footnote, collapse=" "), "</div>", sep='')
   }
 
   footnote <- gsub("\\^(.)\\^", "<sup>\\1</sup>", footnote, fixed=FALSE)
