@@ -83,7 +83,7 @@ del_row <- function(table, row)
 insert_row <- function(table, after, ...)
 {
   # Get the cells from ..., and make sure they are cells
-  cells <- sapply(list(...), FUN=function(x) if("cell" %in% class(x)) x else cell(x))
+  cells <- lapply(list(...), FUN=function(x) if("cell" %in% class(x)) x else cell(x))
   N     <- length(table)
 
   # Check for mismatch in arguments
