@@ -71,6 +71,39 @@ del_row <- function(table, row)
   table
 }
 
+#' Insert a row into a tangram table
+#'
+#' Insert a row into a tangram table. Will fill with empty cells is not enough cells are specified.
+#'
+#' @param table the table to modify
+#' @param after numeric; The row to position the new row after. Can be zero for inserting a new first row.
+#' @param ... Table cells to insert. Cannot be larger than existing table.
+#' @return the modified table
+#' @export
+insert_row <- function(table, after, ...)
+{
+  # Get the cells from ..., and make sure they are cells
+  cells <- sapply(list(...), FUN=function(x) if("cell" %in% class(x)) x else cell(x))
+  N     <- length(table)
+
+  # Check for mismatch in arguments
+  if(length(cells) > N) stop("tangram::insert_row() number of cells provided larger than current row size")
+  if(after > N) stop("tangram::insert_row() after parameter larger than number of rows")
+  if(after < 0) stop("tangram::insert_row() negative after row")
+
+  # Make room
+  if(after < N) for(i in N:(after+1)) table[[i+1]] <- table[[i]]
+
+  # Fill in blanks
+  N <- length(table[[1]])
+  if(length(cells) < N) for(i in (length(cells)+1):N) cells[[i]] <- cell_label("")
+
+  # Put in the row
+  table[[after+1]] <- cells
+
+  table
+}
+
 #' Drop all statistics columns from a table.
 #'
 #' Delete from a table all columns that contain statistics
