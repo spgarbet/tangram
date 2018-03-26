@@ -162,6 +162,7 @@ hmisc_intercept_cleanup <- function(table)
 #' @param table Output of tangram::tangram()
 #' @param positions numeric; A vector of numeric row numbers for the rows that need to be indented. Defaults to NULL which indents all.
 #' @param amounts numeric; Specifies number of spaces to add. A vector that is either a single value or vector of the same size as the height of the table. If positions is specified then it must be the same length. Defaults to 2, which each pair of spaces converts naturally in rendering to HTML, LaTeX, etc..
+#' @param columns numeric; Column to apply indent to, defaults to 1
 #' @return the modified table
 #' @export
 #' @examples
@@ -171,7 +172,7 @@ hmisc_intercept_cleanup <- function(table)
 #' add_indent(x, amounts=c(0, 0, 2, 4))
 #' add_indent(x, positions=c(3))
 #' add_indent(x, positions=c(3, 4), amounts=c(4, 2))
-add_indent <- function(table, positions=NULL, amounts=2)
+add_indent <- function(table, positions=NULL, amounts=2, columns=1)
 {
   if(!is.null(positions) && length(amounts) > 1 && length(positions) != length(amounts)) stop("tangram::add_indent positions length must match amounts length")
   if(is.null(positions)) positions <- 1:length(table)
@@ -181,13 +182,16 @@ add_indent <- function(table, positions=NULL, amounts=2)
     position <- positions[i]
     amount   <- amounts[i]
 
-    if("cell_header" %in% class(table[[position]][[1]]) && nchar(table[[position]][[1]]) > 0)
+    for(column in columns)
     {
-      x <- paste0(paste(rep(" ", amount), collapse=""), table[[position]][[1]])
-      class(x) <- class(table[[position]][[1]])
-      attributes(x) <- attributes(table[[position]][[1]])
+      if(nchar(table[[position]][[column]]) > 0)
+      {
+        x <- paste0(paste(rep(" ", amount), collapse=""), table[[position]][[column]])
+        class(x) <- class(table[[position]][[column]])
+        attributes(x) <- attributes(table[[position]][[column]])
 
-      table[[position]][[1]] <- x
+        table[[position]][[column]] <- x
+      }
     }
   }
 
