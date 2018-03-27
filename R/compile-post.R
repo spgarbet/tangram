@@ -172,25 +172,27 @@ hmisc_intercept_cleanup <- function(table)
 #' add_indent(x, amounts=c(0, 0, 2, 4))
 #' add_indent(x, positions=c(3))
 #' add_indent(x, positions=c(3, 4), amounts=c(4, 2))
-add_indent <- function(table, positions=NULL, amounts=2, columns=1)
+add_indent <- function(table, amounts=2, rows=NULL, columns=NULL)
 {
-  if(!is.null(positions) && length(amounts) > 1 && length(positions) != length(amounts)) stop("tangram::add_indent positions length must match amounts length")
-  if(is.null(positions)) positions <- 1:length(table)
-  if(length(amounts) == 1) amounts <- rep(amounts, length(positions))
-  for(i in 1:length(positions))
+  if(!is.null(rows) && length(amounts) > 1 && length(rows) != length(amounts)) stop("tangram::add_indent rows length must match amounts length")
+  if(is.null(rows)) rows <- 1:length(table) # Defaults to all rows
+  if(is.null(columns)) columns <- 1 # Defaults to first column
+
+  if(length(amounts) == 1) amounts <- rep(amounts, length(rows))
+  for(i in 1:length(rows))
   {
-    position <- positions[i]
-    amount   <- amounts[i]
+    row     <- rows[i]
+    amount  <- amounts[i]
 
     for(column in columns)
     {
-      if(nchar(table[[position]][[column]]) > 0)
+      if(nchar(table[[row]][[column]]) > 0)
       {
-        x <- paste0(paste(rep(" ", amount), collapse=""), table[[position]][[column]])
-        class(x) <- class(table[[position]][[column]])
-        attributes(x) <- attributes(table[[position]][[column]])
+        x <- paste0(paste(rep(" ", amount), collapse=""), table[[row]][[column]])
+        class(x) <- class(table[[row]][[column]])
+        attributes(x) <- attributes(table[[row]][[column]])
 
-        table[[position]][[column]] <- x
+        table[[row]][[column]] <- x
       }
     }
   }

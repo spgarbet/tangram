@@ -271,7 +271,15 @@ html5.cell <- function(object, id, ..., class=NULL)
 #' @importFrom htmltools htmlEscape
 my_html_escape <- function(x)
 {
-  gsub("\\^(.)\\^", "<sup>\\1</sup>", htmlEscape(x), fixed=FALSE)
+  # Turn leading spaces into a set of non breaking html space
+  leading <- nchar(stringr::str_match(x, "^\\s+")[1,1])
+  if(is.na(leading)) leading <- 0
+  leading <- ceiling(leading/2)
+
+  gsub("^\\s+",
+    paste0(rep("&nbsp;&nbsp;&nbsp;&nbsp;", leading), collapse=""),
+    gsub("\\^(.)\\^", "<sup>\\1</sup>", htmlEscape(x), fixed=FALSE),
+    fixed=FALSE)
 }
 
 #' Convert an abstract cell_subheader object into an HTML5 string
