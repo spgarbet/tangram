@@ -467,20 +467,19 @@ cell.aov <- function(x, pformat="%1.3f", ...)
 #' cell(cor.test(rnorm(10), rnorm(10)))
 #' cell(chisq.test(rpois(10,1)))
 #' cell(t.test(rnorm(10), rnorm(10)))
-cell.htest <- function(x, format=2, pformat="%1.3f", reference=NULL, ...)
+cell.htest <- function(x, format=2, pformat="%1.3f", ...)
 {
   pformat <- pfunc(pformat)
 
   #reference <- if(is.null(reference)) "" else paste0("^^",reference, "^^")
   if(names(x$statistic) == "X-squared")
-    cell_chi2(render_f(x$statistic, format), x$parameter[1], pformat(x$p.value), reference=reference, ...)
+    cell_chi2(render_f(x$statistic, format), x$parameter[1], pformat(x$p.value), ...)
   else if(x$method == "Spearman's rank correlation rho")
-    cell_spearman(as.character(x$statistic), render_f(x$estimate,format), pformat(x$p.value), reference=reference, ...)
+    cell_spearman(as.character(x$statistic), render_f(x$estimate,format), pformat(x$p.value), ...)
   else if(names(x$statistic) == "V") # wilcox.test
     cell(paste0("V=", x$statistic, ", P=", pformat(x$p.value)),
-         reference=reference,
          class="statistics", ...)
   else
-    cell_studentt(render_f(x$statistic, format), render_f(x$parameter[1],format), pformat(x$p.value), reference=reference...)
+    cell_studentt(render_f(x$statistic, format), render_f(x$parameter[1],format), pformat(x$p.value), ...)
 }
 

@@ -4,16 +4,16 @@
 \alias{add_indent}
 \title{Add indentations to left column row headers}
 \usage{
-add_indent(table, positions = NULL, amounts = 2, columns = 1)
+add_indent(table, amounts = 2, rows = NULL, columns = NULL)
 }
 \arguments{
 \item{table}{Output of tangram::tangram()}
 
-\item{positions}{numeric; A vector of numeric row numbers for the rows that need to be indented. Defaults to NULL which indents all.}
-
 \item{amounts}{numeric; Specifies number of spaces to add. A vector that is either a single value or vector of the same size as the height of the table. If positions is specified then it must be the same length. Defaults to 2, which each pair of spaces converts naturally in rendering to HTML, LaTeX, etc..}
 
 \item{columns}{numeric; Column to apply indent to, defaults to 1}
+
+\item{positions}{numeric; A vector of numeric row numbers for the rows that need to be indented. Defaults to NULL which indents all.}
 }
 \value{
 the modified table
@@ -26,6 +26,6 @@ x <- tangram(drug ~ bili + albumin, pbc)
 add_indent(x)
 add_indent(x, amounts=10)
 add_indent(x, amounts=c(0, 0, 2, 4))
-add_indent(x, positions=c(3))
-add_indent(x, positions=c(3, 4), amounts=c(4, 2))
+add_indent(x, rows=c(3))
+add_indent(x, rows=c(3, 4), amounts=c(4, 2))
 }

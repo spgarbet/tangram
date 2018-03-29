@@ -380,8 +380,10 @@ cbind.tangram <- function(..., deparse.level=1)
 #'
 #' The pipe operator provides an cbind for tangram tables
 #'
+#' @name pipe.tangram
 #' @param x left argument for rbind
 #' @param y right argument for rbind
+#' @rdname pipe.tangram
 #' @return A column wise merged tangram object
 #' @export
 "|.tangram" <- function(x, y) cbind(x,y)

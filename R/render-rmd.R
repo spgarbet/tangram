@@ -25,16 +25,19 @@
 #' @param object The cell_fstat for indexing
 #' @param ... additional arguments to renderer. Unused
 #' @return A string representation of the table
+#' @rdname rmd
 #' @export
 rmd <- function(object, key=FALSE, ...)
 {
   UseMethod("rmd", object)
 }
 
+#' @rdname rmd
 #' @export
 rmd.default <- function(object, key=FALSE, ...) paste0(as.character(object), collapse=", ")
 
 #' @export
+#' @rdname rmd
 rmd.cell <- function(object, key=FALSE, ...)
 {
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
@@ -49,6 +52,7 @@ rmd.cell <- function(object, key=FALSE, ...)
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_iqr <- function(object, key=FALSE, ...)
 {
   if(key)
@@ -67,18 +71,21 @@ rmd.cell_iqr <- function(object, key=FALSE, ...)
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_estimate <- function(object, key=FALSE, ...)
 {
   paste0("(", rmd(object[1]), ", ", rmd(object[2]), ")")
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_fstat <- function(object, key=FALSE, ...)
 {
   paste0("F~",object[2],",",object[3],"~=",object[1],", P=",object[4])
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_fraction <- function(object, key=FALSE, ...)
 {
   den <- object["denominator"]
@@ -87,6 +94,7 @@ rmd.cell_fraction <- function(object, key=FALSE, ...)
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_chi2 <- function(object, key=FALSE, ...)
 {
   if(key)
@@ -104,6 +112,7 @@ rmd.cell_chi2 <- function(object, key=FALSE, ...)
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_studentt <- function(object, key=FALSE, ...)
 {
   idx <- index(object, key=FALSE, ...)
@@ -112,12 +121,14 @@ rmd.cell_studentt <- function(object, key=FALSE, ...)
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_spearman <- function(object, key=FALSE, ...)
 {
   paste0("S=",object[1],", P=",object[1])
 }
 
 #' @export
+#' @rdname rmd
 rmd.cell_n <- function(object, key=FALSE, ...)
 {
   rep <- if(key)
@@ -131,16 +142,12 @@ rmd.cell_n <- function(object, key=FALSE, ...)
   if (inherits(object, "cell_header")) paste0("(N=",rep,")") else rep
 }
 
-#' Generate an Rmd table entry from a tangram object
-#'
-#' Given a tangram object generate the corresponding piece of an Rmd table
-#'
-#' @param object The cell_fstat for indexing
-#' @param ... additional arguments to renderer. Unused
-#' @return A string representation of the table
+
+#' @rdname rmd
 #' @export
 #'
 #' @importFrom stringr str_pad
+#' @importFrom utils write.table
 rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
 {
   nrows <- rows(object)
@@ -174,10 +181,10 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
 
   for(row in pasty[2:nrows]) cat(row, '\n')
 
-  if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.name=FALSE, append=append, sep=",", quote=FALSE)
+  if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.names=FALSE, append=append, sep=",", quote=FALSE)
 }
 
-#' @rdname summary
+#' @rdname rmd
 #' @export
 rmd.table_builder <- function(object, key=FALSE, ...)
 {
