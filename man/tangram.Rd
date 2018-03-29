@@ -39,6 +39,12 @@ tangram(x, ...)
 
 \item{colheader}{character; Use as column headers in final table}
 
+\item{quant}{numeric; A vector of quantiles to use for summaries}
+
+\item{msd}{logical; Include mean and standard deviation in numeric summary}
+
+\item{as.character}{logical; if true data.frames all variables are passed through as.character and no numerical summary is provided.}
+
 \item{data}{data.frame; data to use for rendering tangram object}
 
 \item{transforms}{list of lists of functions; that contain the transformation to apply for summarization}

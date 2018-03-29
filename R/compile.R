@@ -241,12 +241,15 @@ cell_create_table <- function(ast, transforms, digits, ...)
 #'
 #' @param x object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows, an rms.model
 #' @param after function or list of functions; one or more functions to further process an abstract table
+#' @param as.character logical; if true data.frames all variables are passed through as.character and no numerical summary is provided.
 #' @param colheader character; Use as column headers in final table
 #' @param cols numeric; An integer of the number of cols to create
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
 #' @param embedded logical; Will this table be embedded inside another
 #' @param footnote character; A string to add to the table as a footnote.
+#' @param quant numeric; A vector of quantiles to use for summaries
+#' @param msd logical; Include mean and standard deviation in numeric summary
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization
 #' @param rnd.digits numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.
 #' @param rnd.stats numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.

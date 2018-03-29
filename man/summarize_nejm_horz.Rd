@@ -22,6 +22,8 @@ summarize_nejm_horz(table, row, column, pformat = NULL, msd = FALSE,
 
 \item{overall}{logical; Include overall summary statistics for a categorical column}
 
+\item{test}{logical; include statistical test results}
+
 \item{...}{absorbs additional arugments. Unused at present.}
 }
 \value{

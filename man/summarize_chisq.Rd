@@ -20,6 +20,10 @@ summarize_chisq(table, row, column, pformat = NULL, collapse_single = TRUE,
 
 \item{overall}{logical; Include the overall summary column}
 
+\item{test}{logical; include statistical test results}
+
+\item{row_percents}{logical; use denominator across rows instead of columns.}
+
 \item{...}{absorbs extra parameters. Currently unused.}
 }
 \value{

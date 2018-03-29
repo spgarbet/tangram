@@ -15,6 +15,8 @@ summarize_spearman(table, row, column, pformat = NULL, test = TRUE, ...)
 
 \item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
 
+\item{test}{logical; include statistical test results}
+
 \item{...}{absorbs additional arguments. Unused at present.}
 }
 \value{

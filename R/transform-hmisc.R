@@ -26,6 +26,7 @@
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall logical; Include overall summary statistics for a categorical column
+#' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -120,6 +121,7 @@ summarize_kruskal_horz <- function(table,
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall logical; Include overall summary statistics for a categorical column
+#' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -216,6 +218,7 @@ summarize_nejm_horz <-    function(table,
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (numerical)
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
+#' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -267,6 +270,8 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param overall logical; Include the overall summary column
+#' @param test logical; include statistical test results
+#' @param row_percents logical; use denominator across rows instead of columns.
 #' @param ... absorbs extra parameters. Currently unused.
 #' @return The modified table object
 #' @export
@@ -391,6 +396,7 @@ summarize_chisq <- function(table,
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (numerical)
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
+#' @param test logical; include statistical test results
 #' @param ... absorbs additional arguments. Unused at present.
 #' @return The modified table object
 #' @export
