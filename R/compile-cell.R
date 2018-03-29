@@ -458,7 +458,6 @@ cell.aov <- function(x, pformat="%1.3f", ...)
 #' @param x The htest object to convert to a rendereable cell
 #' @param format numeric or character; A formatting directive applied to statistics
 #' @param pformat numeric or character; A formatting directive to be applied to p-values
-#' @param reference numeric or character; A reference indicator for this test
 #' @param ... additional specifiers for identifying this cell (see key)
 #' @return an S3 rendereable cell that is a hypothesis test
 #' @export

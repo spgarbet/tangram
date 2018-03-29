@@ -14,8 +14,6 @@
 \item{pformat}{numeric or character; A formatting directive to be applied to p-values}
 
 \item{...}{additional specifiers for identifying this cell (see key)}
-
-\item{reference}{numeric or character; A reference indicator for this test}
 }
 \value{
 an S3 rendereable cell that is a hypothesis test

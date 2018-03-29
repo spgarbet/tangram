@@ -15,18 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #######
-# Given the compiled tree of data, render as a text rmd
-#' @include compile-cell.R
-
 #' Generate an Rmd table entry from a cell object
 #'
 #' Given a cell object generate the corresponding piece of an Rmd table
 #'
+#' @include compile-cell.R
 #' @param object The cell_fstat for indexing
+#' @param key A filename to write key values into. Can be false if no key file is desired.
+#' @param append logical; Should the key file be appended too, or overwritten
 #' @param ... additional arguments to renderer. Unused
 #' @return A string representation of the table
 #' @rdname rmd
 #' @export
+#' @examples
+#'  rmd(tangram(drug ~ bili, pbc))
 rmd <- function(object, key=FALSE, ...)
 {
   UseMethod("rmd", object)

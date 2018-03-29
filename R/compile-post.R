@@ -160,7 +160,7 @@ hmisc_intercept_cleanup <- function(table)
 #' Add indentations to left column row headers. Note: will only work on cell_header cells.
 #'
 #' @param table Output of tangram::tangram()
-#' @param positions numeric; A vector of numeric row numbers for the rows that need to be indented. Defaults to NULL which indents all.
+#' @param rows numeric; A vector of numeric row numbers for the rows that need to be indented. Defaults to NULL which indents all.
 #' @param amounts numeric; Specifies number of spaces to add. A vector that is either a single value or vector of the same size as the height of the table. If positions is specified then it must be the same length. Defaults to 2, which each pair of spaces converts naturally in rendering to HTML, LaTeX, etc..
 #' @param columns numeric; Column to apply indent to, defaults to 1
 #' @return the modified table
