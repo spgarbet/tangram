@@ -56,6 +56,8 @@ latex(object, ...)
 
 \item{...}{additional arguments}
 
+\item{style}{character; can be null or "nejm" for different table styling}
+
 \item{caption}{character; Caption to display on table}
 
 \item{footnote}{character; Footnote to include on table}
@@ -71,6 +73,10 @@ latex(object, ...)
 \item{cgroup.just}{character; The text of the column justification used in the table}
 
 \item{arraystretch}{numeric; The arraystretch parameter used for vertical spacing}
+
+\item{pct_width}{numeric; a scaling to be applied to the entire table}
+
+\item{placement}{character; placement directive, defaults to "H"}
 }
 \value{
 the LaTeX rendering

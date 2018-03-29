@@ -34,6 +34,9 @@ latexreference <- function(object)
 #' @param na.blank logical; Should NA's be displayed as blanks
 #' @param cgroup.just character; The text of the column justification used in the table
 #' @param arraystretch numeric; The arraystretch parameter used for vertical spacing
+#' @param style character; can be null or "nejm" for different table styling
+#' @param pct_width numeric; a scaling to be applied to the entire table
+#' @param placement character; placement directive, defaults to "H"
 #' @param ... additional arguments
 #' @return the LaTeX rendering
 #' @include compile-cell.R
