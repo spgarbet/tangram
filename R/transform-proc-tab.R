@@ -84,6 +84,16 @@ construct_selectors <- function(factors)
   as.matrix(result)
 }
 
+#' Tangram transform for proc_tab style summaries via a function
+#'
+#' Given a function that produces a vector of tangram cells, will generate a table
+#'
+#' @param table The table builder object
+#' @param row The row from the abstract syntax tree that parsed the formula
+#' @param column The column from the abstract syntax tree that parsed the formula
+#' @param fun The function to apply to the broken out categories
+#' @param overall Provide a summary of categorical breakdowns
+#' @param ... additional arguments to pass to fun
 #' @export
 proc_tab <- function(table, row, column, fun=NULL, overall=FALSE, ...)
 {
@@ -108,17 +118,17 @@ proc_tab <- function(table, row, column, fun=NULL, overall=FALSE, ...)
   row_hdrs <- construct_headers(row_f)
   row_selc <- construct_selectors(row_f)
   col_selc <- construct_selectors(col_f)
-  
+
   table <- row_header(table, cell_header(derive_label(row_d)), rep("", length(row_hdrs)))
   table <- add_col(table, rep("", (dim(col_selc)[2])+(if(overall) 2 else 1)))
   table <- new_row(table)
-  
+
   # Define the function of the selector (Tricky due to multiple cases of col/row)
   g <- function(selc)
   {
     elm <- if(!is.null(row_d) && !is.null(col_d))
     {
-      fun(row_d, col_d, selc)
+      fun(row_d, col_d, selc, ...)
     } else {
       if(is.null(row_d)) fun(col_d, selc) else fun(row_d, selc)
     }
@@ -131,15 +141,15 @@ proc_tab <- function(table, row, column, fun=NULL, overall=FALSE, ...)
     row <- row_selc[,i]
 
     table <- row_header(table, "", sapply(row_hdrs, function(j) cell_subheader(j[i])))
-    
+
     n <- sum(apply(col_selc, 1, any) & row, na.rm=TRUE)
-    
+
     table <- add_col(table, cell_n(n))
 
     for(j in 1:(dim(col_selc)[2])) table <- add_col(table, g(row & col_selc[,j]))
-    
+
     if(overall) table <- add_col(table, g(row))
-    
+
     table <- new_line(table)
   }
 
