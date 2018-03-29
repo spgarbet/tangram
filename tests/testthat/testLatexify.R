@@ -43,8 +43,9 @@ test_that("header 6",            expect_true(latexify("###### big stuff")   == "
 test_that("regex specials",      expect_true(latexify(".?+()-")             == ".?+()-"))
 
 # Test that things between dollar signs are ignored
-test_that("Escapes math", {
-  expect_true(latexify("blah \\* $a^{23}_{\\cos(\\theta)}$ blah \\$") ==
-              "blah \\ast{} \\[a^{23}_{\\cos(\\theta)}\\] blah \\textdollar{}")
-})
+# This approach is now in question, and slated for refactoring and a deeper pass.
+#test_that("Escapes math", {
+#  expect_true(latexify("blah \\* $a^{23}_{\\cos(\\theta)}$ blah \\$") ==
+#              "blah \\ast{} \\[a^{23}_{\\cos(\\theta)}\\] blah \\textdollar{}")
+#})
 
