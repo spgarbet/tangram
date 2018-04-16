@@ -234,7 +234,7 @@ cell_iqr <- function(x,
   if(is.na(format)) format <- format_guess(y)
   ql <- sapply(y, function(x) render_f(x, format))
   if(msd) attr(ql, "msd") <- c(render_f(mean(x, na.rm=TRUE), format),
-                               render_f(sd(x, na.rm=TRUE) / sqrt(length(x)), format))
+                               render_f(sd(x, na.rm=TRUE), format))
   cell(ql, class="cell_iqr", ...)
 }
 
