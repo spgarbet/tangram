@@ -37,7 +37,7 @@ gsub_table <- list(
 # Defered till all escaped characters are handled
 #  c("\\\u005C", "\\\\textbackslash{}"),
   c("\\\\\\\u005E", "\\\\textasciicircum{}"),
-  c("\\\\\\\u005F", "\\\\_"),
+  c("\u005F", "\\\\_"),
   c("\\\\\\\u0060", "\\\\textasciigrave{}"),
   c("\\\u007C", "\\\\vert{}"),
   c("\\\\\\\u007E", "\\\\textasciitilde{}"),
