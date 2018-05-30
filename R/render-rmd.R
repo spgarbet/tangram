@@ -91,7 +91,7 @@ rmd.cell_fstat <- function(object, key=FALSE, ...)
 rmd.cell_fraction <- function(object, key=FALSE, ...)
 {
   den <- object["denominator"]
-  num <- paste0(rep("", nchar(den) - nchar(object["numerator"])), object["numerator"])
+  num <- object["numerator"]
   paste0(object["ratio"], "  ", num,"/",den)
 }
 
