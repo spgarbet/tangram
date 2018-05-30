@@ -176,6 +176,8 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
     }
   })
 
+  cat('\n')
+
   pasty <- apply(text, 1, function(x) paste(c("|", paste(x, collapse="|"), "|"), collapse=""))
 
   cat(pasty[1], '\n')
