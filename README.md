@@ -1,6 +1,7 @@
 # A Grammar of Tables 'tangram'
 
 ## Release Notes
+Jun 4 2018  v0.4 Numerous bug fixes. The package was used for DSMB report submissions to the FDA, and several examples of IRR and other wonderful things have been produced. The full shakedown is complete, and fixes and updates are becoming smaller and smaller as the package stabilizes. LaTeX is a workable render format. It has rtf output that works acceptibly. Work continues towards formatted output in Word, with traceability.
 
 Jun 27 2017 v0.3 A major refactor, cells in the table object are no longer 'special' and are just straight S3 objects. Two adapter layers of code are deleted, interface is stablizing. Used `tangram` as an S3 object and replaced various table generating calls to a single overloaded function.
 

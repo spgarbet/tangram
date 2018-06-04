@@ -85,10 +85,12 @@ the LaTeX rendering
 Each of these methods will render the cell object as a LaTeX fragment
 }
 \examples{
+\dontrun{
 latex(cell_label("123"))
 latex(cell_iqr(rnorm(20)))
 latex(cell_estimate(2.1,0.8, 3.3))
 latex(cell_fraction(45, 137))
 tbl <- tangram(drug~bili, pbc)
 latex(tbl)
+}
 }
