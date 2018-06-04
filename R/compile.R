@@ -412,4 +412,9 @@ tangram.table <- function(x, ...)
   tbl
 }
 
-
+#' @rdname tangram
+#' @export
+tangram.tbl_df <- function(x, ...)
+{
+  tangram(as.data.frame(x), as.character=TRUE)
+}
