@@ -89,9 +89,5 @@ latex(cell_label("123"))
 latex(cell_iqr(rnorm(20)))
 latex(cell_estimate(2.1,0.8, 3.3))
 latex(cell_fraction(45, 137))
-latex(table_builder()   \%>\%
-        row_header("row") \%>\%
-        col_header(1,2,3) \%>\%
-        add_col("A","B","C"))
 latex(tangram(drug~bili, pbc))
 }
