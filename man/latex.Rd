@@ -89,5 +89,6 @@ latex(cell_label("123"))
 latex(cell_iqr(rnorm(20)))
 latex(cell_estimate(2.1,0.8, 3.3))
 latex(cell_fraction(45, 137))
-latex(tangram(drug~bili, pbc))
+tbl <- tangram(drug~bili, pbc)
+latex(tbl)
 }
