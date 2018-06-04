@@ -176,7 +176,7 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
     }
   })
 
-  cat('\n')
+  cat('\n') # An RMarkdown table must be preceeded by a newline or bad things happen
 
   pasty <- apply(text, 1, function(x) paste(c("|", paste(x, collapse="|"), "|"), collapse=""))
 
