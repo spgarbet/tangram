@@ -37,7 +37,7 @@ gsub_table <- list(
 # Defered till all escaped characters are handled
 #  c("\\\u005C", "\\\\textbackslash{}"),
   c("\\\\\\\u005E", "\\\\textasciicircum{}"),
-  c("\u005F", "\\\\_"),
+  c("\u005F", "\\_"),
   c("\\\\\\\u0060", "\\\\textasciigrave{}"),
   c("\\\u007C", "\\\\vert{}"),
   c("\\\\\\\u007E", "\\\\textasciitilde{}"),
@@ -2488,7 +2488,14 @@ latexify <- function(x)
       pieces[i] <- paste0("$", pieces[i], "$")
     } else # Odd, run gsub conversions
     {
-      for (subst in gsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+      #for (subst in gsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+      for (subst in gsub_table)
+      {
+        # Helpful debug code for latexify
+        #before <- pieces[i]
+        pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+        #if(before != pieces[i]) cat("before ", before, " after ", pieces[i], " ", subst[1], "\n")
+      }
     }
   }
   y <- paste0(pieces, collapse="")
