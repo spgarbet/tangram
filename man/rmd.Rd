@@ -38,7 +38,7 @@ rmd(object, key = FALSE, ...)
 
 \method{rmd}{cell_n}(object, key = FALSE, ...)
 
-\method{rmd}{tangram}(object, key = NULL, append = FALSE, ...)
+\method{rmd}{tangram}(object, key = NULL, append = FALSE, pad = 10, ...)
 
 \method{rmd}{table_builder}(object, key = FALSE, ...)
 }
@@ -50,6 +50,8 @@ rmd(object, key = FALSE, ...)
 \item{...}{additional arguments to renderer. Unused}
 
 \item{append}{logical; Should the key file be appended too, or overwritten}
+
+\item{pad}{numeric; Minimum width of columns can be a single or vector of numerics.}
 }
 \value{
 A string representation of the table

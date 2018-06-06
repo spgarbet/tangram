@@ -23,6 +23,7 @@
 #' @param object The cell_fstat for indexing
 #' @param key A filename to write key values into. Can be false if no key file is desired.
 #' @param append logical; Should the key file be appended too, or overwritten
+#' @param pad numeric; Minimum width of columns can be a single or vector of numerics.
 #' @param ... additional arguments to renderer. Unused
 #' @return A string representation of the table
 #' @rdname rmd
