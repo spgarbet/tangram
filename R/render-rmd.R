@@ -57,7 +57,7 @@ rmd.cell <- function(object, key=FALSE, ...)
 #' @rdname rmd
 rmd.cell_iqr <- function(object, key=FALSE, ...)
 {
-  if(key)
+  result <- if(key)
   {
     idx <- index(object, ...)
     paste0("((",    object[1], "))%", word_ref(idx[[1]]), "%",
@@ -70,6 +70,11 @@ rmd.cell_iqr <- function(object, key=FALSE, ...)
            " **", object[2], "** ",
            object[3])
   }
+
+  z <- attr(object, "msd")
+  if(!is.null(z)) result <- paste0(result, " ", z[1], '\u00b1', z[2]);
+
+  result
 }
 
 #' @export
@@ -181,7 +186,7 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
   pasty <- apply(text, 1, function(x) paste(c("|", paste(x, collapse="|"), "|"), collapse=""))
 
   cat(pasty[1], '\n')
-  cat(gsub("-\\|", ":|", gsub("[^\\|]", "-", pasty[1])), '\n')
+  cat(sub(":\\|", "-|", gsub("\\|-", "|:", gsub("-\\|", ":|", gsub("[^\\|]", "-", pasty[1])))), '\n')
 
   for(row in pasty[2:nrows]) cat(row, '\n')
 
