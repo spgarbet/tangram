@@ -166,18 +166,19 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- gsub("  ", "&nbsp;", rmd(object[[row]][[col]], key=!is.null(key), ...))
+      text[row,col] <<- gsub("  ", "&nbsp;&nbsp;", rmd(object[[row]][[col]], key=!is.null(key), ...))
     })
   })
 
   # Pad strings in first row
   sapply(1:ncols, FUN=function(col) {
+    ipad <- if(length(pad) == 1) pad else max(pad[col], 5)
     if(is.na(text[1,col]))
     {
-      text[1,col] <<- paste0(rep(" ", 10), collapse='')
-    } else if(nchar(text[1,col]) < pad)
+      text[1,col] <<- paste0(rep(" ", ipad),      collapse='')
+    } else if(nchar(text[1,col]) < ipad)
     {
-      text[1,col] <<- str_pad(text[1,col], width=pad, side="both");
+      text[1,col] <<- str_pad(text[1,col], width=ipad, side="both")
     }
   })
 
