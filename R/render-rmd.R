@@ -155,7 +155,7 @@ rmd.cell_n <- function(object, key=FALSE, ...)
 #'
 #' @importFrom stringr str_pad
 #' @importFrom utils write.table
-rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
+rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
 {
   nrows <- rows(object)
   ncols <- cols(object)
@@ -166,18 +166,18 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, ...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- rmd(object[[row]][[col]], key=!is.null(key), ...)
+      text[row,col] <<- gsub("  ", "&nbsp;", rmd(object[[row]][[col]], key=!is.null(key), ...))
     })
   })
 
-  # Pad strings
+  # Pad strings in first row
   sapply(1:ncols, FUN=function(col) {
     if(is.na(text[1,col]))
     {
-      text[1,col] <<- "          "
-    } else if(nchar(text[1,col]) < 10)
+      text[1,col] <<- paste0(rep(" ", 10), collapse='')
+    } else if(nchar(text[1,col]) < pad)
     {
-      text[1,col] <<- str_pad(text[1,col], width=10, side="both");
+      text[1,col] <<- str_pad(text[1,col], width=pad, side="both");
     }
   })
 
