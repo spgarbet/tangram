@@ -14,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
 library(Hmisc)
 
-
 ```
 
 ## FDA Table Tranforms using tangram
@@ -471,3 +470,116 @@ fda <- list(
 )
 
 ```
+
+## IRR Tables
+
+For some DSMB reports to the FDA I created incident relative ratios transforms and they've been working great.
+
+The problem here is that we need the number of events and the exposure and a group variable. I chose to use the `*` operator in the following format `group ~ exposure*(event1+event2)` for my formula. The `*` distributes before executing the transforms and results in `group ~ exposure*event1 + exposure*event2` calling the transform twice once for each event.
+
+Let's create some example data. A mixed group with a period of observation recording observed burps, and rude comments. In this set, the males have a higher rate of public burping.
+
+```{r}
+N <- 1000
+manners <- data.frame(gender  =sample(c("M", "F"), N, replace=TRUE),
+                      observed=rexp(N)/365,
+                      rude    =rpois(N, 0.1))
+
+manners$burps <- rpois(N, 0.1) + ifelse(manners$gender == "M", rpois(N, 0.2), 0)
+```
+
+Now, a reusable transform for this purpose is created. Eventually this will become a core transform available to any user, but it requires more work to handle different possibilities of data sets. This example is targetted towards knowing exactly the form of the data coming in.
+
+```{r}
+# A custom transform to create IRR tables from exposure / event data.
+
+library(sandwich)
+
+irr <- function(table, row, column, ...)
+{
+    events   <- row$right$data
+    exposure <- row$left$data
+    
+    data     <- data.frame(group  = column$data,
+                           events = events,
+                           expose = exposure)
+
+    data     <- subset(data, !is.na(events) & !is.na(expose) & expose > 0)
+    est      <- "-"
+    pval     <- "-"
+    if(sum(data$events[data$group==levels(data$group)[1]], na.rm=TRUE) >0 &&
+       sum(data$events[data$group==levels(data$group)[2]], na.rm=TRUE) >0) {
+    tryCatch(
+    {
+      m1 <- glm(events ~ group+offset(log(expose)), family="poisson", data=data)
+      
+      # Robust inference (Cameron and Trivedi 2009)
+      cov.m1 <- vcovHC(m1, type="HC0")
+      std.err <- sqrt(diag(cov.m1))
+      r.est <- cbind(
+        Estimate= coef(m1),
+        "Robust SE" = std.err,
+        "Pr(>|z|)" = 2 * pnorm(abs(coef(m1)/std.err), lower.tail=FALSE),
+        LL = coef(m1) + qnorm(0.025) * std.err,
+        UL = coef(m1) + qnorm(0.975) * std.err
+      )
+      # Convert to Rates
+      rate   <- exp(r.est[1,1]+r.est[2,1]) / exp(r.est[1,1])
+      
+      fmt <- if(rate < 1000) 2 else "%5.3g"
+      
+      rate.l <- exp(r.est[1,4]+r.est[2,4]) / exp(r.est[1,4])
+      rate.h <- exp(r.est[1,5]+r.est[2,5]) / exp(r.est[1,5])
+      est <- paste0(render_f(rate,   fmt), " (", 
+                    render_f(rate.l, fmt), "--", 
+                    render_f(rate.h, fmt), ")")
+      pval <- if(r.est[2,3] <= 0.0005) "<0.001" else render_f(r.est[2,3], 3)
+    },
+    error = function(e) {}
+    )}
+    
+
+    table %>%
+    col_header("N", "At Least 1", "Total",
+               "At-Risk Time", "Incidence Rate", "Incidence Rate Ratio^1^",
+               "P Value^2^") %>%
+    col_header("", "no. of participants", "no.",
+               "person-yr", "events/100 person-yr", "", "") %>%
+    row_header(derive_label(row$right)) %>%
+    add_col("", "", "", "", "") %>%
+    add_col(est, pval) %>%
+    table_builder_apply(levels(data$group), function(tbl, category)
+    {
+        selector  <- data$group == category
+        #n         <- sum(column$data == category, na.rm=TRUE)
+        n         <- length(data$group[selector])
+        total_exp <- sum(data$expose[selector])
+        total_evt <- sum(data$events[selector])
+
+        tbl %>%
+        row_header(paste0("  ", category)) %>%
+        new_row() %>%
+        add_col(if(total_exp>0) n else "-",
+                if(total_exp>0) sum(data$events[selector] > 0) else "-",
+                if(total_exp>0) sum(data$events[selector]) else "-",
+                if(total_exp>0) render_f(total_exp*100, 2) else "-",
+                if(total_exp>0) render_f(total_evt/total_exp,2) else "-") %>% 
+        add_col("", "")
+    }) 
+}
+
+irr.footnote="^1^IRR was calculated by the number of adverse events via Poisson regression using group as a factor with the offset of the log of 100 person-years exposure. ^2^P-value is Poisson test of group as a factor."
+```
+
+And for the result:
+
+```{r, results="asis"}
+tbl4 <- tangram(gender ~ observed*(burps + rude), manners, transform=irr)
+html5(tbl4, fragment=TRUE, inline="nejm.css", caption = "FDA IRR Table", id="tbl4", footnote=irr.footnote)
+```
+
+### Summary
+
+This is now a reusable IRR table generator for a Poisson model. A general purpose version would first test for excess zeros, and then check dispersion and fall back to either a Poisson or a negative binomial model with or without excess zeros. However, in the FDA work, the data didn't support anything above a Poisson model.
+
+A personal or department library of preferred analysis and tables can easily be shared via the tangram interface, creating consistent and repeatble analysis across many reports. More importantly the analysis and the final format rendering are completely separate choices.
