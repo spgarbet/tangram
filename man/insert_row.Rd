@@ -4,7 +4,7 @@
 \alias{insert_row}
 \title{Insert a row into a tangram table}
 \usage{
-insert_row(table, after, ...)
+insert_row(table, after, ..., class = NULL)
 }
 \arguments{
 \item{table}{the table to modify}
@@ -12,6 +12,8 @@ insert_row(table, after, ...)
 \item{after}{numeric; The row to position the new row after. Can be zero for inserting a new first row.}
 
 \item{...}{Table cells to insert. Cannot be larger than existing table.}
+
+\item{class}{character; Classes to apply as directives to renderers}
 }
 \value{
 the modified table

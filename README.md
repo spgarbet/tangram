@@ -51,12 +51,6 @@ There are some basic operators, but adding more is quite easy. Just drop me a su
   insert_row(1, "", "Yabba", "Dabba", cell_header("DOOOO"), "", class="cell_header") %>%
   drop_statistics() %>%
   add_indent(2)
-> tbl %>% 
-  del_row(2) %>%
-  del_col(2) %>%
-  insert_row(1, "", "Yabba", "Dabba", cell_header("DOOOO"), "", class="cell_header") %>%
-  drop_statistics() %>%
-  add_indent(2)
 ===============================================================================
                            D-penicillamine       placebo        not randomized 
                                 Yabba             Dabba             DOOOO      
@@ -70,7 +64,7 @@ By the way, referring to specific rows and columns in a table and using operator
 
 The formula interface allows for *reproducible* and *consistent* formatting into tables from data frames. I cannot stress the idea of *consistent* enough in this regard. While working on this project I've seen numerous professional tables where the method of display for information of the same type changes several times in the same table. The reader is forced to adapt his cognitition multiple times and this makes communication of the message in the data more difficult. Consistency of representation of data in a table is paramount to good design.
 
-## dplyr Lovers delight
+## dplyr Lovers Delight
 
 But I want to use dplyr to generate my table! Well, you can have your cake and eat it too.
 

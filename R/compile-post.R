@@ -78,6 +78,7 @@ del_row <- function(table, row)
 #' @param table the table to modify
 #' @param after numeric; The row to position the new row after. Can be zero for inserting a new first row.
 #' @param ... Table cells to insert. Cannot be larger than existing table.
+#' @param class character; Classes to apply as directives to renderers
 #' @return the modified table
 #' @export
 insert_row <- function(table, after, ..., class=NULL)
@@ -87,7 +88,7 @@ insert_row <- function(table, after, ..., class=NULL)
   N     <- length(table)
 
   # Check for mismatch in arguments
-  if(length(cells) > length(table[[1]])) stop("tangram::insert_row() number of cells provided larger than current row size")
+  if(length(cells) > table[[1]]) stop("tangram::insert_row() number of cells provided larger than current number of columns")
   if(after > N) stop("tangram::insert_row() after parameter larger than number of rows")
   if(after < 0) stop("tangram::insert_row() negative after row")
 
@@ -100,6 +101,43 @@ insert_row <- function(table, after, ..., class=NULL)
 
   # Put in the row
   table[[after+1]] <- cells
+
+  table
+}
+
+#' Insert a column into a tangram table
+#'
+#' Insert a column into a tangram table. Will fill with empty cells is not enough cells are specified.
+#'
+#' @param table the table to modify
+#' @param after numeric; The column to position the new row after. Can be zero for inserting a new first row.
+#' @param ... Table cells to insert. Cannot be larger than existing table.
+#' @param class character; Classes to apply as directives to renderers
+#' @return the modified table
+#' @export
+insert_column <- function(table, after, ..., class=NULL)
+{
+  # Get the cells from ..., and make sure they are cells
+  cells <- lapply(list(...), FUN=function(x) if("cell" %in% class(x)) x else cell(x, class=class) )
+  nrows <- length(table)
+  ncols <- length(table[[1]])
+
+  # Check for mismatch in arguments
+  if(length(cells) > nrows) stop("tangram::insert_column() number of cells provided larger than current number of rows")
+  if(after > nrows) stop("tangram::insert_column() after parameter larger than number of rows")
+  if(after < 0) stop("tangram::insert_column() negative after column")
+
+  # Make room
+  for(i in 1:nrows)
+  {
+    if(after < ncols) for(j in ncols:(after+1)) table[[i]][[j+1]] <- table[[i]][[j]]
+
+    # Fill in blanks, just in case
+    table[[i]][[after+1]] <- cell_label("")
+  }
+
+  # Put in the column
+  for(i in 1:length(cells)) table[[i]][[after+1]] <- cells[[i]]
 
   table
 }
