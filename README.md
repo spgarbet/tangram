@@ -1,5 +1,9 @@
 # A Grammar of Tables 'tangram'
 
+<div style="width:100px; height:100px">
+![](https://upload.wikimedia.org/wikipedia/commons/c/cb/Tangram_set_00.jpg)
+</div>
+
 Quick show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
 
 
