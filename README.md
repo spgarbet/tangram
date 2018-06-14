@@ -63,7 +63,32 @@ There are some basic operators, but adding more is quite easy. Just drop me a su
 ===============================================================================
 ```
 
+By the way, referring to specific rows and columns in a table and using operators on these introduce brittleness into your table reproducibility. Say a variable is added or removed, all the absolute references are now broken! Sometimes it's necessary, but in general to be avoided if possible.
+
 The formula interface allows for *reproducible* and *consistent* formatting into tables from data frames. I cannot stress the idea of *consistent* enough in this regard. While working on this project I've seen numerous professional tables where the method of display for information of the same type changes several times in the same table. The reader is forced to adapt his cognitition multiple times and this makes communication of the message in the data more difficult. Consistency of representation of data in a table is paramount to good design.
+
+## dplyr Lovers delight
+
+But I want to use dplyr to generate my table! Well, you can have your cake and eat it too.
+
+```
+> library(dplyr)
+> mtcars %>%
+  group_by(cyl) %>%
+  summarise(disp = round(mean(disp),2), N=n()) %>%
+  tangram()
+===============
+cyl   disp   N 
+---------------
+4    105.14  11
+6    183.31  7 
+8    353.1   14
+===============
+```
+
+This allows for all the downstream rich rendering choices into LaTex, HTML5, rmd, or rtf to work with your summaries from dplyr.
+
+### Email 
 
 P.S. I tested copy and paste from the HTML of a vignette into an email with gmail and it worked flawlessly. Nice.
 
