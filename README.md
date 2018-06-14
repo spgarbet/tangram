@@ -1,5 +1,8 @@
 # A Grammar of Tables 'tangram'
 
+Quick show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
+
+
 ## Quick Overview
 
 What began as an extensible library to quickly generate tables from formulas, has evolved into a library that supports magrittr `%>%` style commands on abstract table objects. The formula interface is a complicated piece of code in it's own right, but is only one of many methods now available in the generation of tables. There were a lot of lessons learned to get to this final point, and it's worth talking about what is now the core of the library, and what has become the best practices in the design of the interface.
@@ -8,9 +11,9 @@ A tangram object is at it's heart a list of lists containing `cells` which can b
 
 * `*italic*` or `_italic_` Makes the font chosen *italic*.
 * `**bold**` or `__bold__` Makes the font chosen **bold**.
-* `/`inline code/`` for `inline code`.
+* \`inline code\` for `inline code`.
 * `~~strikethrough~~` for ~~strikethrough~~. 
-* `# Header` for header font, and the various other multiples.
+* `# Header` for header font, and the various other multiples of hash marks.
 * `~subscript~` for a subscript (*extension*). 
 * `^superscript^` for a superscript (*extension*). 
 
@@ -87,6 +90,42 @@ cyl   disp   N
 ```
 
 This allows for all the downstream rich rendering choices into LaTex, HTML5, rmd, or rtf to work with your summaries from dplyr.
+
+
+## I want percents from Hmisc style summary transform
+
+So just override the renderer for the cell_fraction object.
+
+```
+> tangram(1 ~ sex+drug+bili, pbc, test=FALSE)
+==============================================
+                          N         All       
+                                    418       
+----------------------------------------------
+sex : female             418   0.895  374/418 
+drug                     418                  
+   D-penicillamine             0.368  154/418 
+   placebo                     0.378  158/418 
+   not randomized              0.254  106/418 
+Serum Bilirubin (mg/dl)  418  0.80 *1.40* 3.40
+==============================================
+> summary.cell_fraction <- function(object, ...) { paste0('%', object['percentage']) }
+> assignInNamespace("summary.cell_fraction", summary.cell_fraction, "tangram")
+> tangram(1 ~ sex[1]+drug[1]+bili, pbc, test=FALSE)
+==============================================
+                          N         All       
+                                    418       
+----------------------------------------------
+sex : female             418       %89.5      
+drug                     418                  
+   D-penicillamine                 %36.8      
+   placebo                         %37.8      
+   not randomized                  %25.4      
+Serum Bilirubin (mg/dl)  418  0.80 *1.40* 3.40
+==============================================
+```
+
+To get into this level of overrides I recommend reading the code for each renderer in the available source code. The only really complex renderer is the LaTeX one, the rest are really simple and I've written a couple of them in an afternoon. So don't be afraid to change things.
 
 ### Email 
 
