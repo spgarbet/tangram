@@ -270,6 +270,11 @@ print.tangram <- function(x,...)
   }
   result <- paste0(result, paste0(rep("=",nchar(pasty[1])),collapse=''), '\n')
 
+  if(!is.null(attr(x, "footnote")))
+  {
+    result <- paste0(result, paste0(attr(x, "footnote"), collapse="\n"), collapse='\n' )
+  }
+
   cat(result)
   invisible(result)
 }

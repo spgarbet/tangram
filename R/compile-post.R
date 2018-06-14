@@ -142,6 +142,41 @@ insert_column <- function(table, after, ..., class=NULL)
   table
 }
 
+#' Replace a cell's contents
+#'
+#' Replace a cell in a table
+#'
+#' @param table the tangram table to modify
+#' @param row numeric; The row to modify
+#' @param col numeric; The column to modify
+#' @param object The cell or object to replace in a table
+#' @param ... Additional parameters passed to cell function if not given a cell object
+#' @return the modified table
+#' @export
+replace_cell <- function(table, row, col, object, ...)
+{
+  table[[row]][[col]] <- if(inherits(object, "cell")) object else cell(object, ...)
+
+  table
+}
+
+#' Add a footnote to a table
+#'
+#' Add a footnote to a table
+#'
+#' @param table tangram; the tangram table to modify
+#' @param footnote character; The footnote to add
+#' @return the modified table
+#' @export
+add_footnote <- function(table, footnote)
+{
+  footnotes <- attr(table, "footnote")
+
+  attr(table, "footnote") <- if(is.null(footnotes)) footnotes else append(footnotes, footnote)
+
+  table
+}
+
 #' Drop all statistics columns from a table.
 #'
 #' Delete from a table all columns that contain statistics
