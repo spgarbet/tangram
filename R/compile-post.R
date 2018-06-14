@@ -80,14 +80,14 @@ del_row <- function(table, row)
 #' @param ... Table cells to insert. Cannot be larger than existing table.
 #' @return the modified table
 #' @export
-insert_row <- function(table, after, ...)
+insert_row <- function(table, after, ..., class=NULL)
 {
   # Get the cells from ..., and make sure they are cells
-  cells <- lapply(list(...), FUN=function(x) if("cell" %in% class(x)) x else cell(x))
+  cells <- lapply(list(...), FUN=function(x) if("cell" %in% class(x)) x else cell(x, class=class) )
   N     <- length(table)
 
   # Check for mismatch in arguments
-  if(length(cells) > N) stop("tangram::insert_row() number of cells provided larger than current row size")
+  if(length(cells) > length(table[[1]])) stop("tangram::insert_row() number of cells provided larger than current row size")
   if(after > N) stop("tangram::insert_row() after parameter larger than number of rows")
   if(after < 0) stop("tangram::insert_row() negative after row")
 

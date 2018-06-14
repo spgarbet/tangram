@@ -1,5 +1,73 @@
 # A Grammar of Tables 'tangram'
 
+## Quick Overview
+
+What began as an extensible library to quickly generate tables from formulas, has evolved into a library that supports magrittr `%>%` style commands on abstract table objects. The formula interface is a complicated piece of code in it's own right, but is only one of many methods now available in the generation of tables. There were a lot of lessons learned to get to this final point, and it's worth talking about what is now the core of the library, and what has become the best practices in the design of the interface.
+
+A tangram object is at it's heart a list of lists containing `cells` which can be subclassed from just about anything, but the best overall choice is basically a vector of  `character`, which contains text with minor extensions to Rmarkdown. There are two types of style, one is internal to a cell and it's formatting of text. The other is overall styling of a table which is a choice best left to the rendering call. The Rmarkdown/extensions supported are as follows:
+
+* `*italic*` or `_italic_` Makes the font chosen *italic*.
+* `**bold**` or `__bold__` Makes the font chosen **bold**.
+* `/`inline code/`` for `inline code`.
+* `~~strikethrough~~` for ~~strikethrough~~. 
+* `# Header` for header font, and the various other multiples.
+* `~subscript~` for a subscript (*extension*). 
+* `^superscript^` for a superscript (*extension*). 
+
+The original library had custom objects for specific statistical meanings. However, most of these are not required or needed anymore and with each version I am working to eliminate most if not all of them. There is one exception that is difficult and that is the fraction. There is no clean way to support fractions in Rmarkdown that I've come up with. I am considering another extension in the support. However, in the long run all of these custom cell objects and their handling will probably vanish.
+
+This `tangram` object representing the abstract table in memory now has all the internal formatting of a cell representable in a simple and direct manner. A cell object can have the following attributes:
+
+* `sep` a seperator to use for rendering between character strings in a vector
+* `reference` a reference character to append as superscript to the field. Not required, as this can be handled now via the Rmarkdown above. Will probably deprecate soon.
+* `units` the units of the described label. Maintains compability with Hmisc handling of units on objects.
+
+A `tangram` object itself can have an attribute `footnote` to contain footnotes to display. Some formula transforms automatically supply this with their bundle for reference.
+
+Additional subclassing of cells carries through to special handling. For example in the HTML rendering code all of these become CSS classes so that one can specify CSS rendering however an end user likes. Several of the core statistical cells also allow for flexbox rendering in CSS. LaTeX is more fixed in it's rendering, but deals with these issues handily. 
+
+Tables are composible
+```
+> tbl <- tangram(drug ~ sex, pbc) + tangram(drug ~ bili, pbc)
+> tbl
+===========================================================================================================
+                          N   D-penicillamine       placebo        not randomized       Test Statistic     
+                                    154               158               106                                
+-----------------------------------------------------------------------------------------------------------
+sex : female             418   0.903  139/154    0.867  137/158    0.925   98/106     X^2_2=2.38, P=0.304  
+Serum Bilirubin (mg/dl)  418  0.70 *1.30* 3.60  0.80 *1.40* 3.22  0.70 *1.40* 3.12  F_{2,415}=0.03, P=0.972
+===========================================================================================================
+```
+
+There are some basic operators, but adding more is quite easy. Just drop me a suggestion and I can generally turn it around pretty quickly. In fact, I'm focused on adding these in general right now.
+
+```
+> tbl %>% 
+  del_row(2) %>%
+  del_col(2) %>%
+  insert_row(1, "", "Yabba", "Dabba", cell_header("DOOOO"), "", class="cell_header") %>%
+  drop_statistics() %>%
+  add_indent(2)
+> tbl %>% 
+  del_row(2) %>%
+  del_col(2) %>%
+  insert_row(1, "", "Yabba", "Dabba", cell_header("DOOOO"), "", class="cell_header") %>%
+  drop_statistics() %>%
+  add_indent(2)
+===============================================================================
+                           D-penicillamine       placebo        not randomized 
+                                Yabba             Dabba             DOOOO      
+-------------------------------------------------------------------------------
+  sex : female              0.903  139/154    0.867  137/158    0.925   98/106 
+  Serum Bilirubin (mg/dl)  0.70 *1.30* 3.60  0.80 *1.40* 3.22  0.70 *1.40* 3.12
+===============================================================================
+```
+
+The formula interface allows for *reproducible* and *consistent* formatting into tables from data frames. I cannot stress the idea of *consistent* enough in this regard. While working on this project I've seen numerous professional tables where the method of display for information of the same type changes several times in the same table. The reader is forced to adapt his cognitition multiple times and this makes communication of the message in the data more difficult. Consistency of representation of data in a table is paramount to good design.
+
+P.S. I tested copy and paste from the HTML of a vignette into an email with gmail and it worked flawlessly. Nice.
+
+
 ## Release Notes
 Jun 4 2018  v0.4 Numerous bug fixes. The package was used for DSMB report submissions to the FDA, and several examples of IRR and other wonderful things have been produced. The full shakedown is complete, and fixes and updates are becoming smaller and smaller as the package stabilizes. LaTeX is a workable render format. It has rtf output that works acceptibly. Work continues towards formatted output in Word, with traceability.
 
@@ -7,7 +75,7 @@ Jun 27 2017 v0.3 A major refactor, cells in the table object are no longer 'spec
 
 Sep 27 2017 v0.3.2 Multiple bug fixes from earlier refactor. Added support for LaTeX. A new example from FDA work.
 
-## Goal
+## Original Goal
 
 The idea of creating a quick summary of a data set has been around a good while. The use of a statistical formulas to create summaries exists in SAS in PROC REPORT, and in the R package Hmisc. The SAS has a rich syntax which allows for generation of a wide array of summary tables, but is limited to a subset of SAS functions. The SAS generation is further limited to a fairly crude appearing table, with limited options for output generation. Hmisc offers wonderful output, but is fixed in the analysis that can be performed.
 
@@ -16,7 +84,7 @@ This project intends to create a table grammar that is simple to use, while prov
 For an example using Rmarkdown, see [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
 
 
-## General Outline
+## General Outline of Formula Transforms
 A formula, a data frame (spreadsheet), and a transform function input into the framework will output an abstract table, that can be rendered into text, LaTeX, Word, or HTML5. 
 
 Formulas will be in the `Columns ~ Rows` syntax. 
@@ -56,7 +124,7 @@ latex(table)
 index(table)
 ```
 
-## Grammar Definition
+## Grammar Definition of Formulas
 
 A formula consists of a column specification, a tilde "~" and a row-specification.
 
