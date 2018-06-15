@@ -409,18 +409,18 @@ html5.cell_iqr <- function(object, id, ..., class=NULL)
 
   z <- attr(object, "msd")
 
+  data <- sapply(object, my_html_escape)
+
   result <-
       paste0("<td class=\"", attr(object, "parity"),"\"><span ",
          html5_class(c(class, attr(object, "parity"), "data", "quantile")),
          ">",
-         paste0("<span class=\"q25\">", my_html_escape(object[1:(mid-1)]), "</span>", collapse=""),
-         "<span class=\"q50\">", my_html_escape(object[mid]), "</span>",
-         paste0("<span class=\"q75\">", my_html_escape(object[(mid+1):length(object)]), "</span>", collapse=""),
+         paste0(paste0("<span class=\"q", attr(object, "quant"), "\">", data, "</span>"), collapse=""),
          htmlreference(object))
 
   if(is.null(z)) paste0(result, "</td>") else
   {
-    paste0(result, '<br/><span>', my_html_escape(z[1]), '&plusmn;', my_html_escape(z[2]), "</span></td>")
+    paste0(result, '<br/><span class=\"msd\">', my_html_escape(z[1]), '&plusmn;', my_html_escape(z[2]), "</span></td>")
   }
 }
 
