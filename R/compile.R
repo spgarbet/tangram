@@ -291,18 +291,18 @@ tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, styl
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
+tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style=NULL, footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
 {
+  cls <- sapply(names(x), function(y) class(x[1,y]))
+
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(as.character)) as.character <- !any(!cls %in% c("character", "NULL", "labelled"))
-
-  cls <- sapply(names(x), function(y) class(x[1,y]))
 
   # Check for non-character
   if(!as.character)
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
-    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, id=id, quant=quant, msd=msd, ...))
+    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, id=id, caption=caption, style=style, footnote=footnote, after=after, quant=quant, msd=msd, ...))
   }
 
   width   <- length(colnames(x)) + 1

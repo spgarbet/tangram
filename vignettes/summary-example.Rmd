@@ -24,6 +24,7 @@ pre {
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
 library(tangram)
 ```
 Our team here at Vanderbilt replies quite a bit on exploratory data analysis, and thus summary statistics are an important first step. One of the tools we've brought to bear on this is `tangram` which allows for customized statistical tables. Customization aside, the question is how can I quickly get a set of summary statistics into an Rmd document quickly and painlessly using `tangram`?
@@ -40,22 +41,29 @@ Finding out the interfaces inside this package has been quite a journey of disco
 
 It by default will take a data frame, and if there exist columns that are of class `cell` it will render directly as a table. Otherwise, it will generate a summary versus an intercept model.
 
-```{r iris1, comment=''}
-tangram(iris)
+```{r iris1, results="asis"}
+tangram(iris, id="iris1", style="nejm")
 ```
 
 It's clear that a better breakdown model is possible since `Species` is a factor. One can then switch to a formula interface.
 
-```{r iris2, comment=''}
-iris_descrip <- tangram(Species ~ Petal.Length + Petal.Width + Sepal.Length + Sepal.Width, iris)
-iris_descrip
+```{r iris2, results="asis"}
+tangram(Species ~ Petal.Length + Petal.Width + Sepal.Length + Sepal.Width,
+      iris, "iris2", caption="Iris Stats", style="nejm")
 ```
 
-Maybe now with that set of descriptive statistics, one is ready to include it in an Rmd for colloborator consumption. Same object, different renderer is called.
+Maybe one really prefers using `dplyr` so let's go with that.
 
 ```{r, results="asis"}
-html5(iris_descrip,
-      fragment=TRUE, inline="nejm.css", caption = "Iris Stats", id="tbl_iris")
+
+iris %>%
+  group_by(Species) %>%
+  summarise(Mean.Petal.Length=mean(Petal.Length),
+            Median.Petal.Length=median(Petal.Length),
+            sd.Petal.Length=round(sd(Petal.Length),3) ) %>%
+  tangram("iris3", caption="dplyr Stats", style="nejm")
 ```
+
+<br/>
 
 

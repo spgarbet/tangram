@@ -152,11 +152,14 @@ fda_cat_by_cat <- function(tb, row, col, display_percent=TRUE, ...)
 Using this any variables that are factors can be used now to generate a table and render to HTML5.
 
 ```{r, results="asis"}
-tbl1 <- tangram("modality ~ procedure + category + prior", d1, transforms=fda_cat_by_cat)
-html5(tbl1, fragment=TRUE, inline="nejm.css", caption = "FDA Table 1", id="tbl1")
+tangram("modality ~ procedure + category + prior", 
+        d1, "tbl1", caption="FDA Table 1", transforms=fda_cat_by_cat,
+        style="nejm")
 ```
 
-Next it is needed to allow for row variables that are continuous. We begin with the helper function that creates cells for the tests given the data for a row (x) and colunn (y). In this case we make no distribution assumption about the continuous variable and apply a Wilcoxon rank sum test. 
+<br/>
+
+Next it is necessary to allow for row variables that are continuous. We begin with the helper function that creates cells for the tests given the data for a row (x) and colunn (y). In this case we make no distribution assumption about the continuous variable and apply a Wilcoxon rank sum test. 
 
 ```{r, echo=TRUE}
 wilcoxTests <- function(x, y)
@@ -238,8 +241,8 @@ fda <- list(
 Now a rendering with two forms of information is possible. 
 
 ```{r, results="asis"}
-tbl2 <- tangram(modality ~ procedure + category + prior + albumin, d1, transforms=fda)
-html5(tbl2, fragment=TRUE, inline="nejm.css", caption = "FDA Table 2", id="tbl2")
+tangram(modality ~ procedure + category + prior + albumin,
+        d1, "tbl2", caption="FDA Table 2", style="nejm", transforms=fda)
 ```
 
 A tricky binary coded varible for reported side effects needs treatment. In this instance we only want the category in which side effects appeary, i.e. only those individuals with side effects is to be reported. The variable contains a binary number in which each bit represents a different side effect reported. 
@@ -307,8 +310,9 @@ fda <- list(
 Now we have 3 different pieces completed.
 
 ```{r, results="asis"}
-tbl3 <- tangram(modality ~ procedure + category + prior + albumin + reported_side_effects*side_effect, d1, transforms=fda,  binary_key=side_effect_key)
-html5(tbl3, fragment=TRUE, inline="nejm.css", caption = "FDA Table 3", id="tbl3")
+tangram(modality ~ procedure + category + prior + albumin + reported_side_effects*side_effect,
+        d1, "tbl3", transforms=fda,  binary_key=side_effect_key,
+        style="nejm", caption="FDA Table 3")
 ```
 
 And the requested table tranforms for FDA work is complete.
@@ -574,8 +578,9 @@ irr.footnote="^1^IRR was calculated by the number of adverse events via Poisson 
 And for the result:
 
 ```{r, results="asis"}
-tbl4 <- tangram(gender ~ observed*(burps + rude), manners, transform=irr)
-html5(tbl4, fragment=TRUE, inline="nejm.css", caption = "FDA IRR Table", id="tbl4", footnote=irr.footnote)
+tangram(gender ~ observed*(burps + rude),
+        manners, "tbl4", transform=irr,
+        style="nejm", footnote=irr.footnote, caption="FDA IRR Table")
 ```
 
 ### Summary

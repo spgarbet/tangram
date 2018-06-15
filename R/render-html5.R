@@ -153,7 +153,7 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
     id <- ""
   }
 
-  scoped <- if(is.null(style)) "" else paste("<style>", custom_css(paste0(style,".css"),id=id),"</style>", sep='')
+  scoped <- if(is.na(style)) "" else paste("<style>", custom_css(paste0(style,".css"),id=id),"</style>", sep='')
   figdiv <- if(is.null(id)) "<div class=\"figure\">" else paste("<div class=\"figure\" id=\"", id,"\">",sep='')
   fontld <- if(fragment) "" else html5_extra_fonts()
 
