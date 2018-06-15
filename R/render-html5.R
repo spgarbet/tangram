@@ -21,15 +21,6 @@ htmlreference <- function(object)
     paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
 }
 
-# Provide the clipboard copy javascript function
-clipboard_js <- function()
-{
-  filename <- file.path(system.file(package="tangram"), "extdata", "js", "clipboard.min.js")
-  content  <- readChar(filename, file.info(filename)$size)
-
-  paste("<script type=\"text/javascript\">", content, "</script>", sep='')
-}
-
 #' Return a CSS file as a string
 #'
 #' Given a filename, this function will load the file name from the current working directory.
@@ -172,7 +163,6 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
 	                 "<title>",caption,"</title>",
                    "</head><body>")
   intro  <- paste0(fontld,
-                   clipboard_js(),
                    figdiv,
                    scoped)
   if(!is.null(caption)) intro <- paste0(intro, "<div class=\"caption\">",caption,"</div>")
@@ -192,11 +182,11 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   if(fragment)
   {
     footer <- paste0("</table></div>", footnote,
-                     "</div><script>new Clipboard('.data');</script>")
+                     "</div>")
   } else {
     intro  <- paste0(header, intro)
     footer <- paste0("</table></div>", footnote,
-                     "</div><script>new Clipboard('.data');</script></body></html>")
+                     "</div></body></html>")
   }
 
   nrows <- rows(object)
@@ -386,11 +376,8 @@ html5.cell_label <- function(object, id, ..., class=NULL)
 #' @export
 html5.cell_estimate <- function(object, id, ..., class=NULL)
 {
-  idx <- index(object, id)
-
   paste0("<td ",
             html5_class(c(class, attr(object, "parity"), "data", "estimate")),
-            " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
             ">",
           my_html_escape(object[[1]]),
           " (",my_html_escape(paste0(object[[2]], collapse = ", ")),")",
@@ -453,11 +440,8 @@ html5.cell_n <- function(object, id, ..., class=NULL)
 {
   ref <- if(is.null(attr(object,"htmlreference"))) "" else paste0("<sup>", htmlEscape(attr(object, "htmlreference")), "</sup>")
 
-  idx <- index(object, id)
-
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"), "data", "N")),
-         " data-clipboard-text=\"","{",idx[1]," N=",idx[3],"}\"",
          "><span class=\"N\">",
          my_html_escape(object),
          "</span>",
@@ -478,17 +462,15 @@ html5.cell_n <- function(object, id, ..., class=NULL)
 #' @export
 html5.cell_fstat <- function(object, id, ..., class=NULL)
 {
-  idx <- index(object, id)
   paste0(
     "<td ",
     html5_class(c(class, attr(object, "parity"), "data", "statistics")),
-    " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
     ">",
     "<span class=\"statistic\"><span class=\"description\">F",
     "<sub>",object["df1"],",",object["df2"],"</sub> = </span>",
     object["F"], ",</span>",
     "<span class=\"pvalue\"><span class=\"description\">P = </span>",
-    object["P"],
+    my_html_escape(object["P"]),
     htmlreference(object),
     "</span>",
     "</td>"
@@ -509,7 +491,6 @@ html5.cell_fstat <- function(object, id, ..., class=NULL)
 #'
 html5.cell_fraction <- function(object, id, ..., class=NULL)
 {
-  idx        <- index(object, id)
   ratio      <- gsub("\\.", "<span class=\"align\">.</span>", object["ratio"])
   percentage <- object["percentage"]
   den        <- object["denominator"]
@@ -517,7 +498,7 @@ html5.cell_fraction <- function(object, id, ..., class=NULL)
 
   paste0("<td class=\"", attr(object, "parity"),"\"><span ",
                html5_class(c(class, attr(object, "parity"),  "fraction")),
-               " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"", ">",
+               ">",
            "<span class=\"ratio\">",       ratio,      "</span>",
            "<span class=\"percentage\">",  percentage, "</span>",
            "<span class=\"numerator\">",   num,        "</span>",
@@ -538,11 +519,8 @@ html5.cell_fraction <- function(object, id, ..., class=NULL)
 #'
 html5.cell_chi2 <- function(object, id, ..., class=NULL)
 {
-  idx <- index(object, id)
-
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"), "data", "statistics")),
-         " data-clipboard-text=\"","{",idx[1]," ",idx[3],"}\"",
          ">",
          "<span class=\"statistic\"><span class=\"description\"><span class=\"nobr\">&chi;<span class=\"supsub\">2<br/>",
          object[2],
@@ -550,7 +528,7 @@ html5.cell_chi2 <- function(object, id, ..., class=NULL)
          " = </span>",
          object[1],
          ",</span><span class=\"pvalue\"><span class=\"description\">P = </span>",
-         object[3],
+         my_html_escape(object[3]),
          "</span>",
           htmlreference(object),
          "</td>"
