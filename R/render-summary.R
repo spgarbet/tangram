@@ -291,3 +291,22 @@ print.table_builder <- function(x,...) print(summary(x$table,...))
 # map <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2587")
 # h <- hist(rexp(200))
 # paste0(map[floor(h$density*8/max(h$density))+1], collapse='')
+
+#' Router for rendering method
+#'
+#' This functions detects if knitr is loaded, and does it's best to determine the output
+#' format from knitr and returns the appropriate rendering function.
+#'
+#' @return A rendering function to use
+render_route_tangram <- function()
+{
+  if(! "knitr" %in% .packages()) return(print.tangram)
+
+  if(knitr::is_html_output()) return(html5.tangram)
+
+  if(knitr::is_latex_output()) return(latex.tangram)
+
+  if(knitr::opts_knit$get("out.format") == "markdown") return(rmd.tangram)
+
+  print.tangram
+}
