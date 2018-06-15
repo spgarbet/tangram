@@ -209,23 +209,7 @@ drop_statistics <- function(table)
 #' @export
 hmisc_intercept_cleanup <- function(table)
 {
-  table <- drop_statistics(table)
-
-  # Roll up header here
-  sapply(1:length(table[[1]]), function(col)
-  {
-    up    <- table[[1]][[col]]
-    below <- table[[2]][[col]]
-
-    if(!("cell_label" %in% class(up)) ||
-       up == "")
-    {
-      class(below) <- class(below)[length(class(below))]
-      table[[1]][[col]] <<- below
-    }
-  })
-
-  del_row(table, 2)
+  del_col(del_row(table, 2), 4)
 }
 
 #' Add indentations to left column row headers

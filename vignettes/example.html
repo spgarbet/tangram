@@ -11,7 +11,7 @@
 
 <meta name="author" content="Shawn Garbett" />
 
-<meta name="date" content="2018-06-07" />
+<meta name="date" content="2018-06-15" />
 
 <title>Table Grammar Examples</title>
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Table Grammar Examples</h1>
 <h4 class="author"><em>Shawn Garbett</em></h4>
-<h4 class="date"><em>2018-06-07</em></h4>
+<h4 class="date"><em>2018-06-15</em></h4>
 
 </div>
 
@@ -138,14 +138,14 @@ pre {
   font-size: 10px
 }
 
-#tbl3 .statistic {display: none;}
 </style>
 <div id="a-grammar-of-tables" class="section level2">
 <h2>A Grammar of Tables</h2>
 <p>This package is meant to implement the concept of a grammar of tables. It allows for a simple formula expression and a data frame to create a rich summary table in a variety of formats. It is designed for extensibility at each step of the process, so that one is not limited by the authors choice of table statistics, output format. The grammar however is an integral part of the package, and as such is not modifiable.</p>
 <p>Here’s an example similar to summaryM from Hmisc to get us started:</p>
-<pre class="r"><code>tangram(&quot;drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc)</code></pre>
-<pre><code>=====================================================================================================================
+<pre class="r"><code>summary(tangram(&quot;drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc, id=&quot;joe&quot;, caption=&quot;Context Aware Compilation&quot;))</code></pre>
+<pre><code>Context Aware Compilation
+=====================================================================================================================
                                     N   D-penicillamine       placebo        not randomized       Test Statistic     
                                               154               158               106                                
 ---------------------------------------------------------------------------------------------------------------------
@@ -160,15 +160,19 @@ Prothrombin Time (sec.)            416  10.0 *10.6* 11.4  10.0 *10.6* 11.0  10.1
 sex : female                       418   0.903  139/154    0.867  137/158    0.925   98/106     X^2_2=2.38, P=0.304  
 Age                                418  41.4 *48.1* 55.8  42.9 *51.9* 59.0  46.0 *53.0* 61.1  F_{2,415}=6.10, P=0.002
 spiders : present                  312   0.292   45/154    0.285   45/158                       X^2_1=0.02, P=0.885  
-=====================================================================================================================</code></pre>
-<p>Or the same directly into an Rmarkdown pipe_table:</p>
-<pre class="r"><code>#rmd(tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc))</code></pre>
+=====================================================================================================================
+N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon.</code></pre>
 <p>Notice that stage in the formula wasn’t stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.</p>
 <p>It also supports HTML5, with styling fragments</p>
 <div id="hmisc-style-example" class="section level3">
 <h3>Hmisc Style Example</h3>
-<pre class="r"><code>html5(tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc, msd=TRUE, quant=seq(0, 1, 0.25)),
-      fragment=TRUE, inline=&quot;hmisc.css&quot;, caption = &quot;HTML5 Table Hmisc Style&quot;, id=&quot;tbl2&quot;)</code></pre>
+<pre class="r"><code>tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders&quot;,
+        pbc,
+        id=&quot;tbl2&quot;,
+        msd=TRUE,
+        quant=seq(0, 1, 0.25),
+        style=&quot;hmisc&quot;,
+        caption = &quot;HTML5 Table Hmisc Style&quot;)</code></pre>
 <script type="text/javascript">/*!
  * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
@@ -176,32 +180,34 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
  * Licensed MIT © Zeno Rocha
  */
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
-</script><div class="figure" id="tbl2"><style>
+</script>
+<div id="tbl2" class="figure">
+<style>
 
 #tbl2 .figure  {  font-family: "Computer Modern Serif", serif;
             margin-left:  auto;
-			      margin-right: auto;
-			      font-size: 66%;
+                  margin-right: auto;
+                  font-size: 66%;
   -webkit-print-color-adjust: exact;
          }
 
 #tbl2 .caption { text-align:   center;
-	         margin-left:  auto;
-	         margin-right: auto;
-	         padding: 1.5em 0 1.5em 0;
-	       }
+             margin-left:  auto;
+             margin-right: auto;
+             padding: 1.5em 0 1.5em 0;
+           }
 
 #tbl2 .figbody {
-		       text-align:   center;
-	         margin-left:  auto;
-	         margin-right: auto;
-	         border-style: double none solid none;
-	         border-width: 3pt 0 1pt 0;
-	         width:        100%;
+               text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             border-style: double none solid none;
+             border-width: 3pt 0 1pt 0;
+             width:        100%;
          }
 
 #tbl2 .figbody td {
-				      padding: 0.2em 0.5em 0.2em 0.5em;
+                      padding: 0.2em 0.5em 0.2em 0.5em;
             }
 
 #tbl2 .data:hover {
@@ -209,7 +215,7 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
             }
 
 #tbl2 .tangram {
-	border-spacing: 0;
+    border-spacing: 0;
 }
 
 #tbl2 .subheader    { font-size: smaller; }
@@ -218,13 +224,13 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 #tbl2 .subheader td { border-bottom: 1pt solid black; }
 
 #tbl2 .quantile .q25 {
-	font-size: smaller;
-	padding-right: 0.5em;
+    font-size: smaller;
+    padding-right: 0.5em;
 }
 
 #tbl2 .quantile .q75 {
-	font-size: smaller;
-	padding-left: 0.5em;
+    font-size: smaller;
+    padding-left: 0.5em;
 }
 
 #tbl2 .quantile .q50 {
@@ -232,16 +238,16 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 }
 
 #tbl2 .variable {
-	float:      left;
-	text-align: left;
+    float:      left;
+    text-align: left;
 }
 
 #tbl2 .units {
-	float:      right;
-	font-size:  x-small;
-	text-align: right;
-	padding-left: 1em;
-	vertical-align: text-bottom; /* FIXME why doesn't this work */
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
 #tbl2 thead .header {font-weight: bold;}
@@ -258,8 +264,8 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 #tbl2 .statistic {padding-right: 0.5em;}
 
 #tbl2 td .align{
-	display: inline-block;
-	margin: 0 auto;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 #tbl2 .nobr {
@@ -281,16 +287,281 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 #tbl2 .sub { font-size: x-small; vertical-align: sub;}
 
 
-</style><div class="caption">HTML5 Table Hmisc Style</div><div class="figbody"><table class="tangram">
-<thead><tr><td class="header even tg-label"><span class="variable"></span></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">D-penicillamine</span></td><td class="header even tg-label"><span class="variable">placebo</span></td><td class="header even tg-label"><span class="variable">not randomized</span></td><td class="header even tg-label"><span class="variable">Test Statistic</span></td></tr><tr class="subheaderrow"><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "NTM3", src = "tangram:bili:drug[D-penicillamine]:N", value = "154") N=NULL}"><span class="N">154</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "OTRl", src = "tangram:bili:drug[placebo]:N", value = "158") N=NULL}"><span class="N">158</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "ZjNi", src = "tangram:bili:drug[not randomized]:N", value = "106") N=NULL}"><span class="N">106</span></td><td class="subheader header even tg-label"><span class="variable"></span></td></tr></thead>
-<tbody><tr> <td class="header odd tg-label"><span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span></td><td class="odd data N" data-clipboard-text="{list(index = "ZTA3", src = "tbl2:bili:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.30</span><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span><span class="q75">28.00</span><br/><span>3.65&plusmn;5.28</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.30</span><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span><span class="q75">20.00</span><br/><span>2.87&plusmn;3.63</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.40</span><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span><span class="q75">18.00</span><br/><span>3.12&plusmn;4.04</span></td><td class="odd data statistics" data-clipboard-text="{list(index = "MTUy", src = "tbl2:bili:drug:F", value = "0.03") list(index = "NWQ5", src = "tbl2:bili:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.972<sup>1</sup></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Albumin</span><span class="units">gm/dl</span></td><td class="even data N" data-clipboard-text="{list(index = "NmZm", src = "tbl2:albumin:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">1.96</span><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span><span class="q75">4.38</span><br/><span>3.52&plusmn;0.40</span></td><td class="even"><span class="even data quantile"><span class="q25">2.10</span><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span><span class="q75">4.64</span><br/><span>3.52&plusmn;0.44</span></td><td class="even"><span class="even data quantile"><span class="q25">2.31</span><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span><span class="q75">4.52</span><br/><span>3.43&plusmn;0.43</span></td><td class="even data statistics" data-clipboard-text="{list(index = "ZTE1", src = "tbl2:albumin:drug:F", value = "2.13") list(index = "ZTUy", src = "tbl2:albumin:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.120<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">Histologic Stage, Ludwig Criteria</span></td><td class="odd">412</td><td class="odd"></td><td class="odd"></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "YWQ3", src = "tbl2:stage:drug:χ^{2}", value = "5.33") list(index = "MGZl", src = "tbl2:stage:drug:P", value = "0.502")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.502</span><sup>2</sup></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Nzkx", src = "tbl2:stage[   1]:drug[D-penicillamine]:numerator", value = "4") list(index = "MWVm", src = "tbl2:stage[   1]:drug[D-penicillamine]:ratio", value = "0.026")}"><span class="ratio">0<div class="align">.</div>026</span><span class="percentage">2.597</span><span class="numerator">  4</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZjA4", src = "tbl2:stage[   2]:drug[D-penicillamine]:numerator", value = "12") list(index = "Mzgy", src = "tbl2:stage[   2]:drug[D-penicillamine]:ratio", value = "0.076")}"><span class="ratio">0<div class="align">.</div>076</span><span class="percentage">7.595</span><span class="numerator"> 12</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YjJm", src = "tbl2:stage[   3]:drug[D-penicillamine]:numerator", value = "5") list(index = "MDc2", src = "tbl2:stage[   3]:drug[D-penicillamine]:ratio", value = "0.050")}"><span class="ratio">0<div class="align">.</div>050</span><span class="percentage">5.000</span><span class="numerator">  5</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YmE2", src = "tbl2:stage[   1]:drug[placebo]:numerator", value = "32") list(index = "ODAw", src = "tbl2:stage[   1]:drug[placebo]:ratio", value = "0.208")}"><span class="ratio">0<div class="align">.</div>208</span><span class="percentage">20.779</span><span class="numerator"> 32</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTlh", src = "tbl2:stage[   2]:drug[placebo]:numerator", value = "35") list(index = "MTVk", src = "tbl2:stage[   2]:drug[placebo]:ratio", value = "0.222")}"><span class="ratio">0<div class="align">.</div>222</span><span class="percentage">22.152</span><span class="numerator"> 35</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZDBk", src = "tbl2:stage[   3]:drug[placebo]:numerator", value = "25") list(index = "MTc5", src = "tbl2:stage[   3]:drug[placebo]:ratio", value = "0.250")}"><span class="ratio">0<div class="align">.</div>250</span><span class="percentage">25.000</span><span class="numerator"> 25</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NzM0", src = "tbl2:stage[   1]:drug[not randomized]:numerator", value = "64") list(index = "YWU3", src = "tbl2:stage[   1]:drug[not randomized]:ratio", value = "0.416")}"><span class="ratio">0<div class="align">.</div>416</span><span class="percentage">41.558</span><span class="numerator"> 64</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YTJh", src = "tbl2:stage[   2]:drug[not randomized]:numerator", value = "56") list(index = "NzA4", src = "tbl2:stage[   2]:drug[not randomized]:ratio", value = "0.354")}"><span class="ratio">0<div class="align">.</div>354</span><span class="percentage">35.443</span><span class="numerator"> 56</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZjZj", src = "tbl2:stage[   3]:drug[not randomized]:numerator", value = "35") list(index = "MzVj", src = "tbl2:stage[   3]:drug[not randomized]:ratio", value = "0.350")}"><span class="ratio">0<div class="align">.</div>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Y2Vk", src = "tbl2:stage[   1]:drug[NA]:numerator", value = "54") list(index = "ZTk3", src = "tbl2:stage[   1]:drug[NA]:ratio", value = "0.351")}"><span class="ratio">0<div class="align">.</div>351</span><span class="percentage">35.065</span><span class="numerator"> 54</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YjFi", src = "tbl2:stage[   2]:drug[NA]:numerator", value = "55") list(index = "MzVh", src = "tbl2:stage[   2]:drug[NA]:ratio", value = "0.348")}"><span class="ratio">0<div class="align">.</div>348</span><span class="percentage">34.810</span><span class="numerator"> 55</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZTM5", src = "tbl2:stage[   3]:drug[NA]:numerator", value = "35") list(index = "Yzgw", src = "tbl2:stage[   3]:drug[NA]:ratio", value = "0.350")}"><span class="ratio">0<div class="align">.</div>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="header even tg-label"><span class="variable">Prothrombin Time</span><span class="units">sec.</span></td><td class="even data N" data-clipboard-text="{list(index = "MTBl", src = "tbl2:protime:drug:cell_n1", value = "416") N=NULL}"><span class="N">416</span></td><td class="even"><span class="even data quantile"><span class="q25">9.2</span><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span><span class="q75">17.1</span><br/><span>10.8&plusmn;1.1</span></td><td class="even"><span class="even data quantile"><span class="q25">9.0</span><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span><span class="q75">14.1</span><br/><span>10.7&plusmn;0.9</span></td><td class="even"><span class="even data quantile"><span class="q25">9.0</span><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span><span class="q75">18.0</span><br/><span>10.8&plusmn;1.1</span></td><td class="even data statistics" data-clipboard-text="{list(index = "ZWVh", src = "tbl2:protime:drug:F", value = "0.23") list(index = "MzAw", src = "tbl2:protime:drug:df2", value = "413")}"><span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.795<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">sex : female</span></td><td class="odd">418</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NGNm", src = "tbl2:sex[sex : female]:drug[D-penicillamine]:numerator", value = "139") list(index = "MmFi", src = "tbl2:sex[sex : female]:drug[D-penicillamine]:ratio", value = "0.903")}"><span class="ratio">0<div class="align">.</div>903</span><span class="percentage">90.260</span><span class="numerator">139</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OGVj", src = "tbl2:sex[NA]:drug[D-penicillamine]:numerator", value = "137") list(index = "ZWVi", src = "tbl2:sex[NA]:drug[D-penicillamine]:ratio", value = "0.867")}"><span class="ratio">0<div class="align">.</div>867</span><span class="percentage">86.709</span><span class="numerator">137</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OGVj", src = "tbl2:sex[NA]:drug[D-penicillamine]:numerator", value = "98") list(index = "ZWVi", src = "tbl2:sex[NA]:drug[D-penicillamine]:ratio", value = "0.925")}"><span class="ratio">0<div class="align">.</div>925</span><span class="percentage">92.453</span><span class="numerator"> 98</span><span class="denominator">106</span></span></td><td class="odd data statistics" data-clipboard-text="{list(index = "MTk1", src = "tbl2:sex:drug:χ^{2}", value = "2.38") list(index = "ZmEz", src = "tbl2:sex:drug:P", value = "0.304")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.304</span><sup>2</sup></td> </tr><tr> <td class="header even tg-label"><span class="variable">Age</span></td><td class="even data N" data-clipboard-text="{list(index = "Njgw", src = "tbl2:age:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">30.6</span><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span><span class="q75">74.5</span><br/><span>48.6&plusmn;10.0</span></td><td class="even"><span class="even data quantile"><span class="q25">26.3</span><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span><span class="q75">78.4</span><br/><span>51.4&plusmn;11.0</span></td><td class="even"><span class="even data quantile"><span class="q25">33.0</span><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span><span class="q75">75.0</span><br/><span>52.9&plusmn;9.8</span></td><td class="even data statistics" data-clipboard-text="{list(index = "MDc2", src = "tbl2:age:drug:F", value = "6.10") list(index = "ZDdh", src = "tbl2:age:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.002<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">spiders : present</span></td><td class="odd">312</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZjMx", src = "tbl2:spiders[spiders : present]:drug[D-penicillamine]:numerator", value = "45") list(index = "NTdi", src = "tbl2:spiders[spiders : present]:drug[D-penicillamine]:ratio", value = "0.292")}"><span class="ratio">0<div class="align">.</div>292</span><span class="percentage">29.221</span><span class="numerator"> 45</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Yjgz", src = "tbl2:spiders[NA]:drug[D-penicillamine]:numerator", value = "45") list(index = "YTBj", src = "tbl2:spiders[NA]:drug[D-penicillamine]:ratio", value = "0.285")}"><span class="ratio">0<div class="align">.</div>285</span><span class="percentage">28.481</span><span class="numerator"> 45</span><span class="denominator">158</span></span></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "OTE1", src = "tbl2:spiders:drug:χ^{2}", value = "0.02") list(index = "Njll", src = "tbl2:spiders:drug:P", value = "0.885")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.885</span><sup>2</sup></td> </tr></tbody>
-</table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.</div></div><script>new Clipboard('.data');</script>
+</style>
+<div class="caption">
+HTML5 Table Hmisc Style
+</div>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td class="header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="header even tg-label">
+<span class="variable">N</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">D-penicillamine</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">placebo</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">not randomized</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">Test Statistic</span>
+</td>
+</tr>
+<tr class="subheaderrow">
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " NTM3", src="tangram:bili:drug[D-penicillamine]:N" , value="154" ) N="NULL}&quot;">
+<span class="N">154</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " OTRl", src="tangram:bili:drug[placebo]:N" , value="158" ) N="NULL}&quot;">
+<span class="N">158</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " ZjNi", src="tangram:bili:drug[not randomized]:N" , value="106" ) N="NULL}&quot;">
+<span class="N">106</span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span>
+</td>
+<td class="odd data N" data-clipboard-text="{list(index = " ZTA3", src="tbl2:bili:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.30</span><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span><span class="q75">28.00</span><br /><span>3.65±5.28</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.30</span><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span><span class="q75">20.00</span><br /><span>2.87±3.63</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.40</span><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span><span class="q75">18.00</span><br /><span>3.12±4.04</span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " MTUy", src="tbl2:bili:drug:F" , value="0.03" ) list(index="NWQ5" , src="tbl2:bili:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.972<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Albumin</span><span class="units">gm/dl</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " NmZm", src="tbl2:albumin:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">1.96</span><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span><span class="q75">4.38</span><br /><span>3.52±0.40</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">2.10</span><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span><span class="q75">4.64</span><br /><span>3.52±0.44</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">2.31</span><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span><span class="q75">4.52</span><br /><span>3.43±0.43</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " ZTE1", src="tbl2:albumin:drug:F" , value="2.13" ) list(index="ZTUy" , src="tbl2:albumin:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.120<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Histologic Stage, Ludwig Criteria</span>
+</td>
+<td class="odd">
+412
+</td>
+<td class="odd">
+</td>
+<td class="odd">
+</td>
+<td class="odd">
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " YWQ3", src="tbl2:stage:drug:χ^{2}" , value="5.33" ) list(index="MGZl" , src="tbl2:stage:drug:P" , value="0.502" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.502</span><sup>2</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        1</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " nzkx", src="tbl2:stage[   1]:drug[D-penicillamine]:numerator" , value="4" ) list(index="MWVm" , src="tbl2:stage[   1]:drug[D-penicillamine]:ratio" , value="0.026" )}"><span class="ratio">0<span class="align">.</span>026</span><span class="percentage">2.597</span><span class="numerator"> 4</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zja4", src="tbl2:stage[   2]:drug[D-penicillamine]:numerator" , value="12" ) list(index="Mzgy" , src="tbl2:stage[   2]:drug[D-penicillamine]:ratio" , value="0.076" )}"><span class="ratio">0<span class="align">.</span>076</span><span class="percentage">7.595</span><span class="numerator"> 12</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yjjm", src="tbl2:stage[   3]:drug[D-penicillamine]:numerator" , value="5" ) list(index="MDc2" , src="tbl2:stage[   3]:drug[D-penicillamine]:ratio" , value="0.050" )}"><span class="ratio">0<span class="align">.</span>050</span><span class="percentage">5.000</span><span class="numerator"> 5</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        2</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yme2", src="tbl2:stage[   1]:drug[placebo]:numerator" , value="32" ) list(index="ODAw" , src="tbl2:stage[   1]:drug[placebo]:ratio" , value="0.208" )}"><span class="ratio">0<span class="align">.</span>208</span><span class="percentage">20.779</span><span class="numerator"> 32</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mtlh", src="tbl2:stage[   2]:drug[placebo]:numerator" , value="35" ) list(index="MTVk" , src="tbl2:stage[   2]:drug[placebo]:ratio" , value="0.222" )}"><span class="ratio">0<span class="align">.</span>222</span><span class="percentage">22.152</span><span class="numerator"> 35</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zdbk", src="tbl2:stage[   3]:drug[placebo]:numerator" , value="25" ) list(index="MTc5" , src="tbl2:stage[   3]:drug[placebo]:ratio" , value="0.250" )}"><span class="ratio">0<span class="align">.</span>250</span><span class="percentage">25.000</span><span class="numerator"> 25</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        3</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " nzm0", src="tbl2:stage[   1]:drug[not randomized]:numerator" , value="64" ) list(index="YWU3" , src="tbl2:stage[   1]:drug[not randomized]:ratio" , value="0.416" )}"><span class="ratio">0<span class="align">.</span>416</span><span class="percentage">41.558</span><span class="numerator"> 64</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ytjh", src="tbl2:stage[   2]:drug[not randomized]:numerator" , value="56" ) list(index="NzA4" , src="tbl2:stage[   2]:drug[not randomized]:ratio" , value="0.354" )}"><span class="ratio">0<span class="align">.</span>354</span><span class="percentage">35.443</span><span class="numerator"> 56</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zjzj", src="tbl2:stage[   3]:drug[not randomized]:numerator" , value="35" ) list(index="MzVj" , src="tbl2:stage[   3]:drug[not randomized]:ratio" , value="0.350" )}"><span class="ratio">0<span class="align">.</span>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        4</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " y2vk", src="tbl2:stage[   1]:drug[NA]:numerator" , value="54" ) list(index="ZTk3" , src="tbl2:stage[   1]:drug[NA]:ratio" , value="0.351" )}"><span class="ratio">0<span class="align">.</span>351</span><span class="percentage">35.065</span><span class="numerator"> 54</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yjfi", src="tbl2:stage[   2]:drug[NA]:numerator" , value="55" ) list(index="MzVh" , src="tbl2:stage[   2]:drug[NA]:ratio" , value="0.348" )}"><span class="ratio">0<span class="align">.</span>348</span><span class="percentage">34.810</span><span class="numerator"> 55</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ztm5", src="tbl2:stage[   3]:drug[NA]:numerator" , value="35" ) list(index="Yzgw" , src="tbl2:stage[   3]:drug[NA]:ratio" , value="0.350" )}"><span class="ratio">0<span class="align">.</span>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Prothrombin Time</span><span class="units">sec.</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " MTBl", src="tbl2:protime:drug:cell_n1" , value="416" ) N="NULL}&quot;">
+<span class="N">416</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">9.2</span><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span><span class="q75">17.1</span><br /><span>10.8±1.1</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">9.0</span><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span><span class="q75">14.1</span><br /><span>10.7±0.9</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">9.0</span><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span><span class="q75">18.0</span><br /><span>10.8±1.1</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " ZWVh", src="tbl2:protime:drug:F" , value="0.23" ) list(index="MzAw" , src="tbl2:protime:drug:df2" , value="413" )}">
+<span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.795<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">sex : female</span>
+</td>
+<td class="odd">
+418
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ngnm", src="tbl2:sex[sex : female]:drug[D-penicillamine]:numerator" , value="139" ) list(index="MmFi" , src="tbl2:sex[sex : female]:drug[D-penicillamine]:ratio" , value="0.903" )}"><span class="ratio">0<span class="align">.</span>903</span><span class="percentage">90.260</span><span class="numerator">139</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ogvj", src="tbl2:sex[NA]:drug[D-penicillamine]:numerator" , value="137" ) list(index="ZWVi" , src="tbl2:sex[NA]:drug[D-penicillamine]:ratio" , value="0.867" )}"><span class="ratio">0<span class="align">.</span>867</span><span class="percentage">86.709</span><span class="numerator">137</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ogvj", src="tbl2:sex[NA]:drug[D-penicillamine]:numerator" , value="98" ) list(index="ZWVi" , src="tbl2:sex[NA]:drug[D-penicillamine]:ratio" , value="0.925" )}"><span class="ratio">0<span class="align">.</span>925</span><span class="percentage">92.453</span><span class="numerator"> 98</span><span class="denominator">106</span></span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " MTk1", src="tbl2:sex:drug:χ^{2}" , value="2.38" ) list(index="ZmEz" , src="tbl2:sex:drug:P" , value="0.304" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.304</span><sup>2</sup>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Age</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " Njgw", src="tbl2:age:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">30.6</span><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span><span class="q75">74.5</span><br /><span>48.6±10.0</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">26.3</span><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span><span class="q75">78.4</span><br /><span>51.4±11.0</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">33.0</span><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span><span class="q75">75.0</span><br /><span>52.9±9.8</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " MDc2", src="tbl2:age:drug:F" , value="6.10" ) list(index="ZDdh" , src="tbl2:age:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.002<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">spiders : present</span>
+</td>
+<td class="odd">
+312
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zjmx", src="tbl2:spiders[spiders : present]:drug[D-penicillamine]:numerator" , value="45" ) list(index="NTdi" , src="tbl2:spiders[spiders : present]:drug[D-penicillamine]:ratio" , value="0.292" )}"><span class="ratio">0<span class="align">.</span>292</span><span class="percentage">29.221</span><span class="numerator"> 45</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yjgz", src="tbl2:spiders[NA]:drug[D-penicillamine]:numerator" , value="45" ) list(index="YTBj" , src="tbl2:spiders[NA]:drug[D-penicillamine]:ratio" , value="0.285" )}"><span class="ratio">0<span class="align">.</span>285</span><span class="percentage">28.481</span><span class="numerator"> 45</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " OTE1", src="tbl2:spiders:drug:χ^{2}" , value="0.02" ) list(index="Njll" , src="tbl2:spiders:drug:P" , value="0.885" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.885</span><sup>2</sup>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="footnote">
+N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.
+</div>
+</div>
+<script>new Clipboard('.data');</script>
 </div>
 <div id="nejm-style-example" class="section level3">
 <h3>NEJM Style Example</h3>
 <p>Fragments can have localized style sheets specified by given id.</p>
-<pre class="r"><code>html5(tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc),
-      fragment=TRUE, inline=&quot;nejm.css&quot;, caption = &quot;HTML5 Table NEJM Style&quot;, id=&quot;tbl3&quot;)</code></pre>
+<pre class="r"><code>tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc,
+        style=&quot;nejm&quot;, caption = &quot;HTML5 Table NEJM Style&quot;, id=&quot;tbl3&quot;)</code></pre>
 <script type="text/javascript">/*!
  * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
@@ -298,26 +569,28 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
  * Licensed MIT © Zeno Rocha
  */
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
-</script><div class="figure" id="tbl3"><style>
+</script>
+<div id="tbl3" class="figure">
+<style>
 #tbl3 body .figbody {
-	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   font-size: 66%;
   -webkit-print-color-adjust: exact;
 }
 
 #tbl3 .figure  {  margin-left:  auto;
-			      margin-right: auto;
+                  margin-right: auto;
 }
 #tbl3 .caption { text-align:   left;
            text-indent: 2em;
-	         padding: 0.5em 0 0.5em 0;
-	         font-weight: bold;
-	         background-color: #f7f4ef !important;
-	         border: 1px solid black;
-	     }
+             padding: 0.5em 0 0.5em 0;
+             font-weight: bold;
+             background-color: #f7f4ef !important;
+             border: 1px solid black;
+         }
 
 #tbl3 .figbody {
-	text-align:   center;
+    text-align:   center;
   border:       1px solid black
 }
 
@@ -327,7 +600,7 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 }
 
 #tbl3 .figbody td {
-	padding: 0.2em 0.5em 0.2em 0.5em;
+    padding: 0.2em 0.5em 0.2em 0.5em;
 }
 
 #tbl3 .figbody thead tr td
@@ -365,16 +638,16 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 #tbl3 .quantile .q75 {order: 3}
 #tbl3 .quantile .q75:after {content: ")";}
 #tbl3 tbody .variable {
-	float:      left;
-	text-align: left;
+    float:      left;
+    text-align: left;
 }
 
 #tbl3 .units {
-	float:      right;
-	font-size:  x-small;
-	text-align: right;
-	padding-left: 1em;
-	vertical-align: text-bottom; /* FIXME why doesn't this work */
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
 #tbl3 .fraction {
@@ -396,8 +669,8 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
 
 
 #tbl3 td .align{
-	display: inline-block;
-	margin: 0 auto;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 #tbl3 .nobr {
@@ -411,22 +684,286 @@ spiders : present                  312   0.292   45/154    0.285   45/158       
    font-size: 70%;
    text-align: left;
 }
-</style><div class="caption">HTML5 Table NEJM Style</div><div class="figbody"><table class="tangram">
-<thead><tr><td class="header even tg-label"><span class="variable"></span></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">D-penicillamine</span></td><td class="header even tg-label"><span class="variable">placebo</span></td><td class="header even tg-label"><span class="variable">not randomized</span></td><td class="header even tg-label"><span class="variable">Test Statistic</span></td></tr><tr class="subheaderrow"><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "NTM3", src = "tangram:bili:drug[D-penicillamine]:N", value = "154") N=NULL}"><span class="N">154</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "OTRl", src = "tangram:bili:drug[placebo]:N", value = "158") N=NULL}"><span class="N">158</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "ZjNi", src = "tangram:bili:drug[not randomized]:N", value = "106") N=NULL}"><span class="N">106</span></td><td class="subheader header even tg-label"><span class="variable"></span></td></tr></thead>
-<tbody><tr> <td class="header odd tg-label"><span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span></td><td class="odd data N" data-clipboard-text="{list(index = "NWI0", src = "tbl3:bili:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span></td><td class="odd data statistics" data-clipboard-text="{list(index = "ZmYz", src = "tbl3:bili:drug:F", value = "0.03") list(index = "MjI2", src = "tbl3:bili:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.972<sup>1</sup></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Albumin</span><span class="units">gm/dl</span></td><td class="even data N" data-clipboard-text="{list(index = "Njcw", src = "tbl3:albumin:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span></td><td class="even"><span class="even data quantile"><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span></td><td class="even"><span class="even data quantile"><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span></td><td class="even data statistics" data-clipboard-text="{list(index = "YjNl", src = "tbl3:albumin:drug:F", value = "2.13") list(index = "NmVm", src = "tbl3:albumin:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.120<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">Histologic Stage, Ludwig Criteria</span></td><td class="odd">412</td><td class="odd"></td><td class="odd"></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "N2M0", src = "tbl3:stage:drug:χ^{2}", value = "5.33") list(index = "ZGUw", src = "tbl3:stage:drug:P", value = "0.502")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.502</span><sup>2</sup></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ODYz", src = "tbl3:stage[   1]:drug[D-penicillamine]:numerator", value = "4") list(index = "MGEx", src = "tbl3:stage[   1]:drug[D-penicillamine]:ratio", value = "0.026")}"><span class="ratio">0<div class="align">.</div>026</span><span class="percentage">2.597</span><span class="numerator">  4</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTg0", src = "tbl3:stage[   2]:drug[D-penicillamine]:numerator", value = "12") list(index = "Yjk5", src = "tbl3:stage[   2]:drug[D-penicillamine]:ratio", value = "0.076")}"><span class="ratio">0<div class="align">.</div>076</span><span class="percentage">7.595</span><span class="numerator"> 12</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NTZl", src = "tbl3:stage[   3]:drug[D-penicillamine]:numerator", value = "5") list(index = "OGQx", src = "tbl3:stage[   3]:drug[D-penicillamine]:ratio", value = "0.050")}"><span class="ratio">0<div class="align">.</div>050</span><span class="percentage">5.000</span><span class="numerator">  5</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NzBm", src = "tbl3:stage[   1]:drug[placebo]:numerator", value = "32") list(index = "MTVh", src = "tbl3:stage[   1]:drug[placebo]:ratio", value = "0.208")}"><span class="ratio">0<div class="align">.</div>208</span><span class="percentage">20.779</span><span class="numerator"> 32</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZDJh", src = "tbl3:stage[   2]:drug[placebo]:numerator", value = "35") list(index = "OTlm", src = "tbl3:stage[   2]:drug[placebo]:ratio", value = "0.222")}"><span class="ratio">0<div class="align">.</div>222</span><span class="percentage">22.152</span><span class="numerator"> 35</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YmE0", src = "tbl3:stage[   3]:drug[placebo]:numerator", value = "25") list(index = "NzVl", src = "tbl3:stage[   3]:drug[placebo]:ratio", value = "0.250")}"><span class="ratio">0<div class="align">.</div>250</span><span class="percentage">25.000</span><span class="numerator"> 25</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MmNh", src = "tbl3:stage[   1]:drug[not randomized]:numerator", value = "64") list(index = "OTNm", src = "tbl3:stage[   1]:drug[not randomized]:ratio", value = "0.416")}"><span class="ratio">0<div class="align">.</div>416</span><span class="percentage">41.558</span><span class="numerator"> 64</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OWRl", src = "tbl3:stage[   2]:drug[not randomized]:numerator", value = "56") list(index = "MGE4", src = "tbl3:stage[   2]:drug[not randomized]:ratio", value = "0.354")}"><span class="ratio">0<div class="align">.</div>354</span><span class="percentage">35.443</span><span class="numerator"> 56</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MGE1", src = "tbl3:stage[   3]:drug[not randomized]:numerator", value = "35") list(index = "YjI3", src = "tbl3:stage[   3]:drug[not randomized]:ratio", value = "0.350")}"><span class="ratio">0<div class="align">.</div>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZmM2", src = "tbl3:stage[   1]:drug[NA]:numerator", value = "54") list(index = "MTgz", src = "tbl3:stage[   1]:drug[NA]:ratio", value = "0.351")}"><span class="ratio">0<div class="align">.</div>351</span><span class="percentage">35.065</span><span class="numerator"> 54</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZDY2", src = "tbl3:stage[   2]:drug[NA]:numerator", value = "55") list(index = "ZGI1", src = "tbl3:stage[   2]:drug[NA]:ratio", value = "0.348")}"><span class="ratio">0<div class="align">.</div>348</span><span class="percentage">34.810</span><span class="numerator"> 55</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MWE5", src = "tbl3:stage[   3]:drug[NA]:numerator", value = "35") list(index = "ZWQ3", src = "tbl3:stage[   3]:drug[NA]:ratio", value = "0.350")}"><span class="ratio">0<div class="align">.</div>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="header even tg-label"><span class="variable">Prothrombin Time</span><span class="units">sec.</span></td><td class="even data N" data-clipboard-text="{list(index = "MWZk", src = "tbl3:protime:drug:cell_n1", value = "416") N=NULL}"><span class="N">416</span></td><td class="even"><span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span></td><td class="even"><span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span></td><td class="even"><span class="even data quantile"><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span></td><td class="even data statistics" data-clipboard-text="{list(index = "Mjlj", src = "tbl3:protime:drug:F", value = "0.23") list(index = "ZTE5", src = "tbl3:protime:drug:df2", value = "413")}"><span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.795<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">sex : female</span></td><td class="odd">418</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NDY0", src = "tbl3:sex[sex : female]:drug[D-penicillamine]:numerator", value = "139") list(index = "MmQy", src = "tbl3:sex[sex : female]:drug[D-penicillamine]:ratio", value = "0.903")}"><span class="ratio">0<div class="align">.</div>903</span><span class="percentage">90.260</span><span class="numerator">139</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Mzg1", src = "tbl3:sex[NA]:drug[D-penicillamine]:numerator", value = "137") list(index = "NWNm", src = "tbl3:sex[NA]:drug[D-penicillamine]:ratio", value = "0.867")}"><span class="ratio">0<div class="align">.</div>867</span><span class="percentage">86.709</span><span class="numerator">137</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Mzg1", src = "tbl3:sex[NA]:drug[D-penicillamine]:numerator", value = "98") list(index = "NWNm", src = "tbl3:sex[NA]:drug[D-penicillamine]:ratio", value = "0.925")}"><span class="ratio">0<div class="align">.</div>925</span><span class="percentage">92.453</span><span class="numerator"> 98</span><span class="denominator">106</span></span></td><td class="odd data statistics" data-clipboard-text="{list(index = "ZWM4", src = "tbl3:sex:drug:χ^{2}", value = "2.38") list(index = "YjFm", src = "tbl3:sex:drug:P", value = "0.304")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.304</span><sup>2</sup></td> </tr><tr> <td class="header even tg-label"><span class="variable">Age</span></td><td class="even data N" data-clipboard-text="{list(index = "ZjE5", src = "tbl3:age:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span></td><td class="even"><span class="even data quantile"><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span></td><td class="even"><span class="even data quantile"><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span></td><td class="even data statistics" data-clipboard-text="{list(index = "MmM4", src = "tbl3:age:drug:F", value = "6.10") list(index = "MDVl", src = "tbl3:age:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.002<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">spiders : present</span></td><td class="odd">312</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MmFm", src = "tbl3:spiders[spiders : present]:drug[D-penicillamine]:numerator", value = "45") list(index = "YWI5", src = "tbl3:spiders[spiders : present]:drug[D-penicillamine]:ratio", value = "0.292")}"><span class="ratio">0<div class="align">.</div>292</span><span class="percentage">29.221</span><span class="numerator"> 45</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ODhh", src = "tbl3:spiders[NA]:drug[D-penicillamine]:numerator", value = "45") list(index = "NjQz", src = "tbl3:spiders[NA]:drug[D-penicillamine]:ratio", value = "0.285")}"><span class="ratio">0<div class="align">.</div>285</span><span class="percentage">28.481</span><span class="numerator"> 45</span><span class="denominator">158</span></span></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "YjBl", src = "tbl3:spiders:drug:χ^{2}", value = "0.02") list(index = "NmU5", src = "tbl3:spiders:drug:P", value = "0.885")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.885</span><sup>2</sup></td> </tr></tbody>
-</table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.</div></div><script>new Clipboard('.data');</script>
+</style>
+<div class="caption">
+HTML5 Table NEJM Style
+</div>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td class="header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="header even tg-label">
+<span class="variable">N</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">D-penicillamine</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">placebo</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">not randomized</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">Test Statistic</span>
+</td>
+</tr>
+<tr class="subheaderrow">
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " NTM3", src="tangram:bili:drug[D-penicillamine]:N" , value="154" ) N="NULL}&quot;">
+<span class="N">154</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " OTRl", src="tangram:bili:drug[placebo]:N" , value="158" ) N="NULL}&quot;">
+<span class="N">158</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " ZjNi", src="tangram:bili:drug[not randomized]:N" , value="106" ) N="NULL}&quot;">
+<span class="N">106</span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span>
+</td>
+<td class="odd data N" data-clipboard-text="{list(index = " NWI0", src="tbl3:bili:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " ZmYz", src="tbl3:bili:drug:F" , value="0.03" ) list(index="MjI2" , src="tbl3:bili:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.972<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Albumin</span><span class="units">gm/dl</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " Njcw", src="tbl3:albumin:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " YjNl", src="tbl3:albumin:drug:F" , value="2.13" ) list(index="NmVm" , src="tbl3:albumin:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.120<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Histologic Stage, Ludwig Criteria</span>
+</td>
+<td class="odd">
+412
+</td>
+<td class="odd">
+</td>
+<td class="odd">
+</td>
+<td class="odd">
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " N2M0", src="tbl3:stage:drug:χ^{2}" , value="5.33" ) list(index="ZGUw" , src="tbl3:stage:drug:P" , value="0.502" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.502</span><sup>2</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        1</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " odyz", src="tbl3:stage[   1]:drug[D-penicillamine]:numerator" , value="4" ) list(index="MGEx" , src="tbl3:stage[   1]:drug[D-penicillamine]:ratio" , value="0.026" )}"><span class="ratio">0<span class="align">.</span>026</span><span class="percentage">2.597</span><span class="numerator"> 4</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mtg0", src="tbl3:stage[   2]:drug[D-penicillamine]:numerator" , value="12" ) list(index="Yjk5" , src="tbl3:stage[   2]:drug[D-penicillamine]:ratio" , value="0.076" )}"><span class="ratio">0<span class="align">.</span>076</span><span class="percentage">7.595</span><span class="numerator"> 12</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ntzl", src="tbl3:stage[   3]:drug[D-penicillamine]:numerator" , value="5" ) list(index="OGQx" , src="tbl3:stage[   3]:drug[D-penicillamine]:ratio" , value="0.050" )}"><span class="ratio">0<span class="align">.</span>050</span><span class="percentage">5.000</span><span class="numerator"> 5</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        2</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " nzbm", src="tbl3:stage[   1]:drug[placebo]:numerator" , value="32" ) list(index="MTVh" , src="tbl3:stage[   1]:drug[placebo]:ratio" , value="0.208" )}"><span class="ratio">0<span class="align">.</span>208</span><span class="percentage">20.779</span><span class="numerator"> 32</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zdjh", src="tbl3:stage[   2]:drug[placebo]:numerator" , value="35" ) list(index="OTlm" , src="tbl3:stage[   2]:drug[placebo]:ratio" , value="0.222" )}"><span class="ratio">0<span class="align">.</span>222</span><span class="percentage">22.152</span><span class="numerator"> 35</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yme0", src="tbl3:stage[   3]:drug[placebo]:numerator" , value="25" ) list(index="NzVl" , src="tbl3:stage[   3]:drug[placebo]:ratio" , value="0.250" )}"><span class="ratio">0<span class="align">.</span>250</span><span class="percentage">25.000</span><span class="numerator"> 25</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        3</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mmnh", src="tbl3:stage[   1]:drug[not randomized]:numerator" , value="64" ) list(index="OTNm" , src="tbl3:stage[   1]:drug[not randomized]:ratio" , value="0.416" )}"><span class="ratio">0<span class="align">.</span>416</span><span class="percentage">41.558</span><span class="numerator"> 64</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " owrl", src="tbl3:stage[   2]:drug[not randomized]:numerator" , value="56" ) list(index="MGE4" , src="tbl3:stage[   2]:drug[not randomized]:ratio" , value="0.354" )}"><span class="ratio">0<span class="align">.</span>354</span><span class="percentage">35.443</span><span class="numerator"> 56</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mge1", src="tbl3:stage[   3]:drug[not randomized]:numerator" , value="35" ) list(index="YjI3" , src="tbl3:stage[   3]:drug[not randomized]:ratio" , value="0.350" )}"><span class="ratio">0<span class="align">.</span>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        4</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zmm2", src="tbl3:stage[   1]:drug[NA]:numerator" , value="54" ) list(index="MTgz" , src="tbl3:stage[   1]:drug[NA]:ratio" , value="0.351" )}"><span class="ratio">0<span class="align">.</span>351</span><span class="percentage">35.065</span><span class="numerator"> 54</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zdy2", src="tbl3:stage[   2]:drug[NA]:numerator" , value="55" ) list(index="ZGI1" , src="tbl3:stage[   2]:drug[NA]:ratio" , value="0.348" )}"><span class="ratio">0<span class="align">.</span>348</span><span class="percentage">34.810</span><span class="numerator"> 55</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mwe5", src="tbl3:stage[   3]:drug[NA]:numerator" , value="35" ) list(index="ZWQ3" , src="tbl3:stage[   3]:drug[NA]:ratio" , value="0.350" )}"><span class="ratio">0<span class="align">.</span>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Prothrombin Time</span><span class="units">sec.</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " MWZk", src="tbl3:protime:drug:cell_n1" , value="416" ) N="NULL}&quot;">
+<span class="N">416</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " Mjlj", src="tbl3:protime:drug:F" , value="0.23" ) list(index="ZTE5" , src="tbl3:protime:drug:df2" , value="413" )}">
+<span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.795<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">sex : female</span>
+</td>
+<td class="odd">
+418
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ndy0", src="tbl3:sex[sex : female]:drug[D-penicillamine]:numerator" , value="139" ) list(index="MmQy" , src="tbl3:sex[sex : female]:drug[D-penicillamine]:ratio" , value="0.903" )}"><span class="ratio">0<span class="align">.</span>903</span><span class="percentage">90.260</span><span class="numerator">139</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mzg1", src="tbl3:sex[NA]:drug[D-penicillamine]:numerator" , value="137" ) list(index="NWNm" , src="tbl3:sex[NA]:drug[D-penicillamine]:ratio" , value="0.867" )}"><span class="ratio">0<span class="align">.</span>867</span><span class="percentage">86.709</span><span class="numerator">137</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mzg1", src="tbl3:sex[NA]:drug[D-penicillamine]:numerator" , value="98" ) list(index="NWNm" , src="tbl3:sex[NA]:drug[D-penicillamine]:ratio" , value="0.925" )}"><span class="ratio">0<span class="align">.</span>925</span><span class="percentage">92.453</span><span class="numerator"> 98</span><span class="denominator">106</span></span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " ZWM4", src="tbl3:sex:drug:χ^{2}" , value="2.38" ) list(index="YjFm" , src="tbl3:sex:drug:P" , value="0.304" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.304</span><sup>2</sup>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Age</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " ZjE5", src="tbl3:age:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " MmM4", src="tbl3:age:drug:F" , value="6.10" ) list(index="MDVl" , src="tbl3:age:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.002<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">spiders : present</span>
+</td>
+<td class="odd">
+312
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mmfm", src="tbl3:spiders[spiders : present]:drug[D-penicillamine]:numerator" , value="45" ) list(index="YWI5" , src="tbl3:spiders[spiders : present]:drug[D-penicillamine]:ratio" , value="0.292" )}"><span class="ratio">0<span class="align">.</span>292</span><span class="percentage">29.221</span><span class="numerator"> 45</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " odhh", src="tbl3:spiders[NA]:drug[D-penicillamine]:numerator" , value="45" ) list(index="NjQz" , src="tbl3:spiders[NA]:drug[D-penicillamine]:ratio" , value="0.285" )}"><span class="ratio">0<span class="align">.</span>285</span><span class="percentage">28.481</span><span class="numerator"> 45</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " YjBl", src="tbl3:spiders:drug:χ^{2}" , value="0.02" ) list(index="NmU5" , src="tbl3:spiders:drug:P" , value="0.885" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.885</span><sup>2</sup>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="footnote">
+N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.
+</div>
+</div>
+<script>new Clipboard('.data');</script>
 </div>
 <div id="lancet-style-example" class="section level3">
 <h3>Lancet Style Example</h3>
 <p>Fragments can have localized style sheets specified by given id.</p>
-<pre class="r"><code>tbl &lt;- tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]&quot;, 
-              data=pbc,
-              pformat = 5)
-html5(tbl,
-      fragment=TRUE,
-      inline=&quot;lancet.css&quot;,
-      caption = &quot;HTML5 Table Lancet Style&quot;, id=&quot;tbl4&quot;
-      )</code></pre>
+<pre class="r"><code>tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]&quot;, 
+        id=&quot;tbl4&quot;,
+        data=pbc,
+        pformat = 5,
+        style=&quot;lancet&quot;,
+        caption = &quot;HTML5 Table Lancet Style&quot;
+       )</code></pre>
 <script type="text/javascript">/*!
  * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
@@ -434,25 +971,27 @@ html5(tbl,
  * Licensed MIT © Zeno Rocha
  */
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
-</script><div class="figure" id="tbl4"><style>
+</script>
+<div id="tbl4" class="figure">
+<style>
 
 #tbl4 body .figbody {
-	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   font-size: 66%;
   -webkit-print-color-adjust: exact;
 }
 
 #tbl4 .figure  {  margin-left:  auto;
-			      margin-right: auto;
+                  margin-right: auto;
 }
 #tbl4 .caption { text-align:   left;
            text-indent: 2em;
-	         padding: 0.5em 0 0.5em 0;
-	         font-weight: bold;
-	     }
+             padding: 0.5em 0 0.5em 0;
+             font-weight: bold;
+         }
 
 #tbl4 .figbody {
-	text-align:   center;
+    text-align:   center;
   border:       1px solid #c7496d;
 }
 
@@ -462,7 +1001,7 @@ html5(tbl,
 }
 
 #tbl4 .figbody td {
-	padding: 0.2em 0.5em 0.2em 0.5em;
+    padding: 0.2em 0.5em 0.2em 0.5em;
 }
 
 #tbl4 .figbody thead
@@ -516,16 +1055,16 @@ html5(tbl,
 #tbl4 .quantile .q75 {order: 3}
 #tbl4 .quantile .q75:after {content: ")";}
 #tbl4 tbody .variable {
-	float:      left;
-	text-align: left;
+    float:      left;
+    text-align: left;
 }
 
 #tbl4 .units {
-	float:      right;
-	font-size:  x-small;
-	text-align: right;
-	padding-left: 1em;
-	vertical-align: text-bottom; /* FIXME why doesn't this work */
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
 #tbl4 .fraction {
@@ -544,8 +1083,8 @@ html5(tbl,
 
 
 #tbl4 td .align{
-	display: inline-block;
-	margin: 0 auto;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 #tbl4 .nobr {
@@ -559,15 +1098,281 @@ html5(tbl,
    font-size: 70%;
    text-align: left;
 }
-</style><div class="caption">HTML5 Table Lancet Style</div><div class="figbody"><table class="tangram">
-<thead><tr><td class="header even tg-label"><span class="variable"></span></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">D-penicillamine</span></td><td class="header even tg-label"><span class="variable">placebo</span></td><td class="header even tg-label"><span class="variable">not randomized</span></td><td class="header even tg-label"><span class="variable">Test Statistic</span></td></tr><tr class="subheaderrow"><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "NTM3", src = "tangram:bili:drug[D-penicillamine]:N", value = "154") N=NULL}"><span class="N">154</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "OTRl", src = "tangram:bili:drug[placebo]:N", value = "158") N=NULL}"><span class="N">158</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "ZjNi", src = "tangram:bili:drug[not randomized]:N", value = "106") N=NULL}"><span class="N">106</span></td><td class="subheader header even tg-label"><span class="variable"></span></td></tr></thead>
-<tbody><tr> <td class="header odd tg-label"><span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span></td><td class="odd data N" data-clipboard-text="{list(index = "MWFj", src = "tbl4:bili:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span></td><td class="odd data statistics" data-clipboard-text="{list(index = "YzMz", src = "tbl4:bili:drug:F", value = "0.03") list(index = "Mzkw", src = "tbl4:bili:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.97248<sup>1</sup></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Albumin</span><span class="units">gm/dl</span></td><td class="even data N" data-clipboard-text="{list(index = "YTY4", src = "tbl4:albumin:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span></td><td class="even"><span class="even data quantile"><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span></td><td class="even"><span class="even data quantile"><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span></td><td class="even data statistics" data-clipboard-text="{list(index = "NzUz", src = "tbl4:albumin:drug:F", value = "2.13") list(index = "OTNm", src = "tbl4:albumin:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.11996<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">Histologic Stage, Ludwig Criteria</span></td><td class="odd">412</td><td class="odd"></td><td class="odd"></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "MmM5", src = "tbl4:stage:drug:χ^{2}", value = "5.33") list(index = "YzUy", src = "tbl4:stage:drug:P", value = "0.50235")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.50235</span><sup>2</sup></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Yjc1", src = "tbl4:stage[   1]:drug[D-penicillamine]:numerator", value = "4") list(index = "YmZh", src = "tbl4:stage[   1]:drug[D-penicillamine]:ratio", value = "0.0")}"><span class="ratio">0<div class="align">.</div>0</span><span class="percentage">2.6</span><span class="numerator">  4</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OWI1", src = "tbl4:stage[   2]:drug[D-penicillamine]:numerator", value = "12") list(index = "Y2Ri", src = "tbl4:stage[   2]:drug[D-penicillamine]:ratio", value = "0.1")}"><span class="ratio">0<div class="align">.</div>1</span><span class="percentage">7.6</span><span class="numerator"> 12</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZjYy", src = "tbl4:stage[   3]:drug[D-penicillamine]:numerator", value = "5") list(index = "Njcy", src = "tbl4:stage[   3]:drug[D-penicillamine]:ratio", value = "0.1")}"><span class="ratio">0<div class="align">.</div>1</span><span class="percentage">5.0</span><span class="numerator">  5</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "N2Vh", src = "tbl4:stage[   1]:drug[placebo]:numerator", value = "32") list(index = "NmY0", src = "tbl4:stage[   1]:drug[placebo]:ratio", value = "0.2")}"><span class="ratio">0<div class="align">.</div>2</span><span class="percentage">20.8</span><span class="numerator"> 32</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YTY0", src = "tbl4:stage[   2]:drug[placebo]:numerator", value = "35") list(index = "MDBh", src = "tbl4:stage[   2]:drug[placebo]:ratio", value = "0.2")}"><span class="ratio">0<div class="align">.</div>2</span><span class="percentage">22.2</span><span class="numerator"> 35</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NDI0", src = "tbl4:stage[   3]:drug[placebo]:numerator", value = "25") list(index = "NmQ5", src = "tbl4:stage[   3]:drug[placebo]:ratio", value = "0.2")}"><span class="ratio">0<div class="align">.</div>2</span><span class="percentage">25.0</span><span class="numerator"> 25</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NmNl", src = "tbl4:stage[   1]:drug[not randomized]:numerator", value = "64") list(index = "YWEw", src = "tbl4:stage[   1]:drug[not randomized]:ratio", value = "0.4")}"><span class="ratio">0<div class="align">.</div>4</span><span class="percentage">41.6</span><span class="numerator"> 64</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OTU0", src = "tbl4:stage[   2]:drug[not randomized]:numerator", value = "56") list(index = "Nzc0", src = "tbl4:stage[   2]:drug[not randomized]:ratio", value = "0.4")}"><span class="ratio">0<div class="align">.</div>4</span><span class="percentage">35.4</span><span class="numerator"> 56</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MmU5", src = "tbl4:stage[   3]:drug[not randomized]:numerator", value = "35") list(index = "MzBh", src = "tbl4:stage[   3]:drug[not randomized]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">35.0</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ODg0", src = "tbl4:stage[   1]:drug[NA]:numerator", value = "54") list(index = "NTI5", src = "tbl4:stage[   1]:drug[NA]:ratio", value = "0.4")}"><span class="ratio">0<div class="align">.</div>4</span><span class="percentage">35.1</span><span class="numerator"> 54</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NjEz", src = "tbl4:stage[   2]:drug[NA]:numerator", value = "55") list(index = "NGYz", src = "tbl4:stage[   2]:drug[NA]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">34.8</span><span class="numerator"> 55</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MmJk", src = "tbl4:stage[   3]:drug[NA]:numerator", value = "35") list(index = "ZTU0", src = "tbl4:stage[   3]:drug[NA]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">35.0</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="header even tg-label"><span class="variable">Prothrombin Time</span><span class="units">sec.</span></td><td class="even data N" data-clipboard-text="{list(index = "OGIx", src = "tbl4:protime:drug:cell_n1", value = "416") N=NULL}"><span class="N">416</span></td><td class="even"><span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span></td><td class="even"><span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span></td><td class="even"><span class="even data quantile"><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span></td><td class="even data statistics" data-clipboard-text="{list(index = "MDZk", src = "tbl4:protime:drug:F", value = "0.23") list(index = "MjIy", src = "tbl4:protime:drug:df2", value = "413")}"><span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.79472<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">sex : female</span></td><td class="odd">418</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "M2Iw", src = "tbl4:sex[sex : female]:drug[D-penicillamine]:numerator", value = "139") list(index = "Yzk4", src = "tbl4:sex[sex : female]:drug[D-penicillamine]:ratio", value = "0.9")}"><span class="ratio">0<div class="align">.</div>9</span><span class="percentage">90.3</span><span class="numerator">139</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTg0", src = "tbl4:sex[NA]:drug[D-penicillamine]:numerator", value = "137") list(index = "MGEw", src = "tbl4:sex[NA]:drug[D-penicillamine]:ratio", value = "0.9")}"><span class="ratio">0<div class="align">.</div>9</span><span class="percentage">86.7</span><span class="numerator">137</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTg0", src = "tbl4:sex[NA]:drug[D-penicillamine]:numerator", value = "98") list(index = "MGEw", src = "tbl4:sex[NA]:drug[D-penicillamine]:ratio", value = "0.9")}"><span class="ratio">0<div class="align">.</div>9</span><span class="percentage">92.5</span><span class="numerator"> 98</span><span class="denominator">106</span></span></td><td class="odd data statistics" data-clipboard-text="{list(index = "Y2Qy", src = "tbl4:sex:drug:χ^{2}", value = "2.38") list(index = "NDEx", src = "tbl4:sex:drug:P", value = "0.30387")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.30387</span><sup>2</sup></td> </tr><tr> <td class="header even tg-label"><span class="variable">Age</span></td><td class="even data N" data-clipboard-text="{list(index = "MTQz", src = "tbl4:age:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span></td><td class="even"><span class="even data quantile"><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span></td><td class="even"><span class="even data quantile"><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span></td><td class="even data statistics" data-clipboard-text="{list(index = "OTE5", src = "tbl4:age:drug:F", value = "6.10") list(index = "ZDdl", src = "tbl4:age:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.00245<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">spiders : present</span></td><td class="odd">312</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YzUy", src = "tbl4:spiders[spiders : present]:drug[D-penicillamine]:numerator", value = "45") list(index = "MmNi", src = "tbl4:spiders[spiders : present]:drug[D-penicillamine]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">29.2</span><span class="numerator"> 45</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MDk1", src = "tbl4:spiders[NA]:drug[D-penicillamine]:numerator", value = "45") list(index = "NmEy", src = "tbl4:spiders[NA]:drug[D-penicillamine]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">28.5</span><span class="numerator"> 45</span><span class="denominator">158</span></span></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "ODYy", src = "tbl4:spiders:drug:χ^{2}", value = "0.02") list(index = "MDYx", src = "tbl4:spiders:drug:P", value = "0.88534")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.88534</span><sup>2</sup></td> </tr></tbody>
-</table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.</div></div><script>new Clipboard('.data');</script>
+</style>
+<div class="caption">
+HTML5 Table Lancet Style
+</div>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td class="header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="header even tg-label">
+<span class="variable">N</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">D-penicillamine</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">placebo</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">not randomized</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">Test Statistic</span>
+</td>
+</tr>
+<tr class="subheaderrow">
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " NTM3", src="tangram:bili:drug[D-penicillamine]:N" , value="154" ) N="NULL}&quot;">
+<span class="N">154</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " OTRl", src="tangram:bili:drug[placebo]:N" , value="158" ) N="NULL}&quot;">
+<span class="N">158</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " ZjNi", src="tangram:bili:drug[not randomized]:N" , value="106" ) N="NULL}&quot;">
+<span class="N">106</span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span>
+</td>
+<td class="odd data N" data-clipboard-text="{list(index = " MWFj", src="tbl4:bili:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " YzMz", src="tbl4:bili:drug:F" , value="0.03" ) list(index="Mzkw" , src="tbl4:bili:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.97248<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Albumin</span><span class="units">gm/dl</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " YTY4", src="tbl4:albumin:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " NzUz", src="tbl4:albumin:drug:F" , value="2.13" ) list(index="OTNm" , src="tbl4:albumin:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.11996<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Histologic Stage, Ludwig Criteria</span>
+</td>
+<td class="odd">
+412
+</td>
+<td class="odd">
+</td>
+<td class="odd">
+</td>
+<td class="odd">
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " MmM5", src="tbl4:stage:drug:χ^{2}" , value="5.33" ) list(index="YzUy" , src="tbl4:stage:drug:P" , value="0.50235" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.50235</span><sup>2</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        1</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yjc1", src="tbl4:stage[   1]:drug[D-penicillamine]:numerator" , value="4" ) list(index="YmZh" , src="tbl4:stage[   1]:drug[D-penicillamine]:ratio" , value="0.0" )}"><span class="ratio">0<span class="align">.</span>0</span><span class="percentage">2.6</span><span class="numerator"> 4</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " owi1", src="tbl4:stage[   2]:drug[D-penicillamine]:numerator" , value="12" ) list(index="Y2Ri" , src="tbl4:stage[   2]:drug[D-penicillamine]:ratio" , value="0.1" )}"><span class="ratio">0<span class="align">.</span>1</span><span class="percentage">7.6</span><span class="numerator"> 12</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " zjyy", src="tbl4:stage[   3]:drug[D-penicillamine]:numerator" , value="5" ) list(index="Njcy" , src="tbl4:stage[   3]:drug[D-penicillamine]:ratio" , value="0.1" )}"><span class="ratio">0<span class="align">.</span>1</span><span class="percentage">5.0</span><span class="numerator"> 5</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        2</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " n2vh", src="tbl4:stage[   1]:drug[placebo]:numerator" , value="32" ) list(index="NmY0" , src="tbl4:stage[   1]:drug[placebo]:ratio" , value="0.2" )}"><span class="ratio">0<span class="align">.</span>2</span><span class="percentage">20.8</span><span class="numerator"> 32</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yty0", src="tbl4:stage[   2]:drug[placebo]:numerator" , value="35" ) list(index="MDBh" , src="tbl4:stage[   2]:drug[placebo]:ratio" , value="0.2" )}"><span class="ratio">0<span class="align">.</span>2</span><span class="percentage">22.2</span><span class="numerator"> 35</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ndi0", src="tbl4:stage[   3]:drug[placebo]:numerator" , value="25" ) list(index="NmQ5" , src="tbl4:stage[   3]:drug[placebo]:ratio" , value="0.2" )}"><span class="ratio">0<span class="align">.</span>2</span><span class="percentage">25.0</span><span class="numerator"> 25</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        3</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " nmnl", src="tbl4:stage[   1]:drug[not randomized]:numerator" , value="64" ) list(index="YWEw" , src="tbl4:stage[   1]:drug[not randomized]:ratio" , value="0.4" )}"><span class="ratio">0<span class="align">.</span>4</span><span class="percentage">41.6</span><span class="numerator"> 64</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " otu0", src="tbl4:stage[   2]:drug[not randomized]:numerator" , value="56" ) list(index="Nzc0" , src="tbl4:stage[   2]:drug[not randomized]:ratio" , value="0.4" )}"><span class="ratio">0<span class="align">.</span>4</span><span class="percentage">35.4</span><span class="numerator"> 56</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mmu5", src="tbl4:stage[   3]:drug[not randomized]:numerator" , value="35" ) list(index="MzBh" , src="tbl4:stage[   3]:drug[not randomized]:ratio" , value="0.3" )}"><span class="ratio">0<span class="align">.</span>3</span><span class="percentage">35.0</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        4</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " odg0", src="tbl4:stage[   1]:drug[NA]:numerator" , value="54" ) list(index="NTI5" , src="tbl4:stage[   1]:drug[NA]:ratio" , value="0.4" )}"><span class="ratio">0<span class="align">.</span>4</span><span class="percentage">35.1</span><span class="numerator"> 54</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " njez", src="tbl4:stage[   2]:drug[NA]:numerator" , value="55" ) list(index="NGYz" , src="tbl4:stage[   2]:drug[NA]:ratio" , value="0.3" )}"><span class="ratio">0<span class="align">.</span>3</span><span class="percentage">34.8</span><span class="numerator"> 55</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mmjk", src="tbl4:stage[   3]:drug[NA]:numerator" , value="35" ) list(index="ZTU0" , src="tbl4:stage[   3]:drug[NA]:ratio" , value="0.3" )}"><span class="ratio">0<span class="align">.</span>3</span><span class="percentage">35.0</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+</td>
+<td class="odd">
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Prothrombin Time</span><span class="units">sec.</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " OGIx", src="tbl4:protime:drug:cell_n1" , value="416" ) N="NULL}&quot;">
+<span class="N">416</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " MDZk", src="tbl4:protime:drug:F" , value="0.23" ) list(index="MjIy" , src="tbl4:protime:drug:df2" , value="413" )}">
+<span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.79472<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">sex : female</span>
+</td>
+<td class="odd">
+418
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " m2iw", src="tbl4:sex[sex : female]:drug[D-penicillamine]:numerator" , value="139" ) list(index="Yzk4" , src="tbl4:sex[sex : female]:drug[D-penicillamine]:ratio" , value="0.9" )}"><span class="ratio">0<span class="align">.</span>9</span><span class="percentage">90.3</span><span class="numerator">139</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mtg0", src="tbl4:sex[NA]:drug[D-penicillamine]:numerator" , value="137" ) list(index="MGEw" , src="tbl4:sex[NA]:drug[D-penicillamine]:ratio" , value="0.9" )}"><span class="ratio">0<span class="align">.</span>9</span><span class="percentage">86.7</span><span class="numerator">137</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mtg0", src="tbl4:sex[NA]:drug[D-penicillamine]:numerator" , value="98" ) list(index="MGEw" , src="tbl4:sex[NA]:drug[D-penicillamine]:ratio" , value="0.9" )}"><span class="ratio">0<span class="align">.</span>9</span><span class="percentage">92.5</span><span class="numerator"> 98</span><span class="denominator">106</span></span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " Y2Qy", src="tbl4:sex:drug:χ^{2}" , value="2.38" ) list(index="NDEx" , src="tbl4:sex:drug:P" , value="0.30387" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.30387</span><sup>2</sup>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Age</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " MTQz", src="tbl4:age:drug:cell_n1" , value="418" ) N="NULL}&quot;">
+<span class="N">418</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span>
+</td>
+<td class="even data statistics" data-clipboard-text="{list(index = " OTE5", src="tbl4:age:drug:F" , value="6.10" ) list(index="ZDdl" , src="tbl4:age:drug:df2" , value="415" )}">
+<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.00245<sup>1</sup></span>
+</td>
+</tr>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">spiders : present</span>
+</td>
+<td class="odd">
+312
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " yzuy", src="tbl4:spiders[spiders : present]:drug[D-penicillamine]:numerator" , value="45" ) list(index="MmNi" , src="tbl4:spiders[spiders : present]:drug[D-penicillamine]:ratio" , value="0.3" )}"><span class="ratio">0<span class="align">.</span>3</span><span class="percentage">29.2</span><span class="numerator"> 45</span><span class="denominator">154</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mdk1", src="tbl4:spiders[NA]:drug[D-penicillamine]:numerator" , value="45" ) list(index="NmEy" , src="tbl4:spiders[NA]:drug[D-penicillamine]:ratio" , value="0.3" )}"><span class="ratio">0<span class="align">.</span>3</span><span class="percentage">28.5</span><span class="numerator"> 45</span><span class="denominator">158</span></span>
+</td>
+<td class="odd">
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " ODYy", src="tbl4:spiders:drug:χ^{2}" , value="0.02" ) list(index="MDYx" , src="tbl4:spiders:drug:P" , value="0.88534" )}">
+<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.88534</span><sup>2</sup>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="footnote">
+N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.
+</div>
+</div>
+<script>new Clipboard('.data');</script>
 </div>
 <div id="indexing" class="section level3">
 <h3>Indexing</h3>
 <p>It is also capable of producing an index of contents inside a table for traceability.</p>
-<pre class="r"><code>index(tangram(&quot;drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders&quot;, pbc))[1:20,]</code></pre>
+<pre class="r"><code>index(tangram(&quot;drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders&quot;,
+              pbc, id=&quot;tbl2&quot;))[1:20,]</code></pre>
 <pre><code>      key    src                                               value  
  [1,] &quot;NTM3&quot; &quot;tangram:bili:drug[D-penicillamine]:N&quot;            &quot;154&quot;  
  [2,] &quot;OTRl&quot; &quot;tangram:bili:drug[placebo]:N&quot;                    &quot;158&quot;  
@@ -597,10 +1402,10 @@ y &lt;- round(rnorm(375, 80,  9))
 y[rbinom(375, 1, prob=0.05)] &lt;- NA
 attr(x, &quot;label&quot;) &lt;- &quot;Global score, 3m&quot;
 attr(y, &quot;label&quot;) &lt;- &quot;Global score, 12m&quot;
-html5(tangram(1 ~ x+y,
-                    data.frame(x=x, y=y),
-                    after=hmisc_intercept_cleanup),
-      fragment=TRUE, inline=&quot;lancet.css&quot;, caption=&quot;&quot;, id=&quot;tbl5&quot;)</code></pre>
+tangram(1 ~ x+y,
+        data.frame(x=x, y=y),
+        style=&quot;lancet&quot;, caption=&quot;Intercept Example&quot;, id=&quot;tbl5&quot;) %&gt;%
+del_row(2) %&gt;% del_col(4)</code></pre>
 <script type="text/javascript">/*!
  * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
@@ -608,25 +1413,27 @@ html5(tangram(1 ~ x+y,
  * Licensed MIT © Zeno Rocha
  */
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
-</script><div class="figure" id="tbl5"><style>
+</script>
+<div id="tbl5" class="figure">
+<style>
 
 #tbl5 body .figbody {
-	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   font-size: 66%;
   -webkit-print-color-adjust: exact;
 }
 
 #tbl5 .figure  {  margin-left:  auto;
-			      margin-right: auto;
+                  margin-right: auto;
 }
 #tbl5 .caption { text-align:   left;
            text-indent: 2em;
-	         padding: 0.5em 0 0.5em 0;
-	         font-weight: bold;
-	     }
+             padding: 0.5em 0 0.5em 0;
+             font-weight: bold;
+         }
 
 #tbl5 .figbody {
-	text-align:   center;
+    text-align:   center;
   border:       1px solid #c7496d;
 }
 
@@ -636,7 +1443,7 @@ html5(tangram(1 ~ x+y,
 }
 
 #tbl5 .figbody td {
-	padding: 0.2em 0.5em 0.2em 0.5em;
+    padding: 0.2em 0.5em 0.2em 0.5em;
 }
 
 #tbl5 .figbody thead
@@ -690,16 +1497,16 @@ html5(tangram(1 ~ x+y,
 #tbl5 .quantile .q75 {order: 3}
 #tbl5 .quantile .q75:after {content: ")";}
 #tbl5 tbody .variable {
-	float:      left;
-	text-align: left;
+    float:      left;
+    text-align: left;
 }
 
 #tbl5 .units {
-	float:      right;
-	font-size:  x-small;
-	text-align: right;
-	padding-left: 1em;
-	vertical-align: text-bottom; /* FIXME why doesn't this work */
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
 #tbl5 .fraction {
@@ -718,8 +1525,8 @@ html5(tangram(1 ~ x+y,
 
 
 #tbl5 td .align{
-	display: inline-block;
-	margin: 0 auto;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 #tbl5 .nobr {
@@ -733,10 +1540,56 @@ html5(tangram(1 ~ x+y,
    font-size: 70%;
    text-align: left;
 }
-</style><div class="caption"></div><div class="figbody"><table class="tangram">
-<thead><tr><td class="even"></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">All</span></td></tr></thead>
-<tbody><tr> <td class="header odd tg-label"><span class="variable">Global score, 3m</span></td><td class="odd data N" data-clipboard-text="{list(index = "ZjYz", src = "tbl5:x:1:cell_n1", value = "375") N=NULL}"><span class="N">375</span></td><td class="odd"><span class="odd data quantile"><span class="q25">72</span><span class="q50">79</span><span class="q75">86</span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Global score, 12m</span></td><td class="even data N" data-clipboard-text="{list(index = "ZjQ5", src = "tbl5:y:1:cell_n1", value = "374") N=NULL}"><span class="N">374</span></td><td class="even"><span class="even data quantile"><span class="q25">74</span><span class="q50">80</span><span class="q75">86</span></td> </tr></tbody>
-</table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.</div></div><script>new Clipboard('.data');</script>
+</style>
+<div class="caption">
+Intercept Example
+</div>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td class="header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="header even tg-label">
+<span class="variable">N</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">All</span>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Global score, 3m</span>
+</td>
+<td class="odd data N" data-clipboard-text="{list(index = " ZjYz", src="tbl5:x:1:cell_n1" , value="375" ) N="NULL}&quot;">
+<span class="N">375</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">72</span><span class="q50">79</span><span class="q75">85</span>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Global score, 12m</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " ZjQ5", src="tbl5:y:1:cell_n1" , value="374" ) N="NULL}&quot;">
+<span class="N">374</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">74</span><span class="q50">80</span><span class="q75">87</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="footnote">
+N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.
+</div>
+</div>
+<script>new Clipboard('.data');</script>
 </div>
 <div id="types" class="section level3">
 <h3>Types</h3>
@@ -755,14 +1608,15 @@ html5(tangram(1 ~ x+y,
 <pre class="r"><code>d1 &lt;- iris
 d1$A &lt;- d1$Sepal.Length &gt; 5.1
 attr(d1$A,&quot;label&quot;) &lt;- &quot;Sepal Length &gt; 5.1&quot;
-tbl1 &lt;- tangram(
- Species + 1 ~ A + Sepal.Width,
- data = d1,
- after = list(drop_statistics, function(tbl) del_col(tbl, 6))
- )
-
-html5(tbl1,
-     fragment=TRUE, inline=&quot;nejm.css&quot;, caption = &quot;Example All Summary&quot;, id=&quot;tbl1&quot;)</code></pre>
+tangram(
+   Species + 1 ~ A + Sepal.Width,
+   data = d1,
+   id=&quot;tbl6&quot;,
+   style=&quot;nejm&quot;,
+   caption=&quot;Example All Summary&quot;
+) %&gt;%
+drop_statistics() %&gt;%
+del_col(6)</code></pre>
 <script type="text/javascript">/*!
  * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
@@ -770,112 +1624,114 @@ html5(tbl1,
  * Licensed MIT © Zeno Rocha
  */
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
-</script><div class="figure" id="tbl1"><style>
-#tbl1 body .figbody {
-	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+</script>
+<div id="tbl6" class="figure">
+<style>
+#tbl6 body .figbody {
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   font-size: 66%;
   -webkit-print-color-adjust: exact;
 }
 
-#tbl1 .figure  {  margin-left:  auto;
-			      margin-right: auto;
+#tbl6 .figure  {  margin-left:  auto;
+                  margin-right: auto;
 }
-#tbl1 .caption { text-align:   left;
+#tbl6 .caption { text-align:   left;
            text-indent: 2em;
-	         padding: 0.5em 0 0.5em 0;
-	         font-weight: bold;
-	         background-color: #f7f4ef !important;
-	         border: 1px solid black;
-	     }
+             padding: 0.5em 0 0.5em 0;
+             font-weight: bold;
+             background-color: #f7f4ef !important;
+             border: 1px solid black;
+         }
 
-#tbl1 .figbody {
-	text-align:   center;
+#tbl6 .figbody {
+    text-align:   center;
   border:       1px solid black
 }
 
-#tbl1 .figbody table {
+#tbl6 .figbody table {
   margin: 0;
   width: 100%;
 }
 
-#tbl1 .figbody td {
-	padding: 0.2em 0.5em 0.2em 0.5em;
+#tbl6 .figbody td {
+    padding: 0.2em 0.5em 0.2em 0.5em;
 }
 
-#tbl1 .figbody thead tr td
+#tbl6 .figbody thead tr td
 {
     font-weight: bold;
 }
 
-#tbl1 .figbody tbody tr:nth-child(odd) {background: #fffbed !important;}
+#tbl6 .figbody tbody tr:nth-child(odd) {background: #fffbed !important;}
 
-#tbl1 .header td {text-align: center;}
+#tbl6 .header td {text-align: center;}
 
-#tbl1 .subheader    { font-size: smaller; }
-#tbl1 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
+#tbl6 .subheader    { font-size: smaller; }
+#tbl6 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
 
-#tbl1 .subheader em {font-style: normal;}
+#tbl6 .subheader em {font-style: normal;}
 
-#tbl1 .header.N:before { content: "(n="; }
-#tbl1 .header.N:after  { content: ")"; }
+#tbl6 .header.N:before { content: "(n="; }
+#tbl6 .header.N:after  { content: ")"; }
 
-#tbl1 .quantile {
+#tbl6 .quantile {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-#tbl1 .quantile .q50 {
+#tbl6 .quantile .q50 {
   order: 1;
   padding-right: 0.5em;
 }
-#tbl1 .quantile .q25:before {content: "(";}
-#tbl1 .quantile .q25 {
+#tbl6 .quantile .q25:before {content: "(";}
+#tbl6 .quantile .q25 {
   order: 2
 }
-#tbl1 .quantile .q75:before {content: ", ";}
-#tbl1 .quantile .q75 {order: 3}
-#tbl1 .quantile .q75:after {content: ")";}
-#tbl1 tbody .variable {
-	float:      left;
-	text-align: left;
+#tbl6 .quantile .q75:before {content: ", ";}
+#tbl6 .quantile .q75 {order: 3}
+#tbl6 .quantile .q75:after {content: ")";}
+#tbl6 tbody .variable {
+    float:      left;
+    text-align: left;
 }
 
-#tbl1 .units {
-	float:      right;
-	font-size:  x-small;
-	text-align: right;
-	padding-left: 1em;
-	vertical-align: text-bottom; /* FIXME why doesn't this work */
+#tbl6 .units {
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-#tbl1 .fraction {
+#tbl6 .fraction {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-#tbl1 .fraction .numerator   { order: 1 }
-#tbl1 .fraction .denominator:before {content: "/";}
-#tbl1 .fraction .denominator { order: 2; }
-#tbl1 .fraction .ratio       { order: 3; display: none; }
-#tbl1 .fraction .percentage:before {content: "\00A0(";}
-#tbl1 .fraction .percentage  { order: 4; }
-#tbl1 .fraction .percentage:after  {content: ")";}
+#tbl6 .fraction .numerator   { order: 1 }
+#tbl6 .fraction .denominator:before {content: "/";}
+#tbl6 .fraction .denominator { order: 2; }
+#tbl6 .fraction .ratio       { order: 3; display: none; }
+#tbl6 .fraction .percentage:before {content: "\00A0(";}
+#tbl6 .fraction .percentage  { order: 4; }
+#tbl6 .fraction .percentage:after  {content: ")";}
 
-#tbl1 .statistics .description {font-style: italic;}
-#tbl1 .statistic {padding-right: 0.5em;}
+#tbl6 .statistics .description {font-style: italic;}
+#tbl6 .statistic {padding-right: 0.5em;}
 
 
-#tbl1 td .align{
-	display: inline-block;
-	margin: 0 auto;
+#tbl6 td .align{
+    display: inline-block;
+    margin: 0 auto;
 }
 
-#tbl1 .nobr {
+#tbl6 .nobr {
    white-space: nowrap;
 }
-#tbl1 .supsub {
+#tbl6 .supsub {
    display: inline-block;
    margin: -9em 0;
    vertical-align: -0.55em;
@@ -883,10 +1739,103 @@ html5(tbl1,
    font-size: 70%;
    text-align: left;
 }
-</style><div class="caption">Example All Summary</div><div class="figbody"><table class="tangram">
-<thead><tr><td class="header even tg-label"><span class="variable"></span></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">setosa</span></td><td class="header even tg-label"><span class="variable">versicolor</span></td><td class="header even tg-label"><span class="variable">virginica</span></td><td class="header even tg-label"><span class="variable">All</span></td></tr><tr class="subheaderrow"><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "MGMx", src = "tangram:A:Species[setosa]:N", value = "50") N=NULL}"><span class="N">50</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "N2Nl", src = "tangram:A:Species[versicolor]:N", value = "50") N=NULL}"><span class="N">50</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "NTM0", src = "tangram:A:Species[virginica]:N", value = "50") N=NULL}"><span class="N">50</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "Njg1", src = "tangram:A:1[All]:N", value = "150") N=NULL}"><span class="N">150</span></td></tr></thead>
-<tbody><tr> <td class="header odd tg-label"><span class="variable">Sepal Length &gt; 5.1 : TRUE</span></td><td class="odd">150</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ODVi", src = "tbl1:A[Sepal Length > 5.1 : TRUE]:Species[setosa]:numerator", value = "14") list(index = "YTdh", src = "tbl1:A[Sepal Length > 5.1 : TRUE]:Species[setosa]:ratio", value = "0.280")}"><span class="ratio">0<div class="align">.</div>280</span><span class="percentage">28.000</span><span class="numerator">14</span><span class="denominator">50</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NGEy", src = "tbl1:A[NA]:Species[setosa]:numerator", value = "46") list(index = "ZWRk", src = "tbl1:A[NA]:Species[setosa]:ratio", value = "0.920")}"><span class="ratio">0<div class="align">.</div>920</span><span class="percentage">92.000</span><span class="numerator">46</span><span class="denominator">50</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NGEy", src = "tbl1:A[NA]:Species[setosa]:numerator", value = "49") list(index = "ZWRk", src = "tbl1:A[NA]:Species[setosa]:ratio", value = "0.980")}"><span class="ratio">0<div class="align">.</div>980</span><span class="percentage">98.000</span><span class="numerator">49</span><span class="denominator">50</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTdk", src = "tbl1:A[Sepal Length > 5.1 : TRUE]:1[All]:numerator", value = "109") list(index = "N2M3", src = "tbl1:A[Sepal Length > 5.1 : TRUE]:1[All]:ratio", value = "0.727")}"><span class="ratio">0<div class="align">.</div>727</span><span class="percentage">72.667</span><span class="numerator">109</span><span class="denominator">150</span></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Sepal.Width</span></td><td class="even data N" data-clipboard-text="{list(index = "MDNh", src = "tbl1:Sepal.Width:Species:cell_n1", value = "150") N=NULL}"><span class="N">150</span></td><td class="even"><span class="even data quantile"><span class="q25">3.19</span><span class="q50">3.40</span><span class="q75">3.70</span></td><td class="even"><span class="even data quantile"><span class="q25">2.50</span><span class="q50">2.80</span><span class="q75">3.00</span></td><td class="even"><span class="even data quantile"><span class="q25">2.80</span><span class="q50">3.00</span><span class="q75">3.20</span></td><td class="even"><span class="even data quantile"><span class="q25">2.80</span><span class="q50">3.00</span><span class="q75">3.31</span></td> </tr></tbody>
-</table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.</div></div><script>new Clipboard('.data');</script>
+</style>
+<div class="caption">
+Example All Summary
+</div>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td class="header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="header even tg-label">
+<span class="variable">N</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">setosa</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">versicolor</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">virginica</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">All</span>
+</td>
+</tr>
+<tr class="subheaderrow">
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " MGMx", src="tangram:A:Species[setosa]:N" , value="50" ) N="NULL}&quot;">
+<span class="N">50</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " N2Nl", src="tangram:A:Species[versicolor]:N" , value="50" ) N="NULL}&quot;">
+<span class="N">50</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " NTM0", src="tangram:A:Species[virginica]:N" , value="50" ) N="NULL}&quot;">
+<span class="N">50</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " Njg1", src="tangram:A:1[All]:N" , value="150" ) N="NULL}&quot;">
+<span class="N">150</span>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">Sepal Length &gt; 5.1 : TRUE</span>
+</td>
+<td class="odd">
+150
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " ywfk", src="tbl6:A[Sepal Length &gt; 5.1 : TRUE]:Species[setosa]:numerator" , value="14" ) list(index="ODAz" , src="tbl6:A[Sepal Length &gt; 5.1 : TRUE]:Species[setosa]:ratio" , value="0.280" )}"> 5.1 : TRUE]:Species[setosa]:numerator“, value =”14“) list(index =”ODAz“, src =”tbl6:A[Sepal Length &gt; 5.1 : TRUE]:Species[setosa]:ratio“, value =”0.280“)}”&gt;<span class="ratio">0<span class="align">.</span>280</span><span class="percentage">28.000</span><span class="numerator">14</span><span class="denominator">50</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " njm0", src="tbl6:A[NA]:Species[setosa]:numerator" , value="46" ) list(index="Yzlm" , src="tbl6:A[NA]:Species[setosa]:ratio" , value="0.920" )}"><span class="ratio">0<span class="align">.</span>920</span><span class="percentage">92.000</span><span class="numerator">46</span><span class="denominator">50</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " njm0", src="tbl6:A[NA]:Species[setosa]:numerator" , value="49" ) list(index="Yzlm" , src="tbl6:A[NA]:Species[setosa]:ratio" , value="0.980" )}"><span class="ratio">0<span class="align">.</span>980</span><span class="percentage">98.000</span><span class="numerator">49</span><span class="denominator">50</span></span>
+</td>
+<td class="odd">
+<span class="odd fraction" data-clipboard-text="{list(index = " mzk5", src="tbl6:A[Sepal Length &gt; 5.1 : TRUE]:1[All]:numerator" , value="109" ) list(index="MGVi" , src="tbl6:A[Sepal Length &gt; 5.1 : TRUE]:1[All]:ratio" , value="0.727" )}"> 5.1 : TRUE]:1[All]:numerator“, value =”109“) list(index =”MGVi“, src =”tbl6:A[Sepal Length &gt; 5.1 : TRUE]:1[All]:ratio“, value =”0.727“)}”&gt;<span class="ratio">0<span class="align">.</span>727</span><span class="percentage">72.667</span><span class="numerator">109</span><span class="denominator">150</span></span>
+</td>
+</tr>
+<tr>
+<td class="header even tg-label">
+<span class="variable">Sepal.Width</span>
+</td>
+<td class="even data N" data-clipboard-text="{list(index = " OGI5", src="tbl6:Sepal.Width:Species:cell_n1" , value="150" ) N="NULL}&quot;">
+<span class="N">150</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">3.19</span><span class="q50">3.40</span><span class="q75">3.70</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">2.50</span><span class="q50">2.80</span><span class="q75">3.00</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">2.80</span><span class="q50">3.00</span><span class="q75">3.20</span>
+</td>
+<td class="even">
+<span class="even data quantile"><span class="q25">2.80</span><span class="q50">3.00</span><span class="q75">3.31</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="footnote">
+N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.
+</div>
+</div>
+<script>new Clipboard('.data');</script>
 </div>
 <div id="extensibility" class="section level2">
 <h2>Extensibility</h2>
@@ -938,13 +1887,193 @@ summarize_count &lt;- function(table, row, column)
   add_col(test)
 }
 
-tangram(event ~ id[&quot;%1.0f&quot;], df, summarize_count)</code></pre>
-<pre><code>=============================================================
-      N       A        B        C         Test Statistic     
-             244      246      246                           
--------------------------------------------------------------
-ID  N=250  3 *4* 5  3 *4* 5  3 *4* 5  F_{2,733}=0.02, P=0.976
-=============================================================</code></pre>
+tangram(event ~ id[&quot;%1.0f&quot;], df, id=&quot;tbl7&quot;, summarize_count)</code></pre>
+<script type="text/javascript">/*!
+ * clipboard.js v1.5.10
+ * https://zenorocha.github.io/clipboard.js
+ *
+ * Licensed MIT © Zeno Rocha
+ */
+!function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
+</script>
+<div id="tbl7" class="figure">
+<style>
+
+#tbl7 .figure  {  font-family: "Computer Modern Serif", serif;
+            margin-left:  auto;
+                  margin-right: auto;
+                  font-size: 66%;
+  -webkit-print-color-adjust: exact;
+         }
+
+#tbl7 .caption { text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             padding: 1.5em 0 1.5em 0;
+           }
+
+#tbl7 .figbody {
+               text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             border-style: double none solid none;
+             border-width: 3pt 0 1pt 0;
+             width:        100%;
+         }
+
+#tbl7 .figbody td {
+                      padding: 0.2em 0.5em 0.2em 0.5em;
+            }
+
+#tbl7 .data:hover {
+              background-color:yellow;
+            }
+
+#tbl7 .tangram {
+    border-spacing: 0;
+}
+
+#tbl7 .subheader    { font-size: smaller; }
+
+#tbl7 .subheader tr { border-collapse: collapse; }
+#tbl7 .subheader td { border-bottom: 1pt solid black; }
+
+#tbl7 .quantile .q25 {
+    font-size: smaller;
+    padding-right: 0.5em;
+}
+
+#tbl7 .quantile .q75 {
+    font-size: smaller;
+    padding-left: 0.5em;
+}
+
+#tbl7 .quantile .q50 {
+  font-weight: bold;
+}
+
+#tbl7 .variable {
+    float:      left;
+    text-align: left;
+}
+
+#tbl7 .units {
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+#tbl7 thead .header {font-weight: bold;}
+#tbl7 .header.N  { font-style: italic; }
+#tbl7 .header.N:before { content: "N="; }
+
+
+#tbl7 .fraction .percentage {display: none;}
+#tbl7 .fraction .numerator:before {content: "\00A0";}
+#tbl7 .fraction .numerator { font-size: x-small; vertical-align: super; }
+#tbl7 .fraction .numerator:after {content: " \2044";}
+#tbl7 .fraction .denominator { font-size: x-small; vertical-align: sub;}
+#tbl7 .statistics .description {font-style: italic;}
+#tbl7 .statistic {padding-right: 0.5em;}
+
+#tbl7 td .align{
+    display: inline-block;
+    margin: 0 auto;
+}
+
+#tbl7 .nobr {
+   white-space: nowrap;
+}
+
+#tbl7 .supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: x-small;
+   text-align: left;
+}
+
+#tbl7 .sup:before {content: "\00A0";}
+#tbl7 .sup { font-size: x-small; vertical-align: super; }
+#tbl7 .sup:after {content: "\2044"; }
+#tbl7 .sub { font-size: x-small; vertical-align: sub;}
+
+
+</style>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td class="header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="header even tg-label">
+<span class="variable">N</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">A</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">B</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">C</span>
+</td>
+<td class="header even tg-label">
+<span class="variable">Test Statistic</span>
+</td>
+</tr>
+<tr class="subheaderrow">
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " OGNh", src="tangram:id:event[A]:N" , value="247" ) N="NULL}&quot;">
+<span class="N">247</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " NGY3", src="tangram:id:event[B]:N" , value="245" ) N="NULL}&quot;">
+<span class="N">245</span>
+</td>
+<td class="subheader header even data N" data-clipboard-text="{list(index = " OTZm", src="tangram:id:event[C]:N" , value="245" ) N="NULL}&quot;">
+<span class="N">245</span>
+</td>
+<td class="subheader header even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="header odd tg-label">
+<span class="variable">ID</span>
+</td>
+<td class="odd data N" data-clipboard-text="{list(index = " OWNj", src="tbl7:id:event:N" , value="250" ) N="NULL}&quot;">
+<span class="N">250</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">3</span><span class="q50">4</span><span class="q75">5</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">3</span><span class="q50">4</span><span class="q75">5</span>
+</td>
+<td class="odd">
+<span class="odd data quantile"><span class="q25">3</span><span class="q50">4</span><span class="q75">5</span>
+</td>
+<td class="odd data statistics" data-clipboard-text="{list(index = " ZmQ5", src="tbl7:id:event:F" , value="0.02" ) list(index="YzEw" , src="tbl7:id:event:df2" , value="734" )}">
+<span class="statistic"><span class="description">F<sub>2,734</sub> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.977</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<script>new Clipboard('.data');</script>
+<p>And that concludes the basic demonstration of formula capabilities and writing one’s own simple transform bundle.</p>
 </div>
 
 

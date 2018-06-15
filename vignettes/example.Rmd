@@ -21,13 +21,11 @@ pre {
   font-size: 10px
 }
 
-#tbl3 .statistic {display: none;}
 </style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
-library(knitr)
 data(pbc)
 ```
 
@@ -38,8 +36,9 @@ This package is meant to implement the concept of a grammar of tables. It allows
 Here's an example similar to summaryM from Hmisc to get us started:
 
 ```{r pbc, comment=""}
-tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
+summary(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc, id="joe", caption="Context Aware Compilation"))
 ```
+
 
 Notice that stage in the formula wasn't stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.
 
@@ -47,39 +46,44 @@ It also supports HTML5, with styling fragments
 
 ### Hmisc Style Example
 ```{r, results="asis"}
-html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc, msd=TRUE, quant=seq(0, 1, 0.25)),
-      fragment=TRUE, inline="hmisc.css", caption = "HTML5 Table Hmisc Style", id="tbl2")
+tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders",
+        pbc,
+        id="tbl2",
+        msd=TRUE,
+        quant=seq(0, 1, 0.25),
+        style="hmisc",
+        caption = "HTML5 Table Hmisc Style")
 ```
 
 ### NEJM Style Example
 Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
-html5(tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc),
-      fragment=TRUE, inline="nejm.css", caption = "HTML5 Table NEJM Style", id="tbl3")
+tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc,
+        style="nejm", caption = "HTML5 Table NEJM Style", id="tbl3")
 ```
 
 ### Lancet Style Example
 Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
-
-tbl <- tangram("drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]", 
-              data=pbc,
-              pformat = 5)
-html5(tbl,
-      fragment=TRUE,
-      inline="lancet.css",
-      caption = "HTML5 Table Lancet Style", id="tbl4"
-      )
+tangram("drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]", 
+        id="tbl4",
+        data=pbc,
+        pformat = 5,
+        style="lancet",
+        caption = "HTML5 Table Lancet Style"
+       )
 ```
 
 ### Indexing
 
 It is also capable of producing an index of contents inside a table for traceability.
 ```{r, comment=""}
-index(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc))[1:20,]
+index(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders",
+              pbc, id="tbl2"))[1:20,]
 ```
+
 
 ### Intercept Model Example
 ```{r, results='asis'}
@@ -88,10 +92,10 @@ y <- round(rnorm(375, 80,  9))
 y[rbinom(375, 1, prob=0.05)] <- NA
 attr(x, "label") <- "Global score, 3m"
 attr(y, "label") <- "Global score, 12m"
-html5(tangram(1 ~ x+y,
-                    data.frame(x=x, y=y),
-                    after=hmisc_intercept_cleanup),
-      fragment=TRUE, inline="lancet.css", caption="", id="tbl5")
+tangram(1 ~ x+y,
+        data.frame(x=x, y=y),
+        style="lancet", caption="Intercept Example", id="tbl5") %>%
+del_row(2) %>% del_col(4)
 ```
 
 ### Types
@@ -112,14 +116,15 @@ A simple example of using an intercept in a formula, with some post processing t
 d1 <- iris
 d1$A <- d1$Sepal.Length > 5.1
 attr(d1$A,"label") <- "Sepal Length > 5.1"
-tbl1 <- tangram(
- Species + 1 ~ A + Sepal.Width,
- data = d1,
- after = list(drop_statistics, function(tbl) del_col(tbl, 6))
- )
-
-html5(tbl1,
-     fragment=TRUE, inline="nejm.css", caption = "Example All Summary", id="tbl1")
+tangram(
+   Species + 1 ~ A + Sepal.Width,
+   data = d1,
+   id="tbl6",
+   style="nejm",
+   caption="Example All Summary"
+) %>%
+drop_statistics() %>%
+del_col(6)
 ```
 
 ## Extensibility
@@ -128,7 +133,7 @@ The library is designed to be extensible, in the hopes that more useful summary 
 
 This example shows how to create a function that given a row and column, to construct summary entries for a table.
 
-```{r extension, comment=""}
+```{r extension, results='asis'}
 
 ### Make up some data, which has events nested within an id
 n  <- 1000
@@ -176,7 +181,7 @@ summarize_count <- function(table, row, column)
   add_col(test)
 }
 
-tangram(event ~ id["%1.0f"], df, summarize_count)
+tangram(event ~ id["%1.0f"], df, id="tbl7", summarize_count)
 ```
 
-
+And that concludes the basic demonstration of formula capabilities and writing one's own simple transform bundle.

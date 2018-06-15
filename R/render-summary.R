@@ -235,6 +235,9 @@ print.tangram <- function(x, ...)
 #' This functions detects if knitr is loaded, and does it's best to determine the output
 #' format from knitr and returns the appropriate rendering function.
 #'
+#' @importFrom knitr is_html_output
+#' @importFrom knitr is_latex_output
+#' @importFrom knitr opts_knit
 #' @return A rendering function to use
 render_route_tangram <- function()
 {

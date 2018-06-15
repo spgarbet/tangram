@@ -510,7 +510,7 @@ html5.cell_fstat <- function(object, id, ..., class=NULL)
 html5.cell_fraction <- function(object, id, ..., class=NULL)
 {
   idx        <- index(object, id)
-  ratio      <- gsub("\\.", "<div class=\"align\">.</div>", object["ratio"])
+  ratio      <- gsub("\\.", "<span class=\"align\">.</span>", object["ratio"])
   percentage <- object["percentage"]
   den        <- object["denominator"]
   num        <- sprintf(paste("%",nchar(den),"s",sep=''), object["numerator"]) # Adds some spaces to match
