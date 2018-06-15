@@ -1,15 +1,157 @@
 # A Grammar of Tables 'tangram'
 
+
+
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Tangram_set_00.jpg" width="100px"/>
 
 Quick show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
+
+<pre class="r"><code>tbl &lt;- tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]&quot;, 
+              data=pbc,
+              pformat = 5)
+html5(tbl,
+      fragment=TRUE,
+      inline=&quot;lancet.css&quot;,
+      caption = &quot;HTML5 Table Lancet Style&quot;, id=&quot;tbl4&quot;
+      )</code></pre>
+
+<div class="figure" id="tbl4"><style>
+
+#tbl4 body .figbody {
+	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+  font-size: 66%;
+  -webkit-print-color-adjust: exact;
+}
+
+#tbl4 .figure  {  margin-left:  auto;
+			      margin-right: auto;
+}
+#tbl4 .caption { text-align:   left;
+           text-indent: 2em;
+	         padding: 0.5em 0 0.5em 0;
+	         font-weight: bold;
+	     }
+
+#tbl4 .figbody {
+	text-align:   center;
+  border:       1px solid #c7496d;
+}
+
+#tbl4 .figbody table {
+  margin: 0;
+  width: 100%;
+}
+
+#tbl4 .figbody td {
+	padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+#tbl4 .figbody thead
+{
+  border-top: 10px solid #f5e0dc;
+  border-right: 10px solid #f5e0dc;
+  border-left: 10px solid #f5e0dc;
+  border-bottom: 1px solid black;
+  background: #f5e0dc !important;
+}
+
+
+#tbl4 .figbody thead tr td
+{
+    font-weight: bold;
+}
+
+#tbl4 .figbody tbody
+{
+  border-bottom: 10px solid #f5e0dc;
+  border-right: 10px solid #f5e0dc;
+  border-left: 10px solid #f5e0dc;
+}
+
+#tbl4 .figbody tbody .odd {background: #f5e0dc !important;}
+#tbl4 .figbody tbody .even {background: #ffffff;}
+
+#tbl4 .header td {text-align: center;}
+
+#tbl4 .subheader    { font-size: smaller; }
+#tbl4 .subheader td { text-align: center; /* border-bottom: 1pt solid black; */ }
+
+#tbl4 .subheader em {font-style: normal;}
+
+#tbl4 .header.N:before { content: "(n="; }
+#tbl4 .header.N:after  { content: ")"; }
+
+#tbl4 .quantile {
+  display: flex;
+  flex-direction: row;
+}
+#tbl4 .quantile .q50 {
+  order: 1;
+  padding-right: 0.5em;
+}
+#tbl4 .quantile .q25:before {content: "(";}
+#tbl4 .quantile .q25 {
+  order: 2
+}
+#tbl4 .quantile .q75:before {content: ",";}
+#tbl4 .quantile .q75 {order: 3}
+#tbl4 .quantile .q75:after {content: ")";}
+#tbl4 tbody .variable {
+	float:      left;
+	text-align: left;
+}
+
+#tbl4 .units {
+	float:      right;
+	font-size:  x-small;
+	text-align: right;
+	padding-left: 1em;
+	vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+#tbl4 .fraction {
+  display: flex;
+  flex-direction: row;
+}
+#tbl4 .fraction .numerator   { order: 1 }
+#tbl4 .fraction .denominator { order: 2; display: none; }
+#tbl4 .fraction .ratio       { order: 3; display: none; }
+#tbl4 .fraction .percentage  { order: 4; }
+#tbl4 .fraction .percentage:before {content: "\00A0(";}
+#tbl4 .fraction .percentage:after {content: "%)";}
+
+#tbl4 .statistics .description {font-style: italic;}
+#tbl4 .statistic {padding-right: 0.5em;}
+
+
+#tbl4 td .align{
+	display: inline-block;
+	margin: 0 auto;
+}
+
+#tbl4 .nobr {
+   white-space: nowrap;
+}
+#tbl4 .supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: 70%;
+   text-align: left;
+}
+</style><div class="caption">HTML5 Table Lancet Style</div><div class="figbody"><table class="tangram">
+<thead><tr><td class="header even tg-label"><span class="variable"></span></td><td class="header even tg-label"><span class="variable">N</span></td><td class="header even tg-label"><span class="variable">D-penicillamine</span></td><td class="header even tg-label"><span class="variable">placebo</span></td><td class="header even tg-label"><span class="variable">not randomized</span></td><td class="header even tg-label"><span class="variable">Test Statistic</span></td></tr><tr class="subheaderrow"><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even tg-label"><span class="variable"></span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "NTM3", src = "tangram:bili:drug[D-penicillamine]:N", value = "154") N=NULL}"><span class="N">154</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "OTRl", src = "tangram:bili:drug[placebo]:N", value = "158") N=NULL}"><span class="N">158</span></td><td class="subheader header even data N" data-clipboard-text="{list(index = "ZjNi", src = "tangram:bili:drug[not randomized]:N", value = "106") N=NULL}"><span class="N">106</span></td><td class="subheader header even tg-label"><span class="variable"></span></td></tr></thead>
+<tbody><tr> <td class="header odd tg-label"><span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span></td><td class="odd data N" data-clipboard-text="{list(index = "MWFj", src = "tbl4:bili:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span></td><td class="odd"><span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span></td><td class="odd data statistics" data-clipboard-text="{list(index = "YzMz", src = "tbl4:bili:drug:F", value = "0.03") list(index = "Mzkw", src = "tbl4:bili:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.97248<sup>1</sup></span></td> </tr><tr> <td class="header even tg-label"><span class="variable">Albumin</span><span class="units">gm/dl</span></td><td class="even data N" data-clipboard-text="{list(index = "YTY4", src = "tbl4:albumin:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span></td><td class="even"><span class="even data quantile"><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span></td><td class="even"><span class="even data quantile"><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span></td><td class="even data statistics" data-clipboard-text="{list(index = "NzUz", src = "tbl4:albumin:drug:F", value = "2.13") list(index = "OTNm", src = "tbl4:albumin:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.11996<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">Histologic Stage, Ludwig Criteria</span></td><td class="odd">412</td><td class="odd"></td><td class="odd"></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "MmM5", src = "tbl4:stage:drug:χ^{2}", value = "5.33") list(index = "YzUy", src = "tbl4:stage:drug:P", value = "0.50235")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.50235</span><sup>2</sup></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "Yjc1", src = "tbl4:stage[   1]:drug[D-penicillamine]:numerator", value = "4") list(index = "YmZh", src = "tbl4:stage[   1]:drug[D-penicillamine]:ratio", value = "0.0")}"><span class="ratio">0<div class="align">.</div>0</span><span class="percentage">2.6</span><span class="numerator">  4</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OWI1", src = "tbl4:stage[   2]:drug[D-penicillamine]:numerator", value = "12") list(index = "Y2Ri", src = "tbl4:stage[   2]:drug[D-penicillamine]:ratio", value = "0.1")}"><span class="ratio">0<div class="align">.</div>1</span><span class="percentage">7.6</span><span class="numerator"> 12</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ZjYy", src = "tbl4:stage[   3]:drug[D-penicillamine]:numerator", value = "5") list(index = "Njcy", src = "tbl4:stage[   3]:drug[D-penicillamine]:ratio", value = "0.1")}"><span class="ratio">0<div class="align">.</div>1</span><span class="percentage">5.0</span><span class="numerator">  5</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "N2Vh", src = "tbl4:stage[   1]:drug[placebo]:numerator", value = "32") list(index = "NmY0", src = "tbl4:stage[   1]:drug[placebo]:ratio", value = "0.2")}"><span class="ratio">0<div class="align">.</div>2</span><span class="percentage">20.8</span><span class="numerator"> 32</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YTY0", src = "tbl4:stage[   2]:drug[placebo]:numerator", value = "35") list(index = "MDBh", src = "tbl4:stage[   2]:drug[placebo]:ratio", value = "0.2")}"><span class="ratio">0<div class="align">.</div>2</span><span class="percentage">22.2</span><span class="numerator"> 35</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NDI0", src = "tbl4:stage[   3]:drug[placebo]:numerator", value = "25") list(index = "NmQ5", src = "tbl4:stage[   3]:drug[placebo]:ratio", value = "0.2")}"><span class="ratio">0<div class="align">.</div>2</span><span class="percentage">25.0</span><span class="numerator"> 25</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NmNl", src = "tbl4:stage[   1]:drug[not randomized]:numerator", value = "64") list(index = "YWEw", src = "tbl4:stage[   1]:drug[not randomized]:ratio", value = "0.4")}"><span class="ratio">0<div class="align">.</div>4</span><span class="percentage">41.6</span><span class="numerator"> 64</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "OTU0", src = "tbl4:stage[   2]:drug[not randomized]:numerator", value = "56") list(index = "Nzc0", src = "tbl4:stage[   2]:drug[not randomized]:ratio", value = "0.4")}"><span class="ratio">0<div class="align">.</div>4</span><span class="percentage">35.4</span><span class="numerator"> 56</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MmU5", src = "tbl4:stage[   3]:drug[not randomized]:numerator", value = "35") list(index = "MzBh", src = "tbl4:stage[   3]:drug[not randomized]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">35.0</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="subheader header odd tg-label"><span class="variable">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4</span></td><td class="odd tg-label"><span class="variable"></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "ODg0", src = "tbl4:stage[   1]:drug[NA]:numerator", value = "54") list(index = "NTI5", src = "tbl4:stage[   1]:drug[NA]:ratio", value = "0.4")}"><span class="ratio">0<div class="align">.</div>4</span><span class="percentage">35.1</span><span class="numerator"> 54</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "NjEz", src = "tbl4:stage[   2]:drug[NA]:numerator", value = "55") list(index = "NGYz", src = "tbl4:stage[   2]:drug[NA]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">34.8</span><span class="numerator"> 55</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MmJk", src = "tbl4:stage[   3]:drug[NA]:numerator", value = "35") list(index = "ZTU0", src = "tbl4:stage[   3]:drug[NA]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">35.0</span><span class="numerator"> 35</span><span class="denominator">100</span></span></td><td class="odd"></td> </tr><tr> <td class="header even tg-label"><span class="variable">Prothrombin Time</span><span class="units">sec.</span></td><td class="even data N" data-clipboard-text="{list(index = "OGIx", src = "tbl4:protime:drug:cell_n1", value = "416") N=NULL}"><span class="N">416</span></td><td class="even"><span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span></td><td class="even"><span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span></td><td class="even"><span class="even data quantile"><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span></td><td class="even data statistics" data-clipboard-text="{list(index = "MDZk", src = "tbl4:protime:drug:F", value = "0.23") list(index = "MjIy", src = "tbl4:protime:drug:df2", value = "413")}"><span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.79472<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">sex : female</span></td><td class="odd">418</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "M2Iw", src = "tbl4:sex[sex : female]:drug[D-penicillamine]:numerator", value = "139") list(index = "Yzk4", src = "tbl4:sex[sex : female]:drug[D-penicillamine]:ratio", value = "0.9")}"><span class="ratio">0<div class="align">.</div>9</span><span class="percentage">90.3</span><span class="numerator">139</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTg0", src = "tbl4:sex[NA]:drug[D-penicillamine]:numerator", value = "137") list(index = "MGEw", src = "tbl4:sex[NA]:drug[D-penicillamine]:ratio", value = "0.9")}"><span class="ratio">0<div class="align">.</div>9</span><span class="percentage">86.7</span><span class="numerator">137</span><span class="denominator">158</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MTg0", src = "tbl4:sex[NA]:drug[D-penicillamine]:numerator", value = "98") list(index = "MGEw", src = "tbl4:sex[NA]:drug[D-penicillamine]:ratio", value = "0.9")}"><span class="ratio">0<div class="align">.</div>9</span><span class="percentage">92.5</span><span class="numerator"> 98</span><span class="denominator">106</span></span></td><td class="odd data statistics" data-clipboard-text="{list(index = "Y2Qy", src = "tbl4:sex:drug:χ^{2}", value = "2.38") list(index = "NDEx", src = "tbl4:sex:drug:P", value = "0.30387")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.30387</span><sup>2</sup></td> </tr><tr> <td class="header even tg-label"><span class="variable">Age</span></td><td class="even data N" data-clipboard-text="{list(index = "MTQz", src = "tbl4:age:drug:cell_n1", value = "418") N=NULL}"><span class="N">418</span></td><td class="even"><span class="even data quantile"><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span></td><td class="even"><span class="even data quantile"><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span></td><td class="even"><span class="even data quantile"><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span></td><td class="even data statistics" data-clipboard-text="{list(index = "OTE5", src = "tbl4:age:drug:F", value = "6.10") list(index = "ZDdl", src = "tbl4:age:drug:df2", value = "415")}"><span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.00245<sup>1</sup></span></td> </tr><tr> <td class="header odd tg-label"><span class="variable">spiders : present</span></td><td class="odd">312</td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "YzUy", src = "tbl4:spiders[spiders : present]:drug[D-penicillamine]:numerator", value = "45") list(index = "MmNi", src = "tbl4:spiders[spiders : present]:drug[D-penicillamine]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">29.2</span><span class="numerator"> 45</span><span class="denominator">154</span></span></td><td class="odd"><span class="odd fraction" data-clipboard-text="{list(index = "MDk1", src = "tbl4:spiders[NA]:drug[D-penicillamine]:numerator", value = "45") list(index = "NmEy", src = "tbl4:spiders[NA]:drug[D-penicillamine]:ratio", value = "0.3")}"><span class="ratio">0<div class="align">.</div>3</span><span class="percentage">28.5</span><span class="numerator"> 45</span><span class="denominator">158</span></span></td><td class="odd"></td><td class="odd data statistics" data-clipboard-text="{list(index = "ODYy", src = "tbl4:spiders:drug:χ^{2}", value = "0.02") list(index = "MDYx", src = "tbl4:spiders:drug:P", value = "0.88534")}"><span class="statistic"><span class="description"><span class="nobr">&chi;<span class="supsub">2<br/>1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.88534</span><sup>2</sup></td> </tr></tbody>
+</table></div><div class="footnote">N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pearson. <sup>3</sup>Wilcoxon.</div></div><script>new Clipboard('.data');</script>
+</div>
 
 
 ## Quick Overview
 
 What began as an extensible library to quickly generate tables from formulas, has evolved into a library that supports magrittr `%>%` style commands on abstract table objects. The formula interface is a complicated piece of code in it's own right, but is only one of many methods now available in the generation of tables. There were a lot of lessons learned to get to this final point, and it's worth talking about what is now the core of the library, and what has become the best practices in the design of the interface.
 
-It's now been used to make 30-40 page reproducible DSMB (data safety monitoring board) reports on multiple clinical trials. Internally, several biostatistical reports are using it to improve the quality of graphics. This shakedown of formats and usage has vastly improved the overall quality of the package. See [fda-example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/fda-example.html) for some examples--don't be put off by size of the examples. They are reusable over and over for custom content devoted to a given task. These two transforms and their constructions, once built have to date been used on at least 5 different submitted reports. 
+It's now been used to make 30-40 page reproducible DSMB (data safety monitoring board) reports on multiple clinical trials. Internally, several biostatistical reports are using it to improve the quality of presentation. This shakedown of formats and usage has vastly improved the overall quality of the package. See [fda-example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/fda-example.html) for some examples--don't be put off by size of the examples. They are reusable over and over for custom content devoted to a given task. These two transforms and their constructions, once built have to date been used on at least 5 different submitted reports. 
 
 A tangram object is at it's heart a list of lists containing `cells` which can be subclassed from just about anything, but the best overall choice is basically a vector of  `character`, which contains text with minor extensions to Rmarkdown. There are two types of style, one is internal to a cell and it's formatting of text. The other is overall styling of a table which is a choice best left to the rendering call. The Rmarkdown/extensions supported are as follows:
 
@@ -32,6 +174,40 @@ This `tangram` object representing the abstract table in memory now has all the 
 A `tangram` object itself can have an attribute `footnote` to contain footnotes to display. Some formula transforms automatically supply this with their bundle for reference.
 
 Additional subclassing of cells carries through to special handling. For example in the HTML rendering code all of these become CSS classes so that one can specify CSS rendering however an end user likes. Several of the core statistical cells also allow for flexbox rendering in CSS. LaTeX is more fixed in it's rendering, but deals with these issues handily. 
+
+### Cell Helpers
+
+Functions like `cell_label` will generate a cell label. 
+
+```
+> cell_label("Joe")
+Joe
+> class(cell_label("Joe"))
+[1] "cell_label" "cell"       "character" 
+```
+The class information is important for style decisions later in the manner of CSS, and helper functions exist for the top level class all labeled as `cell_*`. The current handled information by the provided styles (you can of course write your own) is as follows:
+
+* cell, character
+* cell_label, cell, character
+* cell_header, cell_label, cell, character
+* cell_subheader, cell_label, cell, character
+* cell_iqr, cell, character
+* cell_value, cell, *any base class*
+* cell_range, cell, numeric
+* cell_fraction, cell_value, cell, character
+* cell_n, cell_value, cell, numeric
+
+#### Additional
+
+These are still supported but likely to be deprecated in favor of the above simplicity. The functions to generate them will still be supported. The additional class information is providing no value at present for rendering.
+
+* cell_estimate, cell, list
+* cell_fstat, statistics, cell_value, cell, numeric
+* cell_chi2, statistics, cell_value, cell, numeric
+* cell_studentt, statistics, cell_value, cell, numeric
+* cell_spearman, statistics, cell_value, cell, numeric
+
+## Wickham Style
 
 Tables are composible
 ```
