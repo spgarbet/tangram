@@ -101,7 +101,7 @@ textify <- function(x)
 #' @include compile.R
 #' @rdname summary
 #' @export
-summary.tangram <- function(object, ...) object
+summary.tangram <- function(object, ...) internal_print(object, ...)
 
 #' @rdname summary
 #' @export
@@ -244,9 +244,9 @@ render_route_tangram <- function()
 
   if(knitr::is_latex_output()) return(latex.tangram)
 
-  if(knitr::opts_knit$get("out.format") == "markdown") return(rmd.tangram)
+  if(is.null(knitr::opts_knit$get("out.format"))) return(internal_print)
 
-  internal_print
+  rmd.tangram
 }
 
 internal_print <- function(x, ...)
@@ -294,6 +294,12 @@ internal_print <- function(x, ...)
     }
   }
   result <- paste0(result, paste0(rep("=",nchar(pasty[1])),collapse=''), '\n')
+
+  if(!is.null(attr(x, "caption")))
+  {
+    result <- paste0(attr(x, "caption"), '\n', result)
+  }
+
 
   if(!is.null(attr(x, "footnote")))
   {

@@ -16,11 +16,11 @@ tangram(x, ...)
 \method{tangram}{numeric}(x, cols, embedded = FALSE, id = NULL,
   caption = NULL, style = "hmisc", footnote = NULL, ...)
 
-\method{tangram}{data.frame}(x, colheader = NA, id = NULL, caption = NULL,
+\method{tangram}{data.frame}(x, id = NULL, colheader = NA, caption = NULL,
   style = "hmisc", footnote = NULL, after = NA, quant = seq(0, 1, 0.25),
   msd = TRUE, as.character = NULL, ...)
 
-\method{tangram}{formula}(x, data, transforms = hmisc_style, id = NULL,
+\method{tangram}{formula}(x, data, id = NULL, transforms = hmisc_style,
   caption = NULL, style = "hmisc", footnote = NULL, after = NA,
   digits = NA, ...)
 

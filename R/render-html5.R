@@ -138,28 +138,36 @@ html5.character <- function(object, id, ..., class=NA)
 #' @param object The cell table to render to HTML5
 #' @param id A unique identifier for the table (strongly recommended). If not provided, caption will be used.
 #' @param caption A string caption for the table
-#' @param css A string that is the href to the css for complete HTML5
 #' @param fragment A boolean flag that determines whether a fragment or a complete HTML5 document is generatedf
 #' @param inline A string containing a filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.
 #' @param footnote Any footnotes to include under the table.
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given table in HTML5
 #' @export
-html5.tangram <- function(object, id=NA, caption=NA, css=NA, fragment=TRUE, inline=NA, footnote=NA, ...)
+html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NULL, footnote=NULL, ...)
 {
-  if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
-  if(is.na(id))
+  # Unused
+  #if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
+
+  if(is.null(id)) id <- attr(object, "id")
+  if(is.null(fragment)) fragment <- attr(object, "fragment")
+  if(is.null(fragment)) fragment <- TRUE
+  if(is.null(caption))  caption  <- attr(object, "caption")
+  if(is.null(style)) style <- attr(object, "style")
+  if(is.null(style)) style <- "hmisc"
+
+  if(is.null(id))
   {
-    warning("No id specified for later traceability of table elements")
+    warning("No unique id for table specified. CSS styling will be unstable")
     id <- ""
   }
 
-  scoped <- if(is.na(inline)) "" else paste("<style>", custom_css(inline,id=id),"</style>", sep='')
-  figdiv <- if(is.na(id)) "<div class=\"figure\">" else paste("<div class=\"figure\" id=\"", id,"\">",sep='')
+  scoped <- if(is.null(style)) "" else paste("<style>", custom_css(paste0(style,".css"),id=id),"</style>", sep='')
+  figdiv <- if(is.null(id)) "<div class=\"figure\">" else paste("<div class=\"figure\" id=\"", id,"\">",sep='')
   fontld <- if(fragment) "" else html5_extra_fonts()
 
   header <- paste0("<!DOCTYPE html><html><head><meta charset=\"UTF-8\">",
-                   css,
+#                   css,
                    "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css\">",
 	                 "<title>",caption,"</title>",
                    "</head><body>")
@@ -167,17 +175,14 @@ html5.tangram <- function(object, id=NA, caption=NA, css=NA, fragment=TRUE, inli
                    clipboard_js(),
                    figdiv,
                    scoped)
-  if(!is.na(caption)) intro <- paste0(intro, "<div class=\"caption\">",caption,"</div>")
+  if(!is.null(caption)) intro <- paste0(intro, "<div class=\"caption\">",caption,"</div>")
   intro <- paste(intro,
 		              "<div class=\"figbody\">",
 			            "<table class=\"tangram\">",
                   sep='')
 
-  if(is.na(footnote) && !is.null(attr(object, "footnote")))
-  {
-    footnote <- attr(object, "footnote")
-  }
-  footnote <- if(is.na(footnote)) "" else
+  if(is.null(footnote)) footnote <- attr(object, "footnote")
+  footnote <- if(is.null(footnote)) "" else
   {
     paste("<div class=\"footnote\">", paste(footnote, collapse=" "), "</div>", sep='')
   }

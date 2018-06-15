@@ -291,7 +291,7 @@ tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, styl
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, colheader=NA, id=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
+tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
 {
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(as.character)) as.character <- !any(!cls %in% c("character", "NULL", "labelled"))
@@ -359,7 +359,7 @@ tangram.data.frame <- function(x, colheader=NA, id=NULL, caption=NULL, style="hm
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(x, data, transforms=hmisc_style, id=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
+tangram.formula <- function(x, data, id=NULL, transforms=hmisc_style, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
 {
   if(length(class(data)) > 1 || class(data) != "data.frame") data <- as.data.frame(data)
   if(length(class(data)) > 1 || class(data) != "data.frame") stop("data must be supplied as data frame")
