@@ -27,9 +27,6 @@
 #' @include parser.R
 table_flatten <- function(table)
 {
-#  if((is.null(attr(table, "embedded"))    || !attr(table, "embedded"))            &&
-#     (!is.null(attr(table, "row_header")) || !is.null(attr(table, "col_header")))
-#    )
   if(!is.null(attr(table, "row_header")) ||
      !is.null(attr(table, "col_header")) ||
      !"tangram" %in% class(table[[1]][[1]])
@@ -240,6 +237,10 @@ cell_create_table <- function(ast, transforms, digits, ...)
 #' single pretty table of model results. The rms and Hmisc packages are required.
 #'
 #' @param x object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows, an rms.model
+#' @param id character; A unique charcter id used to identify this table over multiple runs. No spaces.
+#' @param caption character; A string with the desired caption
+#' @param style character; Desired rendering style, currently supports "hmisc", "nejm", and "lancet". Defaults to "hmisc"
+#' @param footnote character; A vector of character strings as footnotes
 #' @param after function or list of functions; one or more functions to further process an abstract table
 #' @param as.character logical; if true data.frames all variables are passed through as.character and no numerical summary is provided.
 #' @param colheader character; Use as column headers in final table
@@ -247,7 +248,7 @@ cell_create_table <- function(ast, transforms, digits, ...)
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
 #' @param embedded logical; Will this table be embedded inside another
-#' @param footnote character; A string to add to the table as a footnote.
+#' @param footnote character; A vectors of strings to add to the table as a footnotes.
 #' @param quant numeric; A vector of quantiles to use for summaries
 #' @param msd logical; Include mean and standard deviation in numeric summary
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization
@@ -263,9 +264,9 @@ cell_create_table <- function(ast, transforms, digits, ...)
 #'
 #' @examples
 #' tangram(1, 1)
-#' tangram(data.frame(x=1:3, y=c('a','b','c')))
-#' tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc)
-#' tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
+#' tangram(data.frame(x=1:3, y=c('a','b','c'), id="mytbl1"))
+#' tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc, id="mytbl2")
+#' tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc, id="mytbl3")
 tangram <- function(x, ...)
 {
   UseMethod("tangram", x)
@@ -273,29 +274,35 @@ tangram <- function(x, ...)
 
 #' @rdname tangram
 #' @export
-tangram.numeric <- function(x, cols, embedded=FALSE, ...)
+tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, style="hmisc", footnote=NULL, ...)
 {
   # A list of lists
-  result <- lapply(1:x, function(x) {lapply(1:cols, function(y) cell("")) })
+  result <- lapply(1:x, function(x) {lapply(1:cols, function(y) cell("", ...)) })
   class(result) <- c("tangram", "list")
+
   attr(result, "embedded") <- embedded
+  attr(result, "id")       <- id
+  attr(result, "caption")  <- caption
+  attr(result, "style")    <- style
+  attr(result, "footnote") <- footnote
 
   result
 }
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TRUE, as.character=NULL)
+tangram.data.frame <- function(x, colheader=NA, id=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
 {
-  cls <- sapply(names(x), function(y) class(x[1,y]))
-
+  if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(as.character)) as.character <- !any(!cls %in% c("character", "NULL", "labelled"))
+
+  cls <- sapply(names(x), function(y) class(x[1,y]))
 
   # Check for non-character
   if(!as.character)
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
-    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, quant=quant, msd=msd, ...))
+    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, id=id, quant=quant, msd=msd, ...))
   }
 
   width   <- length(colnames(x)) + 1
@@ -337,15 +344,26 @@ tangram.data.frame <- function(x, colheader=NA, ..., quant=seq(0,1,0.25), msd=TR
     tbl <- del_col(tbl, 1)
   }
 
+  attr(tbl, "id")       <- id
+  attr(tbl, "caption")  <- caption
+  attr(tbl, "style")    <- style
+  attr(tbl, "footnote") <- footnote
+
+  if(suppressWarnings(all(is.na(after)))) {return(tbl)}
+
+  # Post function processing
+  if(class(after) == "list") sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
+
   tbl
 }
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA, ...)
+tangram.formula <- function(x, data, transforms=hmisc_style, id=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
 {
   if(length(class(data)) > 1 || class(data) != "data.frame") data <- as.data.frame(data)
   if(length(class(data)) > 1 || class(data) != "data.frame") stop("data must be supplied as data frame")
+  if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
 
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
@@ -368,6 +386,11 @@ tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA
                            digits,
                            ...)
 
+  attr(tbl, "id")       <- id
+  attr(tbl, "caption")  <- caption
+  attr(tbl, "style")    <- style
+  attr(tbl, "footnote") <- append(attr(tbl, "footnote"), footnote)
+
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
   # Post function processing
@@ -378,16 +401,16 @@ tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA
 
 #' @rdname tangram
 #' @export
-tangram.character <- function(x, data, transforms=hmisc_style, after=NA, digits=NA, ...)
+tangram.character <- function(x, ...)
 {
-  tangram.formula(x, data, transforms, after, digits, ...)
+  tangram.formula(x, ...)
 }
 
 #' @rdname tangram
 #' @export
-tangram.table <- function(x, ...)
+tangram.table <- function(x, id=NULL, ...)
 {
-  tbl <- tangram(1,1)
+  tbl <- tangram(1,1, id=id, ...)
 
   if(is.null(dim(x)) || length(dim(x)) == 1)
   {
@@ -416,5 +439,5 @@ tangram.table <- function(x, ...)
 #' @export
 tangram.tbl_df <- function(x, ...)
 {
-  tangram(as.data.frame(x), as.character=TRUE)
+  tangram(as.data.frame(x), as.character=TRUE, ...)
 }

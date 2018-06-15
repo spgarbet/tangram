@@ -224,7 +224,32 @@ print.cell <- function(x, ...)
 
 #' @rdname print
 #' @export
-print.tangram <- function(x,...)
+print.tangram <- function(x, ...)
+{
+  renderer <- render_route_tangram()
+  renderer(x, ...)
+}
+
+#' Router for rendering method
+#'
+#' This functions detects if knitr is loaded, and does it's best to determine the output
+#' format from knitr and returns the appropriate rendering function.
+#'
+#' @return A rendering function to use
+render_route_tangram <- function()
+{
+  if(! "knitr" %in% .packages()) return(internal_print)
+
+  if(knitr::is_html_output()) return(html5.tangram)
+
+  if(knitr::is_latex_output()) return(latex.tangram)
+
+  if(knitr::opts_knit$get("out.format") == "markdown") return(rmd.tangram)
+
+  internal_print
+}
+
+internal_print <- function(x, ...)
 {
   nrows <- rows(x)
   ncols <- cols(x)
@@ -292,21 +317,4 @@ print.table_builder <- function(x,...) print(summary(x$table,...))
 # h <- hist(rexp(200))
 # paste0(map[floor(h$density*8/max(h$density))+1], collapse='')
 
-#' Router for rendering method
-#'
-#' This functions detects if knitr is loaded, and does it's best to determine the output
-#' format from knitr and returns the appropriate rendering function.
-#'
-#' @return A rendering function to use
-render_route_tangram <- function()
-{
-  if(! "knitr" %in% .packages()) return(print.tangram)
 
-  if(knitr::is_html_output()) return(html5.tangram)
-
-  if(knitr::is_latex_output()) return(latex.tangram)
-
-  if(knitr::opts_knit$get("out.format") == "markdown") return(rmd.tangram)
-
-  print.tangram
-}

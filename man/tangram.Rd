@@ -13,18 +13,20 @@
 \usage{
 tangram(x, ...)
 
-\method{tangram}{numeric}(x, cols, embedded = FALSE, ...)
+\method{tangram}{numeric}(x, cols, embedded = FALSE, id = NULL,
+  caption = NULL, style = "hmisc", footnote = NULL, ...)
 
-\method{tangram}{data.frame}(x, colheader = NA, ..., quant = seq(0, 1,
-  0.25), msd = TRUE, as.character = NULL)
+\method{tangram}{data.frame}(x, colheader = NA, id = NULL, caption = NULL,
+  style = "hmisc", footnote = NULL, after = NA, quant = seq(0, 1, 0.25),
+  msd = TRUE, as.character = NULL, ...)
 
-\method{tangram}{formula}(x, data, transforms = hmisc_style, after = NA,
+\method{tangram}{formula}(x, data, transforms = hmisc_style, id = NULL,
+  caption = NULL, style = "hmisc", footnote = NULL, after = NA,
   digits = NA, ...)
 
-\method{tangram}{character}(x, data, transforms = hmisc_style, after = NA,
-  digits = NA, ...)
+\method{tangram}{character}(x, ...)
 
-\method{tangram}{table}(x, ...)
+\method{tangram}{table}(x, id = NULL, ...)
 
 \method{tangram}{tbl_df}(x, ...)
 
@@ -40,7 +42,17 @@ tangram(x, ...)
 
 \item{embedded}{logical; Will this table be embedded inside another}
 
+\item{id}{character; A unique charcter id used to identify this table over multiple runs. No spaces.}
+
+\item{caption}{character; A string with the desired caption}
+
+\item{style}{character; Desired rendering style, currently supports "hmisc", "nejm", and "lancet". Defaults to "hmisc"}
+
+\item{footnote}{character; A vector of character strings as footnotes}
+
 \item{colheader}{character; Use as column headers in final table}
+
+\item{after}{function or list of functions; one or more functions to further process an abstract table}
 
 \item{quant}{numeric; A vector of quantiles to use for summaries}
 
@@ -52,17 +64,15 @@ tangram(x, ...)
 
 \item{transforms}{list of lists of functions; that contain the transformation to apply for summarization}
 
-\item{after}{function or list of functions; one or more functions to further process an abstract table}
-
 \item{digits}{numeric; default number of digits to use for display of numerics}
 
 \item{short.labels}{numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").}
 
-\item{footnote}{character; A string to add to the table as a footnote.}
-
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
+
+\item{footnote}{character; A vectors of strings to add to the table as a footnotes.}
 }
 \value{
 A tangram object (a table).
@@ -79,7 +89,7 @@ single pretty table of model results. The rms and Hmisc packages are required.
 }
 \examples{
 tangram(1, 1)
-tangram(data.frame(x=1:3, y=c('a','b','c')))
-tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc)
-tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc)
+tangram(data.frame(x=1:3, y=c('a','b','c'), id="mytbl1"))
+tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc, id="mytbl2")
+tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc, id="mytbl3")
 }
