@@ -380,7 +380,7 @@ tangram.formula <- function(x, data, transforms=hmisc_style, after=NA, digits=NA
 #' @export
 tangram.character <- function(x, data, transforms=hmisc_style, after=NA, digits=NA, ...)
 {
-  tangram.formula(x, data, transforms, after, digits, ...)
+  tangram.formula(trimws(x), data, transforms, after, digits, ...)
 }
 
 #' @rdname tangram
