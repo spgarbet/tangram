@@ -135,7 +135,7 @@ html5.character <- function(object, id, ..., class=NA)
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given table in HTML5
 #' @export
-html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NULL, footnote=NULL, ...)
+html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NULL, footnote=NULL, inline=NULL, ...)
 {
   # Unused
   #if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
@@ -145,6 +145,17 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   if(is.null(fragment)) fragment <- TRUE
   if(is.null(caption))  caption  <- attr(object, "caption")
   if(is.null(style)) style <- attr(object, "style")
+
+  if(!is.null(inline))
+  {
+    warning("Deprecated inline argument to tangram::html5() call. Use style instead.")
+    if(is.null(style))
+    {
+      style <- substr(inline, 1, nchar(style)-4)
+    } else stop("inline and style argument specified in call to tangram::html5() use only style.")
+  }
+
+  # Default back to hmisc for style
   if(is.null(style)) style <- "hmisc"
 
   if(is.null(id))

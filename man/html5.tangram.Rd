@@ -5,7 +5,7 @@
 \title{Convert a tangram class into an HTML5 string}
 \usage{
 \method{html5}{tangram}(object, id = NULL, caption = NULL,
-  fragment = NULL, style = NULL, footnote = NULL, ...)
+  fragment = NULL, style = NULL, footnote = NULL, inline = NULL, ...)
 }
 \arguments{
 \item{object}{The cell table to render to HTML5}
@@ -18,9 +18,9 @@
 
 \item{footnote}{Any footnotes to include under the table.}
 
-\item{...}{additional arguments to renderer. Unused}
-
 \item{inline}{A string containing a filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.}
+
+\item{...}{additional arguments to renderer. Unused}
 }
 \value{
 A text string rendering of the given table in HTML5
