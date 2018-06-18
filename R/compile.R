@@ -186,7 +186,7 @@ table_flatten <- function(table)
   new_tbl
 }
 
-cell_create_table <- function(ast, transforms, digits, ...)
+cell_create_table <- function(ast, transforms, digits, style, ...)
 {
   elements <- ast$terms()
 
@@ -211,7 +211,7 @@ cell_create_table <- function(ast, transforms, digits, ...)
 
       if(is.null(row$format) || is.na(row$format)) row$set_format(digits)
 
-      tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, ...)$table
+      tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, style=style, ...)$table
     })
   })
 
@@ -384,6 +384,7 @@ tangram.formula <- function(x, data, id=NULL, transforms=hmisc_style, caption=NU
   tbl <- cell_create_table(Parser$new()$run(x)$reduce(data)$distribute(),
                            transforms,
                            digits,
+                           style,
                            ...)
 
   attr(tbl, "id")       <- id
