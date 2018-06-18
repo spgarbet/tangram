@@ -6,6 +6,7 @@
 
 Quick show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
 
+Also, I'm in a major refactor to make style overrides easier for the end user and making rendering automatic and context aware. You can compare and contrast the calls here: [Upcoming Refactored v0.5 example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/knitr/vignettes/example.html). This update will break some existing code. I'm working to make it as backward compatible as possible. 
 
 ## Quick Overview
 

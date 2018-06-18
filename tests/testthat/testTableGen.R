@@ -49,3 +49,10 @@ test_that("Intercept handling works",
 
   expect_true(inherits(tbl1, "tangram"))
 })
+
+test_that("trailing spaces in a formula work",
+{
+  tbl1 <- tangram("drug ~ bili ", pbc)
+
+  expect_true(inherits(tbl1, "tangram"))
+})

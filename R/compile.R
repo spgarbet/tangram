@@ -404,7 +404,7 @@ tangram.formula <- function(x, data, id=NULL, transforms=hmisc_style, caption=NU
 #' @export
 tangram.character <- function(x, ...)
 {
-  tangram.formula(x, ...)
+  tangram.formula(trimws(x), ...)
 }
 
 #' @rdname tangram
