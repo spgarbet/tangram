@@ -1,3 +1,5 @@
+context("Parser")
+
 test_that("Addition and multiplication is parseable.",
 {
   ast <- Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")

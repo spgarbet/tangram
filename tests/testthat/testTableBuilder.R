@@ -1,3 +1,5 @@
+context("Table Builder")
+
 test_that("Flattening arguments works for embedded vectors of numbers",
 {
   fl <- args_flatten(NA, c(1,2,3), NA)

@@ -1,5 +1,7 @@
 # Test Rmd Escaped specials
 
+context("Latexify")
+
 test_that("Escaped hash",        expect_true(latexify("\\#")  == "\\#"))
 test_that("Escaped dollar",      expect_true(latexify("\\$")  == "\\textdollar{}"))
 test_that("Escaped asterisk",    expect_true(latexify("\\*")  == "\\ast{}"))

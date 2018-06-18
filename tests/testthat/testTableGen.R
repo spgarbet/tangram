@@ -1,3 +1,5 @@
+context("Compile")
+
 test_that("Categorical versus Numerical generates a table",
 {
   test_table <- tangram(drug ~ bili, pbc, "test")
@@ -52,7 +54,7 @@ test_that("Intercept handling works",
 
 test_that("trailing spaces in a formula work",
 {
-  tbl1 <- tangram("drug ~ bili ", pbc)
+  tbl1 <- tangram("drug ~ bili ", pbc, "test")
 
   expect_true(inherits(tbl1, "tangram"))
 })
