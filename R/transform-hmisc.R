@@ -75,17 +75,17 @@ summarize_kruskal_horz <- function(table,
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
   {
-    test <- suppressWarnings(wilcox.test(datar))
-    cell_style[['wilcox']](test$statistic, pformat(test$p.value))
+    tst <- suppressWarnings(wilcox.test(datar))
+    cell_style[['wilcox']](test$statistic, pformat(tst$p.value))
   }
   else
   {
-    test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
+    tst  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
     cell_style[['fstat']](
-      f         = render_f(test['F'], "%.2f"),
-      df1       = test['df1'],
-      df2       = test['df2'],
-      p         = pformat(test['P']))
+      f         = render_f(tst['F'], "%.2f"),
+      df1       = tst['df1'],
+      df2       = tst['df2'],
+      p         = pformat(tst['P']))
   }
 
   tbl <- row_header(table, derive_label(row))
@@ -173,17 +173,17 @@ summarize_nejm_horz <-    function(table,
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
   {
-    test <- suppressWarnings(wilcox.test(datar))
-    cell_style[['wilcox']](test$statistic, pformat(test$p.value))
+    tst <- suppressWarnings(wilcox.test(datar))
+    cell_style[['wilcox']](tst$statistic, pformat(tst$p.value))
   }
   else
   {
-    stat  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
+    tst  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
     cell_style[['fstat']](
-      f         = render_f(stat['F'], "%.2f"),
-      df1       = stat['df1'],
-      df2       = stat['df2'],
-      p         = pformat(stat['P'])
+      f         = render_f(tst['F'], "%.2f"),
+      df1       = tst['df1'],
+      df2       = tst['df2'],
+      p         = pformat(tst['P'])
     )
   }
 
