@@ -4,8 +4,9 @@
 \alias{summarize_nejm_horz}
 \title{Create a summarization for a categorical set of column versus a numerical row in NEJM style}
 \usage{
-summarize_nejm_horz(table, row, column, pformat = NULL, msd = FALSE,
-  quant = c(0.25, 0.5, 0.75), overall = NULL, test = TRUE, ...)
+summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
+  msd = FALSE, quant = c(0.25, 0.5, 0.75), overall = NULL, test = TRUE,
+  ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -13,6 +14,8 @@ summarize_nejm_horz(table, row, column, pformat = NULL, msd = FALSE,
 \item{row}{The row variable object to use (numerical)}
 
 \item{column}{The column variable to use (categorical)}
+
+\item{cell_style}{list; cell styling functions}
 
 \item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
 

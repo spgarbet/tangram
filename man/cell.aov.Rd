@@ -4,7 +4,7 @@
 \alias{cell.aov}
 \title{AOV model as cell}
 \usage{
-\method{cell}{aov}(x, pformat = "\%1.3f", ...)
+cell.aov(x, pformat = "\%1.3f", ...)
 }
 \arguments{
 \item{x}{The aov object to turn into a renderable cell}

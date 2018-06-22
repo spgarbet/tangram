@@ -4,7 +4,7 @@
 \name{nejm_style}
 \alias{nejm_style}
 \title{Style Bundle for Closer to NEJM style}
-\format{An object of class \code{list} of length 4.}
+\format{An object of class \code{list} of length 5.}
 \usage{
 nejm_style
 }

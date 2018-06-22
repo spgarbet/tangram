@@ -7,7 +7,7 @@
 cell_n(n, class = NULL, ...)
 }
 \arguments{
-\item{n}{The value of the X^2 statistic}
+\item{n}{The numerical value}
 
 \item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 
@@ -17,7 +17,8 @@ cell_n(n, class = NULL, ...)
 A cell_n object.
 }
 \description{
-A cell_n object contains a statistical result of an X^2-test.
+A cell_n object contains an n value. Essentially, this is just a helper that appends the cell_n class to the given
+object and makes sure it's a cell S3 object as well.
 }
 \examples{
 cell_n(20)

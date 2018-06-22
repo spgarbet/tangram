@@ -4,7 +4,7 @@
 \name{hmisc_style}
 \alias{hmisc_style}
 \title{Style Bundle for Hmisc defaults.}
-\format{An object of class \code{list} of length 4.}
+\format{An object of class \code{list} of length 5.}
 \usage{
 hmisc_style
 }

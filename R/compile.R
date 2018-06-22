@@ -211,7 +211,7 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 
       if(is.null(row$format) || is.na(row$format)) row$set_format(digits)
 
-      tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, style=style, ...)$table
+      tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, cell_style=transforms[["Cell"]], style=style, ...)$table
     })
   })
 

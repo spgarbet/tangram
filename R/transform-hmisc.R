@@ -22,6 +22,7 @@
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
+#' @param cell_style list; cell styling functions
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
@@ -44,6 +45,7 @@
 summarize_kruskal_horz <- function(table,
                                    row,
                                    column,
+                                   cell_style,
                                    pformat=NULL,
                                    msd=FALSE,
                                    quant=c(0.25, 0.5, 0.75),
@@ -65,24 +67,25 @@ summarize_kruskal_horz <- function(table,
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat)
+    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat)
   })
 
-  if(overall) subN[[length(subN)+1]] <- cell_n( sum(!is.na(column$data)), subcol="Overall")
+  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall")
 
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
   {
-    cell(suppressWarnings(wilcox.test(datar)), pformat=pformat, reference="3")
+    test <- suppressWarnings(wilcox.test(datar))
+    cell_style[['wilcox']](test$statistic, pformat(test$p.value))
   }
   else
   {
-    stat  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
-    cell_fstat(f         = render_f(stat['F'], "%.2f"),
-               df1       = stat['df1'],
-               df2       = stat['df2'],
-               p         = pformat(stat['P']),
-               reference = "1")
+    test  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
+    cell_style[['fstat']](
+      f         = render_f(test['F'], "%.2f"),
+      df1       = test['df1'],
+      df2       = test['df2'],
+      p         = pformat(test['P']))
   }
 
   tbl <- row_header(table, derive_label(row))
@@ -92,12 +95,12 @@ summarize_kruskal_horz <- function(table,
     col_header(tbl, "N", categories)  %>% col_header("", subN)
   }
 
-  tbl <- add_col(tbl, cell_n(sum(!is.na(datar)),name=NULL)) %>%
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),name=NULL)) %>%
   table_builder_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
      if(sum(!is.na(x)) > 0) {
-       add_col(tbl, cell_iqr(x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
+       add_col(tbl, cell_style[['iqr']](x, format, na.rm=TRUE, subcol=category, msd=msd, quant=quant))
      } else {
        add_col(tbl, "")
      }
@@ -117,6 +120,7 @@ summarize_kruskal_horz <- function(table,
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
+#' @param cell_style list; cell styling functions
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
@@ -139,6 +143,7 @@ summarize_kruskal_horz <- function(table,
 summarize_nejm_horz <-    function(table,
                                    row,
                                    column,
+                                   cell_style,
                                    pformat=NULL,
                                    msd=FALSE,
                                    quant=c(0.25, 0.5, 0.75),
@@ -160,24 +165,26 @@ summarize_nejm_horz <-    function(table,
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    cell_n(length(datac[datac == cat & !is.na(datac)]), subcol=cat)
+    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat)
   })
 
-  if(overall) subN[[length(subN)+1]] <- cell_n( sum(!is.na(column$data)), subcol="Overall")
+  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall")
 
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
   {
-    cell(suppressWarnings(wilcox.test(datar)), pformat=pformat, reference="3")
+    test <- suppressWarnings(wilcox.test(datar))
+    cell_style[['wilcox']](test$statistic, pformat(test$p.value))
   }
   else
   {
     stat  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
-    cell_fstat(f         = render_f(stat['F'], "%.2f"),
-               df1       = stat['df1'],
-               df2       = stat['df2'],
-               p         = pformat(stat['P']),
-               reference = "1")
+    cell_style[['fstat']](
+      f         = render_f(stat['F'], "%.2f"),
+      df1       = stat['df1'],
+      df2       = stat['df2'],
+      p         = pformat(stat['P'])
+    )
   }
 
   tbl <- table %>%
@@ -192,7 +199,7 @@ summarize_nejm_horz <-    function(table,
   } else {
     col_header(tbl, "N", categories)  %>% col_header("", subN)
   }
-  tbl <- add_col(tbl, cell_n(sum(!is.na(datar)),name=NULL))
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),name=NULL))
   tbl <- table_builder_apply(tbl, categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
      tbl <- add_row(tbl, cell(""))
@@ -217,12 +224,13 @@ summarize_nejm_horz <-    function(table,
 #' @param table The table object to modify
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (numerical)
+#' @param cell_style list; cell styling functions
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, ...)
+summarize_kruskal_vert <- function(table, row, column, cell_style, pformat=NULL, test=TRUE, ...)
 {
   pformat <- pfunc(pformat)
 
@@ -232,7 +240,8 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
 
   # Kruskal-Wallis via F-distribution
   stat  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
-  fstat <- cell_fstat(f   = render_f(stat['F'], "%.2f"),
+  fstat <- cell_style[['fstat']](
+                      f   = render_f(stat['F'], "%.2f"),
                       df1 = stat['df1'],
                       df2 = stat['df2'],
                       p   = pformat(stat['P']),
@@ -249,7 +258,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
     tbl                                                  %>%
     row_header(paste0("  ", category))                   %>%
     add_col(cell(length(x), subcol=category))            %>%
-    add_col(cell_iqr(x, column$format, na.rm=TRUE, subrow=category)) %>%
+    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category)) %>%
     new_line()
   })                                                                %>%
   cursor_pos(1, 3)
@@ -267,6 +276,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
 #' @param table The table object to modify
 #' @param row The row variable object to use (categorical)
 #' @param column The column variable to use (categorical)
+#' @param cell_style list; cell styling functions
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param overall logical; Include the overall summary column
@@ -278,6 +288,7 @@ summarize_kruskal_vert <- function(table, row, column, pformat=NULL, test=TRUE, 
 summarize_chisq <- function(table,
                             row,
                             column,
+                            cell_style,
                             pformat=NULL,
                             collapse_single=TRUE,
                             overall=NULL,
@@ -304,7 +315,7 @@ summarize_chisq <- function(table,
   # Compute overall N values for each category
   # length(datac[datac == cat & !is.na(datac)])
   subN <- lapply(colnames(grid), FUN=function(cat)
-    cell_n( sum(column$data == cat, na.rm=TRUE), subcol=cat)
+    cell_style[['n']]( sum(column$data == cat, na.rm=TRUE), subcol=cat)
   )
 
   if(!is.null(overall))
@@ -312,7 +323,7 @@ summarize_chisq <- function(table,
     denominators <- cbind(denominators, rep(sum(grid), nrow))
     grid         <- cbind(grid,         rowSums(grid))
     colnames(grid)[ncol+1] <- if(is.character(overall)) overall else "Overall"
-    subN[[ncol+1]] <- cell_n( sum(!is.na(column$data)), subcol="Overall")
+    subN[[ncol+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall")
     ncol         <- ncol + 1
   }
 
@@ -368,7 +379,8 @@ summarize_chisq <- function(table,
           add_row(table, "")
         else
           add_row(table,
-                  cell_fraction(grid[i,j], denominators[i,j],
+                  cell_style[['fraction']](
+                                grid[i,j], denominators[i,j],
                                 format=row$format,
                                 subcol=colnames(grid)[i], subrow=rownames(grid)[j]))
     }
@@ -378,7 +390,11 @@ summarize_chisq <- function(table,
   # Finally add the stats
   if(test)
   {
-    table <- add_row(table, cell(stat, reference="2", pformat=pformat))
+    table <- add_row(table, cell_style[['chi2']](
+      render_f(stat$statistic, 2),
+      stat$parameter,
+      pformat(stat$p.value)
+    ))
 
     # Fill in blank cells in stats column
     if(nrow > 1) table <- add_row(table, rep("", nrow))
@@ -395,41 +411,43 @@ summarize_chisq <- function(table,
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (numerical)
+#' @param cell_style list; cell styling functions
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arguments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_spearman <- function(table, row, column, pformat=NULL, test=TRUE, ...)
+summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=TRUE, ...)
 {
   pformat <- pfunc(pformat)
 
-  datar <- row$data
-  datac <- column$data
+  datar   <- row$data
+  datac   <- column$data
 
-  stat  <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
+  stat    <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
 
-  tbl <- row_header(table, derive_label(row))
+  tbl     <- row_header(table, derive_label(row))
+
+  N <- cell_style[['n']](sum(!is.na(datac)))
 
   tbl <- if(test) {
     tbl <- col_header(tbl, "N", derive_label(column), "Test Statistic")
-    tbl <- col_header(tbl, "", "", "")
+    tbl <- col_header(tbl, "", N, "")
   } else {
     tbl <- col_header(tbl, "N", derive_label(column))
-    tbl <- col_header(tbl, "", "")
+    tbl <- col_header(tbl, "", N)
   }
 
-  tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
-  tbl <- add_col(tbl, render_f(stat$estimate, row$format))
+    tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
+  tbl <- add_col(tbl, paste0("\u03c1=", render_f(unname(stat$estimate), row$format)))
 
-  if(test) tbl <- add_col(tbl, cell(stat, pformat=pformat))
+  if(test) tbl <- add_col(tbl, cell_style[['spearman']](
+    stat$statistic,
+    render_f(stat$estimate, row$format),
+    pformat(stat$p.value)
+  ))
 
   tbl
-}
-
-apply_factors <- function(row, column)
-{
-  stop("Not Implemented")
 }
 
 #' Determine data type of a vector loosely consistent with Hmisc.
@@ -475,6 +493,7 @@ hmisc_style <- list(
                   Numerical   = summarize_kruskal_vert,
                   Categorical = summarize_chisq
             ),
+  Cell        = hmisc_cell,
   Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
 )
 
@@ -499,6 +518,7 @@ nejm_style <- list(
                   Numerical   = function(...){stop("Cat X Numerical not implemented in this style")},
                   Categorical = summarize_chisq
             ),
+  Cell        = hmisc_cell,
   Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
 )
 

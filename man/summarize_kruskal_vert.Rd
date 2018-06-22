@@ -4,7 +4,8 @@
 \alias{summarize_kruskal_vert}
 \title{Create a summarization for a categorical row versus a numerical column}
 \usage{
-summarize_kruskal_vert(table, row, column, pformat = NULL, test = TRUE, ...)
+summarize_kruskal_vert(table, row, column, cell_style, pformat = NULL,
+  test = TRUE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -12,6 +13,8 @@ summarize_kruskal_vert(table, row, column, pformat = NULL, test = TRUE, ...)
 \item{row}{The row variable object to use (categorical)}
 
 \item{column}{The column variable to use (numerical)}
+
+\item{cell_style}{list; cell styling functions}
 
 \item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
 

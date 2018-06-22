@@ -4,8 +4,9 @@
 \alias{summarize_chisq}
 \title{Create a summarization for a categorical row versus a categorical column}
 \usage{
-summarize_chisq(table, row, column, pformat = NULL, collapse_single = TRUE,
-  overall = NULL, test = TRUE, row_percents = FALSE, ...)
+summarize_chisq(table, row, column, cell_style, pformat = NULL,
+  collapse_single = TRUE, overall = NULL, test = TRUE,
+  row_percents = FALSE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -13,6 +14,8 @@ summarize_chisq(table, row, column, pformat = NULL, collapse_single = TRUE,
 \item{row}{The row variable object to use (categorical)}
 
 \item{column}{The column variable to use (categorical)}
+
+\item{cell_style}{list; cell styling functions}
 
 \item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
 

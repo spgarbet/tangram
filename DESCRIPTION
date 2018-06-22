@@ -35,6 +35,7 @@ VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Collate: 
     'compile-cell.R'
+    'cell-hmisc.R'
     'compile-operators.R'
     'compile-post.R'
     'parser.R'
