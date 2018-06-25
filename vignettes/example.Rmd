@@ -141,7 +141,7 @@ df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c(
 attr(df$id, "label") <- "ID"
 
 ### Now create custom function for counting events with a category
-summarize_count <- function(table, row, column)
+summarize_count <- function(table, row, column, ...)
 {
   ### Getting Data for row column ast nodes, assuming no factors
   datar <- row$data
@@ -175,13 +175,13 @@ summarize_count <- function(table, row, column)
       xx <- aggregate(x, by=list(x), FUN=length)$x
 
       # Add a column that is a quantile
-      add_col(tbl, cell_iqr(xx, row$format, na.rm=TRUE))
+      add_col(tbl, hmisc_iqr(xx, row$format, na.rm=TRUE))
   })                                                 %>%
   # Now add a statistical test for the final column
   add_col(test)
 }
 
-tangram(event ~ id["%1.0f"], df, id="tbl7", summarize_count)
+tangram(event ~ id["%1.0f"], df, id="tbl7", transforms=summarize_count)
 ```
 
 And that concludes the basic demonstration of formula capabilities and writing one's own simple transform bundle.
