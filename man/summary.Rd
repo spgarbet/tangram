@@ -4,15 +4,6 @@
 \alias{summary.tangram}
 \alias{summary.table_builder}
 \alias{summary.cell}
-\alias{summary.cell_label}
-\alias{summary.cell_spearman}
-\alias{summary.cell_iqr}
-\alias{summary.cell_range}
-\alias{summary.cell_estimate}
-\alias{summary.cell_fraction}
-\alias{summary.cell_fstat}
-\alias{summary.cell_chi2}
-\alias{summary.cell_studentt}
 \title{The default method for rendering tangram objects
 A tangram is a summary, so it returns itself. Otherwise convert to a text representation.}
 \usage{
@@ -21,24 +12,6 @@ A tangram is a summary, so it returns itself. Otherwise convert to a text repres
 \method{summary}{table_builder}(object, ...)
 
 \method{summary}{cell}(object, ...)
-
-\method{summary}{cell_label}(object, ...)
-
-\method{summary}{cell_spearman}(object, ...)
-
-\method{summary}{cell_iqr}(object, ...)
-
-\method{summary}{cell_range}(object, ...)
-
-\method{summary}{cell_estimate}(object, ...)
-
-\method{summary}{cell_fraction}(object, ...)
-
-\method{summary}{cell_fstat}(object, ...)
-
-\method{summary}{cell_chi2}(object, ...)
-
-\method{summary}{cell_studentt}(object, ...)
 }
 \arguments{
 \item{object}{object; the item to render}

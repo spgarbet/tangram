@@ -244,8 +244,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, pformat=NULL,
                       f   = render_f(stat['F'], "%.2f"),
                       df1 = stat['df1'],
                       df2 = stat['df2'],
-                      p   = pformat(stat['P']),
-                      reference = "1")
+                      p   = pformat(stat['P']))
 
   tbl <- if(test) col_header(table, "N", derive_label(column), "Test Statistic") else
                   col_header(table, "N", derive_label(column))

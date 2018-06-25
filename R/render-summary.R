@@ -15,16 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 textsub_table <-list(
-  c("\u00A0",                                "  "),       # Special spaces
-  c("(^|[^\\\\])~((\\\\.|[^~\\\\])*)~",      "\\1_\\2"),  # Subscript
-  c("(^|[^\\\\])\\^((\\\\.|[^~\\\\])*)\\^",  "\\1^\\2"),  # Superscript
-  c("\\\\(.)",                               "\\1")       # convert escaped characters
+  c("\u00A0",                                  "  "),        # Special spaces
+  c("\\*\\*",                                 "\\*"),        # Double asterisks converted to single
+  c("(^|[^\\\\])~([^~\\\\])~",                "\\1_\\2"),    # Single character subscript
+  c("(^|[^\\\\])~((\\\\.|[^~\\\\])+)~",       "\\1_{\\2}"),  # Subscript
+  c("(^|[^\\\\])\\^((\\\\.|[^\\^\\\\])+)\\^", "\\1^\\2 "),   # Superscript
+  c("(^|[^\\\\])\\^((\\\\.|[^\\^\\\\])+) _",  "\\1^\\2_"),   # Superscript followed by subscript correction
+  c("(^|[^\\\\])\\\\frac{([^}]*)}{([^}]*)}",  "\\1 \\2/\\3"),# Make fractions
+  c("\\\\(.)",                                "\\1")         # convert escaped characters
 )
 
 #' @importFrom stringi stri_trans_nfc
 #' @importFrom stringi stri_trans_nfd
 #' @importFrom utils capture.output
-textify <- function(x)
+textify <- Vectorize(function(x)
 {
   y <- as.character(x)          # Make sure a character string was passed
   if(nchar(y) == 0) return("")  # Abort early for zero characters
@@ -41,7 +45,7 @@ textify <- function(x)
   y <- stri_trans_nfd(y)
 
   # Convert strikethrough
-  y <- "~~one~~ other \\~~ ~~two~~"
+  #y <- "~~one~~ other \\~~ ~~two~~"
   pieces <- strsplit(y, "(?<!\\\\)~~", perl=TRUE)[[1]] # Strikethrough
   if(length(pieces) > 1)
   {
@@ -54,13 +58,13 @@ textify <- function(x)
 
   ## Run all conversions as appropriate not inside "$"
   pieces  <- strsplit(y, "(?<!\\\\)\\$", perl=TRUE)[[1]]
-  if(length(pieces) > 0)
-  {
-    subs <- seq(1, length(pieces), by=2)
-    pieces[subs] <- sapply(pieces[subs], function(x) {
-      Reduce(function(u, v) gsub(v[1], v[2], u, perl=TRUE), textsub_table, x)
-    })
-  }
+  # if(length(pieces) > 0)
+  # {
+  #   subs <- seq(1, length(pieces), by=2)
+  #   pieces[subs] <- sapply(pieces[subs], function(x) {
+  #     Reduce(function(u, v) sub(v[1], v[2], u, perl=TRUE), textsub_table, x)
+  #   })
+  # }
 
   for(i in 1:length(pieces))
   {
@@ -71,13 +75,10 @@ textify <- function(x)
   }
   y <- paste0(pieces, collapse="")
 
-
-
   ## Convert result to UTF-8 NFC encoding, although most non-ASCII
   ## content has probably been converted to LaTeX commands.
   stri_trans_nfc(y)
-}
-
+})
 
 
 #######
@@ -117,87 +118,11 @@ summary.cell <- function(object, ...)
   {
     paste(object, collapse=sep)
   } else {
-    name <- vapply(names(object), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
+    name <- vapply(names(object), function(n) if(nchar(n)>0) paste0(textify(n),"=") else "", "character")
     paste(paste0(name, as.character(object)), collapse=sep)
   }
 }
 
-#' @rdname summary
-#' @export
-summary.cell_label <- function(object, ...)
-{
-  units <- attr(object, "units")
-  if(is.null(units)) object else paste0(object, " (", units, ")")
-}
-
-#' @rdname summary
-#' @export
-summary.cell_spearman <- function(object, ...)
-{
-  paste0("S=",object[1],", ","P=",object[3])
-}
-
-#' @rdname summary
-#' @export
-summary.cell_iqr <- function(object, ...)
-{
-  mid <- floor(length(object)/2) + 1
-  y <- as.character(object)
-  x <- y[mid] <- paste0("*", y[mid], "*")
-
-  result <- paste0(y, collapse=' ')
-
-  z <- attr(object, "msd")
-  if(is.null(z)) result else
-  {
-    paste0(result, ' ', z[1], '\u00b1', z[2])
-  }
-}
-
-#' @rdname summary
-#' @export
-summary.cell_range <- function(object, ...)
-{
-  sep <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
-  paste0("(", object[1], sep, object[2], ")")
-}
-
-#' @rdname summary
-#' @export
-summary.cell_estimate <- function(object,...)
-{
-  paste0(c(summary(object[[1]]), summary(object[[2]])), collapse=' ')
-}
-
-#' @rdname summary
-#' @export
-summary.cell_fraction <- function(object,...)
-{
-  den <- as.character(object['denominator'])
-  num <- sprintf(paste("%",nchar(den),"s",sep=''), object['numerator'])
-  paste0(object['ratio'], "  ", num, "/", den)
-}
-
-#' @rdname summary
-#' @export
-summary.cell_fstat <- function(object, ...)
-{
-  paste0("F_{", object[2], ",", object[3], "}=", object[1], ", P=", object[4])
-}
-
-#' @rdname summary
-#' @export
-summary.cell_chi2 <- function(object, ...)
-{
-  paste0("X^2_", object[2], "=", object[1], ", P=", object[3])
-}
-
-#' @rdname summary
-#' @export
-summary.cell_studentt <- function(object, ...)
-{
-  paste0("t_", object[2], "=", object[1], ", P=", object[3])
-}
 
 #######
 #' Print methods for tangram objects
@@ -263,7 +188,7 @@ internal_print <- function(x, ...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(x[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- summary(x[[row]][[col]])
+      text[row,col] <<- textify(summary(x[[row]][[col]]))
     })
   })
 
@@ -300,13 +225,13 @@ internal_print <- function(x, ...)
 
   if(!is.null(attr(x, "caption")))
   {
-    result <- paste0(attr(x, "caption"), '\n', result)
+    result <- paste0(textify(attr(x, "caption")), '\n', result)
   }
 
 
   if(!is.null(attr(x, "footnote")))
   {
-    result <- paste0(result, paste0(attr(x, "footnote"), collapse="\n"), collapse='\n' )
+    result <- paste0(result, textify(paste0(attr(x, "footnote"), collapse="\n")), collapse='\n' )
   }
 
   cat(result)
