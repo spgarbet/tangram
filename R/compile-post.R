@@ -47,10 +47,12 @@ cell_transform <- function(FUN, ...)
 #' @export
 del_col <- function(table, col)
 {
-  sapply(1:length(table), function(row) {
-    cols <- length(table[[row]])
-    if(col < cols) sapply((col+1):cols, function(i) table[[row]][[i-1]] <<- table[[row]][[i]])
-    table[[row]][[cols]] <<- NULL
+  sapply(sort(col, decreasing = TRUE), function(col) {
+    sapply(1:length(table), function(row) {
+      cols <- length(table[[row]])
+      if(col < cols) sapply((col+1):cols, function(i) table[[row]][[i-1]] <<- table[[row]][[i]])
+      table[[row]][[cols]] <<- NULL
+    })
   })
   table
 }
@@ -64,10 +66,11 @@ del_col <- function(table, col)
 #' @export
 del_row <- function(table, row)
 {
-  rows <- length(table)
-  if(row < rows)
-    sapply((row+1):rows, function(i) table[[i-1]] <<- table[[i]])
-  table[[rows]] <- NULL
+  sapply(sort(row, decreasing = TRUE), function(row) {
+    rows <- length(table)
+    if(row < rows) sapply((row+1):rows, function(i) table[[i-1]] <<- table[[i]])
+    table[[rows]] <<- NULL
+  })
   table
 }
 
