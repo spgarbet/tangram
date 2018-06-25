@@ -4,7 +4,7 @@
 \name{hmisc_cell}
 \alias{hmisc_cell}
 \title{Cell Generation functions for hmisc default}
-\format{An object of class \code{list} of length 7.}
+\format{An object of class \code{list} of length 8.}
 \usage{
 hmisc_cell
 }

@@ -177,6 +177,7 @@ render_route_tangram <- function()
   rmd.tangram
 }
 
+#' @importFrom stringr str_pad
 internal_print <- function(x, ...)
 {
   nrows <- rows(x)

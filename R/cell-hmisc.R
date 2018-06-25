@@ -15,6 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+# Turn a passed pformat into a function (or leave alone)
+hmisc_p <- function(pformat)
+{
+  if(class(pformat) == "function") return(pformat)
+
+  if(is.null(pformat)) pformat <- "%1.3f"
+
+  function(p)
+  {
+    if(is.na(p) || is.nan(p) || p <0 || p>1) return("NA")
+
+    y <- render_f(p, pformat)
+
+    # Check for all zeros once formated
+    test <- grep("[^0\\.]+", y)
+    if(length(test) > 0) paste0("P=",y) else paste0("P<", substr(y, 1, nchar(y)-1), "1")
+  }
+}
+
 #' Create a interquartile range cell object of the given data
 #'
 #' Construct a cell which has the 3 interquartile ranges specified.
@@ -101,7 +120,7 @@ hmisc_fraction <- function(numerator, denominator, format=3, ...)
 #' hmisc_fstat(4.0, 10, 20, 0.004039541)
 hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 {
-  cell(paste0("F~", df1, ",", df2, "~=", f, ", ", "P=", p, "^1^"), ..., class=c(class, "statistics"))
+  cell(paste0("F~", df1, ",", df2, "~=", f, ", ", p, "^1^"), ..., class=c(class, "statistics"))
 }
 
 #' Create an hmisc_chi2 (S3) object of the given statistic
@@ -119,7 +138,7 @@ hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 #' hmisc_chi2(5.33, 6, 0.2)
 hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
-  cell(paste0("\u03c7^2^~", df, "~=", chi2,", P=", p, "^2^"),
+  cell(paste0("\u03c7^2^~", df, "~=", chi2,", ", p, "^2^"),
        class="statistics",
        ...)
 }
@@ -139,7 +158,7 @@ hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
 #' hmisc_spearman(20, 0.2, 0.05)
 hmisc_spearman <- function(S, rho, p, class=NULL, ...)
 {
-  cell(paste0("P=",p, "^3^"), class=c(class, "statistics"), ...)
+  cell(paste0(p, "^3^"), class=c(class, "statistics"), ...)
 }
 
 #' Create an hmisc_wilcox (S3) object of the given statistic
@@ -156,7 +175,7 @@ hmisc_spearman <- function(S, rho, p, class=NULL, ...)
 #' hmisc_wilcox(20, 0.2)
 hmisc_wilcox <- function(V, p, class=NULL, ...)
 {
-  cell(paste0("P=",p, "^3^"), class=c(class, "statistics"), ...)
+  cell(paste0(p, "^3^"), class=c(class, "statistics"), ...)
 }
 
 #' Cell Generation functions for hmisc default
@@ -177,6 +196,7 @@ hmisc_cell <- list(
   fstat    = hmisc_fstat,
   chi2     = hmisc_chi2,
   spearman = hmisc_spearman,
-  wilcox   = hmisc_wilcox
+  wilcox   = hmisc_wilcox,
+  p        = hmisc_p
 )
 

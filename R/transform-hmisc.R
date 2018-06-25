@@ -53,7 +53,7 @@ summarize_kruskal_horz <- function(table,
                                    test=TRUE,
                                    ...)
 {
-  pformat <- pfunc(pformat)
+  pformat <- cell_style[['p']](pformat)
 
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
@@ -151,7 +151,7 @@ summarize_nejm_horz <-    function(table,
                                    test=TRUE,
                                    ...)
 {
-  pformat <- pfunc(pformat)
+  pformat <- cell_style[['p']](pformat)
 
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
@@ -226,13 +226,14 @@ summarize_nejm_horz <-    function(table,
 #' @param column The column variable to use (numerical)
 #' @param cell_style list; cell styling functions
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
+#' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column, cell_style, pformat=NULL, test=TRUE, ...)
+summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, test=TRUE, ...)
 {
-  pformat <- pfunc(pformat)
+  pformat    <- cell_style[['p']](pformat)
 
   datar      <- as.categorical(row$data)
   datac      <- column$data
@@ -246,21 +247,39 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, pformat=NULL,
                       df2 = stat['df2'],
                       p   = pformat(stat['P']))
 
-  tbl <- if(test) col_header(table, "N", derive_label(column), "Test Statistic") else
-                  col_header(table, "N", derive_label(column))
 
-  tbl <- row_header(tbl, derive_label(row))                          %>%
-# FIXME Need to handle single case consistent with chisq
-  new_line()                                                        %>%
-  table_builder_apply(categories, FUN=function(tbl, category) {
+  N <- cell_style[['n']](sum(!is.na(datac)))
+
+  tbl <- if(test)
+  {
+    col_header(table, "N", derive_label(column), "Test Statistic") %>% col_header("", N, "")
+  } else {
+    col_header(table, "N", derive_label(column)) %>% col_header("", N)
+  }
+
+  tbl <- if(collapse_single && length(categories) == 2)
+  {
+    category <- categories[2]
     x <- datac[datar == category]
-    tbl                                                  %>%
-    row_header(paste0("  ", category))                   %>%
-    add_col(cell(length(x), subcol=category))            %>%
-    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category)) %>%
-    new_line()
-  })                                                                %>%
-  cursor_pos(1, 3)
+
+    row_header(tbl, paste(derive_label(row), ":", category) )    %>%
+    add_col(cell(sum(!is.na(datac)), subcol=category))            %>%
+    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category))
+
+  } else
+  {
+    row_header(tbl, derive_label(row))                                %>%
+    new_line()                                                        %>%
+    table_builder_apply(categories, FUN=function(tbl, category) {
+      x <- datac[datar == category]
+      tbl                                                  %>%
+      row_header(paste0("  ", category))                   %>%
+      add_col(cell(length(x), subcol=category))            %>%
+      add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category)) %>%
+      new_line()
+    })                                                                %>%
+    cursor_pos(1, 3)
+  }
 
   if(test) tbl <- add_col(tbl, fstat)
 
@@ -295,7 +314,7 @@ summarize_chisq <- function(table,
                             row_percents=FALSE,
                             ...)
 {
-  pformat <- pfunc(pformat)
+  pformat <- cell_style[['p']](pformat)
 
   grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
@@ -418,7 +437,7 @@ summarize_chisq <- function(table,
 #' @export
 summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=TRUE, ...)
 {
-  pformat <- pfunc(pformat)
+  pformat <- cell_style[['p']](pformat)
 
   datar   <- row$data
   datac   <- column$data
@@ -429,15 +448,14 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 
   N <- cell_style[['n']](sum(!is.na(datac)))
 
-  tbl <- if(test) {
-    tbl <- col_header(tbl, "N", derive_label(column), "Test Statistic")
-    tbl <- col_header(tbl, "", N, "")
+  tbl <- if(test)
+  {
+    col_header(tbl, "N", derive_label(column), "Test Statistic") %>% col_header("", N, "")
   } else {
-    tbl <- col_header(tbl, "N", derive_label(column))
-    tbl <- col_header(tbl, "", N)
+    col_header(tbl, "N", derive_label(column)) %>% col_header("", N)
   }
 
-    tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
+  tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
   tbl <- add_col(tbl, paste0("\u03c1=", render_f(unname(stat$estimate), row$format)))
 
   if(test) tbl <- add_col(tbl, cell_style[['spearman']](
