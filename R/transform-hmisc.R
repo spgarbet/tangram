@@ -67,10 +67,10 @@ summarize_kruskal_horz <- function(table,
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat)
+    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat, hdr=TRUE)
   })
 
-  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall")
+  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), hdr=TRUE, subcol="Overall")
 
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
@@ -88,14 +88,13 @@ summarize_kruskal_horz <- function(table,
       p         = pformat(tst['P']))
   }
 
-  tbl <- row_header(table, derive_label(row))
   tbl <- if(test) {
     col_header(tbl, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
   } else {
     col_header(tbl, "N", categories)  %>% col_header("", subN)
   }
 
-  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),name=NULL)) %>%
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),hdr=TRUE)) %>%
   table_builder_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
@@ -231,7 +230,7 @@ summarize_chisq <- function(table,
   # Compute overall N values for each category
   # length(datac[datac == cat & !is.na(datac)])
   subN <- lapply(colnames(grid), FUN=function(cat)
-    cell_style[['n']]( sum(column$data == cat, na.rm=TRUE), subcol=cat)
+    cell_style[['n']](sum(column$data == cat, na.rm=TRUE), subcol=cat, hdr=TRUE)
   )
 
   if(!is.null(overall))
@@ -239,7 +238,7 @@ summarize_chisq <- function(table,
     denominators <- cbind(denominators, rep(sum(grid), nrow))
     grid         <- cbind(grid,         rowSums(grid))
     colnames(grid)[ncol+1] <- if(is.character(overall)) overall else "Overall"
-    subN[[ncol+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall")
+    subN[[ncol+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall", hdr=TRUE)
     ncol         <- ncol + 1
   }
 

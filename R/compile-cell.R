@@ -203,4 +203,8 @@ cell_subheader <- function(text, units=NULL, class=NULL, ...)
 #' @export
 #' @examples
 #' cell_n(20)
-cell_n <- function(n, class=NULL, ...) cell(n, class=c(class, "cell_n"), ...)
+cell_n <- function(n, class=NULL, hdr=FALSE, ...)
+{
+  n <- if(hdr) paste0("(N=",n,")") else as.character(n)
+  cell(n, class=c("cell_n", class), ...)
+}

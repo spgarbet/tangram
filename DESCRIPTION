@@ -36,6 +36,7 @@ RoxygenNote: 6.0.1
 Collate: 
     'compile-cell.R'
     'cell-hmisc.R'
+    'cell-nejm.R'
     'compile-operators.R'
     'compile-post.R'
     'parser.R'

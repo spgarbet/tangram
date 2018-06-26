@@ -53,10 +53,10 @@ summarize_nejm_horz <-    function(table,
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat)
+    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat, hdr=TRUE)
   })
 
-  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall")
+  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), hdr=TRUE, subcol="Overall")
 
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
@@ -77,10 +77,8 @@ summarize_nejm_horz <-    function(table,
 
   tbl <- table %>%
          row_header(derive_label(row)) %>%
-         row_header("   Mean") %>%
-         row_header("   Median") %>%
-         row_header("   Minimum") %>%
-         row_header("   Maximum")
+         row_header("   Median (interquartile range)") %>%
+         row_header("   Range")
 
   tbl <- if(test) {
     col_header(tbl, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
@@ -89,13 +87,12 @@ summarize_nejm_horz <-    function(table,
   }
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),name=NULL))
   tbl <- table_builder_apply(tbl, categories, function(tbl, category) {
-     x  <- if(category == overall_label) datar else datar[datac == category]
-     tbl <- add_row(tbl, cell(""))
-     sapply(c(mean, median, min, max), function (f) {
-       tbl <<- add_row(tbl, cell(render_f(f(x, na.rm=TRUE), row$format), subcol=category))
-     })
-     tbl <- new_col(tbl)
-     tbl
+    x   <- if(category == overall_label) datar else datar[datac == category]
+    tbl               %>%
+    add_row(cell("")) %>%
+    add_row(cell_style[['iqr']](x, row$format, subcol=category))   %>%
+    add_row(cell_style[['range']](x, row$format, subcol=category)) %>%
+    new_col()
   })
   tbl <- home(tbl) %>% cursor_right(length(categories)+1)
   if(test) tbl <- add_col(tbl, stat)
@@ -124,6 +121,6 @@ nejm <- list(
                   Numerical   = function(...){stop("Cat X Numerical not implemented in nejm style")},
                   Categorical = summarize_chisq
             ),
-  Cell        = hmisc_cell,
+  Cell        = nejm_cell,
   Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
 )
