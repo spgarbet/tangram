@@ -101,7 +101,7 @@ hmisc_fraction <- function(numerator, denominator, format=3, ...)
 {
   ratio      <- render_f(numerator / denominator, format)
 
-  cell(paste0(ratio, " \\frac{",numerator,"}{",denominator,"}"), ...)
+  cell(paste0(ratio, " \\frac{",str_pad(numerator, nchar(as.character(denominator))),"}{",denominator,"}"), ...)
 }
 
 #' Create an hmisc_fstat (S3) object of the given statistic

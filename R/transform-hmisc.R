@@ -343,7 +343,7 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 
   tbl     <- row_header(table, derive_label(row))
 
-  N <- cell_style[['n']](sum(!is.na(datac)))
+  N <- cell_style[['n']](sum(!is.na(datac)), hdr=TRUE)
 
   tbl <- if(test)
   {
