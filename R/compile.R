@@ -364,11 +364,12 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style=NUL
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(x, data, id=NULL, transforms=hmisc_style, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
+tangram.formula <- function(x, data, id=NULL, transforms=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
 {
   if(length(class(data)) > 1 || class(data) != "data.frame") data <- as.data.frame(data)
   if(length(class(data)) > 1 || class(data) != "data.frame") stop("data must be supplied as data frame")
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
+  if(is.null(transforms)) transforms <- get(style)
 
   # Helper function for single transform function
   if(!inherits(transforms, "list"))

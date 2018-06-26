@@ -20,7 +20,7 @@ tangram(x, ...)
   style = NULL, footnote = NULL, after = NA, quant = seq(0, 1, 0.25),
   msd = TRUE, as.character = NULL, ...)
 
-\method{tangram}{formula}(x, data, id = NULL, transforms = hmisc_style,
+\method{tangram}{formula}(x, data, id = NULL, transforms = NULL,
   caption = NULL, style = "hmisc", footnote = NULL, after = NA,
   digits = NA, ...)
 

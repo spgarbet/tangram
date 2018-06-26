@@ -31,7 +31,7 @@ textsub_table <-list(
 textify <- Vectorize(function(x)
 {
   y <- as.character(x)          # Make sure a character string was passed
-  if(nchar(y) == 0) return("")  # Abort early for zero characters
+  if(is.null(x) || nchar(y) == 0) return("")  # Abort early for zero characters
 
   ## Kludge for converting from "byte" to the current encoding
   ## in a way which preserves the hex notation.

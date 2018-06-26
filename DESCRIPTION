@@ -56,6 +56,7 @@ Collate:
     'render-rtf.R'
     'render-summary.R'
     'transform-hmisc.R'
+    'transform-nejm.R'
     'transform-proc-tab.R'
 NeedsCompilation: no
 Packaged: 2017-04-25 20:16:25 UTC; garbetsp
