@@ -25,34 +25,16 @@
 				      padding: 0.2em 0.5em 0.2em 0.5em;
             }
 
-.data:hover {
-              background-color:yellow;
-            }
+.tangram { border-spacing: 0; }
 
-.tangram {
-	border-spacing: 0;
-}
+thead td {text-align: center;}
 
 .subheader    { font-size: smaller; }
 
 .subheader tr { border-collapse: collapse; }
 .subheader td { border-bottom: 1pt solid black; }
 
-.quantile .q25 {
-	font-size: smaller;
-	padding-right: 0.5em;
-}
-
-.quantile .q75 {
-	font-size: smaller;
-	padding-left: 0.5em;
-}
-
-.quantile .q50 {
-  font-weight: bold;
-}
-
-.variable {
+tbody .variable {
 	float:      left;
 	text-align: left;
 }
@@ -67,21 +49,6 @@
 
 thead .header {font-weight: bold;}
 .header.N  { font-style: italic; }
-.header.N:before { content: "N="; }
-
-
-.fraction .percentage {display: none;}
-.fraction .numerator:before {content: "\00A0";}
-.fraction .numerator { font-size: x-small; vertical-align: super; }
-.fraction .numerator:after {content: " \2044";}
-.fraction .denominator { font-size: x-small; vertical-align: sub;}
-.statistics .description {font-style: italic;}
-.statistic {padding-right: 0.5em;}
-
-td .align{
-	display: inline-block;
-	margin: 0 auto;
-}
 
 .nobr {
    white-space: nowrap;
@@ -96,9 +63,6 @@ td .align{
    text-align: left;
 }
 
-.sup:before {content: "\00A0";}
 .sup { font-size: x-small; vertical-align: super; }
-.sup:after {content: "\2044"; }
 .sub { font-size: x-small; vertical-align: sub;}
-
 

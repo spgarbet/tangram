@@ -60,24 +60,7 @@ body .figbody {
 
 .subheader em {font-style: normal;}
 
-.header.N:before { content: "(n="; }
-.header.N:after  { content: ")"; }
 
-.quantile {
-  display: flex;
-  flex-direction: row;
-}
-.quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-.quantile .q25:before {content: "(";}
-.quantile .q25 {
-  order: 2
-}
-.quantile .q75:before {content: ",";}
-.quantile .q75 {order: 3}
-.quantile .q75:after {content: ")";}
 tbody .variable {
 	float:      left;
 	text-align: left;
@@ -91,16 +74,6 @@ tbody .variable {
 	vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-.fraction {
-  display: flex;
-  flex-direction: row;
-}
-.fraction .numerator   { order: 1 }
-.fraction .denominator { order: 2; display: none; }
-.fraction .ratio       { order: 3; display: none; }
-.fraction .percentage  { order: 4; }
-.fraction .percentage:before {content: "\00A0(";}
-.fraction .percentage:after {content: "%)";}
 
 .statistics .description {font-style: italic;}
 .statistic {padding-right: 0.5em;}
