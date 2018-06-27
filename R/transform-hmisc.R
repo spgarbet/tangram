@@ -55,6 +55,8 @@ summarize_kruskal_horz <- function(table,
 {
   pformat <- cell_style[['p']](pformat)
 
+  cat("BOOM goes the dynamite\n")
+
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
   overall       <- !is.null(overall)
@@ -93,6 +95,8 @@ summarize_kruskal_horz <- function(table,
   } else {
     col_header(table, "N", categories)  %>% col_header("", subN)
   }
+
+  tbl <- row_header(tbl, derive_label(row))
 
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)))) %>%
   table_builder_apply(categories, function(tbl, category) {
