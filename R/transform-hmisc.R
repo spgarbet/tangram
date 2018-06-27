@@ -55,8 +55,6 @@ summarize_kruskal_horz <- function(table,
 {
   pformat <- cell_style[['p']](pformat)
 
-  cat("BOOM goes the dynamite\n")
-
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
   overall       <- !is.null(overall)
