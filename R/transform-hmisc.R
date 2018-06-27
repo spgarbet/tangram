@@ -94,7 +94,7 @@ summarize_kruskal_horz <- function(table,
     col_header(table, "N", categories)  %>% col_header("", subN)
   }
 
-  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),hdr=TRUE)) %>%
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)))) %>%
   table_builder_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 

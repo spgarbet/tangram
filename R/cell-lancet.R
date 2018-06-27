@@ -74,9 +74,9 @@ lancet_fraction <- function(numerator, denominator, format=NULL, ...)
 #' @export
 lancet_cell <- list(
   n        = cell_n,
-  iqr      = lancet_mean_sd,
+  iqr      = lancet_mean_sd,                                 # Reuse Hmisc transform, but instead of IQR, do mean(sd)
   fraction = lancet_fraction,
-  fstat    = function(...) center_decimal(hmisc_fstat(...)),
+  fstat    = function(...) center_decimal(hmisc_fstat(...)), # Great example of additional styling
   chi2     = function(...) center_decimal(hmisc_chi2(...)),
   spearman = function(...) center_decimal(hmisc_spearman(...)),
   wilcox   = function(...) center_decimal(hmisc_wilcox(...)),
