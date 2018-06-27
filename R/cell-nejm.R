@@ -7,11 +7,13 @@
 #' @param ... additional arguments to passed to cell()
 nejm_range <- function(x, format, ...)
 {
-  cell(paste0(render_f(min(x),format), "\u2014", render_f(max(x), format)), ...)
+  if(is.na(format) || is.null(format)) format <- format_guess(x)
+
+  cell(paste0(render_f(min(x,na.rm=TRUE),format), "\u2014", render_f(max(x, na.rm=TRUE), format)), ...)
 }
 
 
-#' Create an cell_fraction (S3) object of the given statistic
+#' Create an cell_fraction (S3) in NEJM style of the given data
 #'
 #' A cell object contains a statistical result of a fraction/percentage in nejm style
 #'
@@ -24,9 +26,11 @@ nejm_range <- function(x, format, ...)
 #' @export
 #' @examples
 #' nejm_fraction(1, 4, 3)
-nejm_fraction <- function(numerator, denominator, format=3, ...)
+nejm_fraction <- function(numerator, denominator, format=NULL, ...)
 {
-  percent      <- render_f(100 * numerator / denominator, format)
+  percent      <- 100*numerator / denominator
+  if(is.na(format) || is.null(format)) format <- format_guess(percent)
+  percent      <- render_f(percent, format)
 
   cell(paste0(str_pad(numerator, nchar(as.character(denominator))),
               "/",

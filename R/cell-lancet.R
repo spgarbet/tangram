@@ -1,0 +1,85 @@
+center_decimal <- function(x) gsub("\\.", "\u00b7", x)
+
+#' Create a mean/sd cell object of the given data in Lancet style
+#'
+#' Create a mean/sd cell object of the given data in Lancet style.
+#'
+#' @param x numeric vector whose sample quantiles are wanted. NA and NaN values are not allowed in numeric vectors unless na.rm is TRUE.
+#' @param format numeric or character; Significant digits or fmt to pass to sprintf
+#' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
+#' @param names logical; ignored. For compatibility with hmisc_iqr
+#' @param type integer; ignored. For compatibility with hmisc_iqr
+#' @param msd logical; ignored. For compatibility with hmisc_iqr
+#' @param quant numeric; ignored. For compatibility with hmisc_iqr
+#' @param ... additional arguments to constructing cell
+#'
+#' @return A cell object.
+#' @export
+#' @importFrom stats sd
+#' @examples
+#' require(stats)
+#' lancet_iqr(rnorm(100), '3')
+lancet_mean_sd <- function(x,
+                          format = NA,
+                          na.rm  = TRUE,
+                          names  = FALSE,
+                          type   = 8,
+                          msd    = FALSE,
+                          quant  = c(0.25, 0.50, 0.75),
+                          ...
+                          )
+{
+  if(is.na(format) || is.null(format)) format <- format_guess(x)
+
+  cell(center_decimal(paste0(
+    render_f(mean(x, na.rm=na.rm), format),
+    " (",
+    render_f(sd(x, na.rm=na.rm), format),
+    ")"
+  )), ...)
+}
+
+#' Create an cell_fraction (S3) in NEJM style of the given data
+#'
+#' A cell object contains a statistical result of a fraction/percentage in nejm style
+#'
+#' @param numerator numeric; The value of the numerator
+#' @param denominator numeric; The value of the denominator
+#' @param format numeric or character; a string formatting directive
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param ... optional extra information to attach
+#' @return A cell_fraction object.
+#' @export
+#' @examples
+#' lancet_fraction(1, 4, 3)
+lancet_fraction <- function(numerator, denominator, format=NULL, ...)
+{
+  percent      <- 100*numerator / denominator
+  if(is.na(format) || is.null(format)) format <- format_guess(percent)
+  percent      <- render_f(percent, format)
+
+  num <- gsub("(?!^)(?=(?:\\d{3})+(?:\\.|$))",
+              ' ', perl=TRUE,
+              str_pad(numerator, nchar(as.character(denominator))))
+
+  cell(paste0(num, " (", center_decimal(percent), "%)"), ...)
+}
+
+#' Cell Generation functions for Lancet styling
+#'
+#' Each function here is called when a cell is generated. Overriding these in a formula call will allows
+#' one to customize exactly how each cell's contents are generated.
+#' @include compile-cell.R
+#' @keywords data
+#' @export
+lancet_cell <- list(
+  n        = cell_n,
+  iqr      = lancet_mean_sd,
+  fraction = lancet_fraction,
+  fstat    = function(...) center_decimal(hmisc_fstat(...)),
+  chi2     = function(...) center_decimal(hmisc_chi2(...)),
+  spearman = function(...) center_decimal(hmisc_spearman(...)),
+  wilcox   = function(...) center_decimal(hmisc_wilcox(...)),
+  p        = hmisc_p
+)
+

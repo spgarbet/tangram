@@ -89,9 +89,9 @@ summarize_kruskal_horz <- function(table,
   }
 
   tbl <- if(test) {
-    col_header(tbl, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
+    col_header(table, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
   } else {
-    col_header(tbl, "N", categories)  %>% col_header("", subN)
+    col_header(table, "N", categories)  %>% col_header("", subN)
   }
 
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),hdr=TRUE)) %>%

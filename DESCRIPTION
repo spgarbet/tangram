@@ -36,6 +36,7 @@ RoxygenNote: 6.0.1
 Collate: 
     'compile-cell.R'
     'cell-hmisc.R'
+    'cell-lancet.R'
     'cell-nejm.R'
     'compile-operators.R'
     'compile-post.R'
@@ -57,6 +58,7 @@ Collate:
     'render-rtf.R'
     'render-summary.R'
     'transform-hmisc.R'
+    'transform-lancet.R'
     'transform-nejm.R'
     'transform-proc-tab.R'
 NeedsCompilation: no

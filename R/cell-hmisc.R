@@ -99,7 +99,9 @@ hmisc_iqr <- function(x,
 #' hmisc_fraction(1, 4, 3)
 hmisc_fraction <- function(numerator, denominator, format=3, ...)
 {
-  ratio      <- render_f(numerator / denominator, format)
+  ratio      <- numerator / denominator
+  if(is.na(format) || is.null(format)) format <- format_guess(ratio)
+  ratio      <- render_f(ratio, format)
 
   cell(paste0(ratio, " \\frac{",str_pad(numerator, nchar(as.character(denominator))),"}{",denominator,"}"), ...)
 }
