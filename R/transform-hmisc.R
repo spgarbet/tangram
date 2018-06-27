@@ -287,6 +287,7 @@ summarize_chisq <- function(table,
   for(j in 1:ncol)
   {
     if(nrow > 1) table <- add_row(table, "")
+    format <- if(is.na(row$format) || is.null(row$format)) format_guess(as.vector(grid/denominators)) else row$format
     for(i in 1:nrow)
     {
       table <-
@@ -296,7 +297,7 @@ summarize_chisq <- function(table,
           add_row(table,
                   cell_style[['fraction']](
                                 grid[i,j], denominators[i,j],
-                                format=row$format,
+                                format=format,
                                 subcol=colnames(grid)[i], subrow=rownames(grid)[j]))
     }
     table <- new_col(table)
