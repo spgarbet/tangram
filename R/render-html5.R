@@ -14,12 +14,63 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+htmlsub_table <-list(
+  c("\u00A0",                                             "&nbsp;&nbsp;"),  # Special spaces
+  c("(^|[^\\\\])\\*\\*((\\\\.|[^\\*\\\\])*)\\*\\*",       "\\1<strong>\\2</strong>"),  # Bold
+  c("(^|[^\\\\])__((\\\\.|[^\\_\\\\])*)__",               "\\1<strong>\\2</strong>"),  # Bold
+  c("(^|[^\\\\])\\*((\\\\.|[^\\*\\\\])*)\\*",             "\\1<em>\\2</em>"),          # Italic
+  c("(^|[^\\\\])_((\\\\.|[^\\_\\\\])*)_",                 "\\1<em>\\2</em>"),          # Italic
+  c("(^|[^\\\\])~~((\\\\.|[^\\~\\\\])*)~~",               "\\1<del>\\2</del>"),        # Strikethrough
+  c("(^|[^\\\\])`((\\\\.|[^\\`\\\\])*)`",                 "\\1<code>\\2</code>"),      # Code
+
+  c("(^|[^\\\\])\\^((\\\\.|[^\\^\\\\])*)\\^~((\\\\.|[^~\\\\])*)~",             "\\1<span class=\"supsub\">\\2<br/>\\4</span>"),  # Super + Sub
+  c("(^|[^\\\\])~((\\\\.|[^~\\\\])+)~\\^((\\\\.|[^\\^\\\\])*)\\^",             "\\1<span class=\"supsub\">\\4<br/>\\2</span>"),  # Sub + Super
+
+  c("(^|[^\\\\])~((\\\\.|[^~\\\\])+)~",                   "\\1<sub>\\2</sub>"),        # Subscript
+  c("(^|[^\\\\])\\^((\\\\.|[^\\^\\\\])+)\\^",             "\\1<sup>\\2</sup>"),        # Superscript
+
+  c("(^|[^\\\\])\\\\frac{([^}]*)}{([^}]*)}",              "\\1<span class=\"fraction\"><span class=\"numerator\">\\1</span><span class=\"denominator\">\\2</span></span>"),# Make fractions
+  c("\\\\(.)",                                            "\\1")         # convert escaped characters
+)
+
+
+#' @importFrom stringi stri_trans_nfc
+#' @importFrom stringi stri_trans_nfd
+#' @importFrom utils capture.output
 #' @importFrom htmltools htmlEscape
-htmlreference <- function(object)
+htmlify <- Vectorize(function(x)
 {
-  if(is.null(attr(object,"reference"))) "" else
-    paste0("<sup>", htmlEscape(attr(object, "reference")), "</sup>")
-}
+  y <- as.character(htmlEscape(x))          # Make sure a character string was passed
+  if(is.null(x) || nchar(y) == 0) return("")  # Abort early for zero characters
+
+  ## Kludge for converting from "byte" to the current encoding
+  ## in a way which preserves the hex notation.
+  encBytes <- Encoding(y) == "bytes"
+  if (any(encBytes)) y[encBytes] <- capture.output(cat(y[encBytes], sep = "\n"))
+
+  ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
+  ## processing of accented characters. Doing this early to
+  ## circumvent pecularities in gsub() (and nchar()) when working in
+  ## the C locale.
+  y <- stri_trans_nfd(y)
+
+  ## Run all conversions as appropriate not inside "$"
+  pieces  <- strsplit(y, "(?<!\\\\)\\$", perl=TRUE)[[1]]
+  for(i in 1:length(pieces))
+  {
+    if((i %% 2) != 0)
+    {
+      for (subst in htmlsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+    }
+  }
+  y <- paste0(pieces, collapse="")
+
+  ## Convert result to UTF-8 NFC encoding, although most non-ASCII
+  ## content has probably been converted to LaTeX commands.
+  stri_trans_nfc(y)
+})
+
+my_escape_html <- htmlify
 
 #' Return a CSS file as a string
 #'
@@ -74,18 +125,10 @@ html5_extra_fonts <- function()
 #' @param id A unique identifier for traceability in indexing
 #' @param ... additional arguments to renderer.
 #' @export
-html5 <- function(object, id, ...)
-{
-  UseMethod("html5", object)
-}
+html5 <- function(object, id, ...) UseMethod("html5", object)
 
 # Helper function to turn a vector of strings into html5 class specifier
-html5_class <- function(classes)
-{
-  paste0("class=\"",
-         paste(classes[!is.na(classes)], collapse=" "),
-         "\"")
-}
+html5_class <- function(classes) paste0("class=\"", paste(classes[!is.na(classes)], collapse=" "), "\"")
 
 #' Default conversion to HTML5 for an abstract table element
 #'
@@ -137,7 +180,7 @@ html5.character <- function(object, id, ..., class=NA)
 #' @export
 html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NULL, footnote=NULL, inline=NULL, ...)
 {
-  # Unused
+  # Unused at present
   #if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
   if(is.null(id)) id <- attr(object, "id")
