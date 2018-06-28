@@ -28,13 +28,13 @@ textsub_table <-list(
 #' @include iify.R
 textify <- Vectorize(function(x)
 {
-  x <- iffy(x, textsub_table)
+  x <- iify(x, textsub_table)
 
   ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
   ## processing of accented characters. Doing this early to
   ## circumvent pecularities in gsub() (and nchar()) when working in
   ## the C locale.
-  y <- stri_trans_nfd(y)
+  y <- stri_trans_nfd(x)
 
   # Convert strikethrough
   #y <- "~~one~~ other \\~~ ~~two~~"
