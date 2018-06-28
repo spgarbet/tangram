@@ -14,7 +14,7 @@ test_that("Bold underline", expect_true(
 
 test_that("Emphasis asterisk",  expect_true(
   htmlify(" \\**created\\* asdf * *x* ")  ==
-          " *<em>created* asdf </em> <em>x</em> "
+          "&nbsp;&nbsp;&nbsp;&nbsp;*<em>created* asdf </em> <em>x</em> "
 ))
 
 test_that("Emphasis underline",  expect_true(

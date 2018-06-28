@@ -49,6 +49,7 @@ Collate:
     'hmisc-lm.fit.qr.bare.R'
     'hmisc-impute.R'
     'hmisc-biVar.R'
+    'iify.R'
     'render-csv.R'
     'render-html5.R'
     'render-index.R'

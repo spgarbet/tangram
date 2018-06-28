@@ -33,44 +33,22 @@ htmlsub_table <-list(
   c("\\\\(.)",                                            "\\1")         # convert escaped characters
 )
 
-
-#' @importFrom stringi stri_trans_nfc
-#' @importFrom stringi stri_trans_nfd
-#' @importFrom utils capture.output
+#' @include iify.R
 #' @importFrom htmltools htmlEscape
-htmlify <- Vectorize(function(x)
+htmlify <- function(x)
 {
-  y <- as.character(htmlEscape(x))          # Make sure a character string was passed
-  if(is.null(x) || nchar(y) == 0) return("")  # Abort early for zero characters
+  x <- htmlEscape(x) # Use the default necessary set of escapes
 
-  ## Kludge for converting from "byte" to the current encoding
-  ## in a way which preserves the hex notation.
-  encBytes <- Encoding(y) == "bytes"
-  if (any(encBytes)) y[encBytes] <- capture.output(cat(y[encBytes], sep = "\n"))
+  # Special handling of leading spaces
+  leading <- nchar(stringr::str_match(x, "^\\s+")[1,1])
+  if(is.na(leading)) leading <- 0
+  leading <- ceiling(leading/2)
 
-  ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
-  ## processing of accented characters. Doing this early to
-  ## circumvent pecularities in gsub() (and nchar()) when working in
-  ## the C locale.
-  y <- stri_trans_nfd(y)
+  x <- sub("^\\s+", paste0(rep("&nbsp;&nbsp;&nbsp;&nbsp;", leading), collapse=""), x)
 
-  ## Run all conversions as appropriate not inside "$"
-  pieces  <- strsplit(y, "(?<!\\\\)\\$", perl=TRUE)[[1]]
-  for(i in 1:length(pieces))
-  {
-    if((i %% 2) != 0)
-    {
-      for (subst in htmlsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
-    }
-  }
-  y <- paste0(pieces, collapse="")
-
-  ## Convert result to UTF-8 NFC encoding, although most non-ASCII
-  ## content has probably been converted to LaTeX commands.
-  stri_trans_nfc(y)
-})
-
-my_escape_html <- htmlify
+  # Apply set of regexs to text
+  iify(x, htmlsub_table)
+}
 
 #' Return a CSS file as a string
 #'
@@ -228,19 +206,15 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   if(is.null(footnote)) footnote <- attr(object, "footnote")
   footnote <- if(is.null(footnote)) "" else
   {
-    paste("<div class=\"footnote\">", paste(footnote, collapse=" "), "</div>", sep='')
+    paste("<div class=\"footnote\">", paste(htmlify(footnote), collapse=" "), "</div>", sep='')
   }
-
-  footnote <- gsub("\\^(.)\\^", "<sup>\\1</sup>", footnote, fixed=FALSE)
 
   if(fragment)
   {
-    footer <- paste0("</table></div>", footnote,
-                     "</div>")
+    footer <- paste0("</table></div>", footnote,"</div>")
   } else {
     intro  <- paste0(header, intro)
-    footer <- paste0("</table></div>", footnote,
-                     "</div></body></html>")
+    footer <- paste0("</table></div>", footnote, "</div></body></html>")
   }
 
   nrows <- rows(object)
@@ -314,22 +288,9 @@ html5.cell <- function(object, id, ..., class=NULL)
 
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"))),
-         ">", my_html_escape(x), htmlreference(object), "</td>")
+         ">", htmlify(x), "</td>")
 }
 
-#' @importFrom htmltools htmlEscape
-my_html_escape <- function(x)
-{
-  # Turn leading spaces into a set of non breaking html space
-  leading <- nchar(stringr::str_match(x, "^\\s+")[1,1])
-  if(is.na(leading)) leading <- 0
-  leading <- ceiling(leading/2)
-
-  gsub("^\\s+",
-    paste0(rep("&nbsp;&nbsp;&nbsp;&nbsp;", leading), collapse=""),
-    gsub("\\^(.)\\^", "<sup>\\1</sup>", htmlEscape(x), fixed=FALSE),
-    fixed=FALSE)
-}
 
 #' Convert an abstract cell_subheader object into an HTML5 string
 #'
@@ -391,31 +352,23 @@ html5.cell_label <- function(object, id, ..., class=NULL)
 
   label <- gsub("^\\s+",
                 paste0(rep("&nbsp;&nbsp;&nbsp;&nbsp;", leading), collapse=""),
-                my_html_escape(object))
+                htmlify(object))
   # Turn "*" for interaction terms into a break
   label <- gsub("\\*", "&times;<br/>&nbsp;&nbsp;", label)
 
   if(is.null(attr(object, "units")))
-      paste0("<td ",
-             html5_class(c(class, attr(object, "parity"), "tg-label")),
-             ">",
+      paste0("<td ",html5_class(c(class, attr(object, "parity"), "tg-label")),">",
              "<span class=\"variable\">",
              label,
-             "</span>",
-             htmlreference(object),
-             "</td>")
+             "</span></td>")
   else
-      paste0("<td ",
-             html5_class(c(class, attr(object, "parity"), "tg-label")),
-             ">",
+      paste0("<td ",html5_class(c(class, attr(object, "parity"), "tg-label")),">",
              "<span class=\"variable\">",
              label,
              "</span>",
              "<span class=\"units\">",
-             my_html_escape(attr(object,"units")),
-             "</span>",
-             htmlreference(object),
-             "</td>")
+             htmlify(attr(object,"units")),
+             "</span></td>")
 }
 
 #' Convert an abstract cell_n object into an HTML5 string
@@ -431,13 +384,9 @@ html5.cell_label <- function(object, id, ..., class=NULL)
 #'
 html5.cell_n <- function(object, id, ..., class=NULL)
 {
-  ref <- if(is.null(attr(object,"htmlreference"))) "" else paste0("<sup>", htmlEscape(attr(object, "htmlreference")), "</sup>")
-
   paste0("<td ",
          html5_class(c(class, attr(object, "parity"), "data", "N")),
          "><span class=\"N\">",
-         my_html_escape(object),
-         "</span>",
-         htmlreference(object),
-         "</td>")
+         htmlify(object),
+         "</span></td>")
 }
