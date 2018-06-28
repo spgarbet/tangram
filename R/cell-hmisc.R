@@ -17,21 +17,21 @@
 
 # Turn a passed pformat into a function (or leave alone)
 #' @export
-hmisc_p <- function(pformat)
+hmisc_p <- function(p, pformat="%1.3f")
 {
-  if(class(pformat) == "function") return(pformat)
+  if(class(pformat) == "function") pformat(p)
 
-  if(is.null(pformat)) pformat <- "%1.3f"
+  if(is.na(p) || is.nan(p) || p <0 || p>1) return("NA")
 
-  function(p)
+  y <- render_f(p, pformat)
+
+  # Check for all zeros once formated
+  test <- grep("[^0\\.]+", y)
+  if(length(test) > 0)
   {
-    if(is.na(p) || is.nan(p) || p <0 || p>1) return("NA")
-
-    y <- render_f(p, pformat)
-
-    # Check for all zeros once formated
-    test <- grep("[^0\\.]+", y)
-    if(length(test) > 0) paste0("P=",y) else paste0("P<", substr(y, 1, nchar(y)-1), "1")
+    paste0("P=",y)
+  } else {
+    paste0("P<", substr(y, 1, nchar(y)-1), "1")
   }
 }
 

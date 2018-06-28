@@ -53,8 +53,6 @@ summarize_kruskal_horz <- function(table,
                                    test=TRUE,
                                    ...)
 {
-  pformat <- cell_style[['p']](pformat)
-
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
   overall       <- !is.null(overall)
@@ -76,7 +74,7 @@ summarize_kruskal_horz <- function(table,
   stat <- if(length(categories) == 1)
   {
     tst <- suppressWarnings(wilcox.test(datar))
-    cell_style[['wilcox']](test$statistic, pformat(tst$p.value))
+    cell_style[['wilcox']](test$statistic, cell_style[['p']](tst$p.value, pformat))
   }
   else
   {
@@ -85,7 +83,7 @@ summarize_kruskal_horz <- function(table,
       f         = render_f(tst['F'], "%.2f"),
       df1       = tst['df1'],
       df2       = tst['df2'],
-      p         = pformat(tst['P']))
+      p         = cell_style[['p']](tst['P'], pformat))
   }
 
   tbl <- if(test) {
@@ -132,8 +130,6 @@ summarize_kruskal_horz <- function(table,
 #' @export
 summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, test=TRUE, ...)
 {
-  pformat    <- cell_style[['p']](pformat)
-
   datar      <- as.categorical(row$data)
   datac      <- column$data
   categories <- levels(datar)
@@ -144,7 +140,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
                       f   = render_f(stat['F'], "%.2f"),
                       df1 = stat['df1'],
                       df2 = stat['df2'],
-                      p   = pformat(stat['P']))
+                      p   = cell_style[['p']](stat['P'], pformat))
 
 
   N <- cell_style[['n']](sum(!is.na(datac)))
@@ -213,8 +209,6 @@ summarize_chisq <- function(table,
                             row_percents=FALSE,
                             ...)
 {
-  pformat <- cell_style[['p']](pformat)
-
   grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
   validrow      <- which(!apply(grid,1,FUN = function(x){all(x == 0)}))
@@ -311,7 +305,7 @@ summarize_chisq <- function(table,
     table <- add_row(table, cell_style[['chi2']](
       render_f(stat$statistic, 2),
       stat$parameter,
-      pformat(stat$p.value)
+      cell_style[['p']](stat$p.value, pformat)
     ))
 
     # Fill in blank cells in stats column
@@ -337,8 +331,6 @@ summarize_chisq <- function(table,
 #' @export
 summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=TRUE, ...)
 {
-  pformat <- cell_style[['p']](pformat)
-
   datar   <- row$data
   datac   <- column$data
 
@@ -361,7 +353,7 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
   if(test) tbl <- add_col(tbl, cell_style[['spearman']](
     stat$statistic,
     render_f(stat$estimate, row$format),
-    pformat(stat$p.value)
+    cell_style[['p']](stat$p.value, pformat)
   ))
 
   tbl

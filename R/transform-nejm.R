@@ -39,8 +39,6 @@ summarize_nejm_horz <-    function(table,
                                    test=TRUE,
                                    ...)
 {
-  pformat <- cell_style[['p']](pformat)
-
   # Treat overall as a label if it's character
   overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
   overall       <- !is.null(overall)
@@ -62,7 +60,7 @@ summarize_nejm_horz <-    function(table,
   stat <- if(length(categories) == 1)
   {
     tst <- suppressWarnings(wilcox.test(datar))
-    cell_style[['wilcox']](tst$statistic, pformat(tst$p.value))
+    cell_style[['wilcox']](tst$statistic, cell_style[['p']](tst$p.value, pformat))
   }
   else
   {
@@ -71,7 +69,7 @@ summarize_nejm_horz <-    function(table,
       f         = render_f(tst['F'], "%.2f"),
       df1       = tst['df1'],
       df2       = tst['df2'],
-      p         = pformat(tst['P'])
+      p         = cell_style[['p']](tst['P'], pformat)
     )
   }
 
