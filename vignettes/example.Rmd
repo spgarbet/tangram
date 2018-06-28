@@ -156,9 +156,12 @@ summarize_count <- function(table, row, column, ...)
   })
 
   # Test a poisson model
-  test <- aov(glm(x ~ treatment,
-                  aggregate(datar, by=list(id=datar, treatment=datac), FUN=length),
-                  family=poisson))
+  test <- summary(aov(glm(x ~ treatment,
+                      aggregate(datar, by=list(id=datar, treatment=datac), FUN=length),
+                      family=poisson)))[[1]]
+  test <- hmisc_fstat(f = render_f(test$'F value'[1], "%.2f"),
+                      df1 = test$Df[1], df2 = test$Df[2],
+                      p = hmisc_p(2)(test$'Pr(>F)'[1]))
   # Build the table
   table                                              %>%
   # Create Headers

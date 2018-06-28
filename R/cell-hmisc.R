@@ -16,6 +16,7 @@
 
 
 # Turn a passed pformat into a function (or leave alone)
+#' @export
 hmisc_p <- function(pformat)
 {
   if(class(pformat) == "function") return(pformat)
