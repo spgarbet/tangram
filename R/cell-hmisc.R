@@ -140,7 +140,7 @@ hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 #' hmisc_chi2(5.33, 6, 0.2)
 hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
-  cell(paste0("\u03c7^2^~", df, "~=", chi2,", ", p, "^2^"),
+  cell(paste0("\u03a7^2^~", df, "~=", chi2,", ", p, "^2^"),
        class="statistics",
        ...)
 }
