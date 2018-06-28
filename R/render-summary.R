@@ -25,18 +25,10 @@ textsub_table <-list(
   c("\\\\(.)",                                "\\1")         # convert escaped characters
 )
 
-#' @importFrom stringi stri_trans_nfc
-#' @importFrom stringi stri_trans_nfd
-#' @importFrom utils capture.output
+#' @include iify.R
 textify <- Vectorize(function(x)
 {
-  y <- as.character(x)          # Make sure a character string was passed
-  if(is.null(x) || nchar(y) == 0) return("")  # Abort early for zero characters
-
-  ## Kludge for converting from "byte" to the current encoding
-  ## in a way which preserves the hex notation.
-  encBytes <- Encoding(y) == "bytes"
-  if (any(encBytes)) y[encBytes] <- capture.output(cat(y[encBytes], sep = "\n"))
+  x <- iffy(x, textsub_table)
 
   ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
   ## processing of accented characters. Doing this early to
@@ -54,25 +46,7 @@ textify <- Vectorize(function(x)
       gsub("(\\\\.|.)", "\\1\u0336", x, perl=TRUE)
     })
   }
-  y <- paste0(pieces, collapse="")
 
-  ## Run all conversions as appropriate not inside "$"
-  pieces  <- strsplit(y, "(?<!\\\\)\\$", perl=TRUE)[[1]]
-  # if(length(pieces) > 0)
-  # {
-  #   subs <- seq(1, length(pieces), by=2)
-  #   pieces[subs] <- sapply(pieces[subs], function(x) {
-  #     Reduce(function(u, v) sub(v[1], v[2], u, perl=TRUE), textsub_table, x)
-  #   })
-  # }
-
-  for(i in 1:length(pieces))
-  {
-    if((i %% 2) != 0)
-    {
-      for (subst in textsub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
-    }
-  }
   y <- paste0(pieces, collapse="")
 
   ## Convert result to UTF-8 NFC encoding, although most non-ASCII
