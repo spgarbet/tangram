@@ -127,7 +127,7 @@ latex.cell_header <- function(object, ...)
   class(object) <- cls[2:length(cls)]
 
   if(inherits(object, "cell_n"))
-    paste0("\\textbf{N=", latex.cell_n(object, ...), "}")
+    paste0("\\textbf{", latex.cell_n(object, ...), "}")
   else # Peel down to cell_label
     paste0("\\textbf{",  latex(object, ...), "}", latexreference(object))
 }
@@ -141,7 +141,7 @@ latex.cell_subheader <- function(object, ...)
   class(object) <- cls[3:length(cls)]
 
   if(inherits(object, "cell_n"))
-    paste0("{\\scriptsize $N=", latex.cell_n(object, ...), "$}")
+    paste0("{\\scriptsize $", latex.cell_n(object, ...), "$}")
   else # Peel down to cell_label
     paste0("{\\scriptsize ",   latex(object, ...), "}", latexreference(object))
 }

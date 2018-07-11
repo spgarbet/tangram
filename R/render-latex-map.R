@@ -16,6 +16,7 @@
 # Since this supports a subset of Rmarkdown, the special characters #$*\^_`~ must be
 # escaped to be captured by this translation table.
 latexsub_table <- list(
+
   # Brace conversion happens first!
   c("\u007B",     "\\\\lbrace"),
   c("\u007D",     "\\\\rbrace{}"),
@@ -384,32 +385,32 @@ latexsub_table <- list(
   c("\u0389", "\\\\'{H}"),
   c("\u038A", "\\\\'{}{I}"),
   c("\u038C", "\\\\'{}O"),
-  c("\u038E", "\\\\mathrm{'Y}"),
-  c("\u038F", "\\\\mathrm{'\\\\Omega}"),
-  c("\u0390", "\\\\acute{\\\\ddot{\\\\iota}}"),
-  c("\u0391", "\\\\Alpha{}"),
-  c("\u0392", "\\\\Beta{}"),
-  c("\u0393", "\\\\Gamma{}"),
-  c("\u0394", "\\\\Delta{}"),
-  c("\u0395", "\\\\Epsilon{}"),
-  c("\u0396", "\\\\Zeta{}"),
-  c("\u0397", "\\\\Eta{}"),
-  c("\u0398", "\\\\Theta{}"),
-  c("\u0399", "\\\\Iota{}"),
-  c("\u039A", "\\\\Kappa{}"),
-  c("\u039B", "\\\\Lambda{}"),
-  c("\u039E", "\\\\Xi{}"),
-  c("\u03A0", "\\\\Pi{}"),
-  c("\u03A1", "\\\\Rho{}"),
-  c("\u03A3", "\\\\Sigma{}"),
-  c("\u03A4", "\\\\Tau{}"),
-  c("\u03A5", "\\\\Upsilon{}"),
-  c("\u03A6", "\\\\Phi{}"),
-  c("\u03A7", "\\\\Chi{}"),
-  c("\u03A8", "\\\\Psi{}"),
-  c("\u03A9", "\\\\Omega{}"),
-  c("\u03AA", "\\\\mathrm{\\\\ddot{I}}"),
-  c("\u03AB", "\\\\mathrm{\\\\ddot{Y}}"),
+  c("\u038E", "$\\\\mathrm{'Y}$"),
+  c("\u038F", "$\\\\mathrm{'\\\\Omega}$"),
+  c("\u0390", "$\\\\acute{\\\\ddot{\\\\iota}}$"),
+  c("\u0391", "$\\\\alpha{}$"),
+  c("\u0392", "$\\\\beta{}$"),
+  c("\u0393", "$\\\\Gamma{}$"),
+  c("\u0394", "$\\\\Delta{}$"),
+  c("\u0395", "$\\\\epsilon{}$"),
+  c("\u0396", "$\\\\zeta{}$"),
+  c("\u0397", "$\\\\eta{}$"),
+  c("\u0398", "$\\\\Theta{}$"),
+  c("\u0399", "$\\\\iota{}$"),
+  c("\u039A", "$\\\\kappa{}$"),
+  c("\u039B", "$\\\\Lambda{}$"),
+  c("\u039E", "$\\\\Xi{}$"),
+  c("\u03A0", "$\\\\Pi{}$"),
+  c("\u03A1", "$\\\\rho{}$"),
+  c("\u03A3", "$\\\\Sigma{}$"),
+  c("\u03A4", "$\\\\tau{}$"),
+  c("\u03A5", "$\\\\Upsilon{}$"),
+  c("\u03A6", "$\\\\Phi{}$"),
+  c("\u03A7", "$\\\\chi{}$"),
+  c("\u03A8", "$\\\\Psi{}$"),
+  c("\u03A9", "$\\\\Omega{}$"),
+  c("\u03AA", "$\\\\mathrm{\\\\ddot{I}}$"),
+  c("\u03AB", "$\\\\mathrm{\\\\ddot{Y}}$"),
   c("\u03AC", "\\\\'{$\\\\alpha$}"),
   c("\u03AD", "\\\\acute{\\\\epsilon}"),
   c("\u03AE", "\\\\acute{\\\\eta}"),
@@ -2434,7 +2435,10 @@ latexsub_table <- list(
   c("---",                    "\\\\textemdash{}"),
   c("--",                     "\\\\textendash{}"),
   c("\\.\\.\\.",              "\\\\ldots{}"),
-  c("\\*\\*\\*",              "\\\\hrule{}")
+  c("\\*\\*\\*",              "\\\\hrule{}"),
+
+  # And deal with pesky fraction
+  c("\\\\frac\\\\lbrace{}(.*)\\\\rbrace{}\\\\lbrace{}(.*)\\\\rbrace{}", "~$\\\\frac{\\1}{\\2}$")
 )
 
 
@@ -2456,5 +2460,5 @@ latexsub_table <- list(
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #' @include iify.R
-latexify <- function(x) iify(x, latexsub_table)
+latexify <- function(x) gsub("$$", "", iify(x, latexsub_table))
 
