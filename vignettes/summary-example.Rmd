@@ -2,11 +2,16 @@
 title: "Summary"
 author: "Shawn Garbett"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_document
+output:
+  pdf_document: null
+  html_document: null
+header-includes:
+- \usepackage[utf8]{inputenc}
+- \usepackage{float}
+- \usepackage[x11names,dvipsnames,table]{xcolor}
 vignette: >
   %\VignetteIndexEntry{Summary Examples}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
 ---
 
 <style type="text/css">
@@ -55,13 +60,12 @@ tangram(Species ~ Petal.Length + Petal.Width + Sepal.Length + Sepal.Width,
 Maybe one really prefers using `dplyr` so let's go with that.
 
 ```{r, results="asis"}
-
 iris %>%
   group_by(Species) %>%
-  summarise(Mean.Petal.Length=mean(Petal.Length),
-            Median.Petal.Length=median(Petal.Length),
-            sd.Petal.Length=round(sd(Petal.Length),3) ) %>%
-  tangram("iris3", caption="dplyr Stats", style="nejm")
+  summarise(Mean=mean(Petal.Length),
+            Median=median(Petal.Length),
+            SD=round(sd(Petal.Length),3) ) %>%
+  tangram("iris3", caption="Petal Length (dplyr example)", style="nejm")
 ```
 
 <br/>

@@ -337,6 +337,6 @@ latex.tangram <- function(object,
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 
-  cat(result)
-  invisible(result)
+  class(result) <- "tangram.summary"
+  result
 }

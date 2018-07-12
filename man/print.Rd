@@ -3,11 +3,14 @@
 \name{print.cell}
 \alias{print.cell}
 \alias{print.tangram}
+\alias{print.summary.tangram}
 \title{Print methods for tangram objects}
 \usage{
 \method{print}{cell}(x, ...)
 
 \method{print}{tangram}(x, ...)
+
+\method{print}{summary.tangram}(x, ...)
 }
 \arguments{
 \item{x}{object; the item to render}

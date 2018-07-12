@@ -1,12 +1,19 @@
 ---
 title: "Table Grammar Examples"
 author: "Shawn Garbett"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_document
-vignette: >
+date: '`r Sys.Date()`'
+output:
+  pdf_document: null
+  html_document: null
+header-includes:
+- \usepackage[LGR,T1]{fontenc}
+- \usepackage[utf8]{inputenc}
+- \usepackage{textgreek}
+- \usepackage{float}
+- \usepackage[x11names,dvipsnames,table]{xcolor}
+vignette: |
   %\VignetteIndexEntry{Table Grammar Examples}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
 ---
 
 <style type="text/css">
@@ -27,6 +34,14 @@ pre {
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
 data(pbc)
+
+# https://stackoverflow.com/questions/25646333/code-chunk-font-size-in-rmarkdown-with-knitr-and-latex/46526740
+# ?highlight
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
 ```
 
 ## A Grammar of Tables
@@ -35,10 +50,12 @@ This package is meant to implement the concept of a grammar of tables. It allows
 
 Here's an example similar to summaryM from Hmisc to get us started:
 
-```{r pbc, comment=""}
-summary(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc, id="joe", caption="Context Aware Compilation"))
-```
 
+```{r pbc, comment="", size="scriptsize"}
+tbl1 <- tangram("drug~bili+albumin+stage::Categorical+protime+sex+age+spiders",
+        pbc, id="joe", caption="Context Aware Compilation")
+summary(tbl1)
+```
 
 Notice that stage in the formula wasn't stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.
 
@@ -52,7 +69,8 @@ tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + s
         msd=TRUE,
         quant=seq(0, 1, 0.25),
         style="hmisc",
-        caption = "HTML5 Table Hmisc Style")
+        caption = "HTML5 Table Hmisc Style",
+        pct_width=0.6)
 ```
 
 ### NEJM Style Example
@@ -60,7 +78,8 @@ Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
 tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc,
-        style="nejm", caption = "HTML5 Table NEJM Style", id="tbl3")
+        style="nejm", caption = "HTML5 Table NEJM Style", id="tbl3",
+        pct_width=0.8)
 ```
 
 ### Lancet Style Example

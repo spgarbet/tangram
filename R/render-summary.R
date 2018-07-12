@@ -76,7 +76,12 @@ textify <- Vectorize(function(x)
 #' @include compile.R
 #' @rdname summary
 #' @export
-summary.tangram <- function(object, ...) internal_print(object, ...)
+summary.tangram <- function(object, ...)
+{
+  x <- internal_summary(object, ...)
+  class(x) <- "summary.tangram"
+  x
+}
 
 #' @rdname summary
 #' @export
@@ -88,13 +93,15 @@ summary.cell <- function(object, ...)
 {
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
 
-  if(is.null(names(object)))
+  x <- if(is.null(names(object)))
   {
     paste(object, collapse=sep)
   } else {
     name <- vapply(names(object), function(n) if(nchar(n)>0) paste0(textify(n),"=") else "", "character")
     paste(paste0(name, as.character(object)), collapse=sep)
   }
+  class(x) <- "summary.tangram"
+  x
 }
 
 
@@ -126,7 +133,17 @@ print.cell <- function(x, ...)
 print.tangram <- function(x, ...)
 {
   renderer <- render_route_tangram()
-  renderer(x, ...)
+  result <- renderer(x, ...)
+  cat(result)
+  invisible(result)
+}
+
+#' @rdname print
+#' @export
+print.summary.tangram <- function(x, ...)
+{
+  cat(x)
+  invisible(x)
 }
 
 #' Router for rendering method
@@ -140,19 +157,19 @@ print.tangram <- function(x, ...)
 #' @return A rendering function to use
 render_route_tangram <- function()
 {
-  if(! "knitr" %in% .packages()) return(internal_print)
+  if(! "knitr" %in% .packages()) return(internal_summary)
 
   if(knitr::is_html_output()) return(html5.tangram)
 
   if(knitr::is_latex_output()) return(latex.tangram)
 
-  if(is.null(knitr::opts_knit$get("out.format"))) return(internal_print)
+  if(is.null(knitr::opts_knit$get("out.format"))) return(internal_summary)
 
   rmd.tangram
 }
 
 #' @importFrom stringr str_pad
-internal_print <- function(x, ...)
+internal_summary <- function(x, ...)
 {
   nrows <- rows(x)
   ncols <- cols(x)
@@ -209,8 +226,9 @@ internal_print <- function(x, ...)
     result <- paste0(result, textify(paste0(attr(x, "footnote"), collapse="\n")), collapse='\n' )
   }
 
-  cat(result)
-  invisible(result)
+  #cat(result)
+  #invisible(result)
+  result
 }
 
 #' Print a text summary of a given table_builder
