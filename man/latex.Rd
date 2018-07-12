@@ -8,13 +8,6 @@
 \alias{latex.cell_n}
 \alias{latex.cell_header}
 \alias{latex.cell_subheader}
-\alias{latex.cell_iqr}
-\alias{latex.cell_estimate}
-\alias{latex.cell_fstat}
-\alias{latex.cell_fraction}
-\alias{latex.cell_chi2}
-\alias{latex.cell_studentt}
-\alias{latex.cell_spearman}
 \alias{latex.tangram}
 \title{Render to LaTeX methods for tangram cell objects}
 \usage{
@@ -32,20 +25,6 @@ latex(object, ...)
 
 \method{latex}{cell_subheader}(object, ...)
 
-\method{latex}{cell_iqr}(object, ...)
-
-\method{latex}{cell_estimate}(object, ...)
-
-\method{latex}{cell_fstat}(object, style = "", ...)
-
-\method{latex}{cell_fraction}(object, style = "", ...)
-
-\method{latex}{cell_chi2}(object, style = "", ...)
-
-\method{latex}{cell_studentt}(object, ...)
-
-\method{latex}{cell_spearman}(object, ...)
-
 \method{latex}{tangram}(object, fragment = TRUE, filename = NULL,
   append = FALSE, ...)
 }
@@ -53,8 +32,6 @@ latex(object, ...)
 \item{object}{object; the item to render to latex}
 
 \item{...}{additional arguments}
-
-\item{style}{character; can be null or "nejm" for different table styling}
 
 \item{fragment}{logical; Is this a complete LaTeX document or just the table fragment}
 
@@ -72,6 +49,8 @@ latex(object, ...)
 
 \item{arraystretch}{numeric; The arraystretch parameter used for vertical spacing}
 
+\item{style}{character; can be null or "nejm" for different table styling}
+
 \item{pct_width}{numeric; a scaling to be applied to the entire table}
 
 \item{placement}{character; placement directive, defaults to "H"}
@@ -81,6 +60,8 @@ the LaTeX rendering
 }
 \description{
 Each of these methods will render the cell object as a LaTeX fragment
+
+z <- attr(object, "msd")
 }
 \examples{
 \dontrun{
