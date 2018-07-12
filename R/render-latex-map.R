@@ -2444,7 +2444,7 @@ latexsub_table <- list(
 
 # dplR::latexify 1.6.6 modified heavily for use in tangram
 # Copyright (C) 2017 Andy Bunn
-# Copyright (C) 2017 Shawn Garbett, modifications
+# Copyright (C) 2017, 2018 Shawn Garbett, modifications
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

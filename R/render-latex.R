@@ -255,10 +255,6 @@ latex.tangram <- function(object,
 
 
   if(pct_width != 1.0) result <- paste0(result, "\\scalebox{", pct_width, "}{\n")
-#    stylehdr <- paste(stylehdr,
-#                      paste0("\\bigskip\\begin{minipage}{",pct_width,"\\linewidth}\\centering"),
-#                      paste0("\\resizebox{\\columnwidth}{!}{ \\renewcommand{\\arraystretch}{", arraystretch, "}"),
-#                      sep='\n')
 
   nrows <- rows(object)
   ncols <- cols(object)
@@ -286,6 +282,7 @@ latex.tangram <- function(object,
   }
 
   if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
+  result <- paste0(result, "{\\renewcommand{\\arraystretch}{", arraystretch, "}")
   result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
               paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",latexify(caption),"} \\\\\n\\hline\n")
@@ -300,7 +297,7 @@ latex.tangram <- function(object,
 
   result <- paste0(result, if(style=="nejm") "\\hline\n" else "\\hline\\hline\n")
 
-  result <- paste0(result, "\\end{tabular}\n")
+  result <- paste0(result, "\\end{tabular}}\n")
 
   if(pct_width != 1.0) result <- paste0(result, "}\n")
 
