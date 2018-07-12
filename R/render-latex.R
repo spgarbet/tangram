@@ -229,7 +229,8 @@ latex.tangram <- function(object,
 
   if(is.null(cgroup.just)) {
     cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
-    if(style=="nejm") cgroup.just <- paste0("|", cgroup.just, "|")
+    if(style=="nejm")   cgroup.just <- paste0("|", cgroup.just, "|")
+    if(style=="lancet") cgroup.just <- paste0("!{\\color{lancet-red}\\vrule width 4pt}", cgroup.just, "!{\\color{lancet-red}\\vrule width 4pt}")
   }
 
   if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
@@ -241,21 +242,18 @@ latex.tangram <- function(object,
             } else if(style=="hmisc") {
               paste0(result, "\\hline\\hline\n")
             } else {
-              #paste0(result, "\n\\rowcolor{lancet-red}")
               paste0(result, "\n")
             }
 
-  # if(last_header_row > 0) result <- paste0(result, paste0(as.vector(pasty)[1:last_header_row],
-  #                                                         collapse=if(style=="lancet") "\\rowcolor{lancet-red}" else "")
-  #                                         )
   if(last_header_row > 0) result <- paste0(result, paste0(as.vector(pasty)[1:last_header_row],collapse=""))
   if(style=="hmisc") result  <- paste0(result, "\\hline\n")
   if(style=="lancet") result <- paste0(result, "\\hlineB{2.5}\n")
 
   result <- paste0(result, paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''))
 
-  if(style=="hmisc") result <- paste0(result, "\\hline\\hline\n")
-  if(style=="nejm") result <- paste0(result, "\\hline\n")
+  if(style=="hmisc")  result <- paste0(result, "\\hline\\hline\n")
+  if(style=="nejm")   result <- paste0(result, "\\hline\n")
+  if(style=="lancet") result <- paste0(result, "\n")
 
   result <- paste0(result, "\\end{tabular}}\n")
 
