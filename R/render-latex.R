@@ -224,21 +224,45 @@ latex.cell_spearman <- function(object,...)
 #' @rdname latex
 #' @export
 latex.tangram <- function(object,
-                          caption="Table",
-                          footnote=NULL,
                           fragment=TRUE,
                           filename=NULL,
                           append=FALSE,
-                          na.blank=TRUE,
-                          cgroup.just=NULL,
-                          arraystretch=1.2,
-                          pct_width=1.0,
-                          placement="H",
-                          style="",
                           ...)
 {
-  if(is.null(footnote) && !is.null(attr(object, "footnote"))) footnote <- attr(object, "footnote")
+  # Nasty Automagic handling of special LaTeX parameters
+  # Because a tangram object is constructed via a call, that object can be passed to
+  # a print function in a rendering context and the additional ... arguments are needed.
+  # These are lost in the REPL and need to be recovered.
+  # However, someone could call this function directly and those arguments need to take precedence
+  # Additionally there needs to be defaults for decent default handling.
+  defaults <- list(
+    na.blank=TRUE,
+    cgroup.just=NULL,
+    arraystretch=1.2,
+    pct_width=1.0,
+    placement="H",
+    style="hmisc"
+  )
+  obj.args  <- attr(object, "args")
+  obj.args[["style"]] <- attr(object, "style") # And yet another special case
+  call.args <- list(...)
+  for(i in names(defaults))
+  {
+    assign(i,
+           if(i %in% names(obj.args))  { obj.args[[i]]  } else
+           if(i %in% names(call.args)) { call.args[[i]] } else
+                                       { defaults[[i]]  }
+          )
+  }
+
+
+  # Find footnote
+  footnote <- attr(object, "footnote")
   footnote <- if(is.null(footnote)) "" else paste0(latexify(paste0(footnote, collapse="\n\n")), "\n")
+
+  # Find caption
+  caption <- attr(object, "caption")
+  caption <- if(is.null(caption)) "" else latexify(caption)
 
   result <- ""
   if(!fragment) result <- paste(result,
@@ -285,7 +309,7 @@ latex.tangram <- function(object,
   result <- paste0(result, "{\\renewcommand{\\arraystretch}{", arraystretch, "}")
   result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
-              paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",latexify(caption),"} \\\\\n\\hline\n")
+              paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",caption,"} \\\\\n\\hline\n")
             } else {
               paste0(result, "\\hline\\hline\n")
             }

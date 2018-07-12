@@ -290,6 +290,7 @@ tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, styl
   attr(result, "caption")  <- caption
   attr(result, "style")    <- style
   attr(result, "footnote") <- footnote
+  attr(result, "args")     <- list(...)
 
   result
 }
@@ -353,6 +354,7 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style=NUL
   attr(tbl, "caption")  <- caption
   attr(tbl, "style")    <- style
   attr(tbl, "footnote") <- footnote
+  attr(tbl, "args")     <- list(...)
 
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
@@ -397,6 +399,7 @@ tangram.formula <- function(x, data, id=NULL, transforms=NULL, caption=NULL, sty
   attr(tbl, "caption")  <- caption
   attr(tbl, "style")    <- style
   attr(tbl, "footnote") <- append(attr(tbl, "footnote"), footnote)
+  attr(tbl, "args")     <- list(...)
 
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 

@@ -46,10 +46,8 @@ latex(object, ...)
 
 \method{latex}{cell_spearman}(object, ...)
 
-\method{latex}{tangram}(object, caption = "Table", footnote = NULL,
-  fragment = TRUE, filename = NULL, append = FALSE, na.blank = TRUE,
-  cgroup.just = NULL, arraystretch = 1.2, pct_width = 1,
-  placement = "H", style = "", ...)
+\method{latex}{tangram}(object, fragment = TRUE, filename = NULL,
+  append = FALSE, ...)
 }
 \arguments{
 \item{object}{object; the item to render to latex}
@@ -58,15 +56,15 @@ latex(object, ...)
 
 \item{style}{character; can be null or "nejm" for different table styling}
 
-\item{caption}{character; Caption to display on table}
-
-\item{footnote}{character; Footnote to include on table}
-
 \item{fragment}{logical; Is this a complete LaTeX document or just the table fragment}
 
 \item{filename}{character; filename to write LaTex into}
 
 \item{append}{logical; Should the write be an append operation or overwrite}
+
+\item{caption}{character; Caption to display on table}
+
+\item{footnote}{character; Footnote to include on table}
 
 \item{na.blank}{logical; Should NA's be displayed as blanks}
 
