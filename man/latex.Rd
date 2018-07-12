@@ -5,7 +5,6 @@
 \alias{latex.default}
 \alias{latex.cell}
 \alias{latex.cell_label}
-\alias{latex.cell_n}
 \alias{latex.cell_header}
 \alias{latex.cell_subheader}
 \alias{latex.tangram}
@@ -18,8 +17,6 @@ latex(object, ...)
 \method{latex}{cell}(object, ...)
 
 \method{latex}{cell_label}(object, ...)
-
-\method{latex}{cell_n}(object, ...)
 
 \method{latex}{cell_header}(object, ...)
 
@@ -61,7 +58,13 @@ the LaTeX rendering
 \description{
 Each of these methods will render the cell object as a LaTeX fragment
 
-z <- attr(object, "msd")
+#' @rdname latex
+#' @export
+latex.cell_n <- function(object, ...)
+{
+  #idx <- index(object, id)
+  latexify(object)
+}
 }
 \examples{
 \dontrun{

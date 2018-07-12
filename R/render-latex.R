@@ -14,12 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-latexreference <- function(object)
-{
-  if(is.null(attr(object,"reference"))) "" else
-    paste0("\\textsuperscript{", htmlEscape(attr(object, "reference")), "}")
-}
-
 
 #' Render to LaTeX methods for tangram cell objects
 #'
@@ -97,7 +91,7 @@ latex.cell_label <- function(object, ...)
   if(is.null(attr(object, 'units')))
     label
   else
-    paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}", latexreference(object))
+    paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}")
 }
 
 latex.logical <- function(object, na.blank=TRUE, ...)
@@ -110,13 +104,13 @@ latex.logical <- function(object, na.blank=TRUE, ...)
   }
 }
 
-#' @rdname latex
-#' @export
-latex.cell_n <- function(object, ...)
-{
-  #idx <- index(object, id)
-  latexify(object)
-}
+#' #' @rdname latex
+#' #' @export
+#' latex.cell_n <- function(object, ...)
+#' {
+#'   #idx <- index(object, id)
+#'   latexify(object)
+#' }
 
 #' @rdname latex
 #' @export
@@ -126,10 +120,7 @@ latex.cell_header <- function(object, ...)
 
   class(object) <- cls[2:length(cls)]
 
-  if(inherits(object, "cell_n"))
-    paste0("\\textbf{", latex.cell_n(object, ...), "}")
-  else # Peel down to cell_label
-    paste0("\\textbf{",  latex(object, ...), "}", latexreference(object))
+  paste0("\\textbf{",  latex(object, ...), "}")
 }
 
 #' @rdname latex
@@ -140,10 +131,7 @@ latex.cell_subheader <- function(object, ...)
 
   class(object) <- cls[3:length(cls)]
 
-  if(inherits(object, "cell_n"))
-    paste0("{\\scriptsize $", latex.cell_n(object, ...), "$}")
-  else # Peel down to cell_label
-    paste0("{\\scriptsize ",   latex(object, ...), "}", latexreference(object))
+  paste0("{\\scriptsize ",  latex(object, ...), "}")
 }
 
 #' @rdname latex
@@ -195,13 +183,15 @@ latex.tangram <- function(object,
                                 "\\usepackage{geometry}",
                                 "\\begin{document}",
                                 sep="\n")
-  if(style=="nejm") result <- if(style=="nejm") paste0(result,
-                                                      "\\definecolor{nejm-yellow}{RGB}{255,251,237}\n",
-                                                      "\\definecolor{nejm-header}{RGB}{247,244,239}\n")
+  if(style=="nejm") result <- paste0(result,
+                                    "\\definecolor{nejm-yellow}{RGB}{255,251,237}\n",
+                                    "\\definecolor{nejm-header}{RGB}{247,244,239}\n")
+
+  if(style=="lancet") result <- paste0(result, "\\definecolor{lancet-red}{RGB}{245,224,220}\n")
+
   result <- paste0(result, "\\begin{table}[",placement,"]\n\\centering\n")
 
-  if(style=="nejm") result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
-
+  if(style %in% c("nejm", "lancet")) result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
   if(pct_width != 1.0) result <- paste0(result, "\\scalebox{", pct_width, "}{\n")
 
@@ -225,32 +215,53 @@ latex.tangram <- function(object,
 
   pasty <- apply(text, 1, function(x) paste0(paste(x, collapse=" & "), "\\\\\n"))
 
+  # Special coloring
+  if(style=="lancet")
+  {
+    for(i in 1:length(pasty))
+    {
+      parity <- attr(object[[i]][[1]], "parity")
+      target <- attr(object[[last_header_row+1]][[1]], "parity")
+      if(parity == target || i <= last_header_row  )
+        pasty[i] <- paste0("\\rowcolor{lancet-red}", pasty[i])
+    }
+  }
+
   if(is.null(cgroup.just)) {
     cgroup.just <- paste0(c(rep("l", last_header_col), rep("c", ncols-last_header_col)),collapse="")
     if(style=="nejm") cgroup.just <- paste0("|", cgroup.just, "|")
   }
 
   if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
+
   result <- paste0(result, "{\\renewcommand{\\arraystretch}{", arraystretch, "}")
   result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
               paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",caption,"} \\\\\n\\hline\n")
-            } else {
+            } else if(style=="hmisc") {
               paste0(result, "\\hline\\hline\n")
+            } else {
+              #paste0(result, "\n\\rowcolor{lancet-red}")
+              paste0(result, "\n")
             }
 
-  if(last_header_row > 0) result <- paste0(result, paste0(as.vector(pasty)[1:last_header_row], collapse=''))
-  if(style!="nejm") result <- paste0(result, "\\hline\n")
+  # if(last_header_row > 0) result <- paste0(result, paste0(as.vector(pasty)[1:last_header_row],
+  #                                                         collapse=if(style=="lancet") "\\rowcolor{lancet-red}" else "")
+  #                                         )
+  if(last_header_row > 0) result <- paste0(result, paste0(as.vector(pasty)[1:last_header_row],collapse=""))
+  if(style=="hmisc") result  <- paste0(result, "\\hline\n")
+  if(style=="lancet") result <- paste0(result, "\\hlineB{2.5}\n")
 
   result <- paste0(result, paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''))
 
-  result <- paste0(result, if(style=="nejm") "\\hline\n" else "\\hline\\hline\n")
+  if(style=="hmisc") result <- paste0(result, "\\hline\\hline\n")
+  if(style=="nejm") result <- paste0(result, "\\hline\n")
 
   result <- paste0(result, "\\end{tabular}}\n")
 
   if(pct_width != 1.0) result <- paste0(result, "}\n")
 
-  if(style=="nejm") result <- paste0(result, "}\n")
+  if(style %in% c("nejm","lancet")) result <- paste0(result, "}\n")
 
   result <- paste0(result, "\\caption{",latexify(caption),"}\n")
 
