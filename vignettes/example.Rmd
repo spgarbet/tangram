@@ -1,5 +1,5 @@
 ---
-title: "Table Grammar Examples"
+title: "Tangram Examples"
 author: "Shawn Garbett"
 date: '`r Sys.Date()`'
 output:
@@ -11,8 +11,11 @@ header-includes:
 - \usepackage{textgreek}
 - \usepackage{float}
 - \usepackage[x11names,dvipsnames,table]{xcolor}
+- \usepackage{boldline}
+- \usepackage{colortbl}
+- \usepackage{hhline}
 vignette: |
-  %\VignetteIndexEntry{Table Grammar Examples}
+  %\VignetteIndexEntry{Tangram Examples}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
@@ -59,17 +62,17 @@ summary(tbl1)
 
 Notice that stage in the formula wasn't stored as a factor, i.e. Categorical variable, so by adding a type specifier in the formula given, it is treated as a Categorical. There is no preconversion applied to the data frame, nor is there a guess based on the number of unique values. Full direct control of typing is provided in the formula specification.
 
-It also supports HTML5, with styling fragments
+It also supports HTML5, with styling fragments.
 
 ### Hmisc Style Example
 ```{r, results="asis"}
-tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders",
+tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
         id="tbl2",
         msd=TRUE,
         quant=seq(0, 1, 0.25),
         style="hmisc",
-        caption = "HTML5 Table Hmisc Style",
+        caption = "Table Hmisc Style",
         pct_width=0.6)
 ```
 
@@ -77,8 +80,8 @@ tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + s
 Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
-tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders", pbc,
-        style="nejm", caption = "HTML5 Table NEJM Style", id="tbl3",
+tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders", pbc,
+        style="nejm", caption = "Table NEJM Style", id="tbl3",
         pct_width=0.8)
 ```
 
@@ -86,12 +89,13 @@ tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + s
 Fragments can have localized style sheets specified by given id.
 
 ```{r, results="asis"}
-tangram("drug ~ bili[2] + albumin + stage::Categorical[1] + protime + sex[1] + age + spiders[1]", 
+tangram("drug~bili[2]+albumin+stage::Categorical[1]+protime+sex[1]+age+spiders[1]", 
         id="tbl4",
         data=pbc,
         pformat = 5,
         style="lancet",
-        caption = "HTML5 Table Lancet Style"
+        caption = "Table Lancet Style",
+        pct_width = 0.8
        )
 ```
 
@@ -113,7 +117,7 @@ attr(x, "label") <- "Global score, 3m"
 attr(y, "label") <- "Global score, 12m"
 tangram(1 ~ x+y,
         data.frame(x=x, y=y),
-        style="lancet", caption="Intercept Example", id="tbl5") %>%
+        style="hmisc", caption="Intercept Example", id="tbl5") %>%
 del_row(2) %>% del_col(4)
 ```
 
