@@ -31,4 +31,4 @@ iify <- Vectorize(function(x, sub_table)
   ## Convert result to UTF-8 NFC encoding, although most non-ASCII
   ## content has probably been converted to LaTeX commands.
   stri_trans_nfc(y)
-}, vectorize.args="x")
+}, vectorize.args="x", USE.NAMES=FALSE)
