@@ -23,7 +23,14 @@ iify <- Vectorize(function(x, sub_table)
   {
     if((i %% 2) != 0)
     {
-      for (subst in sub_table) pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+      j <- 0
+      for (subst in sub_table)
+      {
+        #j <- j + 1
+        #old <- pieces[i]
+        pieces[i] <- gsub(subst[1], subst[2], pieces[i], perl = TRUE)
+        #if(old != pieces[i]) cat("Applied '", j, dput(subst[1]), "=>", dput(subst[2]), "'\n")
+      }
     }
   }
   y <- paste0(pieces, collapse="")

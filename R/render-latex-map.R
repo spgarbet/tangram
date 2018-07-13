@@ -19,29 +19,29 @@ latexsub_table <- list(
 
   # Brace conversion happens first!
   c("\u007B",     "\\\\lbrace"),
-  c("\u007D",     "\\\\rbrace{}"),
-  c("\\\\lbrace", "\\\\lbrace{}"),
+  c("\u007D",     "$\\\\rbrace{}$"),
+  c("\\\\lbrace", "$\\\\lbrace{}$"),
 
   # Space Conversions
   c("\u000a\u000a", "\\\\vspace{5mm}"),             # 2 Newlines   -> vspace
   c("\u000d\u000a\u000d\u000a", "\\\\vspace{5mm}"), # 2 CR/Newline -> vspace
 
   # Mostly orderly UNICODE Conversions
-  c("\\\\\u0023", "\\\\#"),
-  c("\\\\\\\u0024", "\\\\textdollar{}"),
+ # c("\\\\\u0023", "\\\\#"),
+  c("\\\\\u0024", "\\\\textdollar{}"),
   c("\u0025", "\\\\%"),
   c("\u0026", "\\\\&"),
   c("\u0027", "\\\\textquotesingle{}"),
-  c("\\\\\\\u002A", "\\\\ast{}"), # The escape is deep with this one
-  c("\u003C", "\\\\textless{}"),
-  c("\u003E", "\\\\textgreater{}"),
+  c("\\\\\\\u002A", "$\\\\ast{}$"), # The escape is deep with this one
+  c("\u003C", "$\\\\textless{}$"),
+  c("\u003E", "$\\\\textgreater{}$"),
 # Defered till all escaped characters are handled
 #  c("\\\u005C", "\\\\textbackslash{}"),
-  c("\\\\\\\u005E", "\\\\textasciicircum{}"),
+  c("\\\\\\\u005E", "$\\\\textasciicircum{}$"),
   c("\u005F", "\\_"),
   c("\\\\\\\u0060", "\\\\textasciigrave{}"),
-  c("\\\u007C", "\\\\vert{}"),
-  c("\\\\\\\u007E", "\\\\textasciitilde{}"),
+  c("\\\u007C", "$\\\\vert{}$"),
+  c("\\\\\\\u007E", "$\\\\textasciitilde{}$"),
 # NBSP handled below special handling
 #  c("\u00A0",                 "~"),
   c("\u00A1", "\\\\textexclamdown{}"),
@@ -55,8 +55,8 @@ latexsub_table <- list(
   c("\u00A9", "\\\\textcopyright{}"),
   c("\u00AA", "\\\\textordfeminine{}"),
   c("\u00AB", "\\\\guillemotleft{}"),
-  c("\u00AC", "\\\\lnot{}"),
-  c("\u00AD", "\\\\-"),
+  c("\u00AC", "$\\\\lnot{}$"),
+  c("\u00AD", "$\\\\-$"),
   c("\u00AE", "\\\\textregistered{}"),
   c("\u00AF", "\\\\textasciimacron{}"),
   c("\u00B0", "\\\\textdegree{}"),
@@ -68,7 +68,7 @@ latexsub_table <- list(
   c("\u00B6", "\\\\textparagraph{}"),
   c("\u00B7", "$\\\\cdot{}$"),
   c("\u00B8", "\\\\c{}"),
-  c("\u00B9", "{^\\1}"),
+  c("\u00B9", "$^1$"),
   c("\u00BA", "\\\\textordmasculine{}"),
   c("\u00BB", "\\\\guillemotright{}"),
   c("\u00BC", "\\\\textonequarter{}"),
@@ -79,8 +79,8 @@ latexsub_table <- list(
   c("\u00C1", "\\\\'{A}"),
   c("\u00C2", "\\\\^{A}"),
   c("\u00C3", "\\\\~{A}"),
-  c("\u00C4", "\\\\\"{A}"),
-  c("\u00C5", "\\\\AA{}"),
+  c("\u00C4", '\\\\"{A}'),
+  c("A\u030a","\\\\r A"), #c("\u00C5", "\\\\r A{}"),
   c("\u00C6", "\\\\AE{}"),
   c("\u00C7", "\\\\c{C}"),
   c("\u00C8", "\\\\`{E}"),
@@ -98,7 +98,7 @@ latexsub_table <- list(
   c("\u00D4", "\\\\^{O}"),
   c("\u00D5", "\\\\~{O}"),
   c("\u00D6", "\\\\\"{O}"),
-  c("\u00D7", "\\\\texttimes{}"),
+  c("\u00D7", "$\\\\times$"),
   c("\u00D8", "\\\\O{}"),
   c("\u00D9", "\\\\`{U}"),
   c("\u00DA", "\\\\'{U}"),
@@ -2459,6 +2459,14 @@ latexsub_table <- list(
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#' LaTeX safe string conversion
+#'
+#' LaTeX safe string conversion. This transforms a string handling Markdown characters and UNICODE as best
+#' it can with an automated pass.
+#'
 #' @include iify.R
+#' @export
+#' @param x string to make LaTeX safe
+#' @return valid LaTeX code
 latexify <- function(x) gsub("$$", "", iify(x, latexsub_table))
 
