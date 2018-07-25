@@ -2469,5 +2469,5 @@ latexsub_table <- list(
 #' @export
 #' @param x string to make LaTeX safe
 #' @return valid LaTeX code
-latexify <- function(x) gsub("$$", "", iify(x, latexsub_table))
+latexify <- function(x) iify(x, latexsub_table)
 
