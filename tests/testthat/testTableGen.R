@@ -58,3 +58,13 @@ test_that("trailing spaces in a formula work",
 
   expect_true(inherits(tbl1, "tangram"))
 })
+
+test_that("data.frame with names having spaces renders",
+{
+  df <- data.frame("Given Name"  = c("John",         "Jacob"),
+                   "Sur Name"    = c("Jingleheimer", "Smith"),
+                   check.names=FALSE)
+  tbl1 <- tangram(df, as.character=TRUE, id="tbl1")
+  
+  expect_true(nchar(summary(tbl1)) > 0)
+})
