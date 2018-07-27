@@ -268,6 +268,8 @@ latex.tangram <- function(object,
   result <- paste0(result, "\\end{table}\n")
 
   if(!fragment) result <- paste0(result, "\\end{document}\n")
+  
+  result <- gsub("$\\s*$", "", result)
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 

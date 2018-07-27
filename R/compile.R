@@ -297,7 +297,7 @@ tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, styl
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style=NULL, footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
+tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
 
