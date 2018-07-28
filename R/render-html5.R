@@ -161,11 +161,11 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   # Unused at present
   #if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
-  if(is.null(id)) id <- attr(object, "id")
+  if(is.null(id))       id       <- attr(object, "id")
   if(is.null(fragment)) fragment <- attr(object, "fragment")
   if(is.null(fragment)) fragment <- TRUE
   if(is.null(caption))  caption  <- attr(object, "caption")
-  if(is.null(style)) style <- attr(object, "style")
+  if(is.null(style))    style    <- attr(object, "style")
 
   if(!is.null(inline))
   {

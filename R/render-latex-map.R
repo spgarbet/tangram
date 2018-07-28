@@ -2439,7 +2439,7 @@ latexsub_table <- list(
   c("\\*\\*\\*",              "\\\\hrule{}"),
 
   # And deal with pesky fraction
-  c("\\\\frac\\\\lbrace{}(.*)\\\\rbrace{}\\\\lbrace{}(.*)\\\\rbrace{}", "~$\\\\frac{\\1}{\\2}$")
+  c("\\\\frac\\$\\\\lbrace\\{\\}\\$(.*)\\$\\\\rbrace\\{\\}\\$\\$\\\\lbrace\\{\\}\\$(.*)\\$\\\\rbrace\\{\\}\\$", "~$\\\\frac{\\1}{\\2}$")
 )
 
 
