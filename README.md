@@ -1,12 +1,13 @@
 # A Grammar of Tables 'tangram'
 
-
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Tangram_set_00.jpg" width="100px"/>
 
-Quick show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html)
+*Quick* show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html) or see the equivalent in LaTeX [example.html](https://github.com/spgarbet/tg/blob/master/vignettes/example.pdf)
 
-Also, I'm in a major refactor to make style overrides easier for the end user and making rendering automatic and context aware. You can compare and contrast the calls here: [Upcoming Refactored v0.5 example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/knitr/vignettes/example.html). This update will break some existing code. I'm working to make it as backward compatible as possible. 
+## NOTICE: Major Refactor
+
+Just a quick note that this release is a major refactor that makes the tangram call context aware when used with Rmarkdown. Calls to rendering for html or latex are no longer required (but could still be used). Also, each cell's rendering now has a dispatch table in the transform so one can easily override how numbers are formated. This release will be pushed to CRAN when I finished testing the entire LaTeX UNICODE support. 
+
 
 ## Quick Overview
 
