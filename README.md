@@ -53,21 +53,10 @@ The class information is important for style decisions later in the manner of CS
 * cell_label, cell, character
 * cell_header, cell_label, cell, character
 * cell_subheader, cell_label, cell, character
-* cell_iqr, cell, character
 * cell_value, cell, *any base class*
-* cell_range, cell, numeric
-* cell_fraction, cell_value, cell, character
 * cell_n, cell_value, cell, numeric
 
-#### Additional
-
-These are still supported but likely to be deprecated in favor of the above simplicity. The functions to generate them will still be supported. The additional class information is providing no value at present for rendering.
-
-* cell_estimate, cell, list
-* cell_fstat, statistics, cell_value, cell, numeric
-* cell_chi2, statistics, cell_value, cell, numeric
-* cell_studentt, statistics, cell_value, cell, numeric
-* cell_spearman, statistics, cell_value, cell, numeric
+*Note: Most of the previous versoin classes are all deprecated in favor of straight Markdown*
 
 ## Wickham Style
 
@@ -130,38 +119,65 @@ This allows for all the downstream rich rendering choices into LaTex, HTML5, rmd
 
 ## I want percents from Hmisc style summary transform
 
-So just override the renderer for the cell_fraction object.
+There were several requests to modify exactly how a cell in a table was generated in the provided Hmisc transform. I've added callback tables as part of the transform object so that things can be overridden. This was used to provide styles as well, the original statistical transforms were just modified with different cell rendering via these callbacks.
+
+The hmisc transform looks like this now:
 
 ```
-> tangram(1 ~ sex+drug+bili, pbc, test=FALSE)
-==============================================
-                          N         All       
-                                    418       
-----------------------------------------------
-sex : female             418   0.895  374/418 
-drug                     418                  
-   D-penicillamine             0.368  154/418 
-   placebo                     0.378  158/418 
-   not randomized              0.254  106/418 
-Serum Bilirubin (mg/dl)  418  0.80 *1.40* 3.40
-==============================================
-> summary.cell_fraction <- function(object, ...) { paste0('%', object['percentage']) }
-> assignInNamespace("summary.cell_fraction", summary.cell_fraction, "tangram")
-> tangram(1 ~ sex[1]+drug[1]+bili, pbc, test=FALSE)
-==============================================
-                          N         All       
-                                    418       
-----------------------------------------------
-sex : female             418       %89.5      
-drug                     418                  
-   D-penicillamine                 %36.8      
-   placebo                         %37.8      
-   not randomized                  %25.4      
-Serum Bilirubin (mg/dl)  418  0.80 *1.40* 3.40
-==============================================
+hmisc <- list(
+  Type        = hmisc_data_type,
+  Numerical   = list(
+                  Numerical   = summarize_spearman,
+                  Categorical = summarize_kruskal_horz
+            ),
+  Categorical = list(
+                  Numerical   = summarize_kruskal_vert,
+                  Categorical = summarize_chisq
+            ),
+  Cell        = hmisc_cell,
+  Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
+)
 ```
 
-To get into this level of overrides I recommend reading the code for each renderer in the available source code. The only really complex renderer is the LaTeX one, the rest are really simple and I've written a couple of them in an afternoon. So don't be afraid to change things.
+The `Cell` item in the list contains the list of call backs used by the `hmisc` transform. Thus one can still define their own set of transforms, or just use an existing an modify the portion needed.
+
+```
+hmisc_cell <- list(
+  n        = cell_n,
+  iqr      = hmisc_iqr,
+  fraction = hmisc_fraction,
+  fstat    = hmisc_fstat,
+  chi2     = hmisc_chi2,
+  spearman = hmisc_spearman,
+  wilcox   = hmisc_wilcox,
+  p        = hmisc_p
+)
+```
+
+Here's an example that keeps hmisc the same but adds percentages to fractions.
+
+```
+> my_transform <- hmisc
+> my_transform[['Cell']][['fraction']] <- function(numerator, denominator, format=3, ...)
+  { paste0('%', render_f(100*numerator/denominator, format)) }
+> tangram(1 ~ sex[1]+drug[1]+bili, pbc, test=FALSE, id="override", transform=my_transform)
+=========================================
+                     N         All       
+                             (N=418)     
+-----------------------------------------
+sex : female        418       %89.5      
+drug                418                  
+   D-penicillamine            %36.8      
+   placebo                    %37.8      
+   not randomized             %25.4      
+Serum Bilirubin     418  0.80 *1.40* 3.40
+=========================================
+N is the number of non-missing value. ^1 Kruskal-Wallis. ^2 Pearson. ^3 Wilcoxon.
+```
+
+Thus the framework is entirely separate from the specification of transforms at the formula and the cell level.
+
+Look in the `R/cell-hmisc.R` file for details on cell rendering and the interface expected by the `hmisc` transform.
 
 ### Email 
 
@@ -169,6 +185,8 @@ P.S. I tested copy and paste from the HTML of a vignette into an email with gmai
 
 
 ## Release Notes
+July 21 2018 v0.6 Major Refactor. Callbacks added for cell rendering. Rmarkdown and knitr aware of context. Style support improved and UNICODE to LaTeX mappings in progress.
+
 Jun 4 2018  v0.4 Numerous bug fixes. The package was used for DSMB report submissions to the FDA, and several examples of IRR and other wonderful things have been produced. The full shakedown is complete, and fixes and updates are becoming smaller and smaller as the package stabilizes. LaTeX is a workable render format. It has rtf output that works acceptibly. Work continues towards formatted output in Word, with traceability.
 
 Jun 27 2017 v0.3 A major refactor, cells in the table object are no longer 'special' and are just straight S3 objects. Two adapter layers of code are deleted, interface is stablizing. Used `tangram` as an S3 object and replaced various table generating calls to a single overloaded function.
@@ -193,8 +211,7 @@ A user supplies a set of data and a formula which produces a summary object. Thi
 
 For example, one may wish for summary tables which match the New England Journal of Medicine format in LaTeX. A provided bundle of table generation will create the desired analysis directly from the data, and allow for specifying a style to the rendered LaTeX. The same formula and data could be used for a statistical report inside a department and the Hmisc table generation could be selected. In the end, the user is no longer bound to any decision in the table summary chain, beyond the grammar, and is free to change at will--or contribute more target bundles to share with others. 
 
-
-## High Level Requirements
+## Original High Level Requirements
 
 1. It must render to LaTeX, Text, HTML5, RMarkdown, Index table.
 2. It must allow for user override of any summary generation function.
@@ -206,23 +223,6 @@ For example, one may wish for summary tables which match the New England Journal
 8. Index table must be repeatible, and contain search information.
 9. It should reproduce by default as much as possible Hmisc summaryM behaviors.
 10. It must be algebraically well formed.
-
-## Table 9 Example
-
-_Statistical Tables and Plots using S and LaTeX_ by FE Harrell, has an example, *Table 9*, that will be used for demonstration.
-
-```R
-library(Hmisc)
-
-getHdata(pbc)
-
-table <- tangram(drug ~ bili + albumin + stage + protime + sex + age + spiders, data = pbc)
-
-table
-html5(table)
-latex(table)
-index(table)
-```
 
 ## Grammar Definition of Formulas
 
