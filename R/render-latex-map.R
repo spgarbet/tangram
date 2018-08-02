@@ -83,7 +83,7 @@ latexsub_table <- list(
   c("\u00D5", "\\\\~{O}"),
   c("\u00D6", "\\\\\"{O}"),
   c("\u00D7", "$\\\\times$"),
-  c("\u00D8", "\\\\O{}"),
+  #c("\u00D8", "\\\\O{}"),
   c("\u00D9", "\\\\`{U}"),
   c("\u00DA", "\\\\'{U}"),
   c("\u00DB", "\\\\^{U}"),
@@ -97,6 +97,7 @@ latexsub_table <- list(
 
   c("\u0110", "\\\\DJ{}"),
   c("\u0111", "\\\\dj{}"),
+  c("g\u0327", "$\\\\mathrlap{\\\\raisebox{0.65em}{\\\\hspace{0.15em}\\\\rotatebox[origin=c]{180}{,}}}\\\\text{g}$"),
   c("\u0126", "\\\\B{H}"),
   c("\u0127", "\\\\B{h}"),
 
@@ -255,7 +256,7 @@ latexsub_table <- list(
   c("\u01F4", "\\\\'{G}"),
   c("\u01F5", "\\\\'{g}"),
   c("\u01F6", "\\\\hv{}"),
-  c("\u01F7", "\\\\textwynn{}"), # There is no capital defined in WIPA! Why the fuck UNICODE felt the need for one? https://www.dampfkraft.com/ghost-characters.html
+  c("\u01F7", "\\\\textwynn{}"), # There is no capital defined in WIPA! Why the f*ck UNICODE felt the need for one? https://www.dampfkraft.com/ghost-characters.html
 
   c("\u021C", "{\\\\usefont{OT1}{cmoer10}{m}{n}G}"), # https://tex.stackexchange.com/questions/111032/middle-english-yogh-character
   c("\u021D", "{\\\\usefont{OT1}{cmoer10}{m}{n}g}"),
@@ -334,19 +335,31 @@ latexsub_table <- list(
   c("\u02E8", "\\\\tone{22}"),
   c("\u02E9", "\\\\tone{11}"),
 
+  # Useful: https://www.utf8-chartable.de/unicode-utf8-table.pl?start=768&unicodeinhtml=hex
   c("(.)\u0308\u0304", '$\\\\bar{\\\\text{\\\\"\\1}}$'),
   c("(.)\u0308\u0304", '$\\\\bar{\\\\text{\\\\"\\1}}$'),
   c("(.)\u0308\u0301", '$\\\\acute{\\\\text{\\\\"\\1}}$'),
   c("(.)\u0308\u030c", '$\\\\check{\\\\text{\\\\"\\1}}$'),
   c("(.)\u0308\u0300", '$\\\\grave{\\\\text{\\\\"\\1}}$'),
   c("(.)\u030A\u0301", '$\\\\grave{\\\\mathring{\\1}}$'),
-  c("(.)\u0300", "\\\\`{\\1}"),
-  c("(.)\u0301", "\\\\'{\\1}"),
-  c("(.)\u0304", "\\\\={\\1}"),
-  c("(.)\u0308", '\\\\"{\\1}'),
+  c("(.)\u0300", "\\\\text{\\\\`{\\1}}"), # Insane that \text had to be added to keep pandoc from crapping on it
+  c("(.)\u0301", "\\\\text{\\\\'{\\1}}"),
+  c("(.)\u0302", "\\\\text{\\\\^{\\1}}"),
+  c("(.)\u0303", "\\\\text{\\\\~{\\1}}"),
+  c("(.)\u0304", "\\\\text{\\\\={\\1}}"),
+  c("(.)\u0305", "\\\\text{\\\\b{\\1}}"),
+  c("(.)\u0306", "\\\\text{\\\\u{\\1}}"),
+  c("(.)\u0307", "\\\\text{\\\\.{\\1}}"),
+  c("(.)\u0308", '\\\\text{\\\\"{\\1}}'),
+  c("(.)\u0309", "$\\\\mathrlap{\\\\text{\\\\texthooktop}}\\\\text{\\1}$"),
+  c("(.)\u030A", "\\\\text{\\\\r{\\1}}"),
+  c("(.)\u030B", "\\\\text{\\\\H{\\1}}"),
+  c("(.)\u030C", "\\\\text{\\\\v{\\1}}"),
+  c("(.)\u030D", "\\\\textvbaraccent{\\1}"),
+  c("(.)\u030E", "\\\\textdoublevbaraccent{\\1}"),
   c("(.)\u030F", "\\\\textdoublegrave{\\1}"),
   c("(.)\u0310", "\\\\textdotbreve{\\1}"),
-  c("(.)\u0311", "\\\\u{\\1}"),
+  c("(.)\u0311", "$\\\\invbreve{\\\\text{\\1}}$"),
   #c("(.)\u0312", "\\\\u{\\1}"), Turned comma above ?
   #c("(.)\u0314", "\\\\u{\\1}"), comma above?
   c("(.)\u031b", "\\1'"),
