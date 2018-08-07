@@ -33,15 +33,15 @@ latexsub_table <- list(
   c("\u0026", "\\\\&"),
   c("\u0027", "\\\\textquotesingle{}"),
   c("\\\\\\\u002A", "$\\\\ast{}$"), # The escape is deep with this one
-  c("\u003C", "$\\\\textless{}$"),
-  c("\u003E", "$\\\\textgreater{}$"),
+  c("\u003C", "\\\\textless{}"),
+  c("\u003E", "\\\\textgreater{}"),
 # Defered till all escaped characters are handled
 #  c("\\\u005C", "\\\\textbackslash{}"),
-  c("\\\\\\\u005E", "$\\\\textasciicircum{}$"),
+  c("\\\\\\\u005E", "\\\\textasciicircum{}"),
   c("\u005F", "\\_"),
   c("\\\\\\\u0060", "\\\\textasciigrave{}"),
   c("\\\u007C", "$\\\\vert{}$"),
-  c("\\\\\\\u007E", "$\\\\textasciitilde{}$"),
+  c("\\\\\\\u007E", "\\\\textasciitilde{}"),
 # NBSP handled below special handling
 
   # Page 01 Handling
@@ -2282,9 +2282,9 @@ latexsub_table <- list(
 #  c("_([^_]+)_",              "\\\\textit{\\1}"),
 #  c("`([^`]+)`",              "\\\\texttt{\\1}"), # Inline Code
   c("~~([^~]+)~~",            "\\\\sout{\\1}"),   # Strikethrough (require ulem package)
-#  c("~([^~]+)~",              "\\\\textsubscript{\\1}"),           # Subscript
+  c("~([^~]+)~",              "\\\\textsubscript{\\1}"),           # Subscript
   c("\u00A0",                 "~"),               # no-break space (NBSP) must be handled after subscripting
-#  c("\\^([^\\^]+)\\^",        "\\\\textsuperscript{\\1}"),          # Superscript
+  c("\\^([^\\^]+)\\^",        "\\\\textsuperscript{\\1}"),          # Superscript
 
   c("^# (.*)",                "\\\\Huge{\\1}"),   # Header 1
   c("^## (.*)",               "\\\\huge{\\1}"),   # Header 2

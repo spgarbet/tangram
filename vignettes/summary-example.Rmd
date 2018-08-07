@@ -1,17 +1,17 @@
 ---
 title: "Summary"
 author: "Shawn Garbett"
-date: "`r Sys.Date()`"
+date: '`r Sys.Date()`'
 output:
-  pdf_document: null
+  pdf_document:
+    keep_tex: yes
   html_document: null
 header-includes:
 - \usepackage[utf8]{inputenc}
 - \usepackage{float}
 - \usepackage[x11names,dvipsnames,table]{xcolor}
-vignette: >
-  %\VignetteIndexEntry{Summary Examples}
-  %\VignetteEngine{knitr::rmarkdown}
+vignette: |
+  %\VignetteIndexEntry{Summary Examples} %\VignetteEngine{knitr::rmarkdown}
 ---
 
 <style type="text/css">
@@ -65,7 +65,7 @@ iris %>%
   summarise(Mean=mean(Petal.Length),
             Median=median(Petal.Length),
             SD=round(sd(Petal.Length),3) ) %>%
-  tangram("iris3", caption="Petal Length (dplyr example)", style="nejm")
+  tangram("iris3", caption="Petal Length (dplyr example)", style="nejm", id="iris3")
 ```
 
 <br/>

@@ -72,7 +72,7 @@ head(pbc)
 
 ```{r, results="asis"}
 tangram("drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders",
-        pbc, "tbl2", caption="Hmisc::PBC", style=NA)
+        pbc, "tbl2", caption="Hmisc::PBC")
 ```
 
 ###  Table 2
@@ -86,7 +86,6 @@ attr(y, "label") <- "Global score, 12m"
 tangram(1 ~ x+y,
         data.frame(x=x, y=y),
         after=hmisc_intercept_cleanup,
-        caption="Intercept", id="tbl5",
-        style=NA)
+        caption="Intercept", id="tbl5")
 ```
 

@@ -20,6 +20,8 @@
 #' @importFrom utils capture.output
 iify <- Vectorize(function(x, sub_table)
 {
+  if(is.na(x) || is.null(x) || x == "") return("")
+
   y <- as.character(x)                        # Make sure a character string was passed
   if(is.null(x) || nchar(y) == 0) return("")  # Abort early for zero characters
 
