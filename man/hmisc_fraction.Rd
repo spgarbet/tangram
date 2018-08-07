@@ -14,8 +14,6 @@ hmisc_fraction(numerator, denominator, format = 3, ...)
 \item{format}{numeric or character; a string formatting directive}
 
 \item{...}{optional extra information to attach}
-
-\item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 }
 \value{
 A cell_fraction object.

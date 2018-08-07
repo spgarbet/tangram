@@ -253,7 +253,6 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
 #' @param embedded logical; Will this table be embedded inside another
-#' @param footnote character; A vectors of strings to add to the table as a footnotes.
 #' @param quant numeric; A vector of quantiles to use for summaries
 #' @param msd logical; Include mean and standard deviation in numeric summary
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization

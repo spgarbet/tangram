@@ -198,6 +198,7 @@ cell_subheader <- function(text, units=NULL, class=NULL, ...)
 #'
 #' @param n The numerical value
 #' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param hdr logical; Construct an n value for a header (defaults to FALSE)
 #' @param ... optional extra information to attach
 #' @return A cell_n object.
 #' @export

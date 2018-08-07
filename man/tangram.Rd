@@ -71,8 +71,6 @@ tangram(x, ...)
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
-
-\item{footnote}{character; A vectors of strings to add to the table as a footnotes.}
 }
 \value{
 A tangram object (a table).

@@ -15,8 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# Turn a passed pformat into a function (or leave alone)
+#' A function to format p values intelligently
+#'
+#' Given a style in number of digits or a sprintf style specifier it renders
+#' the p-value and checks to see if it's all zeros, then switches the
+#' output to a less than.
+#'
+#' @param p numeric; p-value to format
+#' @param pformat numeric or character; Significant digits or fmt to pass to sprintf
+#' @return A formatted string of the p-value
 #' @export
+#' @examples
+#' hmisc_p(1e-6)
+#' hmisc_p(0.234)
+#' hmisc_p(1.234e-6, 5)
+#' hmisc_p(1.234e-6, 6)
 hmisc_p <- function(p, pformat="%1.3f")
 {
   if(class(pformat) == "function") pformat(p)
@@ -92,7 +105,6 @@ hmisc_iqr <- function(x,
 #' @param numerator numeric; The value of the numerator
 #' @param denominator numeric; The value of the denominator
 #' @param format numeric or character; a string formatting directive
-#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... optional extra information to attach
 #' @return A cell_fraction object.
 #' @export
@@ -168,7 +180,7 @@ hmisc_spearman <- function(S, rho, p, class=NULL, ...)
 #'
 #' A hmisc_wilcox object contains a statistical result of an Wilcoxon-test.
 #'
-#' @param S The value of the spearman statistic
+#' @param V The value of the Wilcoxon statistic
 #' @param p p-value of resulting test
 #' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... optional extra information to attach

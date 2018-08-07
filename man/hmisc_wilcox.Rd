@@ -7,13 +7,13 @@
 hmisc_wilcox(V, p, class = NULL, ...)
 }
 \arguments{
+\item{V}{The value of the Wilcoxon statistic}
+
 \item{p}{p-value of resulting test}
 
 \item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 
 \item{...}{optional extra information to attach}
-
-\item{S}{The value of the spearman statistic}
 }
 \value{
 A cell_spearman object.

@@ -16,9 +16,11 @@
 
 \item{fragment}{A boolean flag that determines whether a fragment or a complete HTML5 document is generatedf}
 
+\item{style}{A string containing a style filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.}
+
 \item{footnote}{Any footnotes to include under the table.}
 
-\item{inline}{A string containing a filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.}
+\item{inline}{DEPRECATED}
 
 \item{...}{additional arguments to renderer. Unused}
 }

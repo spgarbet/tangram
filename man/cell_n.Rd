@@ -11,6 +11,8 @@ cell_n(n, class = NULL, hdr = FALSE, ...)
 
 \item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 
+\item{hdr}{logical; Construct an n value for a header (defaults to FALSE)}
+
 \item{...}{optional extra information to attach}
 }
 \value{

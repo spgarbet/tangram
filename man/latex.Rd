@@ -35,22 +35,6 @@ latex(object, ...)
 \item{filename}{character; filename to write LaTex into}
 
 \item{append}{logical; Should the write be an append operation or overwrite}
-
-\item{caption}{character; Caption to display on table}
-
-\item{footnote}{character; Footnote to include on table}
-
-\item{na.blank}{logical; Should NA's be displayed as blanks}
-
-\item{cgroup.just}{character; The text of the column justification used in the table}
-
-\item{arraystretch}{numeric; The arraystretch parameter used for vertical spacing}
-
-\item{style}{character; can be null or "nejm" for different table styling}
-
-\item{pct_width}{numeric; a scaling to be applied to the entire table}
-
-\item{placement}{character; placement directive, defaults to "H"}
 }
 \value{
 the LaTeX rendering
@@ -66,13 +50,26 @@ latex.cell_n <- function(object, ...)
   latexify(object)
 }
 }
-\examples{
-\dontrun{
-latex(cell_label("123"))
-latex(cell_iqr(rnorm(20)))
-latex(cell_estimate(2.1,0.8, 3.3))
-latex(cell_fraction(45, 137))
-tbl <- tangram(drug~bili, pbc)
-latex(tbl)
+\details{
+There are addition arguments possible to control the rendering, but
+due to some oddities between CRAN requirements and how R handles defaults
+(for full details see the source code)
+they are as follows
+
+* cgroup.just character; The text of the column justification used in the table
+
+* arraystretch numeric; The arraystretch parameter used for vertical spacing
+
+* style character; can be null or "nejm" for different table styling
+
+* pct_width numeric; a scaling to be applied to the entire table
+
+* placement character; placement directive, defaults to "H"
 }
+\examples{
+latex(cell_label("123"))
+latex(hmisc_iqr(rnorm(20)))
+latex(hmisc_fraction(45, 137))
+tbl <- tangram(drug~bili, pbc, "tbl")
+latex(tbl)
 }

@@ -19,30 +19,35 @@
 #'
 #' Each of these methods will render the cell object as a LaTeX fragment
 #'
+#' There are addition arguments possible to control the rendering, but
+#' due to some oddities between CRAN requirements and how R handles defaults
+#' (for full details see the source code)
+#' they are as follows
+#'
+#' * cgroup.just character; The text of the column justification used in the table
+#'
+#' * arraystretch numeric; The arraystretch parameter used for vertical spacing
+#'
+#' * style character; can be null or "nejm" for different table styling
+#'
+#' * pct_width numeric; a scaling to be applied to the entire table
+#'
+#' * placement character; placement directive, defaults to "H"
+#'
 #' @param object object; the item to render to latex
-#' @param caption character; Caption to display on table
-#' @param footnote character; Footnote to include on table
 #' @param fragment logical; Is this a complete LaTeX document or just the table fragment
 #' @param filename character; filename to write LaTex into
 #' @param append logical; Should the write be an append operation or overwrite
-#' @param na.blank logical; Should NA's be displayed as blanks
-#' @param cgroup.just character; The text of the column justification used in the table
-#' @param arraystretch numeric; The arraystretch parameter used for vertical spacing
-#' @param style character; can be null or "nejm" for different table styling
-#' @param pct_width numeric; a scaling to be applied to the entire table
-#' @param placement character; placement directive, defaults to "H"
 #' @param ... additional arguments
 #' @return the LaTeX rendering
 #' @include compile-cell.R
 #' @include render-latex-map.R
-#'
 #' @examples
 #' \dontrun{
 #' latex(cell_label("123"))
-#' latex(cell_iqr(rnorm(20)))
-#' latex(cell_estimate(2.1,0.8, 3.3))
-#' latex(cell_fraction(45, 137))
-#' tbl <- tangram(drug~bili, pbc)
+#' latex(hmisc_iqr(rnorm(20)))
+#' latex(hmisc_fraction(45, 137))
+#' tbl <- tangram(drug~bili, pbc, "tbl")
 #' latex(tbl)
 #' }
 #' @rdname latex

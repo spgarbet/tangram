@@ -63,7 +63,6 @@ lancet_mean_sd <- function(x,
 #' @param numerator numeric; The value of the numerator
 #' @param denominator numeric; The value of the denominator
 #' @param format numeric or character; a string formatting directive
-#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
 #' @param ... optional extra information to attach
 #' @return A cell_fraction object.
 #' @export

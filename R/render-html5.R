@@ -151,8 +151,9 @@ html5.character <- function(object, id, ..., class=NA)
 #' @param id A unique identifier for the table (strongly recommended). If not provided, caption will be used.
 #' @param caption A string caption for the table
 #' @param fragment A boolean flag that determines whether a fragment or a complete HTML5 document is generatedf
-#' @param inline A string containing a filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.
+#' @param style A string containing a style filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.
 #' @param footnote Any footnotes to include under the table.
+#' @param inline DEPRECATED
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given table in HTML5
 #' @export
