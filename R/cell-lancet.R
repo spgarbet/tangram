@@ -35,7 +35,7 @@ center_decimal <- function(x) gsub("\\.", "\u00b7", x)
 #' @importFrom stats sd
 #' @examples
 #' require(stats)
-#' lancet_iqr(rnorm(100), '3')
+#' lancet_mean_sd(rnorm(100), '3')
 lancet_mean_sd <- function(x,
                           format = NA,
                           na.rm  = TRUE,

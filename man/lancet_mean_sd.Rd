@@ -32,5 +32,5 @@ Create a mean/sd cell object of the given data in Lancet style.
 }
 \examples{
 require(stats)
-lancet_iqr(rnorm(100), '3')
+lancet_mean_sd(rnorm(100), '3')
 }

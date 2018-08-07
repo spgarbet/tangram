@@ -64,9 +64,8 @@ textify <- Vectorize(function(x)
 #' @return the text summary
 #' @examples
 #' summary(cell_label("123"))
-#' summary(cell_iqr(rnorm(20)))
-#' summary(cell_estimate(2.1,0.8, 3.3))
-#' summary(cell_fraction(45, 137))
+#' summary(hmisc_iqr(rnorm(20)))
+#' summary(hmisc_fraction(45, 137))
 #' summary(table_builder()   %>%
 #'         row_header("row") %>%
 #'         col_header(1,2,3) %>%
@@ -113,9 +112,8 @@ summary.cell <- function(object, ...)
 #' @return the text summary
 #' @examples
 #' print(cell_label("123"))
-#' print(cell_iqr(rnorm(20)))
-#' print(cell_estimate(2.1,0.8, 3.3))
-#' print(cell_fraction(45, 137))
+#' print(hmisc_iqr(rnorm(20)))
+#' print(hmisc_fraction(45, 137))
 #' print(table_builder()   %>%
 #'         row_header("row") %>%
 #'         col_header(1,2,3) %>%

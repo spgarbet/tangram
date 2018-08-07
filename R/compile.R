@@ -269,9 +269,9 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #'
 #' @examples
 #' tangram(1, 1)
-#' tangram(data.frame(x=1:3, y=c('a','b','c'), id="mytbl1"))
+#' tangram(data.frame(x=1:3, y=c('a','b','c')), id="mytbl1")
 #' tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc, id="mytbl2")
-#' tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders", pbc, id="mytbl3")
+#' tangram("drug~bili+albumin+stage::Categorical+protime+sex+age+spiders", pbc,"mytbl3")
 tangram <- function(x, ...)
 {
   UseMethod("tangram", x)
