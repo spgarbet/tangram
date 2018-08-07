@@ -122,11 +122,11 @@ rms_variable <- function(model.sum,
   if(lowhigh)
   {
     tbl <- if(var %in% rownames(model.sum)){
-      tbl                                                                           %>%
-      add_col(cell_estimate(render_f(model.sum[var, 'Low'], rnd.digits),
-                            src=paste(var, ":Low", sep='')))                        %>%
-      add_col(cell_estimate(render_f(model.sum[var, 'High'], rnd.digits),
-                            src=paste(var, ":High",sep='')))
+      tbl                                                                          %>%
+      add_col(render_f(model.sum[var, 'Low'], rnd.digits),
+                            src=paste(var, ":Low", sep=''))                        %>%
+      add_col(render_f(model.sum[var, 'High'], rnd.digits),
+                            src=paste(var, ":High",sep=''))
     } else {
       add_col(tbl, "", "")
     }
@@ -134,21 +134,22 @@ rms_variable <- function(model.sum,
 
   tbl <- if(var %in% rownames(model.sum))
   {
-    add_col(tbl, cell_estimate(render_f(model.sum[var, 'Effect'], rnd.digits),
-      low= render_f(model.sum[var,'Lower 0.95'], rnd.digits),
-      high=render_f(model.sum[var,'Upper 0.95'], rnd.digits),
+    add_col(tbl, paste0(
+      render_f(model.sum[var, 'Effect'], rnd.digits),
+      " [", render_f(model.sum[var,'Lower 0.95'], rnd.digits), ",",
+      render_f(model.sum[var,'Upper 0.95'], rnd.digits), "]"),
       src=paste(var,":Effect")
-    ))
+    )
   } else {
     add_col(tbl, "")
   }
 
   add_col(tbl,
-    cell_fstat(f   = render_f(results['F'], "%.2f"),
-               n1  = results['d.f.'],
-               n2  = model.anova['ERROR','d.f.'],
-               p   = render_f(results['P'], "%1.3f"),
-               src = paste(var,":Test",sep='')))
+    hmisc_fstat(f   = render_f(results['F'], "%.2f"),
+                n1  = results['d.f.'],
+                n2  = model.anova['ERROR','d.f.'],
+                p   = render_f(results['P'], "%1.3f"),
+                src = paste(var,":Test",sep='')))
 }
 
 rms_stats <- function(model.anova, lowhigh)
@@ -161,28 +162,28 @@ rms_stats <- function(model.anova, lowhigh)
 
   table_builder()                                             %>%
   row_header("All Nonlinear & Interaction Terms")             %>%
-  padding()                                                   %>%
-  add_col(cell_fstat(f   = render_f(anit['F'], "%.2f"),
-                     n1  = anit['d.f.'],
-                     n2  = model.anova['ERROR','d.f.'],
-                     p   = render_f(anit['P'], "%1.3f"),
-                     src = paste("NonlinearAndInteraction",":Test",sep='')))        %>%
+  padding()
+  add_col(hmisc_fstat(f   = render_f(anit['F'], "%.2f"),
+                      n1  = anit['d.f.'],
+                      n2  = model.anova['ERROR','d.f.'],
+                      p   = render_f(anit['P'], "%1.3f"),
+                      src = paste("NonlinearAndInteraction",":Test",sep='')))        %>%
   new_line()                                                  %>%
   row_header("All Nonlinear Terms", sub=FALSE)                %>%
   padding()                                                   %>%
-  add_col(cell_fstat(f   = render_f(ant['F'], "%.2f"),
-                     n1  = ant['d.f.'],
-                     n2  = model.anova['ERROR','d.f.'],
-                     p   = render_f(ant['P'], "%1.3f"),
-                     src = paste("NonlinearTerms",":Test",sep='')))        %>%
+  add_col(hmisc_fstat(f   = render_f(ant['F'], "%.2f"),
+                      n1  = ant['d.f.'],
+                      n2  = model.anova['ERROR','d.f.'],
+                      p   = render_f(ant['P'], "%1.3f"),
+                      src = paste("NonlinearTerms",":Test",sep='')))        %>%
   new_line()                                                  %>%
   row_header("Overall Model", sub=FALSE)                      %>%
   padding()                                                   %>%
-  add_col(cell_fstat(f   = render_f(om['F'], "%.2f"),
-                     n1  = om['d.f.'],
-                     n2  = model.anova['ERROR','d.f.'],
-                     p   = render_f(om['P'], "%1.3f"),
-                     src = paste("OverallModel",":Test",sep='')))
+  add_col(hmisc_fstat(f   = render_f(om['F'], "%.2f"),
+                      n1  = om['d.f.'],
+                      n2  = model.anova['ERROR','d.f.'],
+                      p   = render_f(om['P'], "%1.3f"),
+                      src = paste("OverallModel",":Test",sep='')))
 }
 
 rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
@@ -193,14 +194,14 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
   table_builder()                                             %>%
   row_header("Model Likelihood Ratio")                        %>%
   padding()                                                   %>%
-  add_col(cell_estimate(render_f(results['Model L.R.'],rnd.stats),
-                        src=paste('ModelLR', sep='')))        %>%
+  add_col(render_f(results['Model L.R.'],rnd.stats),
+                        src=paste('ModelLR', sep=''))         %>%
   add_col("")                                                 %>%
   new_line()                                                  %>%
   row_header("R^2", sub=FALSE)                                %>%
   padding()                                                   %>%
-  add_col(cell_estimate(render_f(results['R2'],rnd.stats),
-                        src=paste('R2', sep='')))             %>%
+  add_col(render_f(results['R2'],rnd.stats),
+                        src=paste('R2', sep=''))              %>%
   add_col("")
 }
 

@@ -148,6 +148,12 @@ latex.tangram <- function(object,
   # These are lost in the REPL and need to be recovered.
   # However, someone could call this function directly and those arguments need to take precedence
   # Additionally there needs to be defaults for decent default handling.
+  na.blank     <- NULL # These lines are to pass CRAN checks, because it can't fathom assign
+  cgroup.just  <- NULL
+  arraystretch <- NULL
+  pct_width    <- NULL
+  placement    <- NULL
+  style        <- NULL
   defaults <- list(
     na.blank=TRUE,
     cgroup.just=NULL,
@@ -268,7 +274,7 @@ latex.tangram <- function(object,
   result <- paste0(result, "\\end{table}\n")
 
   if(!fragment) result <- paste0(result, "\\end{document}\n")
-  
+
   result <- gsub("$\\s*$", "", result)
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
