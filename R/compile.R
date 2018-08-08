@@ -436,9 +436,27 @@ tangram.table <- function(x, id=NULL, ...)
       tbl[[i+1]] <<- list(cell_header(if(is.null(rownames(x))) "" else rownames(x)[i]))
       sapply(1:(dim(x)[2]), function(j) tbl[[i+1]][[j+1]] <<- cell(as.numeric(x[i,j])))
     })
+  } else if(length(dim(x)) == 3)
+  {
+    tbl <- tangram(x[1,,], id, ...) %>% insert_column(0, "", dimnames(x)[[1]][1], class="cell_header")
+    sapply(2:(dim(x)[1]), function(i) {
+      tmp <- tangram(x[i,,], id, ...) %>%
+             insert_column(0, "", dimnames(x)[[1]][i], class="cell_header") %>%
+             del_row(1)
+      tbl <<- rbind(tbl, tmp)
+    })
+  } else if(length(dim(x)) == 4)
+  {
+    tbl <- tangram(x[1,,,], id, ...) %>% insert_column(0, "", dimnames(x)[[1]][1], class="cell_header")
+    sapply(2:(dim(x)[1]), function(i) {
+      tmp <- tangram(x[i,,,], id, ...) %>%
+             insert_column(0, "", dimnames(x)[[1]][i], class="cell_header") %>%
+             del_row(1)
+      tbl <<- rbind(tbl, tmp)
+    })
   } else
   {
-    stop("Tables above 2 dimensions are not supported.")
+    stop("tangram table conversion above 4 dimensions not supported")
   }
 
   tbl
