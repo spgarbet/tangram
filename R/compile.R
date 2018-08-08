@@ -430,7 +430,7 @@ tangram.table <- function(x, id=NULL, ...)
   } else if(length(dim(x)) == 2)
   {
     tbl[[1]][[1]] <- cell_header("")
-    sapply(1:(dim(x)[1]), function(i) tbl[[1]][[i+1]] <<- cell_header(colnames(x)[i]))
+    sapply(1:(dim(x)[2]), function(i) tbl[[1]][[i+1]] <<- cell_header(colnames(x)[i]))
 
     sapply(1:(dim(x)[1]), function(i) {
       tbl[[i+1]] <<- list(cell_header(if(is.null(rownames(x))) "" else rownames(x)[i]))

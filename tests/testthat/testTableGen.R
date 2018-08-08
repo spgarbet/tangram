@@ -65,6 +65,14 @@ test_that("data.frame with names having spaces renders",
                    "Sur Name"    = c("Jingleheimer", "Smith"),
                    check.names=FALSE)
   tbl1 <- tangram(df, as.character=TRUE, id="tbl1")
-  
+
   expect_true(nchar(summary(tbl1)) > 0)
+})
+
+test_that("table is correctly rendered",
+{
+  x <- with(warpbreaks, table(wool, tension)) %>% tangram(id="tbl1")
+
+  expect_true(length(x) == 3)
+  expect_true(length(x[[1]]) == 4)
 })
