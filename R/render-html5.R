@@ -106,7 +106,7 @@ html5_extra_fonts <- function()
 html5 <- function(object, id, ...) UseMethod("html5", object)
 
 # Helper function to turn a vector of strings into html5 class specifier
-html5_class <- function(classes) paste0("class=\"", paste(classes[!is.na(classes)], collapse=" "), "\"")
+html5_class <- function(classes) if(is.null(classes)) "" else paste0("class=\"", paste(classes[!is.na(classes)], collapse=" "), "\"")
 
 #' Default conversion to HTML5 for an abstract table element
 #'
