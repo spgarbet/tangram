@@ -411,8 +411,11 @@ rbind.tangram <- function(..., deparse.level=1)
 
   class(x) <- c("tangram", "list")
   attr(x, "embedded") <- FALSE
-  attr(x, "footnote") <- attr(elements[[i]], "footnote")
-
+  attr(x, "footnote") <- attr(elements[[1]], "footnote")
+  attr(x, "id")       <- attr(elements[[1]], "id")
+  attr(x, "caption")  <- attr(elements[[1]], "caption")
+  attr(x, "style")    <- attr(elements[[1]], "style")
+  attr(x, "args")     <- attr(elements[[1]], "args")
   x
 }
 
