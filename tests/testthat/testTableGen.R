@@ -69,10 +69,28 @@ test_that("data.frame with names having spaces renders",
   expect_true(nchar(summary(tbl1)) > 0)
 })
 
-test_that("table is correctly rendered",
+
+test_that("2 contingency table is correctly rendered",
+{
+  x <- with(warpbreaks, table(wool)) %>% tangram(id="tbl1")
+
+  expect_true(length(x) == 2)
+  expect_true(length(x[[1]]) == 1)
+})
+
+test_that("2x3 contingency table is correctly rendered",
 {
   x <- with(warpbreaks, table(wool, tension)) %>% tangram(id="tbl1")
 
   expect_true(length(x) == 3)
   expect_true(length(x[[1]]) == 4)
 })
+
+test_that("2x2X6 contingency table is correctly rendered",
+{
+  x <- tangram(UCBAdmissions, id="tbl1", style="nejm")
+
+  expect_true(length(x)      == 5)
+  expect_true(length(x[[1]]) == 8)
+})
+

@@ -423,37 +423,43 @@ tangram.table <- function(x, id=NULL, ...)
 
   if(is.null(dim(x)) || length(dim(x)) == 1)
   {
-    tbl[[1]][[1]] <- cell_header("")
-    sapply(1:length(x), function(i) tbl[[1]][[i+1]] <<- cell_header(names(x)[i]))
-    tbl[[2]] <- list(cell_header(if(is.null(attr(x, "label"))) "" else attr(x, "label")))
-    sapply(1:length(x), function(i) tbl[[2]][[i+1]] <<- cell(as.numeric(x[i])))
+    cols <- if(is.null(names(x))) paste("Level", 1:length(x)) else paste0("**", names(x), "**")
+    tbl[[1]] <- lapply(cols, cell_header, USE.NAMES=FALSE)
+    tbl[[2]] <- lapply(x, cell)
   } else if(length(dim(x)) == 2)
   {
-    tbl[[1]][[1]] <- cell_header("")
-    sapply(1:(dim(x)[2]), function(i) tbl[[1]][[i+1]] <<- cell_header(colnames(x)[i]))
+    rows     <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows     <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
+    cols     <- if(is.null(colnames(x))) paste("Level", 1:dim(x)[2]) else paste0("**", dimnames(x)[[2]], "**")
+    tbl[[1]] <- lapply(c("", cols), cell_header, USE.NAMES=FALSE)
 
-    sapply(1:(dim(x)[1]), function(i) {
-      tbl[[i+1]] <<- list(cell_header(if(is.null(rownames(x))) "" else rownames(x)[i]))
-      sapply(1:(dim(x)[2]), function(j) tbl[[i+1]][[j+1]] <<- cell(as.numeric(x[i,j])))
-    })
+    for(i in 1:(dim(x)[1]))
+      tbl[[i+1]] <- lapply(c(rows[i],x[i,]), cell, USE.NAMES=FALSE)
   } else if(length(dim(x)) == 3)
   {
-    tbl <- tangram(x[1,,], id, ...) %>% insert_column(0, "", dimnames(x)[[1]][1], class="cell_header")
-    sapply(2:(dim(x)[1]), function(i) {
-      tmp <- tangram(x[i,,], id, ...) %>%
-             insert_column(0, "", dimnames(x)[[1]][i], class="cell_header") %>%
+    rows   <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows   <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
+    tbl <- tangram(x[1,,], id=id, ...) %>%
+           insert_column(0, cell_header(""), rows[1])
+    for(i in 2:(dim(x)[1]))
+    {
+      tmp <- tangram(x[i,,], id=id, ...) %>%
+             insert_column(0, cell_header(""), rows[i]) %>%
              del_row(1)
-      tbl <<- rbind(tbl, tmp)
-    })
+      tbl <- rbind(tbl, tmp)
+    }
   } else if(length(dim(x)) == 4)
   {
-    tbl <- tangram(x[1,,,], id, ...) %>% insert_column(0, "", dimnames(x)[[1]][1], class="cell_header")
-    sapply(2:(dim(x)[1]), function(i) {
-      tmp <- tangram(x[i,,,], id, ...) %>%
-             insert_column(0, "", dimnames(x)[[1]][i], class="cell_header") %>%
+    rows   <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows   <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
+    tbl <- tangram(x[1,,,], id=id, ...) %>% insert_column(0, "", rows[1], class="cell_header")
+    for(i in 2:(dim(x)[1]))
+    {
+      tmp <- tangram(x[i,,,], id=id, ...) %>%
+             insert_column(0, "", rows[i], class="cell_header") %>%
              del_row(1)
-      tbl <<- rbind(tbl, tmp)
-    })
+      tbl <- rbind(tbl, tmp)
+    }
   } else
   {
     stop("tangram table conversion above 4 dimensions not supported")
