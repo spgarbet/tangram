@@ -75,7 +75,7 @@ test_that("2 contingency table is correctly rendered",
   x <- with(warpbreaks, table(wool)) %>% tangram(id="tbl1")
 
   expect_true(length(x) == 2)
-  expect_true(length(x[[1]]) == 1)
+  expect_true(length(x[[1]]) == 2)
 })
 
 test_that("2x3 contingency table is correctly rendered",
