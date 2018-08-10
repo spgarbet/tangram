@@ -3,6 +3,7 @@
 \name{tangram}
 \alias{tangram}
 \alias{tangram.numeric}
+\alias{tangram.anova.lme}
 \alias{tangram.data.frame}
 \alias{tangram.formula}
 \alias{tangram.character}
@@ -15,6 +16,9 @@ tangram(x, ...)
 
 \method{tangram}{numeric}(x, cols, embedded = FALSE, id = NULL,
   caption = NULL, style = "hmisc", footnote = NULL, ...)
+
+\method{tangram}{anova.lme}(x, id = NULL, style = "hmisc", caption = NULL,
+  footnote = NULL, digits = NULL, ...)
 
 \method{tangram}{data.frame}(x, id = NULL, colheader = NA, caption = NULL,
   style = "hmisc", footnote = NULL, after = NA, quant = seq(0, 1, 0.25),
@@ -50,6 +54,8 @@ tangram(x, ...)
 
 \item{footnote}{character; A vector of character strings as footnotes}
 
+\item{digits}{numeric; default number of digits to use for display of numerics}
+
 \item{colheader}{character; Use as column headers in final table}
 
 \item{after}{function or list of functions; one or more functions to further process an abstract table}
@@ -63,8 +69,6 @@ tangram(x, ...)
 \item{data}{data.frame; data to use for rendering tangram object}
 
 \item{transforms}{list of lists of functions; that contain the transformation to apply for summarization}
-
-\item{digits}{numeric; default number of digits to use for display of numerics}
 
 \item{short.labels}{numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").}
 
