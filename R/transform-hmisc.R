@@ -302,11 +302,13 @@ summarize_chisq <- function(table,
   # Finally add the stats
   if(test)
   {
-    table <- add_row(table, cell_style[['chi2']](
-      render_f(stat$statistic, 2),
-      stat$parameter,
-      cell_style[['p']](stat$p.value, pformat)
-    ))
+    test_result <- if(any(is.na(stat))) cell("NA") else
+      cell_style[['chi2']](
+        render_f(stat$statistic, 2),
+        stat$parameter,
+        cell_style[['p']](stat$p.value, pformat)
+      )
+    table <- add_row(table, test_result)
 
     # Fill in blank cells in stats column
     if(nrow > 1) table <- add_row(table, rep("", nrow))
