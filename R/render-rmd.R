@@ -38,7 +38,8 @@ rmd <- function(object, key=FALSE, ...)
 #' @include iify.R
 rmdify <- function(x) iify(x, list(
   c("&nbsp;",     "  "),
-  c("\\\\frac\\{([^\\}]*)}\\{([^\\}]*)\\}", "\\1/\\2")
+  c("\\\\frac\\{([^\\}]*)}\\{([^\\}]*)\\}", "\\1/\\2"),
+  c("\u03A7", "X")
 ))
 
 #' @rdname rmd
