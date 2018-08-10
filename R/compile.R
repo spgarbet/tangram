@@ -298,13 +298,16 @@ tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, styl
 #' @export
 tangram.anova.lme <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=NULL, digits=NULL, ...)
 {
-  x$call <- NULL
-  class(x) <- "data.frame"
+  y <- x
+  y$call <- NULL
+  class(y) <- "data.frame"
 
   if(is.null(digits)) digits = 3
-  x[] <- lapply(x, function(y) render_f(y,digits))
+  y[] <- lapply(y, function(z) render_f(z,digits))
 
-  tangram.data.frame(x, id, caption=caption, footnote=footnote, style=style, as.character=TRUE, ...)
+  y$Model <- x$Model
+
+  tangram.data.frame(y, id, caption=caption, footnote=footnote, style=style, as.character=TRUE, ...)
 }
 
 #' @rdname tangram
