@@ -212,7 +212,7 @@ summarize_chisq <- function(table,
   grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
   validrow      <- which(!apply(grid,1,FUN = function(x){all(x == 0)}))
-  stat          <- if(length(grid[validrow,validcol]) < 2) NA else suppressWarnings(chisq.test(grid[validrow,validcol], correct=FALSE))
+  stat          <- if(length(validrow) < 2 || length(validcol) < 2) NA else suppressWarnings(chisq.test(grid[validrow,validcol], correct=FALSE))
   ncol          <- dim(grid)[2]
   nrow          <- dim(grid)[1]
 
