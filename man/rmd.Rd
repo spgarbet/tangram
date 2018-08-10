@@ -4,13 +4,6 @@
 \alias{rmd}
 \alias{rmd.default}
 \alias{rmd.cell}
-\alias{rmd.cell_iqr}
-\alias{rmd.cell_estimate}
-\alias{rmd.cell_fstat}
-\alias{rmd.cell_fraction}
-\alias{rmd.cell_chi2}
-\alias{rmd.cell_studentt}
-\alias{rmd.cell_spearman}
 \alias{rmd.cell_n}
 \alias{rmd.tangram}
 \alias{rmd.table_builder}
@@ -21,20 +14,6 @@ rmd(object, key = FALSE, ...)
 \method{rmd}{default}(object, key = FALSE, ...)
 
 \method{rmd}{cell}(object, key = FALSE, ...)
-
-\method{rmd}{cell_iqr}(object, key = FALSE, ...)
-
-\method{rmd}{cell_estimate}(object, key = FALSE, ...)
-
-\method{rmd}{cell_fstat}(object, key = FALSE, ...)
-
-\method{rmd}{cell_fraction}(object, key = FALSE, ...)
-
-\method{rmd}{cell_chi2}(object, key = FALSE, ...)
-
-\method{rmd}{cell_studentt}(object, key = FALSE, ...)
-
-\method{rmd}{cell_spearman}(object, key = FALSE, ...)
 
 \method{rmd}{cell_n}(object, key = FALSE, ...)
 

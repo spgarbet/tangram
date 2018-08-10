@@ -55,7 +55,6 @@ Collate:
     'render-index.R'
     'render-latex-map.R'
     'render-latex.R'
-    'iffy.R'
     'render-rmd.R'
     'render-rtf.R'
     'render-summary.R'
