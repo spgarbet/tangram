@@ -37,8 +37,9 @@ rmd <- function(object, key=FALSE, ...)
 
 #' @include iify.R
 rmdify <- function(x) iify(x, list(
-  c("&nbsp;",     "  "),
-  c("\\\\frac\\{([^\\}]*)}\\{([^\\}]*)\\}", "\\1/\\2"),
+  #c("&nbsp;",     "  "),
+  c("\\\\frac\\{\\s*([^\\}]*)}\\{\\s*([^\\}]*)\\}", "\\1/\\2"),
+  c("  ", "&nbsp;&nbsp;"),
   c("\u03A7", "X")
 ))
 
@@ -119,6 +120,12 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
   for(row in pasty[2:nrows]) cat(row, '\n')
 
   if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.names=FALSE, append=append, sep=",", quote=FALSE)
+
+  if(!is.null(attr(x, "footnote")))
+  {
+    cat('\n')
+    cat(rmdify(paste0(attr(x, "footnote"), collapse="\n")), collapse='\n' )
+  }
 }
 
 #' @rdname rmd
