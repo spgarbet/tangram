@@ -91,7 +91,7 @@ insert_row <- function(table, after, ..., class=NULL)
   N     <- length(table)
 
   # Check for mismatch in arguments
-  if(length(cells) > table[[1]]) stop("tangram::insert_row() number of cells provided larger than current number of columns")
+  if(length(cells) > length(table[[1]])) stop("tangram::insert_row() number of cells provided larger than current number of columns")
   if(after > N) stop("tangram::insert_row() after parameter larger than number of rows")
   if(after < 0) stop("tangram::insert_row() negative after row")
 
