@@ -35,6 +35,12 @@ rmd <- function(object, key=FALSE, ...)
   UseMethod("rmd", object)
 }
 
+#' @include iffy.R
+rmdify <- function(x) iffy(x, list(
+  c("&nbsp;",     "  "),
+  c("\\\\frac\\{\\1\\}\\{\\2\\}", "\\1 / \\2")
+))
+
 #' @rdname rmd
 #' @export
 rmd.default <- function(object, key=FALSE, ...) paste0(as.character(object), collapse=", ")
@@ -52,87 +58,6 @@ rmd.cell <- function(object, key=FALSE, ...)
     name <- vapply(names(object), function(n) if(nchar(n)>0) paste0(n,"=") else "", "character")
     paste(paste0(name, as.character(object)), collapse=sep)
   }
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_iqr <- function(object, key=FALSE, ...)
-{
-  result <- if(key)
-  {
-    idx <- index(object, ...)
-    paste0("((",    object[1], "))%", word_ref(idx[[1]]), "%",
-           " **((", object[2], "))%", word_ref(idx[[2]]), "%** ",
-           "((",    object[3], "))%", word_ref(idx[[3]]), "%"
-           )
-  } else
-  {
-    paste0(object[1],
-           " **", object[2], "** ",
-           object[3])
-  }
-
-  z <- attr(object, "msd")
-  if(!is.null(z)) result <- paste0(result, " ", z[1], '\u00b1', z[2]);
-
-  result
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_estimate <- function(object, key=FALSE, ...)
-{
-  paste0("(", rmd(object[1]), ", ", rmd(object[2]), ")")
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_fstat <- function(object, key=FALSE, ...)
-{
-  paste0("F~",object[2],",",object[3],"~=",object[1],", P=",object[4])
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_fraction <- function(object, key=FALSE, ...)
-{
-  den <- object["denominator"]
-  num <- object["numerator"]
-  paste0(object["ratio"], "  ", num,"/",den)
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_chi2 <- function(object, key=FALSE, ...)
-{
-  if(key)
-  {
-    idx <- index(object, ...)
-    paste0("X^2^((~", object[2], "~))%", word_ref(idx[[2]]), "%",
-           "=((", object[1], "))%",    word_ref(idx[[1]]), "%",
-           ", P=((", object[3], "))%",  word_ref(idx[[3]]), "%")
-  } else
-  {
-    paste0("X^2^~", object[2],
-           "~=", object[1],
-           ", P=", object[3])
-  }
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_studentt <- function(object, key=FALSE, ...)
-{
-  idx <- index(object, key=FALSE, ...)
-
-  paste0("T~",object[2],"~=",object[1], ", P=",object[3])
-}
-
-#' @export
-#' @rdname rmd
-rmd.cell_spearman <- function(object, key=FALSE, ...)
-{
-  paste0("S=",object[1],", P=",object[1])
 }
 
 #' @export
@@ -167,7 +92,7 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- gsub("  ", "&nbsp;&nbsp;", rmd(object[[row]][[col]], key=!is.null(key), ...))
+      text[row,col] <<- rmd(rmdify(object[[row]][[col]]), key=!is.null(key), ...)
     })
   })
 
