@@ -38,7 +38,7 @@ rmd <- function(object, key=FALSE, ...)
 #' @include iify.R
 rmdify <- function(x) iify(x, list(
   c("&nbsp;",     "  "),
-  c("\\\\frac\\{\\1\\}\\{\\2\\}", "\\1 / \\2")
+  c("\\\\frac\\{([^\\}]*)}\\{([^\\}]*)\\}", "\\1/\\2")
 ))
 
 #' @rdname rmd
