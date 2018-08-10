@@ -36,7 +36,7 @@ rmd <- function(object, key=FALSE, ...)
 }
 
 #' @include iify.R
-rmdify <- function(x) iffy(x, list(
+rmdify <- function(x) iify(x, list(
   c("&nbsp;",     "  "),
   c("\\\\frac\\{\\1\\}\\{\\2\\}", "\\1 / \\2")
 ))
