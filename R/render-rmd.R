@@ -121,10 +121,10 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
 
   if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.names=FALSE, append=append, sep=",", quote=FALSE)
 
-  if(!is.null(attr(x, "footnote")))
+  if(!is.null(attr(object, "footnote")))
   {
     cat('\n')
-    cat(rmdify(paste0(attr(x, "footnote"), collapse="\n")), collapse='\n' )
+    cat(rmdify(paste0(attr(object, "footnote"), collapse="\n")), collapse='\n' )
   }
 }
 
