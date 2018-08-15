@@ -32,7 +32,7 @@ LazyData: true
 Suggests: testthat, rms, rmarkdown, Hmisc, sandwich, dplyr
 Imports: stringi, stringr, base64enc, digest, htmltools
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0.9000
 Collate: 
     'compile-cell.R'
     'cell-hmisc.R'
@@ -58,9 +58,11 @@ Collate:
     'render-rmd.R'
     'render-rtf.R'
     'render-summary.R'
+    'smd.R'
     'transform-hmisc.R'
     'transform-lancet.R'
     'transform-nejm.R'
     'transform-proc-tab.R'
+    'transform-smd.R'
 NeedsCompilation: no
 Packaged: 2017-04-25 20:16:25 UTC; garbetsp

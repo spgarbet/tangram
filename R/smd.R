@@ -62,7 +62,7 @@ smd_continuous         <- function(x, g1, g2, weight)
 #' @param weights vector; weighting information for x
 #'
 #' @export
-smd <- function(x, group, weight=NULL)
+standard_difference <- function(x, group, weight=NULL)
 {
   # Force Factor
   if(class(group) != "factor") group <- as.factor(group)
