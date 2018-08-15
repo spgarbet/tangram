@@ -41,14 +41,6 @@ the LaTeX rendering
 }
 \description{
 Each of these methods will render the cell object as a LaTeX fragment
-
-#' @rdname latex
-#' @export
-latex.cell_n <- function(object, ...)
-{
-  #idx <- index(object, id)
-  latexify(object)
-}
 }
 \details{
 There are addition arguments possible to control the rendering, but

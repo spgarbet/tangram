@@ -17,7 +17,8 @@ rmd(object, key = FALSE, ...)
 
 \method{rmd}{cell_n}(object, key = FALSE, ...)
 
-\method{rmd}{tangram}(object, key = NULL, append = FALSE, pad = 10, ...)
+\method{rmd}{tangram}(object, key = NULL, append = FALSE, pad = 10,
+  ...)
 
 \method{rmd}{table_builder}(object, key = FALSE, ...)
 }

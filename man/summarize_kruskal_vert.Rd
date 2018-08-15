@@ -4,8 +4,8 @@
 \alias{summarize_kruskal_vert}
 \title{Create a summarization for a categorical row versus a numerical column}
 \usage{
-summarize_kruskal_vert(table, row, column, cell_style, collapse_single = TRUE,
-  pformat = NULL, test = TRUE, ...)
+summarize_kruskal_vert(table, row, column, cell_style,
+  collapse_single = TRUE, pformat = NULL, test = TRUE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
