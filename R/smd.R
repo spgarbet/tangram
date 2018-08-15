@@ -26,7 +26,8 @@ smd_binary_categorical <- function(x, g1, g2, weight)
 #' Internal with no argument validation
 smd_multi_categorical  <- function(x, group, weight)
 {
-  ct <- tapply(weight, list(group, x), FUN=sum) # Total weights per category
+  # Total weights per category
+  ct <- tapply(weight, list(group, x), FUN=sum, default=0)
   ct <- apply(ct, 1, function(i) i/sum(i))      # Normalize to probability
 
   nrow <- dim(ct)[1]
@@ -80,7 +81,6 @@ standard_difference <- function(x, group, weight=NULL)
   # Just treat everything weighted, simpler downstream
   if(is.null(weight)) weight <- rep(1, length(x))
 
-  ### FIX ME
   g1 <- group == levels(group)[1]
   g2 <- group == levels(group)[2]
 
@@ -90,7 +90,7 @@ standard_difference <- function(x, group, weight=NULL)
   # Is it possible to compute anything?
   if(length(x) < 4                          ||
      length(x[levels(group)[1]==group]) < 2 ||
-     length(x[levels(group)[1]==group]) < 2) return(NA)
+     length(x[levels(group)[2]==group]) < 2) return(NA)
 
   # Dispatch to relevant
   result <-
