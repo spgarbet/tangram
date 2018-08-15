@@ -18,7 +18,7 @@ header-includes:
 - \pdfcompresslevel=9
 - \pdfobjcompresslevel=2
 vignette: |
-  %\VignetteIndexEntry{Tangram Examples}
+  %\VignetteIndexEntry{Tangram Standardized Mean Differences (SMD)}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
@@ -73,14 +73,7 @@ tangram(formula, rhc, "unmatched", smd, "Unmatched", style="nejm")
 ## Propensity Score Matching
 ```{r, results='asis'}
 ## Fit model
-psModel <- glm(formula = swang1 ~ age + sex + race + edu + income + ninsclas +
-                         cat1 + das2d3pc + dnr1 + ca + surv2md1 + aps1 + scoma1 +
-                         wtkilo1 + temp1 + meanbp1 + resp1 + hrt1 + pafi1 +
-                         paco21 + ph1 + wblc1 + hema1 + sod1 + pot1 + crea1 +
-                         bili1 + alb1 + resp + card + neuro + gastr + renal +
-                         meta + hema + seps + trauma + ortho + cardiohx + chfhx +
-                         dementhx + psychhx + chrpulhx + renalhx + liverhx + gibledhx +
-                         malighx + immunhx + transhx + amihx,
+psModel <- glm(formula = formula,
                family  = binomial(link = "logit"),
                data    = rhc)
 

@@ -14,34 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#' Internal with no argument validation
-smd_binary_categorical <- function(x, g1, g2, weight)
-{
-  p1 <- weighted.mean(x[g1], weight[g1])
-  p2 <- weighted.mean(x[g2], weight[g2])
 
-  abs(p1-p2) / sqrt((p1*(1-p1)+p2*(1-p2))/2)
-}
-
-#' Internal with no argument validation
-smd_multi_categorical  <- function(x, group, weight)
+# Internal with no argument validation
+smd_categorical  <- function(x, group, weight)
 {
   # Total weights per category
-  ct <- tapply(weight, list(group, x), FUN=sum, default=0)
-  ct <- apply(ct, 1, function(i) i/sum(i))      # Normalize to probability
-
-  nrow <- dim(ct)[1]
-  Tm   <- as.matrix(ct[2:nrow,1], ncol=1)
-  Cm   <- as.matrix(ct[2:nrow,2], ncol=1)
-  T_C  <- Tm - Cm
-
-  S        <- -(tcrossprod(Tm, Tm) + tcrossprod(Cm, Cm)) / 2
-  diag(S)  <- diag((tcrossprod(Tm, 1-Tm) + tcrossprod(Cm, 1-Cm)) / 2 )
+  ct      <- tapply(weight, list(group, x), FUN=sum, default=0)
+  ct      <- apply(ct, 1, function(i) i/sum(i))      # Normalize to probability
+  nrow    <- dim(ct)[1]
+  Tm      <- as.matrix(ct[2:nrow,1], ncol=1)
+  Cm      <- as.matrix(ct[2:nrow,2], ncol=1)
+  T_C     <- Tm - Cm
+  S       <- -(tcrossprod(Tm, Tm) + tcrossprod(Cm, Cm)) / 2
+  diag(S) <- diag((tcrossprod(Tm, 1-Tm) + tcrossprod(Cm, 1-Cm)) / 2 )
 
   sqrt(t(T_C) %*% solve(S) %*% T_C)[1,1]
 }
 
-#' Internal with no argument validation
+# Internal with no argument validation
 smd_continuous         <- function(x, g1, g2, weight)
 {
   x1 <- weighted.mean(x[g1], weight[g1])
@@ -88,17 +78,15 @@ standard_difference <- function(x, group, weight=NULL)
   if(length(x) != length(weight)) stop("smd() call x and weight lengths differ")
 
   # Is it possible to compute anything?
-  if(length(x) < 4                          ||
-     length(x[levels(group)[1]==group]) < 2 ||
-     length(x[levels(group)[2]==group]) < 2) return(NA)
+  if(length(x) < 4 || length(x[g1]) < 2 || length(x[g2]) < 2) return(NA)
 
   # Dispatch to relevant
   result <-
-    if(length(unique(x)) == 2) smd_binary_categorical(x==x[1], g1, g2, weight) else
-    if(class(x) == "factor")   smd_multi_categorical(x, group, weight)  else
+    if(class(x) == "factor")   smd_categorical(x, group, weight)                  else
+    if(length(unique(x)) == 2) smd_categorical(as.factor(x==x[1]), group, weight) else
                                smd_continuous(x, g1, g2, weight)
 
-
+  # Compute some 95% CI
   sigmad <- sqrt((n1+n2)/(n1*n2) + result^2/2/(n1+n2)) # Hedges and Olkin 1995
 
   attr(result, "hedges")  <- c(n1=n1, n2=n2,
