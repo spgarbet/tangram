@@ -50,8 +50,9 @@ smd_continuous         <- function(x, g1, g2, weight)
 #'
 #' @param x vector; data to estimate effect size for groups
 #' @param group vector; the grouping variable.
-#' @param weights vector; weighting information for x
+#' @param weight vector; weighting information for x
 #'
+#' @importFrom stats qnorm weighted.mean
 #' @export
 standard_difference <- function(x, group, weight=NULL)
 {
