@@ -39,6 +39,7 @@ pre {
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(tangram)
+pbc <- tangram::pbc
 ```
 Our team here at Vanderbilt replies quite a bit on exploratory data analysis, and thus summary statistics are an important first step. One of the tools we've brought to bear on this is `tangram` which allows for customized statistical tables. Customization aside, the question is how can I quickly get a set of summary statistics into an Rmd document quickly and painlessly using `tangram`?
 

@@ -36,6 +36,7 @@ pre {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
+pbc <- tangram::pbc
 ```
 
 <style type="text/css">

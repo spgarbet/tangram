@@ -40,6 +40,8 @@ pre {
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
 
+pbc <- tangram::pbc
+
 # This is necessary for changing size of chunks in LaTeX. Why isn't this patched in knitr?
 # https://stackoverflow.com/questions/25646333/code-chunk-font-size-in-rmarkdown-with-knitr-and-latex/46526740
 # ?highlight
