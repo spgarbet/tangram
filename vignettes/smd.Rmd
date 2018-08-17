@@ -14,6 +14,7 @@ header-includes:
 - \usepackage{boldline}
 - \usepackage{colortbl}
 - \usepackage{hhline}
+- \usepackage{longtable}
 - \pdfminorversion=5
 - \pdfcompresslevel=9
 - \pdfobjcompresslevel=2
@@ -67,7 +68,7 @@ vars <- c("age","sex","race","edu","income","ninsclas","cat1","das2d3pc","dnr1",
 
 formula <- paste0("swang1~", paste0(vars, collapse="+"))
 
-tangram(formula, rhc, "unmatched", smd, "Unmatched", style="nejm")
+tangram(formula, rhc, "unmatched", smd, "Unmatched", style="nejm", pct_width=0.5)
 ```
 
 ## Propensity Score Matching
@@ -103,7 +104,7 @@ listMatch <- Match(Tr       = (rhc$swang1 == "RHC"),      # Need to be in 0,1
 ## Extract matched data
 rhcMatched <- rhc[unlist(listMatch[c("index.treated","index.control")]), ]
 
-tangram(formula, rhcMatched, "matched", smd, "Propesnity Score Matched", style="nejm")
+tangram(formula, rhcMatched, "matched", smd, "Propesnity Score Matched", style="nejm", pct_width=0.5)
 ```
 
 ## Propensity Score Matching Weight
@@ -111,5 +112,5 @@ tangram(formula, rhcMatched, "matched", smd, "Propesnity Score Matched", style="
 tangram(formula, rhc, "weighted", smd,
         "Propensity Score Weighted",
         style="nejm",
-        weight=rhc$pMin/rhc$pAssign)
+        weight=rhc$pMin/rhc$pAssign, pct_width=0.5)
 ```

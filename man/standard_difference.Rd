@@ -15,7 +15,7 @@ standard_difference(x, group, weight = NULL)
 
 \item{group}{vector; the grouping variable.}
 
-\item{weights}{vector; weighting information for x}
+\item{weight}{vector; weighting information for x}
 }
 \description{
 Compute the standardized mean distance between 2 groups for numerical

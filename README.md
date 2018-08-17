@@ -2,7 +2,7 @@
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Tangram_set_00.jpg" width="100px"/>
 
-*Quick* show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/vignettes/example.html) or see the equivalent in LaTeX [example.pdf](https://github.com/spgarbet/tangram/raw/master/vignettes/example.pdf)
+*Quick* show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://github.com/spgarbet/tg/blob/master/inst/doc/example.html) or see the equivalent in LaTeX [example.pdf](https://github.com/spgarbet/tangram/raw/master/inst/doc/example.pdf)
 
 ## NOTICE: Major Refactor
 

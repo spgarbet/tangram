@@ -11,7 +11,7 @@
 
 <meta name="author" content="Shawn Garbett" />
 
-<meta name="date" content="2018-06-15" />
+<meta name="date" content="2018-08-17" />
 
 <title>Summary</title>
 
@@ -92,6 +92,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -121,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Summary</h1>
 <h4 class="author"><em>Shawn Garbett</em></h4>
-<h4 class="date"><em>2018-06-15</em></h4>
+<h4 class="date"><em>2018-08-17</em></h4>
 
 </div>
 
@@ -196,29 +199,10 @@ pre {
 
 #iris1 .subheader em {font-style: normal;}
 
-#iris1 .header.N:before { content: "(n="; }
-#iris1 .header.N:after  { content: ")"; }
-
-#iris1 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#iris1 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#iris1 .quantile .q25:before {content: "(";}
-#iris1 .quantile .q25 {
-  order: 2
-}
-#iris1 .quantile .q75:before {content: ", ";}
-#iris1 .quantile .q75 {order: 3}
-#iris1 .quantile .q75:after {content: ")";}
 #iris1 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #iris1 .units {
@@ -228,23 +212,6 @@ pre {
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#iris1 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#iris1 .fraction .numerator   { order: 1 }
-#iris1 .fraction .denominator:before {content: "/";}
-#iris1 .fraction .denominator { order: 2; }
-#iris1 .fraction .ratio       { order: 3; display: none; }
-#iris1 .fraction .percentage:before {content: "\00A0(";}
-#iris1 .fraction .percentage  { order: 4; }
-#iris1 .fraction .percentage:after  {content: ")";}
-
-#iris1 .statistics .description {font-style: italic;}
-#iris1 .statistic {padding-right: 0.5em;}
 
 
 #iris1 td .align{
@@ -263,6 +230,9 @@ pre {
    font-size: 70%;
    text-align: left;
 }
+
+#iris1 .statistics {font-style: italic;}
+#iris1 .statistics {padding-right: 0.5em;}
 </style>
 <div class="figbody">
 <table class="tangram">
@@ -289,7 +259,7 @@ pre {
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">150</span>
+<span class="N">(N=150)</span>
 </td>
 <td class="subheader header even tg-label">
 <span class="variable"></span>
@@ -305,10 +275,37 @@ pre {
 <span class="N">150</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">4.30</span><span class="q25">5.10</span><span class="q50">5.80</span><span class="q75">6.40</span><span class="q75">7.90</span><br /><span>5.84±0.83</span>
 </td>
 <td class="statistics odd">
-V=11325, P=&lt;0.001<sup>3</sup>
+P&lt;0.001<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+5.80 (5.10—6.40)
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+4.30—7.90
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -319,10 +316,37 @@ V=11325, P=&lt;0.001<sup>3</sup>
 <span class="N">150</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">2.00</span><span class="q25">2.80</span><span class="q50">3.00</span><span class="q75">3.31</span><span class="q75">4.40</span><br /><span>3.06±0.44</span>
 </td>
 <td class="statistics even">
-V=11325, P=&lt;0.001<sup>3</sup>
+P&lt;0.001<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+3.00 (2.80—3.31)
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+2.00—4.40
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -333,10 +357,37 @@ V=11325, P=&lt;0.001<sup>3</sup>
 <span class="N">150</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">1.00</span><span class="q25">1.59</span><span class="q50">4.35</span><span class="q75">5.10</span><span class="q75">6.90</span><br /><span>3.76±1.77</span>
 </td>
 <td class="statistics odd">
-V=11325, P=&lt;0.001<sup>3</sup>
+P&lt;0.001<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+4.35 (1.59—5.10)
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+1.00—6.90
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -347,10 +398,37 @@ V=11325, P=&lt;0.001<sup>3</sup>
 <span class="N">150</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">0.10</span><span class="q25">0.30</span><span class="q50">1.30</span><span class="q75">1.80</span><span class="q75">2.50</span><br /><span>1.20±0.76</span>
 </td>
 <td class="statistics even">
-V=11325, P=&lt;0.001<sup>3</sup>
+P&lt;0.001<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+1.30 (0.30—1.80)
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+0.10—2.50
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -362,8 +440,8 @@ V=11325, P=&lt;0.001<sup>3</sup>
 </td>
 <td class="odd">
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />2</span></span> = </span>0.00,</span><span class="pvalue"><span class="description">P = </span>1.000</span><sup>2</sup>
+<td class="odd">
+NA
 </td>
 </tr>
 <tr>
@@ -374,7 +452,7 @@ V=11325, P=&lt;0.001<sup>3</sup>
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>333</span><span class="percentage">33.333</span><span class="numerator"> 50</span><span class="denominator">150</span></span>
+    50/150 (33.3)
 </td>
 <td class="odd">
 </td>
@@ -387,7 +465,7 @@ V=11325, P=&lt;0.001<sup>3</sup>
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>333</span><span class="percentage">33.333</span><span class="numerator"> 50</span><span class="denominator">150</span></span>
+    50/150 (33.3)
 </td>
 <td class="odd">
 </td>
@@ -400,7 +478,7 @@ V=11325, P=&lt;0.001<sup>3</sup>
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>333</span><span class="percentage">33.333</span><span class="numerator"> 50</span><span class="denominator">150</span></span>
+    50/150 (33.3)
 </td>
 <td class="odd">
 </td>
@@ -462,29 +540,10 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
 
 #iris2 .subheader em {font-style: normal;}
 
-#iris2 .header.N:before { content: "(n="; }
-#iris2 .header.N:after  { content: ")"; }
-
-#iris2 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#iris2 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#iris2 .quantile .q25:before {content: "(";}
-#iris2 .quantile .q25 {
-  order: 2
-}
-#iris2 .quantile .q75:before {content: ", ";}
-#iris2 .quantile .q75 {order: 3}
-#iris2 .quantile .q75:after {content: ")";}
 #iris2 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #iris2 .units {
@@ -494,23 +553,6 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#iris2 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#iris2 .fraction .numerator   { order: 1 }
-#iris2 .fraction .denominator:before {content: "/";}
-#iris2 .fraction .denominator { order: 2; }
-#iris2 .fraction .ratio       { order: 3; display: none; }
-#iris2 .fraction .percentage:before {content: "\00A0(";}
-#iris2 .fraction .percentage  { order: 4; }
-#iris2 .fraction .percentage:after  {content: ")";}
-
-#iris2 .statistics .description {font-style: italic;}
-#iris2 .statistic {padding-right: 0.5em;}
 
 
 #iris2 td .align{
@@ -529,6 +571,9 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
    font-size: 70%;
    text-align: left;
 }
+
+#iris2 .statistics {font-style: italic;}
+#iris2 .statistics {padding-right: 0.5em;}
 </style>
 <div class="caption">
 Iris Stats
@@ -564,13 +609,13 @@ Iris Stats
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">50</span>
+<span class="N">(N=50)</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">50</span>
+<span class="N">(N=50)</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">50</span>
+<span class="N">(N=50)</span>
 </td>
 <td class="subheader header even tg-label">
 <span class="variable"></span>
@@ -586,16 +631,53 @@ Iris Stats
 <span class="N">150</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">1.40</span><span class="q50">1.50</span><span class="q75">1.60</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">4.00</span><span class="q50">4.35</span><span class="q75">4.60</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">5.10</span><span class="q50">5.55</span><span class="q75">5.90</span>
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description">F<sub>2,147</sub> = </span>515.64,</span><span class="pvalue"><span class="description">P = </span>&lt;0.001<sup>1</sup></span>
+<td class="statistics odd">
+F<sub>2,147</sub>=515.64, P&lt;0.001<sup>1</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+1.50 (1.40—1.60)
+</td>
+<td class="odd">
+4.35 (4.00—4.60)
+</td>
+<td class="odd">
+5.55 (5.10—5.90)
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+1.00—1.90
+</td>
+<td class="odd">
+3.00—5.10
+</td>
+<td class="odd">
+4.50—6.90
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -606,16 +688,53 @@ Iris Stats
 <span class="N">150</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">0.20</span><span class="q50">0.20</span><span class="q75">0.30</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">1.20</span><span class="q50">1.30</span><span class="q75">1.50</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">1.80</span><span class="q50">2.00</span><span class="q75">2.30</span>
 </td>
-<td class="even data statistics">
-<span class="statistic"><span class="description">F<sub>2,147</sub> = </span>541.25,</span><span class="pvalue"><span class="description">P = </span>&lt;0.001<sup>1</sup></span>
+<td class="statistics even">
+F<sub>2,147</sub>=541.25, P&lt;0.001<sup>1</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+0.200 (0.200—0.300)
+</td>
+<td class="even">
+1.30 (1.20—1.50)
+</td>
+<td class="even">
+2.00 (1.80—2.30)
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+0.100—0.600
+</td>
+<td class="even">
+1.00—1.80
+</td>
+<td class="even">
+1.40—2.50
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -626,16 +745,53 @@ Iris Stats
 <span class="N">150</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">4.80</span><span class="q50">5.00</span><span class="q75">5.20</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">5.60</span><span class="q50">5.90</span><span class="q75">6.30</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">6.20</span><span class="q50">6.50</span><span class="q75">6.92</span>
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description">F<sub>2,147</sub> = </span>136.85,</span><span class="pvalue"><span class="description">P = </span>&lt;0.001<sup>1</sup></span>
+<td class="statistics odd">
+F<sub>2,147</sub>=136.85, P&lt;0.001<sup>1</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+5.00 (4.80—5.20)
+</td>
+<td class="odd">
+5.90 (5.60—6.30)
+</td>
+<td class="odd">
+6.50 (6.20—6.92)
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd">
+4.30—5.80
+</td>
+<td class="odd">
+4.90—7.00
+</td>
+<td class="odd">
+4.90—7.90
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 <tr>
@@ -646,16 +802,53 @@ Iris Stats
 <span class="N">150</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">3.19</span><span class="q50">3.40</span><span class="q75">3.70</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">2.50</span><span class="q50">2.80</span><span class="q75">3.00</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">2.80</span><span class="q50">3.00</span><span class="q75">3.20</span>
 </td>
-<td class="even data statistics">
-<span class="statistic"><span class="description">F<sub>2,147</sub> = </span>54.69,</span><span class="pvalue"><span class="description">P = </span>&lt;0.001<sup>1</sup></span>
+<td class="statistics even">
+F<sub>2,147</sub>=54.69, P&lt;0.001<sup>1</sup>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Median (interquartile range)</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+3.40 (3.19—3.70)
+</td>
+<td class="even">
+2.80 (2.50—3.00)
+</td>
+<td class="even">
+3.00 (2.80—3.20)
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header even tg-label">
+<span class="variable">        Range</span>
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
+</td>
+<td class="even">
+2.30—4.40
+</td>
+<td class="even">
+2.00—3.40
+</td>
+<td class="even">
+2.20—3.80
+</td>
+<td class="even tg-label">
+<span class="variable"></span>
 </td>
 </tr>
 </tbody>
@@ -668,10 +861,10 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
 <p>Maybe one really prefers using <code>dplyr</code> so let’s go with that.</p>
 <pre class="r"><code>iris %&gt;%
   group_by(Species) %&gt;%
-  summarise(Mean.Petal.Length=mean(Petal.Length),
-            Median.Petal.Length=median(Petal.Length),
-            sd.Petal.Length=round(sd(Petal.Length),3) ) %&gt;%
-  tangram(&quot;iris3&quot;, caption=&quot;dplyr Stats&quot;, style=&quot;nejm&quot;)</code></pre>
+  summarise(Mean=mean(Petal.Length),
+            Median=median(Petal.Length),
+            SD=round(sd(Petal.Length),3) ) %&gt;%
+  tangram(&quot;iris3&quot;, caption=&quot;Petal Length (dplyr example)&quot;, style=&quot;nejm&quot;, id=&quot;iris3&quot;)</code></pre>
 <div id="iris3" class="figure">
 <style>
 #iris3 body .figbody {
@@ -719,29 +912,10 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
 
 #iris3 .subheader em {font-style: normal;}
 
-#iris3 .header.N:before { content: "(n="; }
-#iris3 .header.N:after  { content: ")"; }
-
-#iris3 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#iris3 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#iris3 .quantile .q25:before {content: "(";}
-#iris3 .quantile .q25 {
-  order: 2
-}
-#iris3 .quantile .q75:before {content: ", ";}
-#iris3 .quantile .q75 {order: 3}
-#iris3 .quantile .q75:after {content: ")";}
 #iris3 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #iris3 .units {
@@ -751,23 +925,6 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#iris3 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#iris3 .fraction .numerator   { order: 1 }
-#iris3 .fraction .denominator:before {content: "/";}
-#iris3 .fraction .denominator { order: 2; }
-#iris3 .fraction .ratio       { order: 3; display: none; }
-#iris3 .fraction .percentage:before {content: "\00A0(";}
-#iris3 .fraction .percentage  { order: 4; }
-#iris3 .fraction .percentage:after  {content: ")";}
-
-#iris3 .statistics .description {font-style: italic;}
-#iris3 .statistic {padding-right: 0.5em;}
 
 
 #iris3 td .align{
@@ -786,25 +943,28 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
    font-size: 70%;
    text-align: left;
 }
+
+#iris3 .statistics {font-style: italic;}
+#iris3 .statistics {padding-right: 0.5em;}
 </style>
 <div class="caption">
-dplyr Stats
+Petal Length (dplyr example)
 </div>
 <div class="figbody">
 <table class="tangram">
 <thead>
 <tr>
 <td class="header tg-label">
-<span class="variable">Species</span>
+<span class="variable">iris3</span>
 </td>
 <td class="header tg-label">
-<span class="variable">Mean.Petal.Length</span>
+<span class="variable"></span>
 </td>
 <td class="header tg-label">
-<span class="variable">Median.Petal.Length</span>
+<span class="variable"></span>
 </td>
 <td class="header tg-label">
-<span class="variable">sd.Petal.Length</span>
+<span class="variable"></span>
 </td>
 </tr>
 </thead>

@@ -39,7 +39,6 @@ pre {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
-data(pbc)
 
 # This is necessary for changing size of chunks in LaTeX. Why isn't this patched in knitr?
 # https://stackoverflow.com/questions/25646333/code-chunk-font-size-in-rmarkdown-with-knitr-and-latex/46526740
@@ -56,7 +55,6 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 This package is meant to implement the concept of a grammar of tables. It allows for a simple formula expression and a data frame to create a rich summary table in a variety of formats. It is designed for extensibility at each step of the process, so that one is not limited by the authors choice of table statistics, output format. The grammar however is an integral part of the package, and as such is not modifiable.
 
 Here's an example similar to summaryM from Hmisc to get us started:
-
 
 ```{r pbc, comment="", size="scriptsize"}
 tbl1 <- tangram("drug~bili+albumin+stage::Categorical+protime+sex+age+spiders",

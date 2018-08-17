@@ -11,7 +11,7 @@
 
 <meta name="author" content="Shawn Garbett" />
 
-<meta name="date" content="2018-06-15" />
+<meta name="date" content="2018-08-17" />
 
 <title>FDA Work Example</title>
 
@@ -92,6 +92,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -121,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">FDA Work Example</h1>
 <h4 class="author"><em>Shawn Garbett</em></h4>
-<h4 class="date"><em>2018-06-15</em></h4>
+<h4 class="date"><em>2018-08-17</em></h4>
 
 </div>
 
@@ -292,29 +295,10 @@ label(d1$reported_side_effects) &lt;- &quot;Reported Side Effects&quot;</code></
 
 #tbl1 .subheader em {font-style: normal;}
 
-#tbl1 .header.N:before { content: "(n="; }
-#tbl1 .header.N:after  { content: ")"; }
-
-#tbl1 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl1 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#tbl1 .quantile .q25:before {content: "(";}
-#tbl1 .quantile .q25 {
-  order: 2
-}
-#tbl1 .quantile .q75:before {content: ", ";}
-#tbl1 .quantile .q75 {order: 3}
-#tbl1 .quantile .q75:after {content: ")";}
 #tbl1 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #tbl1 .units {
@@ -324,23 +308,6 @@ label(d1$reported_side_effects) &lt;- &quot;Reported Side Effects&quot;</code></
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#tbl1 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl1 .fraction .numerator   { order: 1 }
-#tbl1 .fraction .denominator:before {content: "/";}
-#tbl1 .fraction .denominator { order: 2; }
-#tbl1 .fraction .ratio       { order: 3; display: none; }
-#tbl1 .fraction .percentage:before {content: "\00A0(";}
-#tbl1 .fraction .percentage  { order: 4; }
-#tbl1 .fraction .percentage:after  {content: ")";}
-
-#tbl1 .statistics .description {font-style: italic;}
-#tbl1 .statistic {padding-right: 0.5em;}
 
 
 #tbl1 td .align{
@@ -359,6 +326,9 @@ label(d1$reported_side_effects) &lt;- &quot;Reported Side Effects&quot;</code></
    font-size: 70%;
    text-align: left;
 }
+
+#tbl1 .statistics {font-style: italic;}
+#tbl1 .statistics {padding-right: 0.5em;}
 </style>
 <div class="caption">
 FDA Table 1
@@ -394,13 +364,13 @@ FDA Table 1
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3222</span>
+<span class="N">3240</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3199</span>
+<span class="N">3239</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3275</span>
+<span class="N">3218</span>
 </td>
 <td class="subheader header even tg-label">
 <span class="variable">P-value</span>
@@ -425,13 +395,13 @@ FDA Table 1
 <td class="odd">
 </td>
 <td class="odd">
-0.078<sup>1</sup>
+0.375
 </td>
 <td class="odd">
-0.384<sup>1</sup>
+0.288
 </td>
 <td class="odd">
-304
+303
 </td>
 </tr>
 <tr>
@@ -439,13 +409,13 @@ FDA Table 1
 <span class="variable">        Incisional</span>
 </td>
 <td class="odd">
-478 (14.8)
+459 (14.2)
 </td>
 <td class="odd">
-421 (13.2)
+471 (14.5)
 </td>
 <td class="odd">
-458 (14.0)
+448 (13.9)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -462,13 +432,13 @@ FDA Table 1
 <span class="variable">        Parastomal</span>
 </td>
 <td class="odd">
-475 (14.7)
+472 (14.6)
 </td>
 <td class="odd">
-467 (14.6)
+468 (14.4)
 </td>
 <td class="odd">
-445 (13.6)
+491 (15.3)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -485,13 +455,13 @@ FDA Table 1
 <span class="variable">        Incisional and Parastomal</span>
 </td>
 <td class="odd">
-445 (13.8)
+453 (14.0)
 </td>
 <td class="odd">
-503 (15.7)
+452 (14.0)
 </td>
 <td class="odd">
-454 (13.9)
+424 (13.2)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -508,13 +478,13 @@ FDA Table 1
 <span class="variable">        Epigastric (primary hernia)</span>
 </td>
 <td class="odd">
-455 (14.1)
+413 (12.7)
 </td>
 <td class="odd">
-448 (14.0)
+470 (14.5)
 </td>
 <td class="odd">
-517 (15.8)
+473 (14.7)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -531,13 +501,13 @@ FDA Table 1
 <span class="variable">        Umbilical (primary hernia)</span>
 </td>
 <td class="odd">
-446 (13.8)
+494 (15.2)
 </td>
 <td class="odd">
-444 (13.9)
+447 (13.8)
 </td>
 <td class="odd">
-432 (13.2)
+457 (14.2)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -554,13 +524,13 @@ FDA Table 1
 <span class="variable">        Spigelian (primary hernia)</span>
 </td>
 <td class="odd">
-471 (14.6)
+463 (14.3)
 </td>
 <td class="odd">
-424 (13.3)
+460 (14.2)
 </td>
 <td class="odd">
-495 (15.1)
+460 (14.3)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -577,13 +547,13 @@ FDA Table 1
 <span class="variable">        Lumbar (primary hernia)</span>
 </td>
 <td class="odd">
-452 (14.0)
+486 (15.0)
 </td>
 <td class="odd">
-492 (15.4)
+471 (14.5)
 </td>
 <td class="odd">
-474 (14.5)
+465 (14.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -606,13 +576,13 @@ FDA Table 1
 <td class="even">
 </td>
 <td class="even">
-0.013<sup>1</sup>
+0.358
 </td>
 <td class="even">
-0.120<sup>1</sup>
+0.742
 </td>
 <td class="even">
-320
+285
 </td>
 </tr>
 <tr>
@@ -620,13 +590,13 @@ FDA Table 1
 <span class="variable">        D</span>
 </td>
 <td class="even">
-1670 (51.7)
+1644 (50.5)
 </td>
 <td class="even">
-1554 (48.6)
+1597 (49.3)
 </td>
 <td class="even">
-1617 (49.8)
+1639 (50.9)
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -643,13 +613,13 @@ FDA Table 1
 <span class="variable">        E</span>
 </td>
 <td class="even">
-1561 (48.3)
+1613 (49.5)
 </td>
 <td class="even">
-1645 (51.4)
+1640 (50.7)
 </td>
 <td class="even">
-1633 (50.2)
+1582 (49.1)
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -672,13 +642,13 @@ FDA Table 1
 <td class="odd">
 </td>
 <td class="odd">
-0.275<sup>1</sup>
+0.910
 </td>
 <td class="odd">
-0.437<sup>1</sup>
+0.841
 </td>
 <td class="odd">
-100
+92
 </td>
 </tr>
 <tr>
@@ -686,13 +656,13 @@ FDA Table 1
 <span class="variable">        0</span>
 </td>
 <td class="odd">
-1204 (36.5)
+1208 (36.5)
 </td>
 <td class="odd">
-1190 (36.5)
+1232 (37.2)
 </td>
 <td class="odd">
-1179 (35.4)
+1226 (37.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -709,13 +679,13 @@ FDA Table 1
 <span class="variable">        1</span>
 </td>
 <td class="odd">
-1202 (36.4)
+1234 (37.2)
 </td>
 <td class="odd">
-1186 (36.3)
+1243 (37.5)
 </td>
 <td class="odd">
-1291 (38.7)
+1179 (35.9)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -732,13 +702,13 @@ FDA Table 1
 <span class="variable">        2</span>
 </td>
 <td class="odd">
-629 (19.0)
+610 (18.4)
 </td>
 <td class="odd">
-595 (18.2)
+588 (17.8)
 </td>
 <td class="odd">
-598 (17.9)
+627 (19.1)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -755,13 +725,13 @@ FDA Table 1
 <span class="variable">        3</span>
 </td>
 <td class="odd">
-212 (6.4)
+199 (6.0)
 </td>
 <td class="odd">
-212 (6.5)
+188 (5.7)
 </td>
 <td class="odd">
-202 (6.1)
+187 (5.7)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -778,13 +748,13 @@ FDA Table 1
 <span class="variable">        4</span>
 </td>
 <td class="odd">
-45 (1.4)
+53 (1.6)
 </td>
 <td class="odd">
-70 (2.1)
+54 (1.6)
 </td>
 <td class="odd">
-52 (1.6)
+51 (1.6)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -801,13 +771,13 @@ FDA Table 1
 <span class="variable">        5+</span>
 </td>
 <td class="odd">
-11 (0.3)
+10 (0.3)
 </td>
 <td class="odd">
-11 (0.3)
+7 (0.2)
 </td>
 <td class="odd">
-11 (0.3)
+12 (0.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -937,29 +907,10 @@ fda &lt;- list(
 
 #tbl2 .subheader em {font-style: normal;}
 
-#tbl2 .header.N:before { content: "(n="; }
-#tbl2 .header.N:after  { content: ")"; }
-
-#tbl2 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl2 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#tbl2 .quantile .q25:before {content: "(";}
-#tbl2 .quantile .q25 {
-  order: 2
-}
-#tbl2 .quantile .q75:before {content: ", ";}
-#tbl2 .quantile .q75 {order: 3}
-#tbl2 .quantile .q75:after {content: ")";}
 #tbl2 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #tbl2 .units {
@@ -969,23 +920,6 @@ fda &lt;- list(
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#tbl2 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl2 .fraction .numerator   { order: 1 }
-#tbl2 .fraction .denominator:before {content: "/";}
-#tbl2 .fraction .denominator { order: 2; }
-#tbl2 .fraction .ratio       { order: 3; display: none; }
-#tbl2 .fraction .percentage:before {content: "\00A0(";}
-#tbl2 .fraction .percentage  { order: 4; }
-#tbl2 .fraction .percentage:after  {content: ")";}
-
-#tbl2 .statistics .description {font-style: italic;}
-#tbl2 .statistic {padding-right: 0.5em;}
 
 
 #tbl2 td .align{
@@ -1004,6 +938,9 @@ fda &lt;- list(
    font-size: 70%;
    text-align: left;
 }
+
+#tbl2 .statistics {font-style: italic;}
+#tbl2 .statistics {padding-right: 0.5em;}
 </style>
 <div class="caption">
 FDA Table 2
@@ -1039,13 +976,13 @@ FDA Table 2
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3222</span>
+<span class="N">3240</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3199</span>
+<span class="N">3239</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3275</span>
+<span class="N">3218</span>
 </td>
 <td class="subheader header even tg-label">
 <span class="variable">P-value</span>
@@ -1070,13 +1007,13 @@ FDA Table 2
 <td class="odd">
 </td>
 <td class="odd">
-0.078<sup>1</sup>
+0.375
 </td>
 <td class="odd">
-0.384<sup>1</sup>
+0.288
 </td>
 <td class="odd">
-304
+303
 </td>
 </tr>
 <tr>
@@ -1084,13 +1021,13 @@ FDA Table 2
 <span class="variable">        Incisional</span>
 </td>
 <td class="odd">
-478 (14.8)
+459 (14.2)
 </td>
 <td class="odd">
-421 (13.2)
+471 (14.5)
 </td>
 <td class="odd">
-458 (14.0)
+448 (13.9)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1107,13 +1044,13 @@ FDA Table 2
 <span class="variable">        Parastomal</span>
 </td>
 <td class="odd">
-475 (14.7)
+472 (14.6)
 </td>
 <td class="odd">
-467 (14.6)
+468 (14.4)
 </td>
 <td class="odd">
-445 (13.6)
+491 (15.3)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1130,13 +1067,13 @@ FDA Table 2
 <span class="variable">        Incisional and Parastomal</span>
 </td>
 <td class="odd">
-445 (13.8)
+453 (14.0)
 </td>
 <td class="odd">
-503 (15.7)
+452 (14.0)
 </td>
 <td class="odd">
-454 (13.9)
+424 (13.2)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1153,13 +1090,13 @@ FDA Table 2
 <span class="variable">        Epigastric (primary hernia)</span>
 </td>
 <td class="odd">
-455 (14.1)
+413 (12.7)
 </td>
 <td class="odd">
-448 (14.0)
+470 (14.5)
 </td>
 <td class="odd">
-517 (15.8)
+473 (14.7)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1176,13 +1113,13 @@ FDA Table 2
 <span class="variable">        Umbilical (primary hernia)</span>
 </td>
 <td class="odd">
-446 (13.8)
+494 (15.2)
 </td>
 <td class="odd">
-444 (13.9)
+447 (13.8)
 </td>
 <td class="odd">
-432 (13.2)
+457 (14.2)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1199,13 +1136,13 @@ FDA Table 2
 <span class="variable">        Spigelian (primary hernia)</span>
 </td>
 <td class="odd">
-471 (14.6)
+463 (14.3)
 </td>
 <td class="odd">
-424 (13.3)
+460 (14.2)
 </td>
 <td class="odd">
-495 (15.1)
+460 (14.3)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1222,13 +1159,13 @@ FDA Table 2
 <span class="variable">        Lumbar (primary hernia)</span>
 </td>
 <td class="odd">
-452 (14.0)
+486 (15.0)
 </td>
 <td class="odd">
-492 (15.4)
+471 (14.5)
 </td>
 <td class="odd">
-474 (14.5)
+465 (14.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1251,13 +1188,13 @@ FDA Table 2
 <td class="even">
 </td>
 <td class="even">
-0.013<sup>1</sup>
+0.358
 </td>
 <td class="even">
-0.120<sup>1</sup>
+0.742
 </td>
 <td class="even">
-320
+285
 </td>
 </tr>
 <tr>
@@ -1265,13 +1202,13 @@ FDA Table 2
 <span class="variable">        D</span>
 </td>
 <td class="even">
-1670 (51.7)
+1644 (50.5)
 </td>
 <td class="even">
-1554 (48.6)
+1597 (49.3)
 </td>
 <td class="even">
-1617 (49.8)
+1639 (50.9)
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -1288,13 +1225,13 @@ FDA Table 2
 <span class="variable">        E</span>
 </td>
 <td class="even">
-1561 (48.3)
+1613 (49.5)
 </td>
 <td class="even">
-1645 (51.4)
+1640 (50.7)
 </td>
 <td class="even">
-1633 (50.2)
+1582 (49.1)
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -1317,13 +1254,13 @@ FDA Table 2
 <td class="odd">
 </td>
 <td class="odd">
-0.275<sup>1</sup>
+0.910
 </td>
 <td class="odd">
-0.437<sup>1</sup>
+0.841
 </td>
 <td class="odd">
-100
+92
 </td>
 </tr>
 <tr>
@@ -1331,13 +1268,13 @@ FDA Table 2
 <span class="variable">        0</span>
 </td>
 <td class="odd">
-1204 (36.5)
+1208 (36.5)
 </td>
 <td class="odd">
-1190 (36.5)
+1232 (37.2)
 </td>
 <td class="odd">
-1179 (35.4)
+1226 (37.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1354,13 +1291,13 @@ FDA Table 2
 <span class="variable">        1</span>
 </td>
 <td class="odd">
-1202 (36.4)
+1234 (37.2)
 </td>
 <td class="odd">
-1186 (36.3)
+1243 (37.5)
 </td>
 <td class="odd">
-1291 (38.7)
+1179 (35.9)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1377,13 +1314,13 @@ FDA Table 2
 <span class="variable">        2</span>
 </td>
 <td class="odd">
-629 (19.0)
+610 (18.4)
 </td>
 <td class="odd">
-595 (18.2)
+588 (17.8)
 </td>
 <td class="odd">
-598 (17.9)
+627 (19.1)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1400,13 +1337,13 @@ FDA Table 2
 <span class="variable">        3</span>
 </td>
 <td class="odd">
-212 (6.4)
+199 (6.0)
 </td>
 <td class="odd">
-212 (6.5)
+188 (5.7)
 </td>
 <td class="odd">
-202 (6.1)
+187 (5.7)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1423,13 +1360,13 @@ FDA Table 2
 <span class="variable">        4</span>
 </td>
 <td class="odd">
-45 (1.4)
+53 (1.6)
 </td>
 <td class="odd">
-70 (2.1)
+54 (1.6)
 </td>
 <td class="odd">
-52 (1.6)
+51 (1.6)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1446,13 +1383,13 @@ FDA Table 2
 <span class="variable">        5+</span>
 </td>
 <td class="odd">
-11 (0.3)
+10 (0.3)
 </td>
 <td class="odd">
-11 (0.3)
+7 (0.2)
 </td>
 <td class="odd">
-11 (0.3)
+12 (0.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1475,13 +1412,13 @@ FDA Table 2
 <td class="even">
 </td>
 <td class="even">
-0.908<sup>3</sup>
+0.884
 </td>
 <td class="even">
-0.463<sup>3</sup>
+0.252
 </td>
 <td class="even">
-200
+190
 </td>
 </tr>
 <tr>
@@ -1489,13 +1426,13 @@ FDA Table 2
 <span class="variable">    Mean</span>
 </td>
 <td class="even">
-3.509
+3.489
 </td>
 <td class="even">
-3.506
+3.489
 </td>
 <td class="even">
-3.498
+3.500
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -1512,13 +1449,13 @@ FDA Table 2
 <span class="variable">    Median</span>
 </td>
 <td class="even">
-3.502
+3.492
 </td>
 <td class="even">
-3.506
+3.484
 </td>
 <td class="even">
-3.504
+3.500
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -1535,13 +1472,13 @@ FDA Table 2
 <span class="variable">    SD</span>
 </td>
 <td class="even">
+0.392
+</td>
+<td class="even">
+0.393
+</td>
+<td class="even">
 0.400
-</td>
-<td class="even">
-0.413
-</td>
-<td class="even">
-0.397
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -1666,29 +1603,10 @@ fda &lt;- list(
 
 #tbl3 .subheader em {font-style: normal;}
 
-#tbl3 .header.N:before { content: "(n="; }
-#tbl3 .header.N:after  { content: ")"; }
-
-#tbl3 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl3 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#tbl3 .quantile .q25:before {content: "(";}
-#tbl3 .quantile .q25 {
-  order: 2
-}
-#tbl3 .quantile .q75:before {content: ", ";}
-#tbl3 .quantile .q75 {order: 3}
-#tbl3 .quantile .q75:after {content: ")";}
 #tbl3 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #tbl3 .units {
@@ -1698,23 +1616,6 @@ fda &lt;- list(
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#tbl3 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl3 .fraction .numerator   { order: 1 }
-#tbl3 .fraction .denominator:before {content: "/";}
-#tbl3 .fraction .denominator { order: 2; }
-#tbl3 .fraction .ratio       { order: 3; display: none; }
-#tbl3 .fraction .percentage:before {content: "\00A0(";}
-#tbl3 .fraction .percentage  { order: 4; }
-#tbl3 .fraction .percentage:after  {content: ")";}
-
-#tbl3 .statistics .description {font-style: italic;}
-#tbl3 .statistic {padding-right: 0.5em;}
 
 
 #tbl3 td .align{
@@ -1733,6 +1634,9 @@ fda &lt;- list(
    font-size: 70%;
    text-align: left;
 }
+
+#tbl3 .statistics {font-style: italic;}
+#tbl3 .statistics {padding-right: 0.5em;}
 </style>
 <div class="caption">
 FDA Table 3
@@ -1768,13 +1672,13 @@ FDA Table 3
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3222</span>
+<span class="N">3240</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3199</span>
+<span class="N">3239</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">3275</span>
+<span class="N">3218</span>
 </td>
 <td class="subheader header even tg-label">
 <span class="variable">P-value</span>
@@ -1799,13 +1703,13 @@ FDA Table 3
 <td class="odd">
 </td>
 <td class="odd">
-0.078<sup>1</sup>
+0.375
 </td>
 <td class="odd">
-0.384<sup>1</sup>
+0.288
 </td>
 <td class="odd">
-304
+303
 </td>
 </tr>
 <tr>
@@ -1813,13 +1717,13 @@ FDA Table 3
 <span class="variable">        Incisional</span>
 </td>
 <td class="odd">
-478 (14.8)
+459 (14.2)
 </td>
 <td class="odd">
-421 (13.2)
+471 (14.5)
 </td>
 <td class="odd">
-458 (14.0)
+448 (13.9)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1836,13 +1740,13 @@ FDA Table 3
 <span class="variable">        Parastomal</span>
 </td>
 <td class="odd">
-475 (14.7)
+472 (14.6)
 </td>
 <td class="odd">
-467 (14.6)
+468 (14.4)
 </td>
 <td class="odd">
-445 (13.6)
+491 (15.3)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1859,13 +1763,13 @@ FDA Table 3
 <span class="variable">        Incisional and Parastomal</span>
 </td>
 <td class="odd">
-445 (13.8)
+453 (14.0)
 </td>
 <td class="odd">
-503 (15.7)
+452 (14.0)
 </td>
 <td class="odd">
-454 (13.9)
+424 (13.2)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1882,13 +1786,13 @@ FDA Table 3
 <span class="variable">        Epigastric (primary hernia)</span>
 </td>
 <td class="odd">
-455 (14.1)
+413 (12.7)
 </td>
 <td class="odd">
-448 (14.0)
+470 (14.5)
 </td>
 <td class="odd">
-517 (15.8)
+473 (14.7)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1905,13 +1809,13 @@ FDA Table 3
 <span class="variable">        Umbilical (primary hernia)</span>
 </td>
 <td class="odd">
-446 (13.8)
+494 (15.2)
 </td>
 <td class="odd">
-444 (13.9)
+447 (13.8)
 </td>
 <td class="odd">
-432 (13.2)
+457 (14.2)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1928,13 +1832,13 @@ FDA Table 3
 <span class="variable">        Spigelian (primary hernia)</span>
 </td>
 <td class="odd">
-471 (14.6)
+463 (14.3)
 </td>
 <td class="odd">
-424 (13.3)
+460 (14.2)
 </td>
 <td class="odd">
-495 (15.1)
+460 (14.3)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1951,13 +1855,13 @@ FDA Table 3
 <span class="variable">        Lumbar (primary hernia)</span>
 </td>
 <td class="odd">
-452 (14.0)
+486 (15.0)
 </td>
 <td class="odd">
-492 (15.4)
+471 (14.5)
 </td>
 <td class="odd">
-474 (14.5)
+465 (14.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -1980,13 +1884,13 @@ FDA Table 3
 <td class="even">
 </td>
 <td class="even">
-0.013<sup>1</sup>
+0.358
 </td>
 <td class="even">
-0.120<sup>1</sup>
+0.742
 </td>
 <td class="even">
-320
+285
 </td>
 </tr>
 <tr>
@@ -1994,13 +1898,13 @@ FDA Table 3
 <span class="variable">        D</span>
 </td>
 <td class="even">
-1670 (51.7)
+1644 (50.5)
 </td>
 <td class="even">
-1554 (48.6)
+1597 (49.3)
 </td>
 <td class="even">
-1617 (49.8)
+1639 (50.9)
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -2017,13 +1921,13 @@ FDA Table 3
 <span class="variable">        E</span>
 </td>
 <td class="even">
-1561 (48.3)
+1613 (49.5)
 </td>
 <td class="even">
-1645 (51.4)
+1640 (50.7)
 </td>
 <td class="even">
-1633 (50.2)
+1582 (49.1)
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -2046,13 +1950,13 @@ FDA Table 3
 <td class="odd">
 </td>
 <td class="odd">
-0.275<sup>1</sup>
+0.910
 </td>
 <td class="odd">
-0.437<sup>1</sup>
+0.841
 </td>
 <td class="odd">
-100
+92
 </td>
 </tr>
 <tr>
@@ -2060,13 +1964,13 @@ FDA Table 3
 <span class="variable">        0</span>
 </td>
 <td class="odd">
-1204 (36.5)
+1208 (36.5)
 </td>
 <td class="odd">
-1190 (36.5)
+1232 (37.2)
 </td>
 <td class="odd">
-1179 (35.4)
+1226 (37.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2083,13 +1987,13 @@ FDA Table 3
 <span class="variable">        1</span>
 </td>
 <td class="odd">
-1202 (36.4)
+1234 (37.2)
 </td>
 <td class="odd">
-1186 (36.3)
+1243 (37.5)
 </td>
 <td class="odd">
-1291 (38.7)
+1179 (35.9)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2106,13 +2010,13 @@ FDA Table 3
 <span class="variable">        2</span>
 </td>
 <td class="odd">
-629 (19.0)
+610 (18.4)
 </td>
 <td class="odd">
-595 (18.2)
+588 (17.8)
 </td>
 <td class="odd">
-598 (17.9)
+627 (19.1)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2129,13 +2033,13 @@ FDA Table 3
 <span class="variable">        3</span>
 </td>
 <td class="odd">
-212 (6.4)
+199 (6.0)
 </td>
 <td class="odd">
-212 (6.5)
+188 (5.7)
 </td>
 <td class="odd">
-202 (6.1)
+187 (5.7)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2152,13 +2056,13 @@ FDA Table 3
 <span class="variable">        4</span>
 </td>
 <td class="odd">
-45 (1.4)
+53 (1.6)
 </td>
 <td class="odd">
-70 (2.1)
+54 (1.6)
 </td>
 <td class="odd">
-52 (1.6)
+51 (1.6)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2175,13 +2079,13 @@ FDA Table 3
 <span class="variable">        5+</span>
 </td>
 <td class="odd">
-11 (0.3)
+10 (0.3)
 </td>
 <td class="odd">
-11 (0.3)
+7 (0.2)
 </td>
 <td class="odd">
-11 (0.3)
+12 (0.4)
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2204,13 +2108,13 @@ FDA Table 3
 <td class="even">
 </td>
 <td class="even">
-0.908<sup>3</sup>
+0.884
 </td>
 <td class="even">
-0.463<sup>3</sup>
+0.252
 </td>
 <td class="even">
-200
+190
 </td>
 </tr>
 <tr>
@@ -2218,13 +2122,13 @@ FDA Table 3
 <span class="variable">    Mean</span>
 </td>
 <td class="even">
-3.509
+3.489
 </td>
 <td class="even">
-3.506
+3.489
 </td>
 <td class="even">
-3.498
+3.500
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -2241,13 +2145,13 @@ FDA Table 3
 <span class="variable">    Median</span>
 </td>
 <td class="even">
-3.502
+3.492
 </td>
 <td class="even">
-3.506
+3.484
 </td>
 <td class="even">
-3.504
+3.500
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -2264,13 +2168,13 @@ FDA Table 3
 <span class="variable">    SD</span>
 </td>
 <td class="even">
+0.392
+</td>
+<td class="even">
+0.393
+</td>
+<td class="even">
 0.400
-</td>
-<td class="even">
-0.413
-</td>
-<td class="even">
-0.397
 </td>
 <td class="even tg-label">
 <span class="variable"></span>
@@ -2284,7 +2188,7 @@ FDA Table 3
 </tr>
 <tr>
 <td class="header odd tg-label">
-<span class="variable">Reported Side Effects N=4881</span>
+<span class="variable">Reported Side Effects N=4958</span>
 </td>
 <td class="odd">
 </td>
@@ -2293,13 +2197,13 @@ FDA Table 3
 <td class="odd">
 </td>
 <td class="odd">
-0.664<sup>1</sup>
+0.903
 </td>
 <td class="odd">
-0.850<sup>1</sup>
+0.934
 </td>
 <td class="odd">
-191
+163
 </td>
 </tr>
 <tr>
@@ -2307,13 +2211,13 @@ FDA Table 3
 <span class="variable">        Akward Elbows</span>
 </td>
 <td class="odd">
-806
+825
 </td>
 <td class="odd">
-803
+829
 </td>
 <td class="odd">
-843
+835
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2330,79 +2234,10 @@ FDA Table 3
 <span class="variable">        Beiber Fever</span>
 </td>
 <td class="odd">
-783
+829
 </td>
 <td class="odd">
-790
-</td>
-<td class="odd">
-801
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-</tr>
-<tr>
-<td class="subheader header odd tg-label">
-<span class="variable">        Breaking Voice</span>
-</td>
-<td class="odd">
-822
-</td>
-<td class="odd">
-785
-</td>
-<td class="odd">
-820
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-</tr>
-<tr>
-<td class="subheader header odd tg-label">
-<span class="variable">        Excessive Sweating</span>
-</td>
-<td class="odd">
-848
-</td>
-<td class="odd">
-770
-</td>
-<td class="odd">
-824
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-<td class="odd tg-label">
-<span class="variable"></span>
-</td>
-</tr>
-<tr>
-<td class="subheader header odd tg-label">
-<span class="variable">        Hairy Navel</span>
-</td>
-<td class="odd">
-811
-</td>
-<td class="odd">
-787
+827
 </td>
 <td class="odd">
 806
@@ -2419,16 +2254,85 @@ FDA Table 3
 </tr>
 <tr>
 <td class="subheader header odd tg-label">
+<span class="variable">        Breaking Voice</span>
+</td>
+<td class="odd">
+844
+</td>
+<td class="odd">
+802
+</td>
+<td class="odd">
+825
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Excessive Sweating</span>
+</td>
+<td class="odd">
+821
+</td>
+<td class="odd">
+805
+</td>
+<td class="odd">
+814
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
+<span class="variable">        Hairy Navel</span>
+</td>
+<td class="odd">
+836
+</td>
+<td class="odd">
+805
+</td>
+<td class="odd">
+792
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+<td class="odd tg-label">
+<span class="variable"></span>
+</td>
+</tr>
+<tr>
+<td class="subheader header odd tg-label">
 <span class="variable">        Repetative Uttering of Wut?</span>
 </td>
 <td class="odd">
-819
+844
 </td>
 <td class="odd">
-801
+831
 </td>
 <td class="odd">
-818
+837
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2445,13 +2349,13 @@ FDA Table 3
 <span class="variable">        Swiftaphila</span>
 </td>
 <td class="odd">
-798
+801
 </td>
 <td class="odd">
-836
+835
 </td>
 <td class="odd">
-816
+814
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2468,13 +2372,13 @@ FDA Table 3
 <span class="variable">        Veruca</span>
 </td>
 <td class="odd">
-818
+837
 </td>
 <td class="odd">
-792
+796
 </td>
 <td class="odd">
-765
+784
 </td>
 <td class="odd tg-label">
 <span class="variable"></span>
@@ -2789,29 +2693,10 @@ irr.footnote=&quot;^1^IRR was calculated by the number of adverse events via Poi
 
 #tbl4 .subheader em {font-style: normal;}
 
-#tbl4 .header.N:before { content: "(n="; }
-#tbl4 .header.N:after  { content: ")"; }
-
-#tbl4 .quantile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl4 .quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-#tbl4 .quantile .q25:before {content: "(";}
-#tbl4 .quantile .q25 {
-  order: 2
-}
-#tbl4 .quantile .q75:before {content: ", ";}
-#tbl4 .quantile .q75 {order: 3}
-#tbl4 .quantile .q75:after {content: ")";}
 #tbl4 tbody .variable {
     float:      left;
     text-align: left;
+    padding-left: 0.5em;
 }
 
 #tbl4 .units {
@@ -2821,23 +2706,6 @@ irr.footnote=&quot;^1^IRR was calculated by the number of adverse events via Poi
     padding-left: 1em;
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
-
-#tbl4 .fraction {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-#tbl4 .fraction .numerator   { order: 1 }
-#tbl4 .fraction .denominator:before {content: "/";}
-#tbl4 .fraction .denominator { order: 2; }
-#tbl4 .fraction .ratio       { order: 3; display: none; }
-#tbl4 .fraction .percentage:before {content: "\00A0(";}
-#tbl4 .fraction .percentage  { order: 4; }
-#tbl4 .fraction .percentage:after  {content: ")";}
-
-#tbl4 .statistics .description {font-style: italic;}
-#tbl4 .statistic {padding-right: 0.5em;}
 
 
 #tbl4 td .align{
@@ -2856,6 +2724,9 @@ irr.footnote=&quot;^1^IRR was calculated by the number of adverse events via Poi
    font-size: 70%;
    text-align: left;
 }
+
+#tbl4 .statistics {font-style: italic;}
+#tbl4 .statistics {padding-right: 0.5em;}
 </style>
 <div class="caption">
 FDA IRR Table
@@ -2932,7 +2803,7 @@ FDA IRR Table
 <td class="odd">
 </td>
 <td class="odd">
-3.01 (2.08–4.37)
+4.11 (2.83–5.96)
 </td>
 <td class="odd">
 &lt;0.001
@@ -2943,19 +2814,19 @@ FDA IRR Table
 <span class="variable">    F</span>
 </td>
 <td class="odd">
-499
+502
 </td>
 <td class="odd">
-42
+35
 </td>
 <td class="odd">
-44
+35
 </td>
 <td class="odd">
-132.34
+141.41
 </td>
 <td class="odd">
-33.25
+24.75
 </td>
 <td class="odd">
 </td>
@@ -2967,19 +2838,19 @@ FDA IRR Table
 <span class="variable">    M</span>
 </td>
 <td class="odd">
-501
+498
 </td>
 <td class="odd">
-117
+127
 </td>
 <td class="odd">
 145
 </td>
 <td class="odd">
-144.70
+142.63
 </td>
 <td class="odd">
-100.21
+101.66
 </td>
 <td class="odd">
 </td>
@@ -3001,10 +2872,10 @@ FDA IRR Table
 <td class="even">
 </td>
 <td class="even">
-0.88 (0.58–1.33)
+1.05 (0.70–1.59)
 </td>
 <td class="even">
-0.540
+0.805
 </td>
 </tr>
 <tr>
@@ -3012,19 +2883,19 @@ FDA IRR Table
 <span class="variable">    F</span>
 </td>
 <td class="even">
-499
+502
 </td>
 <td class="even">
-50
+46
 </td>
 <td class="even">
-52
+48
 </td>
 <td class="even">
-132.34
+141.41
 </td>
 <td class="even">
-39.29
+33.94
 </td>
 <td class="even">
 </td>
@@ -3036,19 +2907,19 @@ FDA IRR Table
 <span class="variable">    M</span>
 </td>
 <td class="even">
-501
+498
 </td>
 <td class="even">
-46
+48
 </td>
 <td class="even">
-50
+51
 </td>
 <td class="even">
-144.70
+142.63
 </td>
 <td class="even">
-34.55
+35.76
 </td>
 <td class="even">
 </td>

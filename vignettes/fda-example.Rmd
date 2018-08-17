@@ -1,12 +1,25 @@
 ---
 title: "FDA Work Example"
 author: "Shawn Garbett"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_document
-vignette: >
+date: '`r Sys.Date()`'
+output:
+  html_document: null
+  pdf_document: null
+header-includes:
+- \usepackage[LGR,T1]{fontenc}
+- \usepackage[utf8]{inputenc}
+- \usepackage{textgreek}
+- \usepackage{float}
+- \usepackage[x11names,dvipsnames,table]{xcolor}
+- \usepackage{boldline}
+- \usepackage{colortbl}
+- \usepackage{hhline}
+- \pdfminorversion=5
+- \pdfcompresslevel=9
+- \pdfobjcompresslevel=2
+vignette: |
   %\VignetteIndexEntry{FDA Work Examples}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}

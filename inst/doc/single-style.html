@@ -11,7 +11,7 @@
 
 <meta name="author" content="Shawn Garbett" />
 
-<meta name="date" content="2018-06-15" />
+<meta name="date" content="2018-08-17" />
 
 <title>Global Style for Rmd Example</title>
 
@@ -92,6 +92,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -121,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Global Style for Rmd Example</h1>
 <h4 class="author"><em>Shawn Garbett</em></h4>
-<h4 class="date"><em>2018-06-15</em></h4>
+<h4 class="date"><em>2018-08-17</em></h4>
 
 </div>
 
@@ -205,24 +208,7 @@ body .figbody {
 
 .subheader em {font-style: normal;}
 
-.header.N:before { content: "(n="; }
-.header.N:after  { content: ")"; }
 
-.quantile {
-  display: flex;
-  flex-direction: row;
-}
-.quantile .q50 {
-  order: 1;
-  padding-right: 0.5em;
-}
-.quantile .q25:before {content: "(";}
-.quantile .q25 {
-  order: 2
-}
-.quantile .q75:before {content: ",";}
-.quantile .q75 {order: 3}
-.quantile .q75:after {content: ")";}
 tbody .variable {
     float:      left;
     text-align: left;
@@ -236,16 +222,6 @@ tbody .variable {
     vertical-align: text-bottom; /* FIXME why doesn't this work */
 }
 
-.fraction {
-  display: flex;
-  flex-direction: row;
-}
-.fraction .numerator   { order: 1 }
-.fraction .denominator { order: 2; display: none; }
-.fraction .ratio       { order: 3; display: none; }
-.fraction .percentage  { order: 4; }
-.fraction .percentage:before {content: "\00A0(";}
-.fraction .percentage:after {content: "%)";}
 
 .statistics .description {font-style: italic;}
 .statistic {padding-right: 0.5em;}
@@ -321,8 +297,78 @@ td .align{
 ## 5                       no edema    143
 ## 6                       no edema     50</code></pre>
 <pre class="r"><code>tangram(&quot;drug ~ bili[2] + albumin + stage::Categorical + protime + sex + age + spiders&quot;,
-        pbc, &quot;tbl2&quot;, caption=&quot;Hmisc::PBC&quot;, style=NA)</code></pre>
+        pbc, &quot;tbl2&quot;, caption=&quot;Hmisc::PBC&quot;)</code></pre>
 <div id="tbl2" class="figure">
+<style>
+
+#tbl2 .figure  {  font-family: "Computer Modern Serif", serif;
+            margin-left:  auto;
+                  margin-right: auto;
+                  font-size: 66%;
+  -webkit-print-color-adjust: exact;
+         }
+
+#tbl2 .caption { text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             padding: 1.5em 0 1.5em 0;
+           }
+
+#tbl2 .figbody {
+               text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             border-style: double none solid none;
+             border-width: 3pt 0 1pt 0;
+             width:        100%;
+         }
+
+#tbl2 .figbody td {
+                      padding: 0.2em 0.5em 0.2em 0.5em;
+            }
+
+#tbl2 .tangram { border-spacing: 0; }
+
+#tbl2 thead td {text-align: center;}
+
+#tbl2 .subheader    { font-size: smaller; }
+
+#tbl2 .subheader tr { border-collapse: collapse; }
+#tbl2 .subheader td { border-bottom: 1pt solid black; }
+
+#tbl2 tbody .variable {
+    float:      left;
+    text-align: left;
+}
+
+#tbl2 .units {
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+#tbl2 thead .header {font-weight: bold;}
+#tbl2 .header.N  { font-style: italic; }
+
+#tbl2 .nobr {
+   white-space: nowrap;
+}
+
+#tbl2 .supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: x-small;
+   text-align: left;
+}
+
+#tbl2 .sup { font-size: x-small; vertical-align: super; }
+#tbl2 .sub { font-size: x-small; vertical-align: sub;}
+
+</style>
 <div class="caption">
 Hmisc::PBC
 </div>
@@ -357,13 +403,13 @@ Hmisc::PBC
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">154</span>
+<span class="N">(N=154)</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">158</span>
+<span class="N">(N=158)</span>
 </td>
 <td class="subheader header even data N">
-<span class="N">106</span>
+<span class="N">(N=106)</span>
 </td>
 <td class="subheader header even tg-label">
 <span class="variable"></span>
@@ -379,16 +425,16 @@ Hmisc::PBC
 <span class="N">418</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.30</span><span class="q75">3.60</span>
+0.70 <strong>1.30</strong> 3.60
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">0.80</span><span class="q50">1.40</span><span class="q75">3.22</span>
+0.80 <strong>1.40</strong> 3.22
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">0.70</span><span class="q50">1.40</span><span class="q75">3.12</span>
+0.70 <strong>1.40</strong> 3.12
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>0.03,</span><span class="pvalue"><span class="description">P = </span>0.972<sup>1</sup></span>
+<td class="statistics odd">
+F<sub>2,415</sub>=0.03, P=0.972<sup>1</sup>
 </td>
 </tr>
 <tr>
@@ -399,16 +445,16 @@ Hmisc::PBC
 <span class="N">418</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">3.34</span><span class="q50">3.54</span><span class="q75">3.78</span>
+3.34 <strong>3.54</strong> 3.78
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">3.21</span><span class="q50">3.56</span><span class="q75">3.83</span>
+3.21 <strong>3.56</strong> 3.83
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">3.12</span><span class="q50">3.47</span><span class="q75">3.73</span>
+3.12 <strong>3.47</strong> 3.73
 </td>
-<td class="even data statistics">
-<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>2.13,</span><span class="pvalue"><span class="description">P = </span>0.120<sup>1</sup></span>
+<td class="statistics even">
+F<sub>2,415</sub>=2.13, P=0.120<sup>1</sup>
 </td>
 </tr>
 <tr>
@@ -424,8 +470,8 @@ Hmisc::PBC
 </td>
 <td class="odd">
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />6</span></span> = </span>5.33,</span><span class="pvalue"><span class="description">P = </span>0.502</span><sup>2</sup>
+<td class="statistics odd">
+Χ<span class="supsub">2<br />6</span>=5.33, P=0.502<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -436,13 +482,13 @@ Hmisc::PBC
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>026</span><span class="percentage">2.597</span><span class="numerator"> 4</span><span class="denominator">154</span></span>
+0.026 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 4</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>076</span><span class="percentage">7.595</span><span class="numerator"> 12</span><span class="denominator">158</span></span>
+0.076 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 12</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>050</span><span class="percentage">5.000</span><span class="numerator"> 5</span><span class="denominator">100</span></span>
+0.050 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 5</span></span>
 </td>
 <td class="odd">
 </td>
@@ -455,13 +501,13 @@ Hmisc::PBC
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>208</span><span class="percentage">20.779</span><span class="numerator"> 32</span><span class="denominator">154</span></span>
+0.208 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 32</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>222</span><span class="percentage">22.152</span><span class="numerator"> 35</span><span class="denominator">158</span></span>
+0.222 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 35</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>250</span><span class="percentage">25.000</span><span class="numerator"> 25</span><span class="denominator">100</span></span>
+0.250 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 25</span></span>
 </td>
 <td class="odd">
 </td>
@@ -474,13 +520,13 @@ Hmisc::PBC
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>416</span><span class="percentage">41.558</span><span class="numerator"> 64</span><span class="denominator">154</span></span>
+0.416 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 64</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>354</span><span class="percentage">35.443</span><span class="numerator"> 56</span><span class="denominator">158</span></span>
+0.354 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 56</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+0.350 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 35</span></span>
 </td>
 <td class="odd">
 </td>
@@ -493,13 +539,13 @@ Hmisc::PBC
 <span class="variable"></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>351</span><span class="percentage">35.065</span><span class="numerator"> 54</span><span class="denominator">154</span></span>
+0.351 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 54</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>348</span><span class="percentage">34.810</span><span class="numerator"> 55</span><span class="denominator">158</span></span>
+0.348 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 55</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>350</span><span class="percentage">35.000</span><span class="numerator"> 35</span><span class="denominator">100</span></span>
+0.350 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 35</span></span>
 </td>
 <td class="odd">
 </td>
@@ -512,16 +558,16 @@ Hmisc::PBC
 <span class="N">416</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.4</span>
+10.0 <strong>10.6</strong> 11.4
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">10.0</span><span class="q50">10.6</span><span class="q75">11.0</span>
+10.0 <strong>10.6</strong> 11.0
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">10.1</span><span class="q50">10.6</span><span class="q75">11.0</span>
+10.1 <strong>10.6</strong> 11.0
 </td>
-<td class="even data statistics">
-<span class="statistic"><span class="description">F<sub>2,413</sub> = </span>0.23,</span><span class="pvalue"><span class="description">P = </span>0.795<sup>1</sup></span>
+<td class="statistics even">
+F<sub>2,413</sub>=0.23, P=0.795<sup>1</sup>
 </td>
 </tr>
 <tr>
@@ -532,16 +578,16 @@ Hmisc::PBC
 418
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>903</span><span class="percentage">90.260</span><span class="numerator">139</span><span class="denominator">154</span></span>
+0.903 <span class="fraction"><span class="numerator"> </span><span class="denominator">139</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>867</span><span class="percentage">86.709</span><span class="numerator">137</span><span class="denominator">158</span></span>
+0.867 <span class="fraction"><span class="numerator"> </span><span class="denominator">137</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>925</span><span class="percentage">92.453</span><span class="numerator"> 98</span><span class="denominator">106</span></span>
+0.925 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 98</span></span>
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />2</span></span> = </span>2.38,</span><span class="pvalue"><span class="description">P = </span>0.304</span><sup>2</sup>
+<td class="statistics odd">
+Χ<span class="supsub">2<br />2</span>=2.38, P=0.304<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -552,16 +598,16 @@ Hmisc::PBC
 <span class="N">418</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">41.4</span><span class="q50">48.1</span><span class="q75">55.8</span>
+41.4 <strong>48.1</strong> 55.8
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">42.9</span><span class="q50">51.9</span><span class="q75">59.0</span>
+42.9 <strong>51.9</strong> 59.0
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">46.0</span><span class="q50">53.0</span><span class="q75">61.1</span>
+46.0 <strong>53.0</strong> 61.1
 </td>
-<td class="even data statistics">
-<span class="statistic"><span class="description">F<sub>2,415</sub> = </span>6.10,</span><span class="pvalue"><span class="description">P = </span>0.002<sup>1</sup></span>
+<td class="statistics even">
+F<sub>2,415</sub>=6.10, P=0.002<sup>1</sup>
 </td>
 </tr>
 <tr>
@@ -572,15 +618,15 @@ Hmisc::PBC
 312
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>292</span><span class="percentage">29.221</span><span class="numerator"> 45</span><span class="denominator">154</span></span>
+0.292 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 45</span></span>
 </td>
 <td class="odd">
-<span class="odd fraction"><span class="ratio">0<span class="align">.</span>285</span><span class="percentage">28.481</span><span class="numerator"> 45</span><span class="denominator">158</span></span>
+0.285 <span class="fraction"><span class="numerator"> </span><span class="denominator"> 45</span></span>
 </td>
 <td class="odd">
 </td>
-<td class="odd data statistics">
-<span class="statistic"><span class="description"><span class="nobr">χ<span class="supsub">2<br />1</span></span> = </span>0.02,</span><span class="pvalue"><span class="description">P = </span>0.885</span><sup>2</sup>
+<td class="statistics odd">
+Χ<span class="supsub">2<br />1</span>=0.02, P=0.885<sup>2</sup>
 </td>
 </tr>
 </tbody>
@@ -602,9 +648,78 @@ attr(y, &quot;label&quot;) &lt;- &quot;Global score, 12m&quot;
 tangram(1 ~ x+y,
         data.frame(x=x, y=y),
         after=hmisc_intercept_cleanup,
-        caption=&quot;Intercept&quot;, id=&quot;tbl5&quot;,
-        style=NA)</code></pre>
+        caption=&quot;Intercept&quot;, id=&quot;tbl5&quot;)</code></pre>
 <div id="tbl5" class="figure">
+<style>
+
+#tbl5 .figure  {  font-family: "Computer Modern Serif", serif;
+            margin-left:  auto;
+                  margin-right: auto;
+                  font-size: 66%;
+  -webkit-print-color-adjust: exact;
+         }
+
+#tbl5 .caption { text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             padding: 1.5em 0 1.5em 0;
+           }
+
+#tbl5 .figbody {
+               text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             border-style: double none solid none;
+             border-width: 3pt 0 1pt 0;
+             width:        100%;
+         }
+
+#tbl5 .figbody td {
+                      padding: 0.2em 0.5em 0.2em 0.5em;
+            }
+
+#tbl5 .tangram { border-spacing: 0; }
+
+#tbl5 thead td {text-align: center;}
+
+#tbl5 .subheader    { font-size: smaller; }
+
+#tbl5 .subheader tr { border-collapse: collapse; }
+#tbl5 .subheader td { border-bottom: 1pt solid black; }
+
+#tbl5 tbody .variable {
+    float:      left;
+    text-align: left;
+}
+
+#tbl5 .units {
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+#tbl5 thead .header {font-weight: bold;}
+#tbl5 .header.N  { font-style: italic; }
+
+#tbl5 .nobr {
+   white-space: nowrap;
+}
+
+#tbl5 .supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: x-small;
+   text-align: left;
+}
+
+#tbl5 .sup { font-size: x-small; vertical-align: super; }
+#tbl5 .sub { font-size: x-small; vertical-align: sub;}
+
+</style>
 <div class="caption">
 Intercept
 </div>
@@ -632,7 +747,7 @@ Intercept
 <span class="N">375</span>
 </td>
 <td class="odd">
-<span class="odd data quantile"><span class="q25">73</span><span class="q50">79</span><span class="q75">85</span>
+73 <strong>79</strong> 85
 </td>
 </tr>
 <tr>
@@ -643,7 +758,7 @@ Intercept
 <span class="N">374</span>
 </td>
 <td class="even">
-<span class="even data quantile"><span class="q25">73</span><span class="q50">80</span><span class="q75">85</span>
+73 <strong>80</strong> 85
 </td>
 </tr>
 </tbody>
