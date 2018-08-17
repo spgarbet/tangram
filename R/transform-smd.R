@@ -15,7 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#' Create an SMD mean and standard deviation cell
+#'
+#' Create an SMD mean and standard deviation cell. In this case it prints the
+#' mean with the standard deviation in parenthesis
+#'
+#' @param x vector; variable to evaluate with smd
+#' @param format formatting to apply to result
+#' @param ... additional arguments to pass to cell generation
+#' @return a tangram cell
 #' @export
+#' @importFrom stringr str_sub
 smd_meansd <- function(x, format, ...)
 {
   if(sum(!is.na(x))==0) return(cell("", ...))
@@ -26,7 +36,20 @@ smd_meansd <- function(x, format, ...)
        ...)
 }
 
+#' Create an SMD distance cell
+#'
+#' Create an SMD distance cell. It calls the smd function then formats the result.
+#' If the result rounds to all zeros then it appends a less than sign and
+#' bumps the least significant digit to one.
+#'
+#' @param x vector; variable to evaluate with smd
+#' @param group factor; A grouping to apply. Must have 2 levels.
+#' @param format formatting to apply to result
+#' @param weight numeric; Weighting to apply to computation. Defaults to NULL.
+#' @param ... additional arguments to pass to cell generation
+#' @return a tangram cell
 #' @export
+#' @importFrom stringr str_sub
 smd_dist <- function(x, group, format, weight=NULL, ...)
 {
   if(sum(!is.na(x))==0 || sum(!is.na(x))==0) return(cell("NA", ...))
@@ -42,6 +65,16 @@ smd_dist <- function(x, group, format, weight=NULL, ...)
   cell(paste0("<", substr(d, 1, nchar(d)-1), "1"), ...)
 }
 
+#' Create a fraction cell in the smd transform
+#'
+#' Create a fraction cell in the smd transform. In this instance it
+#' print the numerator followed by percentage in parenthesis.
+#'
+#' @param num numerator of fraction
+#' @param den denominator of fraction
+#' @param format formatting to apply to result
+#' @param ... additional arguments to pass to cell generation
+#' @return a tangram cell
 #' @export
 #' @importFrom stringr str_sub
 smd_fraction <- function(num, den, format, ...)
@@ -66,7 +99,9 @@ smd_fraction <- function(num, den, format, ...)
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
 #' @param cell_style list; cell styling functions
+#' @param style character; chosen styling to final table
 #' @param smdformat numeric, character or function; A formatting directive to be applied to smd
+#' @param weight numeric; Vector of weights to apply to data when computing SMD
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -109,7 +144,22 @@ smd_compare <- function(table,
   add_col(cell_style[['smd']](datar, datac, smdformat, weight))
 }
 
+#' Create a contingency table with SMD given a row column of a formula
+#'
+#' Create a contingency table with SMD given a row column of a formula
+#'
+#' @param table The tablebuilder object
+#' @param row The row node from the parser of the formula
+#' @param column The column node provided by the parser of the formula
+#' @param cell_style A list of all individual cell stylings to apply
+#' @param style The global style to apply.
+#' @param smdformat The format command to apply to smd
+#' @param collapse_single Should single factor variables be collapsed
+#' @param weight Any weighting to apply to data for computation of SMD
+#' @param ... Additional arguments to provide cell generation functions
+#' @return The resulting sub table constructed
 #' @export
+#' @importFrom stringr str_sub
 smd_contingency <- function(table,
                             row,
                             column,

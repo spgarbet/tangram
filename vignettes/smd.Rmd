@@ -3,8 +3,8 @@ title: "Standardized Mean Differences (SMD)"
 author: "Shawn Garbett"
 date: '`r Sys.Date()`'
 output:
-  html_document: null
   pdf_document: null
+  html_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}
 - \usepackage[utf8]{inputenc}
@@ -43,7 +43,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Purpose
 
-To create a SMD statistic in the style of tableone inside of tangram. See '[Using standardized mean differences](https://cran.r-project.org/web/packages/tableone/vignettes/smd.html)' by Kazuki Yoshida for original work and description of method. This is a reproduction of the original document using `tangram`.
+To create a SMD statistic in the style of tableone inside of tangram. See '[Using standardized mean differences](https://CRAN.R-project.org/package=tableone/vignettes/smd.html)' by Kazuki Yoshida for original work and description of method. This is a reproduction of the original document using `tangram`.
 
 ## Load Packages and Data
 

@@ -16,7 +16,11 @@ smd_compare(table, row, column, cell_style, style, smdformat = NULL,
 
 \item{cell_style}{list; cell styling functions}
 
+\item{style}{character; chosen styling to final table}
+
 \item{smdformat}{numeric, character or function; A formatting directive to be applied to smd}
+
+\item{weight}{numeric; Vector of weights to apply to data when computing SMD}
 
 \item{...}{absorbs additional arugments. Unused at present.}
 }
