@@ -104,7 +104,7 @@ listMatch <- Match(Tr       = (rhc$swang1 == "RHC"),      # Need to be in 0,1
 ## Extract matched data
 rhcMatched <- rhc[unlist(listMatch[c("index.treated","index.control")]), ]
 
-tangram(formula, rhcMatched, "matched", smd, "Propesnity Score Matched", style="nejm", pct_width=0.5)
+tangram(formula, rhcMatched, "matched", smd, "Propensity Score Matched", style="nejm", pct_width=0.5)
 ```
 
 ## Propensity Score Matching Weight
