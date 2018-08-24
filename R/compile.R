@@ -391,6 +391,17 @@ tangram.formula <- function(x, data, id=NULL, transforms=NULL, caption=NULL, sty
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
   {
+    if(length(methods::formalArgs(transforms)) == 2)
+    {
+      f <- transforms
+      transforms <- function(table, row, column, cell_style, ...) {
+          table                            %>%
+          col_header(derive_label(column)) %>%
+          row_header(derive_label(row))    %>%
+          add_row(f(row$data, column$data))
+      }
+    }
+
     transforms <- list(
       Type = function(x) {"Data"}, # Short circuit data type determination
       Data = list(
@@ -400,7 +411,8 @@ tangram.formula <- function(x, data, id=NULL, transforms=NULL, caption=NULL, sty
       ASTMultiply = list(
         Data = transforms,
         ASTMultiply = transforms
-      )
+      ),
+      Cell = NULL
     )
   }
 
