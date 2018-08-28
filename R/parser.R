@@ -108,23 +108,17 @@ ASTVariable <- R6Class("ASTVariable",
     },
     reduce   = function(d)
     {
-      if(is.null(d))
+      if(is.null(d) || !(self$value %in% names(d)))
       {
         self$data <- get(self$value) # Pull from current environment
+        if(is.null(self$data)) stop(paste(self$value, "not found in supplied data or environment"))
         if(is.null(attr(self$data, "label"))) attr(self$data, "label") <- self$value
         return(self)
       }
 
       if(self$value == "1")
       {
-        if(is.null(d))
-        {
-          # This is a problem!
-          stop("Not implemented intercepts for data referenced from environment")
-        } else
-        {
-          self$data  <- factor(rep(1, length(d[,1])), labels="All")
-        }
+        self$data  <- factor(rep(1, length(d[,1])), labels="All")
         attr(self$data, "label") <- "All"
         return(self)
       }
