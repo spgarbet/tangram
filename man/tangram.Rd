@@ -24,9 +24,9 @@ tangram(x, ...)
   caption = NULL, style = "hmisc", footnote = NULL, after = NA,
   quant = seq(0, 1, 0.25), msd = TRUE, as.character = NULL, ...)
 
-\method{tangram}{formula}(x, data, id = NULL, transforms = NULL,
-  caption = NULL, style = "hmisc", footnote = NULL, after = NA,
-  digits = NA, ...)
+\method{tangram}{formula}(x, data = NULL, id = NULL,
+  transforms = NULL, caption = NULL, style = "hmisc",
+  footnote = NULL, after = NA, digits = NA, ...)
 
 \method{tangram}{character}(x, ...)
 
