@@ -498,7 +498,68 @@ tangram.table <- function(x, id=NULL, ...)
 
 #' @rdname tangram
 #' @export
+tangram.matrix <- function(x, ...) tangram(as.data.frame(x), as.character=TRUE, ...)
+
+#' @rdname tangram
+#' @export
 tangram.tbl_df <- function(x, ...)
 {
   tangram(as.data.frame(x), as.character=TRUE, ...)
+}
+
+#' @rdname tangram
+#' @export
+tangram.lm <- function(x, ...) tangram(summary(x), ...)
+
+#' @rdname tangram
+#' @export
+tangram.summary.lm <- function(x, id=NULL, format=NULL, pformat=NULL, tformat=NULL, ...)
+{
+  if(is.null(pformat)) pformat <- "%1.3f"
+  if(is.null(tformat)) tformat <- 3
+  y <- as.data.frame(x$coefficients)
+  names(y) <- c("Estimate", "Std Error", "*t* statistic", "*p*-value")
+
+  y[,4] <- hmisc_p(y[,4], pformat, include_p=FALSE)
+
+  if(is.null(format))
+  {
+    format  <- if(rownames(y)[1] == "(Intercept)")
+                  format_guess(y[2:length(y[,1]),1]) else
+                  format_guess(y[,1])
+  }
+
+  y[,1] <- render_f(y[,1], format)
+  y[,2] <- render_f(y[,2], format)
+  y[,3] <- render_f(y[,3], tformat)
+
+  m <- tangram(y, id=id, as.character=TRUE, ...)
+
+  nr <- length(m) + 1
+
+  m[[nr]] <- list(cell(""), cell(""), cell(""), cell(""), cell(""))
+
+  m[[nr+1]] <- list(
+    cell_header("Residual Std Err"),
+    cell(paste0(render_f(x$sigma, 3), " on ", x$df[2], " dof")),
+    cell(""), cell(""), cell(""))
+
+  m[[nr+2]] <- list(
+    cell_header("Multiple R^2^"),
+    cell(paste0(render_f(x$r.squared, 3))),
+    cell_header("Adj R^2^"),
+    cell(paste0(render_f(x$adj.r.squared, 3))),
+    cell(""))
+
+  m[[nr+3]] <- list(
+    cell_header(paste0("F~", x$fstatistic[2], "," , x$fstatistic[3], "~")),
+    cell(render_f(unname(x$fstatistic[1]), 3)),
+    cell(""), cell(""), cell(""))
+
+  m[[nr+4]] <- list(
+    cell_header("*p*-value"),
+    cell(hmisc_p(pf(x$fstatistic[1], x$fstatistic[2], x$fstatistic[3], lower.tail=FALSE), pformat, include_p=FALSE)),
+    cell(""), cell(""), cell(""))
+
+  m
 }

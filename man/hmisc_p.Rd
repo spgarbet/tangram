@@ -4,12 +4,14 @@
 \alias{hmisc_p}
 \title{A function to format p values intelligently}
 \usage{
-hmisc_p(p, pformat = "\%1.3f")
+hmisc_p(p, pformat = "\%1.3f", include_p = TRUE)
 }
 \arguments{
 \item{p}{numeric; p-value to format}
 
 \item{pformat}{numeric or character; Significant digits or fmt to pass to sprintf}
+
+\item{include_p}{include the leading P on the output string}
 }
 \value{
 A formatted string of the p-value

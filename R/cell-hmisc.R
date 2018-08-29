@@ -23,6 +23,7 @@
 #'
 #' @param p numeric; p-value to format
 #' @param pformat numeric or character; Significant digits or fmt to pass to sprintf
+#' @param include_p include the leading P on the output string
 #' @return A formatted string of the p-value
 #' @export
 #' @examples
@@ -30,7 +31,7 @@
 #' hmisc_p(0.234)
 #' hmisc_p(1.234e-6, 5)
 #' hmisc_p(1.234e-6, 6)
-hmisc_p <- function(p, pformat="%1.3f")
+hmisc_p <- function(p, pformat="%1.3f", include_p=TRUE)
 {
   if(class(pformat) == "function") pformat(p)
 
@@ -42,9 +43,9 @@ hmisc_p <- function(p, pformat="%1.3f")
   test <- grep("[^0\\.]+", y)
   if(length(test) > 0)
   {
-    paste0("P=",y)
+    if(include_p) paste0("P=",y) else y
   } else {
-    paste0("P<", substr(y, 1, nchar(y)-1), "1")
+    if(include_p) paste0("P<", substr(y, 1, nchar(y)-1), "1") else paste0("<", substr(y, 1, nchar(y)-1), "1")
   }
 }
 

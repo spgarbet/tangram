@@ -8,7 +8,10 @@
 \alias{tangram.formula}
 \alias{tangram.character}
 \alias{tangram.table}
+\alias{tangram.matrix}
 \alias{tangram.tbl_df}
+\alias{tangram.lm}
+\alias{tangram.summary.lm}
 \alias{tangram.rms}
 \title{Table creation methods}
 \usage{
@@ -32,7 +35,13 @@ tangram(x, ...)
 
 \method{tangram}{table}(x, id = NULL, ...)
 
+\method{tangram}{matrix}(x, ...)
+
 \method{tangram}{tbl_df}(x, ...)
+
+\method{tangram}{lm}(x, ...)
+
+\method{tangram}{summary.lm}(x, id = NULL, pformat = NULL, ...)
 
 \method{tangram}{rms}(x, data = NULL, short.labels = NULL,
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits, ...)
