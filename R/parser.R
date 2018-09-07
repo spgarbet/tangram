@@ -108,7 +108,7 @@ ASTVariable <- R6Class("ASTVariable",
     },
     reduce   = function(d)
     {
-      if(is.null(d) || !(self$value %in% names(d)))
+      if(!(self$value=="1") && (is.null(d) || !(self$value %in% names(d))))
       {
         self$data <- get(self$value) # Pull from current environment
         if(is.null(self$data)) stop(paste(self$value, "not found in supplied data or environment"))
