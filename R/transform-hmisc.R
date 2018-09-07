@@ -73,12 +73,13 @@ summarize_kruskal_horz <- function(table,
   # Kruskal-Wallis via F-distribution
   stat <- if(length(categories) == 1)
   {
-    tst <- suppressWarnings(wilcox.test(datar))
+    browser()
+    tst <- suppressWarnings(wilcox.test(c(datar)))
     cell_style[['wilcox']](test$statistic, cell_style[['p']](tst$p.value, pformat))
   }
   else
   {
-    tst  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
+    tst  <- suppressWarnings(spearman2(c(datac), c(datar), na.action=na.retain))
     cell_style[['fstat']](
       f         = render_f(tst['F'], "%.2f"),
       df1       = tst['df1'],
