@@ -41,7 +41,8 @@ tangram(x, ...)
 
 \method{tangram}{lm}(x, ...)
 
-\method{tangram}{summary.lm}(x, id = NULL, pformat = NULL, ...)
+\method{tangram}{summary.lm}(x, id = NULL, format = NULL,
+  pformat = NULL, tformat = NULL, ...)
 
 \method{tangram}{rms}(x, data = NULL, short.labels = NULL,
   footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits, ...)
