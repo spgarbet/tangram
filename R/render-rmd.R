@@ -85,6 +85,8 @@ rmd.cell_n <- function(object, key=FALSE, ...)
 #' @importFrom utils write.table
 rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
 {
+  if(!is.null(attr(object, "caption"))) cat('\n', attr(object, "caption"), '\n',sep='')
+
   nrows <- rows(object)
   ncols <- cols(object)
 
