@@ -474,7 +474,7 @@ Parser <- R6Class("Parser",
     },
     eat_whitespace = function()
     {
-      while(substr(self$input, self$pos, self$pos) %in% c(" ","\t") &&
+      while(substr(self$input, self$pos, self$pos) %in% c(" ","\t","\n","\r") &&
             self$pos < self$len)
       {
         self$pos = self$pos + 1
