@@ -106,7 +106,19 @@ html5_extra_fonts <- function()
 html5 <- function(object, id, ...) UseMethod("html5", object)
 
 # Helper function to turn a vector of strings into html5 class specifier
-html5_class <- function(classes) if(is.null(classes)) "" else paste0("class=\"", paste(classes[!is.na(classes)], collapse=" "), "\"")
+html5_class <- function(classes, attrs)
+{
+  cls <- if(is.null(classes)) "" else
+           paste0(" class=\"", paste(classes[!is.na(classes)], collapse=" "), "\"")
+
+  rsp <- if(is.null(attrs[['rowspan']])) "" else
+           paste0(" rowspan=\"", attrs[['rowspan']], "\"")
+
+  csp <- if(is.null(attrs[['colspan']])) "" else
+           paste0(" colspan=\"", attrs[['colspan']], "\"")
+
+  paste0(cls, rsp, csp)
+}
 
 #' Default conversion to HTML5 for an abstract table element
 #'
@@ -137,6 +149,25 @@ html5.default <- function(object, id, ..., class=NA)
 html5.character <- function(object, id, ..., class=NA)
 {
   html5.cell(object, id, ..., class=class)
+}
+
+#' Default conversion to HTML5 for a logical cell
+#'
+#' Produces table cell or nothing if it's an NA. This is useful
+#' for dealing with rowspan and colspan.
+#'
+#' @param object The cell to render to HTML5
+#' @param id A unique identifier for traceability
+#' @param ... additional arguments to renderer. Unused
+#' @param class An additional class attribute for the HTML5 element
+#' @return An empty html5 td of the given class
+#' @export
+html5.logical <- function(object, id, ..., class=NA)
+{
+  if(is.na(object)) return("") # Deal with rowspan / colspan
+
+  if(object) html5.character("True", id, ..., class=class) else
+             html5.character("False",id, ..., class=class)
 }
 
 #' Convert a tangram class into an HTML5 string
@@ -287,8 +318,8 @@ html5.cell <- function(object, id, ..., class=NULL)
     paste(paste0(name, as.character(object)), collapse=sep)
   }
 
-  paste0("<td ",
-         html5_class(c(class, attr(object, "parity"))),
+  paste0("<td",
+         html5_class(c(class, attr(object, "parity")), attributes(object)),
          ">", htmlify(x), "</td>")
 }
 
@@ -358,12 +389,12 @@ html5.cell_label <- function(object, id, ..., class=NULL)
   label <- gsub("\\*", "&times;<br/>&nbsp;&nbsp;", label)
 
   if(is.null(attr(object, "units")))
-      paste0("<td ",html5_class(c(class, attr(object, "parity"), "tg-label")),">",
+      paste0("<td",html5_class(c(class, attr(object, "parity"), "tg-label"), attributes(object)),">",
              "<span class=\"variable\">",
              label,
              "</span></td>")
   else
-      paste0("<td ",html5_class(c(class, attr(object, "parity"), "tg-label")),">",
+      paste0("<td",html5_class(c(class, attr(object, "parity"), "tg-label"), attributes(object)),">",
              "<span class=\"variable\">",
              label,
              "</span>",
@@ -385,8 +416,8 @@ html5.cell_label <- function(object, id, ..., class=NULL)
 #'
 html5.cell_n <- function(object, id, ..., class=NULL)
 {
-  paste0("<td ",
-         html5_class(c(class, attr(object, "parity"), "data", "N")),
+  paste0("<td",
+         html5_class(c(class, attr(object, "parity"), "data", "N"), attributes(object)),
          "><span class=\"N\">",
          htmlify(object),
          "</span></td>")
