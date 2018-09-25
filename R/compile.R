@@ -316,6 +316,7 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
 
+  if(is.null(id) && "knitr" %in% .packages()) id <- knitr::opts_current$get("label")
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(as.character)) as.character <- !any(!cls %in% c("character", "NULL", "labelled"))
 
@@ -385,6 +386,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
 {
   if(!is.null(data) && (length(class(data)) > 1 || class(data) != "data.frame")) data <- as.data.frame(data)
   if(!is.null(data) && (length(class(data)) > 1 || class(data) != "data.frame")) stop("data must be supplied as data frame")
+  if(is.null(id) && "knitr" %in% .packages()) id <- knitr::opts_current$get("label")
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(transforms)) transforms <- get(style)
 

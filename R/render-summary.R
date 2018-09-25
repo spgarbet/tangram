@@ -132,8 +132,14 @@ print.tangram <- function(x, ...)
 {
   renderer <- render_route_tangram()
   result <- renderer(x, ...)
-  cat(result)
-  invisible(result)
+
+  if(isTRUE(getOption('knitr.in.progress')))
+  {
+    result
+  } else
+  { cat(result)
+    invisible(result)
+  }
 }
 
 #' @rdname print

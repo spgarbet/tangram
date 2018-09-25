@@ -285,7 +285,8 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   )
 
   final <- paste(intro, tableHdr, tableBdy, footer, sep="\n")
-  class(final) <- c("html", "character")
+  attr(final, "knit_cacheable") <- NA
+  class(final) <- c("knit_asis", "html", "character")
   final
 }
 

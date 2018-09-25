@@ -112,22 +112,27 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
     }
   })
 
-  cat('\n') # An RMarkdown table must be preceeded by a newline or bad things happen
+  results <- '\n' # An RMarkdown table must be preceeded by a newline or bad things happen
 
   pasty <- apply(text, 1, function(x) paste(c("|", paste(x, collapse="|"), "|"), collapse=""))
 
-  cat(pasty[1], '\n')
-  cat(sub(":\\|", "-|", gsub("\\|-", "|:", gsub("-\\|", ":|", gsub("[^\\|]", "-", pasty[1])))), '\n')
+  results <- paste0(results, pasty[1], '\n')
+  results <- paste0(results, sub(":\\|", "-|", gsub("\\|-", "|:", gsub("-\\|", ":|", gsub("[^\\|]", "-", pasty[1])))), '\n')
 
-  for(row in pasty[2:nrows]) cat(row, '\n')
+  for(row in pasty[2:nrows]) results <- paste0(results, row, '\n')
 
   if(!is.null(key)) write.table(index(object, ...), key, col.names=FALSE, row.names=FALSE, append=append, sep=",", quote=FALSE)
 
   if(!is.null(attr(object, "footnote")))
   {
-    cat('\n')
-    cat(rmdify(paste0(attr(object, "footnote"), collapse="\n")), collapse='\n' )
+    results <- paste0(results, '\n')
+    results <- paste0(results, rmdify(paste0(attr(object, "footnote"), collapse="\n")), collapse='\n' )
   }
+
+  class(results) <- c("knit_asis", "character")
+  attr(results, "knit_cacheable") <- NA
+
+  results
 }
 
 #' @rdname rmd

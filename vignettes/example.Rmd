@@ -3,8 +3,8 @@ title: "Tangram Examples"
 author: "Shawn Garbett"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: null
   html_document: null
+  pdf_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}
 - \usepackage[utf8]{inputenc}
@@ -69,10 +69,9 @@ Notice that stage in the formula wasn't stored as a factor, i.e. Categorical var
 It also supports HTML5, with styling fragments.
 
 ### Rmd Direct Example
-```{r, results="asis"}
+```{r tbl2}
 x <- tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
-        id="tbl2",
         msd=TRUE,
         quant=seq(0, 1, 0.25),
         style="hmisc",
@@ -82,10 +81,9 @@ rmd(x)
 ```
 
 ### Hmisc Style Example
-```{r, results="asis"}
+```{r tbl3}
 tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
-        id="tbl2",
         msd=TRUE,
         quant=seq(0, 1, 0.25),
         style="hmisc",
@@ -96,18 +94,17 @@ tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
 ### NEJM Style Example
 Fragments can have localized style sheets specified by given id. Notice the specification of 2 digits for bilirubin in the formula. 
 
-```{r, results="asis"}
+```{r tbl4}
 tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders", pbc,
-        style="nejm", caption = "Table NEJM Style", id="tbl3",
+        style="nejm", caption = "Table NEJM Style",
         pct_width=0.8)
 ```
 
 ### Lancet Style Example
 Fragments can have localized style sheets specified by given id. Specifications of digit output can also be c specifiers if enclosed in quotes.
 
-```{r, results="asis"}
+```{r tbl5}
 tangram('drug~bili["%4.03f"]+albumin+stage::Categorical[1]+protime+sex[1]+age+spiders[1]', 
-        id="tbl4",
         data=pbc,
         pformat = 5,
         style="lancet",
@@ -119,14 +116,14 @@ tangram('drug~bili["%4.03f"]+albumin+stage::Categorical[1]+protime+sex[1]+age+sp
 ### Indexing
 
 It is also capable of producing an index of contents inside a table for traceability.
-```{r, comment=""}
+```{r tbl6, comment=""}
 index(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders",
-              pbc, id="tbl2"))[1:20,]
+              pbc))[1:20,]
 ```
 
 
 ### Intercept Model Example
-```{r, results='asis'}
+```{r tbl7}
 x <- round(rnorm(375, 79, 10))
 y <- round(rnorm(375, 80,  9))
 y[rbinom(375, 1, prob=0.05)] <- NA
@@ -152,14 +149,13 @@ Let's cover the phases of table generations.
 
 A simple example of using an intercept in a formula, with some post processing to remove undesired columns.
 
-```{r, results='asis'}
+```{r tbl8}
 d1 <- iris
 d1$A <- d1$Sepal.Length > 5.1
 attr(d1$A,"label") <- "Sepal Length > 5.1"
 tangram(
    Species + 1 ~ A + Sepal.Width,
    data = d1,
-   id="tbl6",
    style="nejm",
    caption="Example All Summary"
 ) %>%
@@ -173,7 +169,7 @@ The library is designed to be extensible, in the hopes that more useful summary 
 
 This example shows how to create a function that given a row and column, to construct summary entries for a table.
 
-```{r extension, results='asis'}
+```{r extension}
 
 ### Make up some data, which has events nested within an id
 n  <- 1000

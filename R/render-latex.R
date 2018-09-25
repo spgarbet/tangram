@@ -284,6 +284,8 @@ latex.tangram <- function(object,
 
   if(!is.null(filename)) cat(result, file=filename, append=append)
 
-  class(result) <- "tangram.summary"
+  class(result) <- c("knit_asis", "latex", "character")
+  attr(result, "knit_cacheable") <- NA
+
   result
 }
