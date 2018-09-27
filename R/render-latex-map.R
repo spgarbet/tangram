@@ -2276,11 +2276,11 @@ latexsub_table <- list(
   c("\\\\\\\\", "\\\\textbackslash{}"), # Deferred backslash escape from above list
 
   # Subset of markdown syntax
-#  c("\\*\\*([^\\*]+)\\*\\*",  "\\\\textbf{\\1}"), # Bold
-#  c("__([^_]+)__",            "\\\\textbf{\\1}"),
-#  c("\\*([^\\*]+)\\*",        "\\\\textit{\\1}"), # Italic
-#  c("_([^_]+)_",              "\\\\textit{\\1}"),
-#  c("`([^`]+)`",              "\\\\texttt{\\1}"), # Inline Code
+  c("\\*\\*([^\\*]+)\\*\\*",  "\\\\textbf{\\1}"), # Bold
+  c("__([^_]+)__",            "\\\\textbf{\\1}"),
+  c("\\*([^\\*]+)\\*",        "\\\\textit{\\1}"), # Italic
+  c("_([^_]+)_",              "\\\\textit{\\1}"),
+  c("`([^`]+)`",              "\\\\texttt{\\1}"), # Inline Code
   c("~~([^~]+)~~",            "\\\\sout{\\1}"),   # Strikethrough (require ulem package)
   c("~([^~]+)~",              "\\\\textsubscript{\\1}"),           # Subscript
   c("\u00A0",                 "~"),               # no-break space (NBSP) must be handled after subscripting

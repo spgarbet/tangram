@@ -6,7 +6,7 @@
 \usage{
 summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
   msd = FALSE, quant = c(0.25, 0.5, 0.75), overall = NULL,
-  test = TRUE, ...)
+  test = FALSE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}

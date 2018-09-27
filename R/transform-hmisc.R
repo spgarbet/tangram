@@ -50,18 +50,17 @@ summarize_kruskal_horz <- function(table,
                                    msd=FALSE,
                                    quant=c(0.25, 0.5, 0.75),
                                    overall=NULL,
-                                   test=TRUE,
+                                   test=FALSE,
                                    ...)
 {
   # Treat overall as a label if it's character
-  overall_label <- if(is.null(overall)) "" else { if(is.character(overall)) overall else "Overall" }
-  overall       <- !is.null(overall)
-
-  datar      <- row$data
-  datac      <- as.categorical(column$data)
-  categories <- if(overall) c(levels(datac), overall_label) else levels(datac)
-
-  format <- ifelse(is.na(row$format), format_guess(datar), row$format)
+  overall_label <- if(is.character(overall)) overall else "Overall"
+  overall       <- column$value != "1" && (isTRUE(overall) || is.character(overall))
+  datar         <- row$data
+  datac         <- as.categorical(column$data)
+  categories    <- if(overall) c(levels(datac), overall_label) else levels(datac)
+  categories    <- if(length(categories) == 1) overall_label else categories
+  format        <- ifelse(is.na(row$format), format_guess(datar), row$format)
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
@@ -70,13 +69,14 @@ summarize_kruskal_horz <- function(table,
 
   if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), hdr=TRUE, subcol="Overall")
 
-  # Kruskal-Wallis via F-distribution
+  # Wilcox rank sum test versus zero
   stat <- if(length(categories) == 1)
   {
-    tst <- suppressWarnings(wilcox.test(c(datar)))
-    cell_style[['wilcox']](test$statistic, cell_style[['p']](tst$p.value, pformat))
+    #tst <- suppressWarnings(wilcox.test(c(datar)))
+    #cell_style[['wilcox']](test$statistic, cell_style[['p']](tst$p.value, pformat))
+    ""
   }
-  else
+  else # Kruskal-Wallis via F-distribution
   {
     tst  <- suppressWarnings(spearman2(c(datac), c(datar), na.action=na.retain))
     cell_style[['fstat']](
@@ -128,7 +128,7 @@ summarize_kruskal_horz <- function(table,
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, test=TRUE, ...)
+summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, test=FALSE, ...)
 {
   datar      <- as.categorical(row$data)
   datac      <- column$data
@@ -205,7 +205,7 @@ summarize_chisq <- function(table,
                             pformat=NULL,
                             collapse_single=TRUE,
                             overall=NULL,
-                            test=TRUE,
+                            test=FALSE,
                             row_percents=FALSE,
                             ...)
 {
@@ -331,7 +331,7 @@ summarize_chisq <- function(table,
 #' @param ... absorbs additional arguments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=TRUE, ...)
+summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=FALSE, ...)
 {
   datar   <- row$data
   datac   <- column$data
