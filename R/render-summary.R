@@ -131,13 +131,14 @@ print.cell <- function(x, ...)
 print.tangram <- function(x, ...)
 {
   renderer <- render_route_tangram()
-  result <- renderer(x, ...)
+  result   <- renderer(x, ...)
 
   if(isTRUE(getOption('knitr.in.progress')))
   {
     result
   } else
-  { cat(result)
+  {
+    cat(result)
     invisible(result)
   }
 }
