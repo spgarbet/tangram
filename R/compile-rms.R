@@ -289,14 +289,14 @@ tangram.rms <- function(x,
         names(rms.model)[[col]],
         var, label, rnd.digits,
         col==1
-      )$table
+      )
     }
   }
 
   for(col in 1:length(rms.model))
   {
-    master_table[[length(vars)+1]][[col]] <- rms_stats(model.anova[[col]], col==1)$table
-    master_table[[length(vars)+2]][[col]] <- rms_model_fit(rms.model[[col]], rnd.stats, col==1)$table
+    master_table[[length(vars)+1]][[col]] <- rms_stats(model.anova[[col]], col==1)
+    master_table[[length(vars)+2]][[col]] <- rms_model_fit(rms.model[[col]], rnd.stats, col==1)
   }
 
   flat <- table_flatten(master_table)

@@ -4,7 +4,6 @@
 \alias{csv}
 \alias{csv.tangram}
 \alias{csv.default}
-\alias{csv.table_builder}
 \title{Generate an csv from a tangram or cell object}
 \usage{
 csv(object, ...)
@@ -12,8 +11,6 @@ csv(object, ...)
 \method{csv}{tangram}(object, file = NULL, sep = ",", ...)
 
 \method{csv}{default}(object, ...)
-
-\method{csv}{table_builder}(object, ...)
 }
 \arguments{
 \item{object}{The cell header to render to HTML5}

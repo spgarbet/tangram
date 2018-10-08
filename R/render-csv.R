@@ -55,7 +55,4 @@ csv.tangram <- function(object, file=NULL, sep=',', ...)
 #' @export
 csv.default <- function(object, ...) paste0("\"", summary(object), "\"", collapse='')
 
-#' @rdname csv
-#' @export
-csv.table_builder <- function(object,...) csv(table_flatten(object$table))
 

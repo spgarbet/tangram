@@ -5,8 +5,6 @@
 \alias{cols}
 \alias{rows.list}
 \alias{cols.list}
-\alias{rows.table_builder}
-\alias{cols.table_builder}
 \title{S3 object to return number of rows/cols in object}
 \usage{
 rows(x)
@@ -16,10 +14,6 @@ cols(x)
 \method{rows}{list}(x)
 
 \method{cols}{list}(x)
-
-\method{rows}{table_builder}(x)
-
-\method{cols}{table_builder}(x)
 }
 \arguments{
 \item{x}{object; object to determine requested count}

@@ -6,7 +6,6 @@
 \alias{rmd.cell}
 \alias{rmd.cell_n}
 \alias{rmd.tangram}
-\alias{rmd.table_builder}
 \title{Generate an Rmd table entry from a cell object}
 \usage{
 rmd(object, key = FALSE, ...)
@@ -19,8 +18,6 @@ rmd(object, key = FALSE, ...)
 
 \method{rmd}{tangram}(object, key = NULL, append = FALSE, pad = 10,
   ...)
-
-\method{rmd}{table_builder}(object, key = FALSE, ...)
 }
 \arguments{
 \item{object}{The cell_fstat for indexing}

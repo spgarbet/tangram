@@ -78,14 +78,6 @@ cols.list <- function(x)
   }
 }
 
-#' @export
-#' @rdname rowscols
-rows.table_builder <- function(x) rows(x$table)
-
-#' @export
-#' @rdname rowscols
-cols.table_builder <- function(x) cols(x$table)
-
 #' Construct a table cell from an object
 #'
 #' Any R object can be used as a cell value. Attributes

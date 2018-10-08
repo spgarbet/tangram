@@ -84,10 +84,6 @@ summary.tangram <- function(object, ...)
 
 #' @rdname summary
 #' @export
-summary.table_builder <- function(object,...) summary(table_flatten(object$table))
-
-#' @rdname summary
-#' @export
 summary.cell <- function(object, ...)
 {
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
@@ -236,13 +232,6 @@ internal_summary <- function(x, ...)
   result
 }
 
-#' Print a text summary of a given table_builder
-#'
-#' @param x The table_builder to render to text
-#' @param ... additional arguments, unused at present
-#' @return A text string rendering of the given table
-#' @export
-print.table_builder <- function(x,...) print(summary(x$table,...))
 
 ### Notes on making text rendering of histograms
 # map <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2587")

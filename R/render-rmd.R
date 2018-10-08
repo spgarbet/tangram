@@ -135,11 +135,5 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
   results
 }
 
-#' @rdname rmd
-#' @export
-rmd.table_builder <- function(object, key=FALSE, ...)
-{
-  rmd(table_flatten(object$table), key=key, ...)
-}
 
 
