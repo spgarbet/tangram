@@ -100,7 +100,7 @@ summarize_nejm_horz <-    function(table,
     col_header(tbl, "N", categories)  %>% col_header("", subN)
   }
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),name=NULL))
-  tbl <- table_builder_apply(tbl, categories, function(tbl, category) {
+  tbl <- table_apply(tbl, categories, function(tbl, category) {
     x   <- if(category == overall_label) datar else datar[datac == category]
     tbl               %>%
     add_row(cell("")) %>%

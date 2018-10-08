@@ -95,7 +95,7 @@ summarize_kruskal_horz <- function(table,
   tbl <- row_header(tbl, derive_label(row))
 
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)))) %>%
-  table_builder_apply(categories, function(tbl, category) {
+  table_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
      if(sum(!is.na(x)) > 0) {
@@ -165,7 +165,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
   {
     row_header(tbl, derive_label(row))                                %>%
     new_line()                                                        %>%
-    table_builder_apply(categories, FUN=function(tbl, category) {
+    table_apply(categories, FUN=function(tbl, category) {
       x <- datac[datar == category]
       tbl                                                  %>%
       row_header(paste0("  ", category))                   %>%

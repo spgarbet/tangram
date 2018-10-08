@@ -17,8 +17,8 @@
 \usage{
 tangram(x, ...)
 
-\method{tangram}{numeric}(x, cols, embedded = FALSE, id = NULL,
-  caption = NULL, style = "hmisc", footnote = NULL, ...)
+\method{tangram}{numeric}(x, cols, id = NULL, caption = NULL,
+  style = "hmisc", footnote = NULL, ...)
 
 \method{tangram}{anova.lme}(x, id = NULL, style = "hmisc",
   caption = NULL, footnote = NULL, digits = NULL, ...)
@@ -54,8 +54,6 @@ tangram(x, ...)
 
 \item{cols}{numeric; An integer of the number of cols to create}
 
-\item{embedded}{logical; Will this table be embedded inside another}
-
 \item{id}{character; A unique charcter id used to identify this table over multiple runs. No spaces.}
 
 \item{caption}{character; A string with the desired caption}
@@ -85,6 +83,10 @@ tangram(x, ...)
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
+
+\item{row}{numeric; Current row being edited. Think of it as current cursor position}
+
+\item{col}{numeric; Current col being edited Think of it as current cursor position}
 }
 \value{
 A tangram object (a table).

@@ -29,11 +29,10 @@ table_flatten <- function(table)
 {
   if(!is.null(attr(table, "row_header")) ||
      !is.null(attr(table, "col_header")) ||
-     !"tangram" %in% class(table[[1]][[1]])
+     (inherits(table, "list") & inherits(table[[1]], "list") & !inherits(table[[1]][[1]], "tangram"))
   )
   {
-    x <- tangram(1, 1, FALSE)
-    attr(table, "embedded") <- TRUE
+    x <- tangram(1, 1)
     x[[1]][[1]] <- table
     table <- x
   }
@@ -43,14 +42,14 @@ table_flatten <- function(table)
   final_cols    <- 0
   sapply(1:rows(table), FUN=function(row) {
     element <- table[[row]][[1]]
-    if(inherits(element, "tangram") && attr(element, "embedded"))
+    if(inherits(element, "tangram"))
       final_rows <<- final_rows + length(element)
     else
       final_rows <<- final_rows + 1
   })
   sapply(1:cols(table), FUN=function(col){
     element <- table[[1]][[col]]
-    if(inherits(element, "tangram") && attr(element, "embedded"))
+    if(inherits(element, "tangram"))
       final_cols <<- final_cols + length(element[[1]])
     else
       final_cols <<- final_cols + 1
@@ -139,7 +138,7 @@ table_flatten <- function(table)
     sapply(1:cols(table), FUN=function(col) {
       element <- table[[row]][[col]]
 
-      if(inherits(element, "tangram") && attr(element, "embedded"))
+      if(inherits(element, "tangram"))
       {
         n_cols <- length(element[[1]]) # Number of columns in first row
         ## Need another double sapply here.
@@ -213,9 +212,9 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 
       if(is.null(transforms[["Cell"]]))
       {
-        tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, style=style, ...)$table
+        tbl[[row_idx]][[col_idx]] <<- transform(tangram(1,1), row, column, style=style, ...)
       } else {
-        tbl[[row_idx]][[col_idx]] <<- transform(table_builder(row$value, column$value, TRUE), row, column, cell_style=transforms[["Cell"]], style=style, ...)$table
+        tbl[[row_idx]][[col_idx]] <<- transform(tangram(1,1), row, column, cell_style=transforms[["Cell"]], style=style, ...)
       }
     })
   })
@@ -252,7 +251,8 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' @param cols numeric; An integer of the number of cols to create
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
-#' @param embedded logical; Will this table be embedded inside another
+#' @param row numeric; Current row being edited. Think of it as current cursor position
+#' @param col numeric; Current col being edited Think of it as current cursor position
 #' @param quant numeric; A vector of quantiles to use for summaries
 #' @param msd logical; Include mean and standard deviation in numeric summary
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization
@@ -278,18 +278,19 @@ tangram <- function(x, ...)
 
 #' @rdname tangram
 #' @export
-tangram.numeric <- function(x, cols, embedded=FALSE, id=NULL, caption=NULL, style="hmisc", footnote=NULL, ...)
+tangram.numeric <- function(x, cols, id=NULL, caption=NULL, style="hmisc", footnote=NULL, ...)
 {
   # A list of lists
   result <- lapply(1:x, function(x) {lapply(1:cols, function(y) cell("", ...)) })
   class(result) <- c("tangram", "list")
 
-  attr(result, "embedded") <- embedded
   attr(result, "id")       <- id
   attr(result, "caption")  <- caption
   attr(result, "style")    <- style
   attr(result, "footnote") <- footnote
   attr(result, "args")     <- list(...)
+  attr(result, "row")      <- 1
+  attr(result, "col")      <- 1
 
   result
 }
@@ -371,6 +372,8 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
   attr(tbl, "style")    <- style
   attr(tbl, "footnote") <- footnote
   attr(tbl, "args")     <- list(...)
+  attr(tbl, "row")      <- 1
+  attr(tbl, "col")      <- 1
 
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
@@ -429,6 +432,8 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   attr(tbl, "style")    <- style
   attr(tbl, "footnote") <- append(attr(tbl, "footnote"), footnote)
   attr(tbl, "args")     <- list(...)
+  attr(tbl, "row")      <- 1
+  attr(tbl, "col")      <- 1
 
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
