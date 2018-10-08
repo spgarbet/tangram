@@ -26,7 +26,7 @@ A tangram is a summary, so it returns itself. Otherwise convert to a text repres
 summary(cell_label("123"))
 summary(hmisc_iqr(rnorm(20)))
 summary(hmisc_fraction(45, 137))
-summary(table_builder()   \%>\%
+summary(tangram(1,1)   \%>\%
         row_header("row") \%>\%
         col_header(1,2,3) \%>\%
         add_col("A","B","C"))

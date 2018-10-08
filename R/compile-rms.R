@@ -107,7 +107,7 @@ rms_variable <- function(model.sum,
 {
   results <- model.anova[var,]
 
-  tbl <- table_builder()
+  tbl <- tangram(1,1)
 
   tbl <- if(lowhigh) {
            col_header(tbl, "", "", model.name, "") %>%
@@ -160,7 +160,7 @@ rms_stats <- function(model.anova, lowhigh)
 
   padding <- function(tbl) if(lowhigh) add_col(tbl, "", "", "") else tbl
 
-  table_builder()                                             %>%
+  tangram(1,1)                                                %>%
   row_header("All Nonlinear & Interaction Terms")             %>%
   padding()
   add_col(hmisc_fstat(f   = render_f(anit['F'], "%.2f"),
@@ -191,7 +191,7 @@ rms_model_fit <- function(rms.model, rnd.stats, lowhigh)
   results <- rms.model$stats
   padding <- function(x) if(lowhigh) add_col(x, "", "") else x
 
-  table_builder()                                             %>%
+  tangram(1,1)                                                %>%
   row_header("Model Likelihood Ratio")                        %>%
   padding()                                                   %>%
   add_col(render_f(results['Model L.R.'],rnd.stats),

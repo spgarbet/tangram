@@ -27,7 +27,7 @@ Print methods for tangram objects
 print(cell_label("123"))
 print(hmisc_iqr(rnorm(20)))
 print(hmisc_fraction(45, 137))
-print(table_builder()   \%>\%
+print(tangram(1,1)   \%>\%
         row_header("row") \%>\%
         col_header(1,2,3) \%>\%
         add_col("A","B","C"))

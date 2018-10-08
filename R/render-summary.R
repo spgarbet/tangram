@@ -66,7 +66,7 @@ textify <- Vectorize(function(x)
 #' summary(cell_label("123"))
 #' summary(hmisc_iqr(rnorm(20)))
 #' summary(hmisc_fraction(45, 137))
-#' summary(table_builder()   %>%
+#' summary(tangram(1,1)   %>%
 #'         row_header("row") %>%
 #'         col_header(1,2,3) %>%
 #'         add_col("A","B","C"))
@@ -110,7 +110,7 @@ summary.cell <- function(object, ...)
 #' print(cell_label("123"))
 #' print(hmisc_iqr(rnorm(20)))
 #' print(hmisc_fraction(45, 137))
-#' print(table_builder()   %>%
+#' print(tangram(1,1)   %>%
 #'         row_header("row") %>%
 #'         col_header(1,2,3) %>%
 #'         add_col("A","B","C"))
@@ -127,7 +127,7 @@ print.cell <- function(x, ...)
 print.tangram <- function(x, ...)
 {
   renderer <- render_route_tangram()
-  result   <- renderer(x, ...)
+  result   <- renderer(table_flatten(x), ...)
 
   if(isTRUE(getOption('knitr.in.progress')))
   {
