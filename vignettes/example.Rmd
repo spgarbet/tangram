@@ -113,14 +113,6 @@ tangram('drug~bili["%4.03f"]+albumin+stage::Categorical[1]+protime+sex[1]+age+sp
        )
 ```
 
-### Indexing
-
-It is also capable of producing an index of contents inside a table for traceability.
-```{r tbl6, comment=""}
-index(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders",
-              pbc))[1:20,]
-```
-
 
 ### Intercept Model Example
 ```{r tbl7}
@@ -207,7 +199,7 @@ summarize_count <- function(table, row, column, ...)
   # Add the First column of summary data as an N value
   add_col(cell_n(length(unique(datar))))             %>%
   # Now add quantiles for the counts
-  table_builder_apply(col_categories, FUN=
+  table_apply(col_categories, FUN=
     function(tbl, cat_name) {
       # Compute each data set
       x  <- datar[datac == cat_name]

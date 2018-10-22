@@ -78,10 +78,10 @@ custom_css <- function(filename, id=NA)
     stop(paste("cannot open file '", filename, "': No such file or directory", sep=''))
   }
 
-  if(is.na(id)) return(content)
+  if(is.null(id) || is.na(id) || id==" " || id=="") return(content)
 
   # sub in a given id
-  gsub("(?<=\\n)([a-zA-Z.#])", paste("    #",id," \\2",sep=''), paste("\n",content,sep=''), perl=TRUE)
+  gsub("\\n([a-zA-Z.#])", paste("\n    #",id," \\1",sep=''), paste("\n",content,sep=''), perl=TRUE)
 }
 
 # Helper function to include extra fonts

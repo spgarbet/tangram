@@ -27,6 +27,15 @@
 #' @include parser.R
 table_flatten <- function(table)
 {
+  if(is.null(attr(table, "row_header")) &&
+     is.null(attr(table, "col_header")) &&
+     !any(sapply(table, function(y) sapply(y, function(z) inherits(z, "tangram"))))
+    )
+  {
+    # Nothing to flatten
+    return(table)
+  }
+
   if(!is.null(attr(table, "row_header")) ||
      !is.null(attr(table, "col_header")) ||
      (inherits(table, "list") & inherits(table[[1]], "list") & !inherits(table[[1]][[1]], "tangram"))
@@ -34,6 +43,9 @@ table_flatten <- function(table)
   {
     x <- tangram(1, 1)
     x[[1]][[1]] <- table
+    for(i in c("id", "caption", "style", "footnote", "args"))
+      attr(x, i) <- attr(table, i)
+
     table <- x
   }
 
@@ -182,7 +194,10 @@ table_flatten <- function(table)
     output_row <<- output_row + length(table[[row]][[1]])
   })
 
-  new_tbl
+  for(i in c("id", "caption", "style", "footnote", "args"))
+    attr(new_tbl, i) <- attr(table, i)
+
+  new_tbl %>% home()
 }
 
 cell_create_table <- function(ast, transforms, digits, style, ...)

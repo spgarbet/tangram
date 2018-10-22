@@ -565,7 +565,7 @@ irr <- function(table, row, column, ...)
     row_header(derive_label(row$right)) %>%
     add_col("", "", "", "", "") %>%
     add_col(est, pval) %>%
-    table_builder_apply(levels(data$group), function(tbl, category)
+    table_apply(levels(data$group), function(tbl, category)
     {
         selector  <- data$group == category
         #n         <- sum(column$data == category, na.rm=TRUE)
