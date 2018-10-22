@@ -166,17 +166,19 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
 
     row_header(tbl, paste(derive_label(row), ":", category) )    %>%
     add_col(cell(sum(!is.na(datac)), subcol=category))           %>%
-    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category))
+    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd))
   } else
   {
+
     row_header(tbl, derive_label(row))                                %>%
+    add_col("", "")                                                   %>%
     new_line()                                                        %>%
     table_apply(categories, FUN=function(tbl, category) {
       x <- datac[datar == category]
       tbl                                                  %>%
       row_header(paste0("  ", category))                   %>%
       add_col(cell(length(x), subcol=category))            %>%
-      add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category)) %>%
+      add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd)) %>%
       new_line()
     })                                                                %>%
     cursor_pos(1, 3)
