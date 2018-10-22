@@ -93,7 +93,7 @@ hmisc_iqr <- function(x,
   if(msd) ql <- paste0(ql, "\u00A0\u00A0",
     render_f(mean(x, na.rm=TRUE), format),
     "\u00b1",
-    render_f(sd(x, na.rm=TRUE), format),
+    render_f(sd(x, na.rm=TRUE), format)
     )
 
   cell(ql, ...)

@@ -115,6 +115,82 @@ summarize_nejm_horz <-    function(table,
 }
 
 
+#' Create a summarization for a categorical row versus X numerical column
+#'
+#' Given a row and column object from the parser apply a Kruskal test and output
+#' the results vertically (#Categories+1) X (N, Summary, Statistic)
+#'
+#' @param table The table object to modify
+#' @param row The row variable object to use (categorical)
+#' @param column The column variable to use (numerical)
+#' @param cell_style list; cell styling functions
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
+#' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
+#' @param test logical; include statistical test results
+#' @param msd logical; include msd in summary
+#' @param ... absorbs additional arugments. Unused at present.
+#' @return The modified table object
+#' @export
+summarize_nejm_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, msd=FALSE, test=FALSE, ...)
+{
+  datar      <- as.categorical(row$data)
+  datac      <- column$data
+  categories <- levels(datar)
+  collapse   <- length(categories) == 1
+
+  # Kruskal-Wallis via F-distribution
+  stat  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
+  fstat <- if(collapse) "" else
+             cell_style[['fstat']](
+                      f   = render_f(stat['F'], "%.2f"),
+                      df1 = stat['df1'],
+                      df2 = stat['df2'],
+                      p   = cell_style[['p']](stat['P'], pformat))
+
+  N <- cell_style[['n']](sum(!is.na(datac)))
+
+  tbl <- if(test)
+  {
+    col_header(table, "N", derive_label(column), "Test Statistic") %>% col_header("", N, "")
+  } else {
+    col_header(table, "N", derive_label(column)) %>% col_header("", N)
+  }
+
+  tbl <- if(collapse)
+  {
+    row_header(tbl, derive_label(row)) %>%
+    add_col(cell(sum(!is.na(datac)), subcol=categories[1]))           %>%
+    add_col(cell_style[['iqr']](datac, column$format, na.rm=TRUE, msd=msd, subrow=categories[1]))
+  } else if(collapse_single && length(categories) == 2)
+  {
+    category <- categories[2]
+    x <- datac[datar == category]
+
+    row_header(tbl, paste(derive_label(row), ":", category) )    %>%
+    add_col(cell(sum(!is.na(datac)), subcol=category))           %>%
+    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd))
+  } else
+  {
+
+    row_header(tbl, derive_label(row))                                %>%
+    add_col("", "")                                                   %>%
+    new_line()                                                        %>%
+    table_apply(categories, FUN=function(tbl, category) {
+      x <- datac[datar == category]
+      tbl                                                  %>%
+      row_header(paste0("  ", category))                   %>%
+      add_col(cell(length(x), subcol=category))            %>%
+      add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd)) %>%
+      new_line()
+    })                                                                %>%
+    cursor_pos(1, 3)
+  }
+
+  if(test) tbl <- add_col(tbl, fstat)
+
+  tbl
+}
+
 #' Style Bundle for Closer to NEJM style
 #'
 #' List of lists, should contain a "Type" entry with a function to determine type of vector passed in.
@@ -132,7 +208,7 @@ nejm <- list(
                   Categorical = summarize_nejm_horz
             ),
   Categorical = list(
-                  Numerical   = function(...){stop("Cat X Numerical not implemented in nejm style")},
+                  Numerical   = summarize_nejm_vert,
                   Categorical = summarize_chisq
             ),
   Cell        = nejm_cell,

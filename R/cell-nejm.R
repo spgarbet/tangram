@@ -102,7 +102,8 @@ nejm_iqr <- function(x,
                       paste0(ql[(m+1):length(quant)], collapse="\u2014"),
                       ")")
 
-  if(msd) ql <- paste0(ql, " ",
+
+  if(msd) ql <- paste0(ql, "\u00A0\u00A0",
     render_f(mean(x, na.rm=TRUE), format),
     "\u00b1",
     render_f(sd(x, na.rm=TRUE), format)
