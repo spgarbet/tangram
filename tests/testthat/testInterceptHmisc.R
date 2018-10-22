@@ -20,8 +20,8 @@ test_that("Group By Species (row) forms expected table",
 {
   t1 <- tangram("Sepal.Length + Sepal.Width~Species", data=iris, id="joe")
 
-  expect_equal(length(t1), 5)
-  for(i in 1:5) expect_equal(length(t1[[i]]), 5)
+  expect_equal(length(t1), 6)
+  for(i in 1:6) expect_equal(length(t1[[i]]), 5)
 })
 
 test_that("Group By Species (column) forms expected table",
