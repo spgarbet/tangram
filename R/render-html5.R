@@ -81,7 +81,7 @@ custom_css <- function(filename, id=NA)
   if(is.na(id)) return(content)
 
   # sub in a given id
-  gsub("\\n([a-zA-Z.#])", paste("\n#",id," \\1",sep=''), paste("\n",content,sep=''), perl=TRUE)
+  gsub("(?<=\\n)([a-zA-Z.#])", paste("    #",id," \\2",sep=''), paste("\n",content,sep=''), perl=TRUE)
 }
 
 # Helper function to include extra fonts

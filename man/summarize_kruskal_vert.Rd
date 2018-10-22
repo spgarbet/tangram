@@ -2,10 +2,11 @@
 % Please edit documentation in R/transform-hmisc.R
 \name{summarize_kruskal_vert}
 \alias{summarize_kruskal_vert}
-\title{Create a summarization for a categorical row versus a numerical column}
+\title{Create a summarization for a categorical row versus X numerical column}
 \usage{
 summarize_kruskal_vert(table, row, column, cell_style,
-  collapse_single = TRUE, pformat = NULL, test = FALSE, ...)
+  collapse_single = TRUE, pformat = NULL, msd = FALSE,
+  test = FALSE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -19,6 +20,8 @@ summarize_kruskal_vert(table, row, column, cell_style,
 \item{collapse_single}{logical; default TRUE. Categorical variables with a two values collapse to single row.}
 
 \item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
+
+\item{msd}{logical; include msd in summary}
 
 \item{test}{logical; include statistical test results}
 

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#' Create a summarization for a categorical set of column versus a numerical row
+#' Create a summarization for a numerical row X categorical column
 #'
 #' Given a row and column object from the parser apply a Kruskal test and output
 #' the results horizontally. 1 X (n + no. categories + test statistic)
@@ -113,7 +113,7 @@ summarize_kruskal_horz <- function(table,
 
 
 
-#' Create a summarization for a categorical row versus a numerical column
+#' Create a summarization for a categorical row versus X numerical column
 #'
 #' Given a row and column object from the parser apply a Kruskal test and output
 #' the results vertically (#Categories+1) X (N, Summary, Statistic)
@@ -125,23 +125,25 @@ summarize_kruskal_horz <- function(table,
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param test logical; include statistical test results
+#' @param msd logical; include msd in summary
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, test=FALSE, ...)
+summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, msd=FALSE, test=FALSE, ...)
 {
   datar      <- as.categorical(row$data)
   datac      <- column$data
   categories <- levels(datar)
+  collapse   <- length(categories) == 1
 
   # Kruskal-Wallis via F-distribution
   stat  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
-  fstat <- cell_style[['fstat']](
+  fstat <- if(collapse) "" else
+             cell_style[['fstat']](
                       f   = render_f(stat['F'], "%.2f"),
                       df1 = stat['df1'],
                       df2 = stat['df2'],
                       p   = cell_style[['p']](stat['P'], pformat))
-
 
   N <- cell_style[['n']](sum(!is.na(datac)))
 
@@ -152,15 +154,19 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
     col_header(table, "N", derive_label(column)) %>% col_header("", N)
   }
 
-  tbl <- if(collapse_single && length(categories) == 2)
+  tbl <- if(collapse)
+  {
+    row_header(tbl, derive_label(row)) %>%
+    add_col(cell(sum(!is.na(datac)), subcol=categories[1]))           %>%
+    add_col(cell_style[['iqr']](datac, column$format, na.rm=TRUE, msd=msd, subrow=categories[1]))
+  } else if(collapse_single && length(categories) == 2)
   {
     category <- categories[2]
     x <- datac[datar == category]
 
     row_header(tbl, paste(derive_label(row), ":", category) )    %>%
-    add_col(cell(sum(!is.na(datac)), subcol=category))            %>%
+    add_col(cell(sum(!is.na(datac)), subcol=category))           %>%
     add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category))
-
   } else
   {
     row_header(tbl, derive_label(row))                                %>%

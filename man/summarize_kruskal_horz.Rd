@@ -2,7 +2,7 @@
 % Please edit documentation in R/transform-hmisc.R
 \name{summarize_kruskal_horz}
 \alias{summarize_kruskal_horz}
-\title{Create a summarization for a categorical set of column versus a numerical row}
+\title{Create a summarization for a numerical row X categorical column}
 \usage{
 summarize_kruskal_horz(table, row, column, cell_style, pformat = NULL,
   msd = FALSE, quant = c(0.25, 0.5, 0.75), overall = NULL,
