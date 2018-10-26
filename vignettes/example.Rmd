@@ -1,10 +1,10 @@
 ---
 title: "Tangram Examples"
-author: "Shawn Garbett"
+author: "Shawn Garbett, MS"
 date: '`r Sys.Date()`'
 output:
-  html_document: null
   pdf_document: null
+  html_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}
 - \usepackage[utf8]{inputenc}
@@ -17,6 +17,7 @@ header-includes:
 - \pdfminorversion=5
 - \pdfcompresslevel=9
 - \pdfobjcompresslevel=2
+email: shawn.garbett@vumc.org
 vignette: |
   %\VignetteIndexEntry{Tangram Examples}
   %\VignetteEngine{knitr::rmarkdown}

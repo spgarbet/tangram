@@ -57,7 +57,7 @@ smd_continuous         <- function(x, g1, g2, weight)
 standard_difference <- function(x, group, weight=NULL)
 {
   # Force Factor
-  if(class(group) != "factor") group <- as.factor(group)
+  if(!inherits(group,"factor"))   group <- as.factor(group)
   if(length(x) != length(group))  stop("smd() call x and group lengths differ")
   if(length(levels(group)) != 2)  stop("smd() call must have only 2 groups")
 
@@ -83,7 +83,7 @@ standard_difference <- function(x, group, weight=NULL)
 
   # Dispatch to relevant
   result <-
-    if(class(x) == "factor")   smd_categorical(x, group, weight)                  else
+    if(inherits(x,"factor"))   smd_categorical(x, group, weight)                  else
     if(length(unique(x)) == 2) smd_categorical(as.factor(x==x[1]), group, weight) else
                                smd_continuous(x, g1, g2, weight)
 

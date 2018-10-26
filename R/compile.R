@@ -393,7 +393,7 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
   # Post function processing
-  if(class(after) == "list") sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
+  if(inherits(after,"list")) sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
 
   tbl
 }
@@ -402,8 +402,8 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
 #' @export
 tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
 {
-  if(!is.null(data) && (length(class(data)) > 1 || class(data) != "data.frame")) data <- as.data.frame(data)
-  if(!is.null(data) && (length(class(data)) > 1 || class(data) != "data.frame")) stop("data must be supplied as data frame")
+  if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) data <- as.data.frame(data)
+  if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) stop("data must be supplied as data frame")
   if(is.null(id) && "knitr" %in% .packages()) id <- knitr::opts_current$get("label")
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(transforms)) transforms <- get(style)
@@ -453,7 +453,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   if(suppressWarnings(all(is.na(after)))) {return(tbl)}
 
   # Post function processing
-  if(class(after) == "list") sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
+  if(inherits(after,"list")) sapply(as.list(after), function(f) tbl <<- f(tbl)) else tbl <- after(tbl)
 
   tbl
 }

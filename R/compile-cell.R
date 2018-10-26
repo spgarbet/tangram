@@ -17,7 +17,7 @@
 # Turn a passed pformat into a function (or leave alone)
 pfunc <- function(pformat)
 {
-  if(class(pformat) == "function") return(pformat)
+  if(inherits(pformat,"function")) return(pformat)
 
   if(is.null(pformat)) pformat <- "%1.3f"
 

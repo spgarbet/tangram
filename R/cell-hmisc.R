@@ -33,7 +33,7 @@
 #' hmisc_p(1.234e-6, 6)
 hmisc_p <- function(p, pformat="%1.3f", include_p=TRUE)
 {
-  if(class(pformat) == "function") pformat(p)
+  if(inherits(pformat,"function")) pformat(p)
 
   if(is.na(p) || is.nan(p) || p <0 || p>1) return("NA")
 
