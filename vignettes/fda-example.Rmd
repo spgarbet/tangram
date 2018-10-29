@@ -26,6 +26,7 @@ vignette: |
 knitr::opts_chunk$set(echo = TRUE)
 library(tangram)
 library(Hmisc)
+library(epitools)
 pbc <- tangram::pbc
 ```
 
@@ -509,9 +510,7 @@ Now, a reusable transform for this purpose is created. Eventually this will beco
 
 ```{r}
 # A custom transform to create IRR tables from exposure / event data.
-
-library(sandwich)
-
+library(dplyr)
 irr <- function(table, row, column, ...)
 {
     events   <- row$right$data
@@ -524,42 +523,32 @@ irr <- function(table, row, column, ...)
     data     <- subset(data, !is.na(events) & !is.na(expose) & expose > 0)
     est      <- "-"
     pval     <- "-"
-    if(sum(data$events[data$group==levels(data$group)[1]], na.rm=TRUE) >0 &&
-       sum(data$events[data$group==levels(data$group)[2]], na.rm=TRUE) >0) {
+
     tryCatch(
     {
-      m1 <- glm(events ~ group+offset(log(expose)), family="poisson", data=data)
+      # Now put in epitools format
+      etd <- data %>% group_by(group) %>% summarize(
+                incidents = sum(events),
+                exposure  = sum(expose)
+              )
+      # Run midp analysis using epitools
+      x <- rateratio.midp(etd$incidents, etd$exposure)
+
+      fmt <- if(x$measure[2,1] < 1000) 2 else "%5.3g"
       
-      # Robust inference (Cameron and Trivedi 2009)
-      cov.m1 <- vcovHC(m1, type="HC0")
-      std.err <- sqrt(diag(cov.m1))
-      r.est <- cbind(
-        Estimate= coef(m1),
-        "Robust SE" = std.err,
-        "Pr(>|z|)" = 2 * pnorm(abs(coef(m1)/std.err), lower.tail=FALSE),
-        LL = coef(m1) + qnorm(0.025) * std.err,
-        UL = coef(m1) + qnorm(0.975) * std.err
-      )
-      # Convert to Rates
-      rate   <- exp(r.est[1,1]+r.est[2,1]) / exp(r.est[1,1])
-      
-      fmt <- if(rate < 1000) 2 else "%5.3g"
-      
-      rate.l <- exp(r.est[1,4]+r.est[2,4]) / exp(r.est[1,4])
-      rate.h <- exp(r.est[1,5]+r.est[2,5]) / exp(r.est[1,5])
-      est <- paste0(render_f(rate,   fmt), " (", 
-                    render_f(rate.l, fmt), "--", 
-                    render_f(rate.h, fmt), ")")
-      pval <- if(r.est[2,3] <= 0.0005) "<0.001" else render_f(r.est[2,3], 3)
+      est <- paste0(render_f(x$measure[2,1], fmt), " (", 
+                    render_f(x$measure[2,2], fmt), "--", 
+                    render_f(x$measure[2,3], fmt), ")")
+      pval <- if(x$p.value[2,1] <= 0.0005) "<0.001" else render_f(x$p.value[2,1], 3)
     },
     error = function(e) {}
-    )}
+    )
     
 
     table %>%
     col_header("N", "At Least 1", "Total",
-               "At-Risk Time", "Incidence Rate", "Incidence Rate Ratio^1^",
-               "P Value^2^") %>%
+               "At-Risk Time", "Incidence Rate", "Incidence Rate Ratio",
+               "P Value^1^") %>%
     col_header("", "no. of participants", "no.",
                "person-yr", "events/100 person-yr", "", "") %>%
     row_header(derive_label(row$right)) %>%
@@ -585,7 +574,7 @@ irr <- function(table, row, column, ...)
     }) 
 }
 
-irr.footnote="^1^IRR was calculated by the number of adverse events via Poisson regression using group as a factor with the offset of the log of 100 person-years exposure. ^2^P-value is Poisson test of group as a factor."
+irr.footnote="^1^IRR and *p*-values calculated by the number of adverse events over exposure via median-unbiased estimation (mid-p Rothman 2008)."
 ```
 
 And for the result:
@@ -598,6 +587,6 @@ tangram(gender ~ observed*(burps + rude),
 
 ### Summary
 
-This is now a reusable IRR table generator for a Poisson model. A general purpose version would first test for excess zeros, and then check dispersion and fall back to either a Poisson or a negative binomial model with or without excess zeros. However, in the FDA work, the data didn't support anything above a Poisson model.
+This is now a reusable IRR table generator that calculates rate ratio by median-unbiased estimation (mid-p). See Kenneth J. Rothman, Sander Greenland, and Timothy Lash (2008), Modern Epidemiology, Lippincott-Raven Publishers.
 
 A personal or department library of preferred analysis and tables can easily be shared via the tangram interface, creating consistent and repeatble analysis across many reports. More importantly the analysis and the final format rendering are completely separate choices.
