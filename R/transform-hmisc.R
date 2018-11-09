@@ -92,7 +92,7 @@ summarize_kruskal_horz <- function(table,
     col_header(table, "N", categories)  %>% col_header("", subN)
   }
 
-  tbl <- row_header(tbl, derive_label(row))
+  tbl <- row_header(tbl, derive_label(row, ...))
 
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)))) %>%
   table_apply(categories, function(tbl, category) {
@@ -149,14 +149,14 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
 
   tbl <- if(test)
   {
-    col_header(table, "N", derive_label(column), "Test Statistic") %>% col_header("", N, "")
+    col_header(table, "N", derive_label(column, ...), "Test Statistic") %>% col_header("", N, "")
   } else {
-    col_header(table, "N", derive_label(column)) %>% col_header("", N)
+    col_header(table, "N", derive_label(column, ...)) %>% col_header("", N)
   }
 
   tbl <- if(collapse)
   {
-    row_header(tbl, derive_label(row)) %>%
+    row_header(tbl, derive_label(row, ...)) %>%
     add_col(cell(sum(!is.na(datac)), subcol=categories[1]))           %>%
     add_col(cell_style[['iqr']](datac, column$format, na.rm=TRUE, msd=msd, subrow=categories[1]))
   } else if(collapse_single && length(categories) == 2)
@@ -164,13 +164,13 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
     category <- categories[2]
     x <- datac[datar == category]
 
-    row_header(tbl, paste(derive_label(row), ":", category) )    %>%
+    row_header(tbl, paste(derive_label(row, ...), ":", category) )    %>%
     add_col(cell(sum(!is.na(datac)), subcol=category))           %>%
     add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd))
   } else
   {
 
-    row_header(tbl, derive_label(row))                                %>%
+    row_header(tbl, derive_label(row, ...))                                %>%
     add_col("", "")                                                   %>%
     new_line()                                                        %>%
     table_apply(categories, FUN=function(tbl, category) {
@@ -281,7 +281,7 @@ summarize_chisq <- function(table,
   }
 
   # Row Headers
-  if(nrow > 1) table <- row_header(table, derive_label(row)) # Deal with single
+  if(nrow > 1) table <- row_header(table, derive_label(row, ...)) # Deal with single
   for(nm in rownames(grid)) table <- row_header(table, nm)
 
   # The N value
@@ -346,15 +346,15 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 
   stat    <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
 
-  tbl     <- row_header(table, derive_label(row))
+  tbl     <- row_header(table, derive_label(row, ...))
 
   N <- cell_style[['n']](sum(!is.na(datac)), hdr=TRUE)
 
   tbl <- if(test)
   {
-    col_header(tbl, "N", derive_label(column), "Test Statistic") %>% col_header("", N, "")
+    col_header(tbl, "N", derive_label(column, ...), "Test Statistic") %>% col_header("", N, "")
   } else {
-    col_header(tbl, "N", derive_label(column)) %>% col_header("", N)
+    col_header(tbl, "N", derive_label(column, ...)) %>% col_header("", N)
   }
 
   tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))

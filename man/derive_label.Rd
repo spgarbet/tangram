@@ -4,10 +4,14 @@
 \alias{derive_label}
 \title{Derive label of AST node.}
 \usage{
-derive_label(node)
+derive_label(node, capture_units = TRUE, ...)
 }
 \arguments{
 \item{node}{Abstract syntax tree node.}
+
+\item{capture_units}{logical; Capture units from parenthesis ending a label}
+
+\item{...}{Other arguments, ignored}
 }
 \value{
 A string with a label for the node

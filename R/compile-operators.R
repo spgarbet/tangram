@@ -24,36 +24,46 @@
 #' NOTE: Should have data attached via reduce before calling.
 #'
 #' @param node Abstract syntax tree node.
+#' @param capture_units logical; Capture units from parenthesis ending a label
+#' @param ... Other arguments, ignored
 #'
 #' @return A string with a label for the node
 #' @include compile-cell.R
 #' @export
-derive_label <- function(node)
+derive_label <- function(node, capture_units=TRUE, ...)
 {
-  l <- node$name()
-  units <- NULL
-  try({
-        l2 <- attr(node$data, "label")
-        if(!is.null(l2))
-        {
-          # Since a label was found, see if it has units
-          u2 <- str_match(l2, "(.*)\\((.*)\\)$")
-          if(is.na(u2[1,1]))
-          {
-            l <- l2
-          } else {
-            l     <- trimws(u2[1,2])
-            units <- u2[1,3]
-          }
-        }
-  })
+  l     <- node$name() # Default Label
+  units <- NULL        # Default Units
 
-  # Find units if they exist
-  try({
-    u2 <- attr(node$data, "units")
+  u2 <- NULL
+  try({u2 <- attr(node$data, "units")})
+  l2 <- NULL
+  try({l2 <- attr(node$data, "label")})
 
-    if(!is.null(u2)) {units<-u2}
-  })
+  if(!is.null(u2))
+  {
+    units <- u2
+  }
+
+  if(!is.null(l2))
+  {
+    if(capture_units && is.null(units)) # Capture and not already specified
+    {
+      # Assumes units are in parenthesis at end of label
+      u2 <- str_match(l2, "(.*)\\((.*)\\)$")
+      if(!is.na(u2[1,1]))
+      {
+        l     <- trimws(u2[1,2])
+        units <- u2[1,3]
+      } else
+      {
+        l <- l2
+      }
+    } else
+    {
+      l <- l2
+    }
+  }
 
   cell_label(l, units)
 }
