@@ -4,7 +4,7 @@
 \alias{derive_label}
 \title{Derive label of AST node.}
 \usage{
-derive_label(node, capture_units = TRUE, ...)
+derive_label(node, capture_units = FALSE, ...)
 }
 \arguments{
 \item{node}{Abstract syntax tree node.}

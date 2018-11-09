@@ -30,7 +30,7 @@
 #' @return A string with a label for the node
 #' @include compile-cell.R
 #' @export
-derive_label <- function(node, capture_units=TRUE, ...)
+derive_label <- function(node, capture_units=FALSE, ...)
 {
   l     <- node$name() # Default Label
   units <- NULL        # Default Units
