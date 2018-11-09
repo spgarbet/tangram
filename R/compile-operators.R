@@ -37,7 +37,7 @@ derive_label <- function(node)
         if(!is.null(l2))
         {
           # Since a label was found, see if it has units
-          u2 <- str_match(l2, "(.*)\\((.*)\\)")
+          u2 <- str_match(l2, "(.*)\\((.*)\\)$")
           if(is.na(u2[1,1]))
           {
             l <- l2
