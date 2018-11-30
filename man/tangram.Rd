@@ -8,6 +8,7 @@
 \alias{tangram.formula}
 \alias{tangram.character}
 \alias{tangram.table}
+\alias{tangram.ftable}
 \alias{tangram.matrix}
 \alias{tangram.tbl_df}
 \alias{tangram.lm}
@@ -33,7 +34,10 @@ tangram(x, ...)
 
 \method{tangram}{character}(x, ...)
 
-\method{tangram}{table}(x, id = NULL, ...)
+\method{tangram}{table}(x, id = NULL, percents = FALSE, digits = 1,
+  ...)
+
+\method{tangram}{ftable}(x, id = NULL, ...)
 
 \method{tangram}{matrix}(x, ...)
 
@@ -77,6 +81,8 @@ tangram(x, ...)
 \item{data}{data.frame; data to use for rendering tangram object}
 
 \item{transforms}{list of lists of functions; that contain the transformation to apply for summarization}
+
+\item{percents}{logical; Display percents when rendering a table object. Defaults to FALSE}
 
 \item{short.labels}{numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").}
 

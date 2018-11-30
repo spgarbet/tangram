@@ -466,8 +466,9 @@ tangram.character <- function(x, ...)
 }
 
 #' @rdname tangram
+#' @param percents logical; Display percents when rendering a table object. Defaults to FALSE
 #' @export
-tangram.table <- function(x, id=NULL, ...)
+tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
 {
   tbl <- tangram(1,1, id=id, ...)
 
@@ -484,28 +485,39 @@ tangram.table <- function(x, id=NULL, ...)
     tbl[[1]] <- lapply(c("", cols), cell_header, USE.NAMES=FALSE)
 
     for(i in 1:(dim(x)[1]))
-      tbl[[i+1]] <- lapply(c(rows[i],x[i,]), cell, USE.NAMES=FALSE)
+    {
+      denom <- colSums(x)
+      tbl[[i+1]] <- if(percents)
+      {
+        pcnt  <- paste0(" (", render_f(100*x[i,] / denom, digits), ")")
+        lapply(c(rows[i], paste0(x[i,],pcnt)), cell, USE.NAMES=FALSE)
+      } else
+      {
+        lapply(c(rows[i],x[i,]), cell, USE.NAMES=FALSE)
+      }
+    }
   } else if(length(dim(x)) == 3)
   {
-    rows   <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
-    rows   <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
-    tbl <- tangram(x[1,,], id=id, ...) %>%
-           insert_column(0, cell_header(""), rows[1])
+    rows <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
+    tbl  <- tangram(x[1,,], id=id, percents=percents, digits=digits, ...) %>%
+            insert_column(0, cell_header(""), rows[1])
     for(i in 2:(dim(x)[1]))
     {
-      tmp <- tangram(x[i,,], id=id, ...) %>%
+      tmp <- tangram(x[i,,], id=id, percents=percents, digits=digits, ...) %>%
              insert_column(0, cell_header(""), rows[i]) %>%
              del_row(1)
       tbl <- rbind(tbl, tmp)
     }
   } else if(length(dim(x)) == 4)
   {
-    rows   <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
-    rows   <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
-    tbl <- tangram(x[1,,,], id=id, ...) %>% insert_column(0, "", rows[1], class="cell_header")
+    rows <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
+    tbl  <- tangram(x[1,,,], id=id, percents=percents, digits=digits, ...) %>%
+            insert_column(0, "", rows[1], class="cell_header")
     for(i in 2:(dim(x)[1]))
     {
-      tmp <- tangram(x[i,,,], id=id, ...) %>%
+      tmp <- tangram(x[i,,,], id=id, percents=percnets, digits=digits, ...) %>%
              insert_column(0, "", rows[i], class="cell_header") %>%
              del_row(1)
       tbl <- rbind(tbl, tmp)
@@ -517,6 +529,14 @@ tangram.table <- function(x, id=NULL, ...)
 
   tbl
 }
+
+#' @rdname tangram
+#' @export
+tangram.ftable <- function(x, id=NULL, ...)
+{
+  tangram.table(as.table(x), id=id, ...)
+}
+
 
 #' @rdname tangram
 #' @export
