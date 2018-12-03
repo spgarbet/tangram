@@ -28,6 +28,8 @@ textsub_table <-list(
 #' @include iify.R
 textify <- Vectorize(function(x)
 {
+  if(is.na(x)) return("")
+
   x <- iify(x, textsub_table)
 
   ## Convert strings to UTF-8 encoding, NFD (decomposed) form, for
@@ -80,6 +82,15 @@ summary.tangram <- function(object, ...)
   x <- internal_summary(object, ...)
   class(x) <- "summary.tangram"
   x
+}
+
+#' @rdname summary
+#' @export
+summary.logical <- function(object, ...)
+{
+  if(is.na(object)) return("")
+
+  return(as.character(object))
 }
 
 #' @rdname summary
@@ -185,18 +196,37 @@ internal_summary <- function(x, ...)
     })
   })
 
-  maxwidths <- apply(text, 2, FUN=function(x) max(nchar(x), na.rm=TRUE))
+  maxwidths <- rep(0, ncols)
+  for(i in 1:nrows)
+  {
+    for(j in 1:ncols)
+    {
+      colspan <- if(!is.null(attr(x[[i]][[j]], "colspan"))) attr(x[[i]][[j]], "colspan") else 1
+      width   <- ceiling(nchar(text[i,j]) / colspan)
+      for(k in 1:colspan)
+        if(width > maxwidths[j+k-1]) maxwidths[j+k-1] <- width
+
+      # Deal with rowspans (i.e. get rid of NAs)
+      rowspan <- if(!is.null(attr(x[[i]][[j]], "rowspan"))) attr(x[[i]][[j]], "rowspan") else 1
+      if(rowspan > 1)
+      {
+        for(k in 2:rowspan)
+        {
+          x[[i]][[j+k-1]] <- ""
+        }
+      }
+    }
+  }
 
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
-      if(col == 1)
+      text[row, col] <- if(!is.na(x[[row]][[col]]))
       {
-        text[row,col] <<- str_pad(text[row,col], maxwidths[col], "right")
-      }
-      else
-      {
-        text[row,col] <<- str_pad(text[row,col], maxwidths[col], "both")
-      }
+        just    <- if(col == 1) "right" else "both"
+        width   <- maxwidths[col]
+        if(!is.null(attr(x[[row]][[col]], "colspan"))) width <- sum(maxwidths[col:(col+attr(x[[row]][[col]], "colspan")-1)])
+        text[row, col] <<- str_pad(text[row,col], width, just)
+      } else ""
     })
   })
 
@@ -227,8 +257,6 @@ internal_summary <- function(x, ...)
     result <- paste0(result, textify(paste0(attr(x, "footnote"), collapse="\n")), collapse='\n' )
   }
 
-  #cat(result)
-  #invisible(result)
   result
 }
 

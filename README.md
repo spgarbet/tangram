@@ -32,6 +32,8 @@ This `tangram` object representing the abstract table in memory now has all the 
 * `sep` a seperator to use for rendering between character strings in a vector
 * `reference` a reference character to append as superscript to the field. Not required, as this can be handled now via the Rmarkdown above. Will probably deprecate soon.
 * `units` the units of the described label. Maintains compability with Hmisc handling of units on objects.
+* `colspan` the ability of a cell to take up multiple columns that follow to the right. The cells it covers should be set to NA.
+* `rowspan` the ability of a cell to take up multiple rows that follow below. The cells it covers should be set to NA.
 
 A `tangram` object itself can have an attribute `footnote` to contain footnotes to display. Some formula transforms automatically supply this with their bundle for reference.
 

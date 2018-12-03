@@ -2,11 +2,14 @@
 % Please edit documentation in R/render-summary.R
 \name{summary.tangram}
 \alias{summary.tangram}
+\alias{summary.logical}
 \alias{summary.cell}
 \title{The default method for rendering tangram objects
 A tangram is a summary, so it returns itself. Otherwise convert to a text representation.}
 \usage{
 \method{summary}{tangram}(object, ...)
+
+\method{summary}{logical}(object, ...)
 
 \method{summary}{cell}(object, ...)
 }
