@@ -96,6 +96,9 @@ rmd.tangram <- function(object, key=NULL, append=FALSE, pad=10, ...)
   sapply(1:nrows, FUN=function(row) {
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
+      if(!is.null(attr(object[[row]][[col]], "colspan"))) warning("colspan not supported for Rmd tangram rendering")
+      if(!is.null(attr(object[[row]][[col]], "rowspan"))) warning("rowspan not supported for Rmd tangram rendering")
+
       text[row,col] <<- rmd(rmdify(object[[row]][[col]]), key=!is.null(key), ...)
     })
   })
