@@ -394,6 +394,8 @@ rtf.tangram <- function(
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
       text[row,col] <<- rtf(object[[row]][[col]], id=id, point=point)
+      if(!is.null(attr(object[[row]][[col]], "colspan"))) warning("colspan not supported for rtf tangram rendering")
+      if(!is.null(attr(object[[row]][[col]], "rowspan"))) warning("rowspan not supported for rtf tangram rendering")
     })
   })
   rowtext <- paste0(
