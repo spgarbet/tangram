@@ -14,7 +14,7 @@ latex(object, ...)
 
 \method{latex}{default}(object, ...)
 
-\method{latex}{cell}(object, ...)
+\method{latex}{cell}(object, na.blank = TRUE, ...)
 
 \method{latex}{cell_label}(object, ...)
 

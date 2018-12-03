@@ -68,8 +68,18 @@ latex.default <- function(object, ...)
 
 #' @rdname latex
 #' @export
-latex.cell <- function(object, ...)
+latex.cell <- function(object, na.blank=TRUE, ...)
 {
+  if(is.logical(object))
+  {
+    if(is.na(object))
+    {
+      return(if(na.blank) "" else "NA")
+    } else {
+      return(as.character(object))
+    }
+  }
+
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
 
   if(is.null(names(object)))
@@ -99,23 +109,16 @@ latex.cell_label <- function(object, ...)
     paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}")
 }
 
-latex.logical <- function(object, na.blank=TRUE, ...)
+latex.logical <- function(object, ...)
 {
   if(is.na(object))
   {
-    if(na.blank) "" else "NA"
+    NA
   } else {
     as.character(object)
   }
 }
 
-#' #' @rdname latex
-#' #' @export
-#' latex.cell_n <- function(object, ...)
-#' {
-#'   #idx <- index(object, id)
-#'   latexify(object)
-#' }
 
 #' @rdname latex
 #' @export
@@ -221,10 +224,26 @@ latex.tangram <- function(object,
         last_header_col <<- col - 1
       }
       text[row,col] <<- latex(object[[row]][[col]], na.blank, style=style, ...)
+
+      colspan <- attr(object[[row]][[col]], "colspan")
+      if(!is.null(colspan) && colspan > 1)
+      {
+        text[row, col] <<- paste0("\\multicolumn{",colspan,"}{c}{", text[row, col], "}")
+      }
+
+      rowspan <- attr(object[[row]][[col]], "rowspan")
+      if(!is.null(rowspan) && rowspan > 1)
+      {
+        text[row, col] <<- paste0("\\multirow{",rowspan,"}{*}{", text[row, col], "}")
+        for(k in (row+1):(row+rowspan-1))
+        {
+          object[[k]][[col]] <<- cell(" ")
+        }
+      }
     })
   })
 
-  pasty <- apply(text, 1, function(x) paste0(paste(x, collapse=" & "), "\\\\\n"))
+  pasty <- apply(text, 1, function(x) paste0(paste(na.omit(x), collapse=" & "), "\\\\\n"))
 
   # Special coloring
   if(style=="lancet")

@@ -206,7 +206,7 @@ internal_summary <- function(x, ...)
       for(k in 1:colspan)
         if(width > maxwidths[j+k-1]) maxwidths[j+k-1] <- width
 
-      # Deal with rowspans (i.e. get rid of NAs)
+      # Deal with rowspans (i.e. get rid of NAs for proper column expansion)
       rowspan <- if(!is.null(attr(x[[i]][[j]], "rowspan"))) attr(x[[i]][[j]], "rowspan") else 1
       if(rowspan > 1)
       {
