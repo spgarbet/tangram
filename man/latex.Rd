@@ -5,6 +5,7 @@
 \alias{latex.default}
 \alias{latex.cell}
 \alias{latex.cell_label}
+\alias{latex.logical}
 \alias{latex.cell_header}
 \alias{latex.cell_subheader}
 \alias{latex.tangram}
@@ -17,6 +18,8 @@ latex(object, ...)
 \method{latex}{cell}(object, na.blank = TRUE, ...)
 
 \method{latex}{cell_label}(object, ...)
+
+\method{latex}{logical}(object, ...)
 
 \method{latex}{cell_header}(object, ...)
 

@@ -109,6 +109,8 @@ latex.cell_label <- function(object, ...)
     paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}")
 }
 
+#' @rdname latex
+#' @export
 latex.logical <- function(object, ...)
 {
   if(is.na(object))
@@ -211,7 +213,7 @@ latex.tangram <- function(object,
 
   nrows <- rows(object)
   ncols <- cols(object)
-  text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
+  text  <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
   # Render it all
   last_header_row <- 0 # Current Header Row
@@ -229,6 +231,7 @@ latex.tangram <- function(object,
       if(!is.null(colspan) && colspan > 1)
       {
         text[row, col] <<- paste0("\\multicolumn{",colspan,"}{c}{", text[row, col], "}")
+        for(i in (col+1):(col+colspan-1)) object[[row]][[i]] <<- NA
       }
 
       rowspan <- attr(object[[row]][[col]], "rowspan")

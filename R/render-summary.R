@@ -84,19 +84,21 @@ summary.tangram <- function(object, ...)
   x
 }
 
-#' @rdname summary
-#' @export
-summary.logical <- function(object, ...)
-{
-  if(is.na(object)) return("")
-
-  return(as.character(object))
-}
+#' #' @rdname summary
+#' #' @export
+#' summary.logical <- function(object, ...)
+#' {
+#'   if(is.na(object)) return("")
+#'
+#'   return(as.character(object))
+#' }
 
 #' @rdname summary
 #' @export
 summary.cell <- function(object, ...)
 {
+  if(is.na(object)) return("")
+
   sep  <- if(is.null(attr(object, "sep"))) ", " else attr(object, "sep")
 
   x <- if(is.null(names(object)))
@@ -224,7 +226,11 @@ internal_summary <- function(x, ...)
       {
         just    <- if(col == 1) "right" else "both"
         width   <- maxwidths[col]
-        if(!is.null(attr(x[[row]][[col]], "colspan"))) width <- sum(maxwidths[col:(col+attr(x[[row]][[col]], "colspan")-1)])
+        if(!is.null(attr(x[[row]][[col]], "colspan")))
+        {
+          widths <- maxwidths[col:(col+attr(x[[row]][[col]], "colspan")-1)]
+          width  <- sum(widths)+2*(length(widths)-1)
+        }
         text[row, col] <<- str_pad(text[row,col], width, just)
       } else ""
     })

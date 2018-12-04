@@ -259,6 +259,17 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
     sapply(1:ncols, FUN=function(col) {
       if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
       text[row,col] <<- html5(object[[row]][[col]], id, ...)
+      colspan <- attr(object[[row]][[col]], "colspan")
+      if(!is.null(colspan) && colspan > 1)
+      {
+        for(i in (col+1):(col+colspan-1)) object[[row]][[i]] <<- NA
+      }
+      rowspan <- attr(object[[row]][[col]], "rowspan")
+      if(!is.null(rowspan) && rowspan > 1)
+      {
+        for(i in (row+1):(row+rowspan-1)) object[[i]][[col]] <<- NA
+      }
+
     })
   })
   pasty <- apply(text, 1, function(x) paste(x, collapse=""))

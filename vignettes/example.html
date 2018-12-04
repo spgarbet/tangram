@@ -11,7 +11,7 @@
 
 <meta name="author" content="Shawn Garbett, MS" />
 
-<meta name="date" content="2018-10-26" />
+<meta name="date" content="2018-12-04" />
 
 <title>Tangram Examples</title>
 
@@ -124,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Tangram Examples</h1>
 <h4 class="author"><em>Shawn Garbett, MS</em></h4>
-<h4 class="date"><em>2018-10-26</em></h4>
+<h4 class="date"><em>2018-12-04</em></h4>
 
 </div>
 
@@ -155,14 +155,14 @@ summary(tbl1)</code></pre>
                                     N   D-penicillamine       placebo        not randomized 
                                             (N=154)           (N=158)           (N=106)     
 --------------------------------------------------------------------------------------------
-Serum Bilirubin                    418  0.70 *1.30* 3.60  0.80 *1.40* 3.22  0.70 *1.40* 3.12
-Albumin                            418  3.34 *3.54* 3.78  3.21 *3.56* 3.83  3.12 *3.47* 3.73
+Serum Bilirubin (mg/dl)            418  0.70 *1.30* 3.60  0.80 *1.40* 3.22  0.70 *1.40* 3.12
+Albumin (gm/dl)                    418  3.34 *3.54* 3.78  3.21 *3.56* 3.83  3.12 *3.47* 3.73
 Histologic Stage, Ludwig Criteria  412                                                      
    1                                     0.026    4/154    0.076   12/158    0.050    5/100 
    2                                     0.208   32/154    0.222   35/158    0.250   25/100 
    3                                     0.416   64/154    0.354   56/158    0.350   35/100 
    4                                     0.351   54/154    0.348   55/158    0.350   35/100 
-Prothrombin Time                   416  10.0 *10.6* 11.4  10.0 *10.6* 11.0  10.1 *10.6* 11.0
+Prothrombin Time (sec.)            416  10.0 *10.6* 11.4  10.0 *10.6* 11.0  10.1 *10.6* 11.0
 sex : female                       418   0.903  139/154    0.867  137/158    0.925   98/106 
 Age                                418  41.4 *48.1* 55.8  42.9 *51.9* 59.0  46.0 *53.0* 61.1
 spiders : present                  312   0.292   45/154    0.285   45/158                   
@@ -209,14 +209,14 @@ rmd(x)</code></pre>
 <td align="center">(N=106)</td>
 </tr>
 <tr class="even">
-<td align="left">Serum Bilirubin</td>
+<td align="left">Serum Bilirubin (mg/dl)</td>
 <td align="center">418</td>
 <td align="center">0.30 0.70 <strong>1.30</strong> 3.60 28.00  3.65±5.28</td>
 <td align="center">0.30 0.80 <strong>1.40</strong> 3.22 20.00  2.87±3.63</td>
 <td align="center">0.40 0.70 <strong>1.40</strong> 3.12 18.00  3.12±4.04</td>
 </tr>
 <tr class="odd">
-<td align="left">Albumin</td>
+<td align="left">Albumin (gm/dl)</td>
 <td align="center">418</td>
 <td align="center">1.96 3.34 <strong>3.54</strong> 3.78 4.38  3.52±0.40</td>
 <td align="center">2.10 3.21 <strong>3.56</strong> 3.83 4.64  3.52±0.44</td>
@@ -258,7 +258,7 @@ rmd(x)</code></pre>
 <td align="center">0.350 35/100</td>
 </tr>
 <tr class="odd">
-<td align="left">Prothrombin Time</td>
+<td align="left">Prothrombin Time (sec.)</td>
 <td align="center">416</td>
 <td align="center">9.2 10.0 <strong>10.6</strong> 11.4 17.1  10.8±1.1</td>
 <td align="center">9.0 10.0 <strong>10.6</strong> 11.0 14.1  10.7±0.9</td>
@@ -297,7 +297,9 @@ rmd(x)</code></pre>
         quant=seq(0, 1, 0.25),
         style=&quot;hmisc&quot;,
         caption = &quot;Table Hmisc Style&quot;,
-        pct_width=0.6)</code></pre>
+        pct_width=0.6,
+        capture_units=TRUE
+  )</code></pre>
 <div id="tbl3" class="figure">
 <style>
 
@@ -607,7 +609,8 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
 <p>Fragments can have localized style sheets specified by given id. Notice the specification of 2 digits for bilirubin in the formula.</p>
 <pre class="r"><code>tangram(&quot;drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders&quot;, pbc,
         style=&quot;nejm&quot;, caption = &quot;Table NEJM Style&quot;,
-        pct_width=0.8)</code></pre>
+        pct_width=0.8,
+        capture_units=TRUE)</code></pre>
 <div id="tbl4" class="figure">
 <style>
     #tbl4 body .figbody {
@@ -733,7 +736,7 @@ Table NEJM Style
 <tbody>
 <tr>
 <td class="header odd tg-label">
-<span class="variable">Serum Bilirubin</span><span class="units">mg/dl</span>
+<span class="variable">Serum Bilirubin (mg/dl)</span>
 </td>
 <td class="odd data N">
 <span class="N">418</span>
@@ -781,7 +784,7 @@ Table NEJM Style
 </tr>
 <tr>
 <td class="header even tg-label">
-<span class="variable">Albumin</span><span class="units">gm/dl</span>
+<span class="variable">Albumin (gm/dl)</span>
 </td>
 <td class="even data N">
 <span class="N">418</span>
@@ -911,7 +914,7 @@ Table NEJM Style
 </tr>
 <tr>
 <td class="header even tg-label">
-<span class="variable">Prothrombin Time</span><span class="units">sec.</span>
+<span class="variable">Prothrombin Time (sec.)</span>
 </td>
 <td class="even data N">
 <span class="N">416</span>
@@ -1054,7 +1057,8 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
         pformat = 5,
         style=&quot;lancet&quot;,
         caption = &quot;Table Lancet Style&quot;,
-        pct_width = 0.8
+        pct_width = 0.8,
+        capture_units=TRUE
        )</code></pre>
 <div id="tbl5" class="figure">
 <style>
@@ -1507,6 +1511,148 @@ N is the number of non-missing value. <sup>1</sup>Kruskal-Wallis. <sup>2</sup>Pe
 </div>
 </div>
 </div>
+<div id="tables-with-multicolumnsmultirow" class="section level3">
+<h3>Tables with Multicolumns/Multirow</h3>
+<p>What about the <code>table</code> object in R? Can I have multicol/multirow output for cells?</p>
+<p>The answer is yes to both but multi row/col is only for supported rendering formats, i.e. HTML and LaTeX.</p>
+<pre class="r"><code>tangram(with(warpbreaks, table(wool, tension)), id=&quot;warpbreaks&quot;) %&gt;%
+insert_row(0, cell(&quot;&quot;), cell(&quot;Tension&quot;, colspan=3), NA, NA) %&gt;%
+insert_column(0, &quot;&quot;, cell(&quot;Wool&quot;, rowspan=3), NA, NA)</code></pre>
+<div id="warpbreaks" class="figure">
+<style>
+
+    #warpbreaks .figure  {  font-family: "Computer Modern Serif", serif;
+            margin-left:  auto;
+                  margin-right: auto;
+                  font-size: 66%;
+  -webkit-print-color-adjust: exact;
+         }
+
+    #warpbreaks .caption { text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             padding: 1.5em 0 1.5em 0;
+           }
+
+    #warpbreaks .figbody {
+               text-align:   center;
+             margin-left:  auto;
+             margin-right: auto;
+             border-style: double none solid none;
+             border-width: 3pt 0 1pt 0;
+             width:        100%;
+         }
+
+    #warpbreaks .figbody td {
+                      padding: 0.2em 0.5em 0.2em 0.5em;
+            }
+
+    #warpbreaks .tangram { border-spacing: 0; }
+
+    #warpbreaks thead td {text-align: center;}
+
+    #warpbreaks .subheader    { font-size: smaller; }
+
+    #warpbreaks .subheader tr { border-collapse: collapse; }
+    #warpbreaks .subheader td { border-bottom: 1pt solid black; }
+
+    #warpbreaks tbody .variable {
+    float:      left;
+    text-align: left;
+}
+
+    #warpbreaks .units {
+    float:      right;
+    font-size:  x-small;
+    text-align: right;
+    padding-left: 1em;
+    vertical-align: text-bottom; /* FIXME why doesn't this work */
+}
+
+    #warpbreaks thead .header {font-weight: bold;}
+    #warpbreaks .header.N  { font-style: italic; }
+
+    #warpbreaks .nobr {
+   white-space: nowrap;
+}
+
+    #warpbreaks .supsub {
+   display: inline-block;
+   margin: -9em 0;
+   vertical-align: -0.55em;
+   line-height: 1.35em;
+   font-size: x-small;
+   text-align: left;
+}
+
+    #warpbreaks .sup { font-size: x-small; vertical-align: super; }
+    #warpbreaks .sub { font-size: x-small; vertical-align: sub;}
+
+</style>
+<div class="figbody">
+<table class="tangram">
+<thead>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td colspan="3">
+Tension
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="3">
+Wool
+</td>
+<td class="header tg-label">
+<span class="variable"></span>
+</td>
+<td class="header tg-label">
+<span class="variable"><strong>L</strong></span>
+</td>
+<td class="header tg-label">
+<span class="variable"><strong>M</strong></span>
+</td>
+<td class="header tg-label">
+<span class="variable"><strong>H</strong></span>
+</td>
+</tr>
+<tr>
+<td>
+<strong>A</strong>
+</td>
+<td>
+9
+</td>
+<td>
+9
+</td>
+<td>
+9
+</td>
+</tr>
+<tr>
+<td>
+<strong>B</strong>
+</td>
+<td>
+9
+</td>
+<td>
+9
+</td>
+<td>
+9
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 <div id="types" class="section level3">
 <h3>Types</h3>
 <p>The Hmisc default style recognizes 3 types: Categorical, Bionimial, and Numerical. Then for each product of these two, a function is provided to generate the corresponding rows and columns. As mentioned before, the user can declare any type in a formula, and one is not limited to the Hmisc defaults. This is completely customizable, which will be covered later.</p>
@@ -1901,7 +2047,7 @@ tangram(event ~ id[&quot;%1.0f&quot;], df, id=&quot;tbl7&quot;, transforms=summa
 <span class="variable"></span>
 </td>
 <td class="subheader header even data N">
-<span class="N">246</span>
+<span class="N">242</span>
 </td>
 <td class="subheader header even data N">
 <span class="N">248</span>
@@ -1926,13 +2072,13 @@ tangram(event ~ id[&quot;%1.0f&quot;], df, id=&quot;tbl7&quot;, transforms=summa
 3 <strong>4</strong> 5
 </td>
 <td class="odd">
-2 <strong>4</strong> 5
+3 <strong>4</strong> 5
 </td>
 <td class="odd">
 3 <strong>4</strong> 5
 </td>
 <td class="statistics odd">
-F<sub>2,734</sub>=0.12, P=0.890<sup>1</sup>
+F<sub>2,730</sub>=0.18, P=0.836<sup>1</sup>
 </td>
 </tr>
 </tbody>

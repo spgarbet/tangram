@@ -12,6 +12,7 @@ header-includes:
 - \usepackage{float}
 - \usepackage[x11names,dvipsnames,table]{xcolor}
 - \usepackage{boldline}
+- \usepackage{multirow}
 - \usepackage{colortbl}
 - \usepackage{hhline}
 - \pdfminorversion=5
@@ -130,6 +131,18 @@ tangram(1 ~ x+y,
         data.frame(x=x, y=y),
         style="hmisc", caption="Intercept Example", id="tbl5") %>%
 del_row(2) %>% del_col(4)
+```
+
+### Tables with Multicolumns/Multirow
+
+What about the `table` object in R? Can I have multicol/multirow output for cells? 
+
+The answer is yes to both but multi row/col is only for supported rendering formats, i.e. HTML and LaTeX.
+
+```{r warpbreaks}
+tangram(with(warpbreaks, table(wool, tension)), id="warpbreaks") %>%
+insert_row(0, cell(""), cell("Tension", colspan=3), NA, NA) %>%
+insert_column(0, "", cell("Wool", rowspan=3), NA, NA)
 ```
 
 ### Types
