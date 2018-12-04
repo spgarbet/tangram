@@ -1,6 +1,6 @@
 ---
 title: "Tangram Examples"
-author: "Shawn Garbett"
+author: "Shawn Garbett, MS"
 date: '`r Sys.Date()`'
 output:
   pdf_document: null
@@ -12,11 +12,13 @@ header-includes:
 - \usepackage{float}
 - \usepackage[x11names,dvipsnames,table]{xcolor}
 - \usepackage{boldline}
+- \usepackage{multirow}
 - \usepackage{colortbl}
 - \usepackage{hhline}
 - \pdfminorversion=5
 - \pdfcompresslevel=9
 - \pdfobjcompresslevel=2
+email: shawn.garbett@vumc.org
 vignette: |
   %\VignetteIndexEntry{Tangram Examples}
   %\VignetteEngine{knitr::rmarkdown}
@@ -69,10 +71,9 @@ Notice that stage in the formula wasn't stored as a factor, i.e. Categorical var
 It also supports HTML5, with styling fragments.
 
 ### Rmd Direct Example
-```{r, results="asis"}
+```{r tbl2}
 x <- tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
-        id="tbl2",
         msd=TRUE,
         quant=seq(0, 1, 0.25),
         style="hmisc",
@@ -82,51 +83,45 @@ rmd(x)
 ```
 
 ### Hmisc Style Example
-```{r, results="asis"}
+```{r tbl3}
 tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
-        id="tbl2",
         msd=TRUE,
         quant=seq(0, 1, 0.25),
         style="hmisc",
         caption = "Table Hmisc Style",
-        pct_width=0.6)
+        pct_width=0.6,
+        capture_units=TRUE
+  )
 ```
 
 ### NEJM Style Example
 Fragments can have localized style sheets specified by given id. Notice the specification of 2 digits for bilirubin in the formula. 
 
-```{r, results="asis"}
+```{r tbl4}
 tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders", pbc,
-        style="nejm", caption = "Table NEJM Style", id="tbl3",
-        pct_width=0.8)
+        style="nejm", caption = "Table NEJM Style",
+        pct_width=0.8,
+        capture_units=TRUE)
 ```
 
 ### Lancet Style Example
 Fragments can have localized style sheets specified by given id. Specifications of digit output can also be c specifiers if enclosed in quotes.
 
-```{r, results="asis"}
+```{r tbl5}
 tangram('drug~bili["%4.03f"]+albumin+stage::Categorical[1]+protime+sex[1]+age+spiders[1]', 
-        id="tbl4",
         data=pbc,
         pformat = 5,
         style="lancet",
         caption = "Table Lancet Style",
-        pct_width = 0.8
+        pct_width = 0.8,
+        capture_units=TRUE
        )
-```
-
-### Indexing
-
-It is also capable of producing an index of contents inside a table for traceability.
-```{r, comment=""}
-index(tangram("drug ~ bili + albumin + stage::Categorical + protime + sex + age + spiders",
-              pbc, id="tbl2"))[1:20,]
 ```
 
 
 ### Intercept Model Example
-```{r, results='asis'}
+```{r tbl7}
 x <- round(rnorm(375, 79, 10))
 y <- round(rnorm(375, 80,  9))
 y[rbinom(375, 1, prob=0.05)] <- NA
@@ -136,6 +131,18 @@ tangram(1 ~ x+y,
         data.frame(x=x, y=y),
         style="hmisc", caption="Intercept Example", id="tbl5") %>%
 del_row(2) %>% del_col(4)
+```
+
+### Tables with Multicolumns/Multirow
+
+What about the `table` object in R? Can I have multicol/multirow output for cells? 
+
+The answer is yes to both but multi row/col is only for supported rendering formats, i.e. HTML and LaTeX.
+
+```{r warpbreaks}
+tangram(with(warpbreaks, table(wool, tension)), id="warpbreaks") %>%
+insert_row(0, cell(""), cell("Tension", colspan=3), NA, NA) %>%
+insert_column(0, "", cell("Wool", rowspan=3), NA, NA)
 ```
 
 ### Types
@@ -152,14 +159,13 @@ Let's cover the phases of table generations.
 
 A simple example of using an intercept in a formula, with some post processing to remove undesired columns.
 
-```{r, results='asis'}
+```{r tbl8}
 d1 <- iris
 d1$A <- d1$Sepal.Length > 5.1
 attr(d1$A,"label") <- "Sepal Length > 5.1"
 tangram(
    Species + 1 ~ A + Sepal.Width,
    data = d1,
-   id="tbl6",
    style="nejm",
    caption="Example All Summary"
 ) %>%
@@ -173,7 +179,7 @@ The library is designed to be extensible, in the hopes that more useful summary 
 
 This example shows how to create a function that given a row and column, to construct summary entries for a table.
 
-```{r extension, results='asis'}
+```{r extension}
 
 ### Make up some data, which has events nested within an id
 n  <- 1000
@@ -211,7 +217,7 @@ summarize_count <- function(table, row, column, ...)
   # Add the First column of summary data as an N value
   add_col(cell_n(length(unique(datar))))             %>%
   # Now add quantiles for the counts
-  table_builder_apply(col_categories, FUN=
+  table_apply(col_categories, FUN=
     function(tbl, cat_name) {
       # Compute each data set
       x  <- datar[datac == cat_name]
