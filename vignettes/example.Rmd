@@ -141,8 +141,8 @@ The answer is yes to both but multi row/col is only for supported rendering form
 
 ```{r warpbreaks}
 tangram(with(warpbreaks, table(wool, tension)), id="warpbreaks") %>%
-insert_row(0, cell(""), cell("Tension", colspan=3), NA, NA) %>%
-insert_column(0, "", cell("Wool", rowspan=3), NA, NA)
+insert_row(0, cell_header(""), cell_header("Tension", colspan=3), NA, NA) %>%
+insert_column(0, cell_header(""), cell_header(""), cell_header("Wool", rowspan=2), NA)
 ```
 
 ### Types

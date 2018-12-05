@@ -474,14 +474,14 @@ tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
 
   if(is.null(dim(x)) || length(dim(x)) == 1)
   {
-    cols <- if(is.null(names(x))) paste("Level", 1:length(x)) else paste0("**", names(x), "**")
+    cols <- if(is.null(names(x))) paste("Level", 1:length(x)) else names(x)
     tbl[[1]] <- lapply(cols, cell_header, USE.NAMES=FALSE)
     tbl[[2]] <- lapply(x, cell)
   } else if(length(dim(x)) == 2)
   {
-    rows     <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows     <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else dimnames(x)[[1]]
     rows     <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
-    cols     <- if(is.null(colnames(x))) paste("Level", 1:dim(x)[2]) else paste0("**", dimnames(x)[[2]], "**")
+    cols     <- if(is.null(colnames(x))) paste("Level", 1:dim(x)[2]) else dimnames(x)[[2]]
     tbl[[1]] <- lapply(c("", cols), cell_header, USE.NAMES=FALSE)
 
     for(i in 1:(dim(x)[1]))
@@ -490,15 +490,16 @@ tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
       tbl[[i+1]] <- if(percents)
       {
         pcnt  <- paste0(" (", render_f(100*x[i,] / denom, digits), ")")
-        lapply(c(rows[i], paste0(x[i,],pcnt)), cell, USE.NAMES=FALSE)
+        lapply(c("", paste0(x[i,],pcnt)), cell, USE.NAMES=FALSE)
       } else
       {
-        lapply(c(rows[i],x[i,]), cell, USE.NAMES=FALSE)
+        lapply(c("",x[i,]), cell, USE.NAMES=FALSE)
       }
+      tbl[[i+1]][[1]] <- cell_header(rows[i])
     }
   } else if(length(dim(x)) == 3)
   {
-    rows <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
+    rows <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else dimnames(x)[[1]]
     rows <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
     tbl  <- tangram(x[1,,], id=id, percents=percents, digits=digits, ...) %>%
             insert_column(0, cell_header(""), rows[1])
@@ -517,7 +518,7 @@ tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
             insert_column(0, "", rows[1], class="cell_header")
     for(i in 2:(dim(x)[1]))
     {
-      tmp <- tangram(x[i,,,], id=id, percents=percnets, digits=digits, ...) %>%
+      tmp <- tangram(x[i,,,], id=id, percents=percents, digits=digits, ...) %>%
              insert_column(0, "", rows[i], class="cell_header") %>%
              del_row(1)
       tbl <- rbind(tbl, tmp)
