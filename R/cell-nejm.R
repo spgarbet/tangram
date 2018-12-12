@@ -45,9 +45,12 @@ nejm_range <- function(x, format, ...)
 nejm_fraction <- function(numerator, denominator, format=NULL, ...)
 {
   format <- if(inherits(format,"numeric")) format - 2 else format
+
+  percent <- 100*numerator/denominator
+
   if(is.na(format) || is.null(format)) format <- format_guess(percent)
 
-  percent      <- render_f(100*numerator / denominator, format)
+  percent      <- render_f(percent, format)
 
   cell(paste0(str_pad(numerator, nchar(as.character(denominator))),
               "/",
