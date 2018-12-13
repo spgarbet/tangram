@@ -57,8 +57,8 @@ textify <- Vectorize(function(x)
 })
 
 
-#######
 #' The default method for rendering tangram objects
+#'
 #' A tangram is a summary, so it returns itself. Otherwise convert to a text representation.
 #'
 #' @param object object; the item to render
@@ -84,14 +84,14 @@ summary.tangram <- function(object, ...)
   x
 }
 
-#' #' @rdname summary
-#' #' @export
-#' summary.logical <- function(object, ...)
-#' {
-#'   if(is.na(object)) return("")
-#'
-#'   return(as.character(object))
-#' }
+# #' @rdname summary
+# #' @export
+# summary.logical <- function(object, ...)
+# {
+#   if(is.na(object)) return("")
+#
+#   return(as.character(object))
+# }
 
 #' @rdname summary
 #' @export

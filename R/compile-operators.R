@@ -137,6 +137,10 @@ new_header <- function(table, attribute, sub, ...)
   table
 }
 
+#' A set of magrittr operators for tangram tables
+#'
+#' A set of magrittr operators for tangram tables
+#'
 #' @rdname table_builder
 #' @export
 col_header <- function(table, ..., sub=TRUE) new_header(table, "col_header", sub, ...)

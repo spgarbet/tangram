@@ -3,8 +3,7 @@
 \name{summary.tangram}
 \alias{summary.tangram}
 \alias{summary.cell}
-\title{The default method for rendering tangram objects
-A tangram is a summary, so it returns itself. Otherwise convert to a text representation.}
+\title{The default method for rendering tangram objects}
 \usage{
 \method{summary}{tangram}(object, ...)
 
@@ -19,7 +18,6 @@ A tangram is a summary, so it returns itself. Otherwise convert to a text repres
 the text summary
 }
 \description{
-The default method for rendering tangram objects
 A tangram is a summary, so it returns itself. Otherwise convert to a text representation.
 }
 \examples{

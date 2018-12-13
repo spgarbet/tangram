@@ -62,6 +62,7 @@ Collate:
     'transform-hmisc.R'
     'transform-lancet.R'
     'transform-nejm.R'
+    'transform-proc-tab.R'
     'transform-smd.R'
 NeedsCompilation: no
 Packaged: 2017-04-25 20:16:25 UTC; garbetsp
