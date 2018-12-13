@@ -33,7 +33,8 @@
 render_f <- function(x, format)
 {
   if(is.null(format) || is.na(format)) format <- attr(x, "format")
-  if(is.null(format) || is.na(format)) format <- 3
+  if(is.null(format) || is.na(format)) format <- 2
+  if(!is.character(format) && format < 0) format <- 0
   if(is.character(format) && substr(format, 1, 1) != "%") format <- as.numeric(format)
 
   result <- if(is.numeric(format))
