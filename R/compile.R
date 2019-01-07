@@ -445,7 +445,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   attr(tbl, "id")       <- id
   attr(tbl, "caption")  <- caption
   attr(tbl, "style")    <- style
-  attr(tbl, "footnote") <- append(attr(tbl, "footnote"), footnote)
+  attr(tbl, "footnote") <- paste(attr(tbl, "footnote"), footnote, collapse="\n")
   attr(tbl, "args")     <- list(...)
   attr(tbl, "row")      <- 1
   attr(tbl, "col")      <- 1
