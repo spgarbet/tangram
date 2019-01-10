@@ -206,6 +206,8 @@ latex.tangram <- function(object,
   if(style=="lancet") result <- paste0(result, "\\definecolor{lancet-red}{RGB}{245,224,220}\n")
 
   result <- paste0(result, "\\begin{table}[",placement,"]\n\\centering\n")
+  result <- paste0(result, "\\caption{",latexify(caption),"}\n")
+
 
   if(style %in% c("nejm", "lancet")) result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
@@ -293,8 +295,6 @@ latex.tangram <- function(object,
   if(pct_width != 1.0) result <- paste0(result, "}\n")
 
   if(style %in% c("nejm","lancet")) result <- paste0(result, "}\n")
-
-  result <- paste0(result, "\\caption{",latexify(caption),"}\n")
 
   if(nchar(footnote) > 0) result <- paste0(result, "\n\n\\vspace{0.2cm}\n\\raggedright{\\begin{footnotesize}",footnote,"\\end{footnotesize}}\n")
 
