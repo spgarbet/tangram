@@ -175,7 +175,7 @@ add_footnote <- function(table, footnote)
 {
   footnotes <- attr(table, "footnote")
 
-  attr(table, "footnote") <- if(is.null(footnotes)) footnotes else append(footnotes, footnote)
+  attr(table, "footnote") <- if(is.null(footnotes)) footnotes else paste(footnotes, footnote)
 
   table
 }

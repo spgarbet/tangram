@@ -406,6 +406,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) stop("data must be supplied as data frame")
   if(is.null(id) && "knitr" %in% .packages()) id <- knitr::opts_current$get("label")
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
+  if(is.null(transforms)) transforms <- get(style, envir=globalenv())
   if(is.null(transforms)) transforms <- get(style)
 
   # Helper function for single transform function
@@ -445,7 +446,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   attr(tbl, "id")       <- id
   attr(tbl, "caption")  <- caption
   attr(tbl, "style")    <- style
-  attr(tbl, "footnote") <- paste(attr(tbl, "footnote"), footnote, collapse="\n")
+  attr(tbl, "footnote") <- if(is.null(footnote)) attr(tbl, "footnote") else footnote
   attr(tbl, "args")     <- list(...)
   attr(tbl, "row")      <- 1
   attr(tbl, "col")      <- 1
