@@ -25,6 +25,9 @@
 nejm_range <- function(x, format, ...)
 {
   if(is.na(format) || is.null(format)) format <- format_guess(x)
+  
+  if(sum(!is.na(x)) == 0)             return(cell("\u2014", ...))
+  if(is.infinite(min(x, na.rm=TRUE))) return(cell("\u2014", ...))
 
   cell(paste0(render_f(min(x,na.rm=TRUE),format), "\u2014", render_f(max(x, na.rm=TRUE), format)), ...)
 }
@@ -98,19 +101,21 @@ nejm_iqr <- function(x,
   y <- quantile(x, quant, na.rm, names, type)
 
   if(is.na(format)) format <- format_guess(y)
-  ql <- sapply(y, function(x) render_f(x, format))
-  ql <- paste0(ql[m], " (",
-                      paste0(ql[1:(m-1)], collapse="\u2014"),
-                      "\u2014",
-                      paste0(ql[(m+1):length(quant)], collapse="\u2014"),
-                      ")")
-
-
-  if(msd) ql <- paste0(ql, "\u00A0\u00A0",
-    render_f(mean(x, na.rm=TRUE), format),
-    "\u00b1",
-    render_f(sd(x, na.rm=TRUE), format)
-    )
+  ql <- "\u2014"
+  if(sum(!is.na(y)) > 0)
+  {
+    ql <- sapply(y, function(x) render_f(x, format))
+    ql <- paste0(ql[m], " (",
+                        paste0(ql[1:(m-1)], collapse="\u2014"),
+                        "\u2014",
+                        paste0(ql[(m+1):length(quant)], collapse="\u2014"),
+                        ")")
+    if(msd) ql <- paste0(ql, "\u00A0\u00A0",
+      render_f(mean(x, na.rm=TRUE), format),
+      "\u00b1",
+      render_f(sd(x, na.rm=TRUE), format)
+      )
+  }
 
   cell(ql, ...)
 }
