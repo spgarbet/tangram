@@ -25,3 +25,6 @@ hmisc_data_type(factor(c("A","B","B","A")))
 hmisc_data_type(factor(c(TRUE, FALSE, TRUE, FALSE)))
 
 }
+\seealso{
+\code{\link{hmisc}}
+}
