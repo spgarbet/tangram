@@ -105,6 +105,6 @@ the results in a 1X3 format.
 }
 
 \seealso{
-\code{\link{hmisc_data_type}}, \code{\link{tangram}}
+\code{\link{hmisc_data_type}}, \code{\link{tangram}}, \code{\link{hmisc_cell}}
 }
 \keyword{data}

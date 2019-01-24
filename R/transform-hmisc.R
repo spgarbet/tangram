@@ -40,7 +40,7 @@
 #' 
 #' @rdname hmisc
 #' 
-#' @seealso \code{\link{hmisc_data_type}}, \code{\link{tangram}}
+#' @seealso \code{\link{hmisc_data_type}}, \code{\link{tangram}}, \code{\link{hmisc_cell}}
 #'
 #' @section \code{summarize_kruskal_horz}:
 #' Given a row and column object apply a Kruskal test and output
