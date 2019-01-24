@@ -273,7 +273,7 @@ latex.tangram <- function(object,
   result <- paste0(result, "{\\renewcommand{\\arraystretch}{", arraystretch, "}")
   result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
-              paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{",caption,"} \\\\\n\\hline\n")
+              paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{Table \\thetable{}: ",caption,"} \\\\\n\\hline\n")
             } else if(style=="hmisc") {
               paste0(result, "\\hline\\hline\n")
             } else {
