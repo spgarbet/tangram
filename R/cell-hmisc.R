@@ -136,6 +136,7 @@ hmisc_fraction <- function(numerator, denominator, format=3, ...)
 #' hmisc_fstat(4.0, 10, 20, 0.004039541)
 hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 {
+  if(is.na(f)) return("")
   cell(paste0("F~", df1, ",", df2, "~=", f, ", ", p, "^1^"), ..., class=c(class, "statistics"))
 }
 
@@ -154,6 +155,7 @@ hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 #' hmisc_chi2(5.33, 6, 0.2)
 hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
+  if(is.na(chi2)) return("")
   cell(paste0("\u03a7^2^~", df, "~=", chi2,", ", p, "^2^"),
        class="statistics",
        ...)
@@ -174,6 +176,7 @@ hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
 #' hmisc_spearman(20, 0.2, 0.05)
 hmisc_spearman <- function(S, rho, p, class=NULL, ...)
 {
+  if(is.na(S)) return("")
   cell(paste0(p, "^3^"), class=c(class, "statistics"), ...)
 }
 
@@ -191,6 +194,7 @@ hmisc_spearman <- function(S, rho, p, class=NULL, ...)
 #' hmisc_wilcox(20, 0.2)
 hmisc_wilcox <- function(V, p, class=NULL, ...)
 {
+  if(is.na(V)) return("")
   cell(paste0(p, "^3^"), class=c(class, "statistics"), ...)
 }
 

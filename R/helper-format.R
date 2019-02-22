@@ -46,6 +46,7 @@ render_f <- function(x, format)
     sprintf(format, x)
   }
   names(result) <- names(x)
+  result[is.na(x)] <- NA
   result
 }
 
