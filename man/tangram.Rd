@@ -107,9 +107,18 @@ Given an \code{rms} object it will summarize that model in a table. A
 rendering. Can create tables from summary.rms(), anova.rms(), and other rms object info to create a
 single pretty table of model results. The rms and Hmisc packages are required.
 }
+\details{
+Note that additional arguments are passed to any subsequent transform. This means that a lot
+of possible arguments are not documented here but in the transform applied.
+Examine their documentations for additional possible arguments if needed.
+}
 \examples{
 tangram(1, 1)
 tangram(data.frame(x=1:3, y=c('a','b','c')), id="mytbl1")
 tangram(drug ~ bili + albumin + protime + sex + age + spiders, pbc, id="mytbl2")
 tangram("drug~bili+albumin+stage::Categorical+protime+sex+age+spiders", pbc,"mytbl3")
+}
+\seealso{
+Possible transforms are (see \code{\link{hmisc}}) (*default*),
+\code{\link{nejm}} and \code{\link{lancet}}.
 }

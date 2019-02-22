@@ -14,17 +14,44 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-#' A function to format p values intelligently
+#' Cell Generation functions for hmisc default
 #'
+#' Each function here is called when a cell is generated. Overriding these in a formula call will allows
+#' one to customize exactly how each cell's contents are generated.
+#' While this serves as the base template for transforms, it is by no means required if one develops their
+#' own bundle of data transforms. One can create ay number of cell level styling choices.
+#'
+#' @param p numeric; p-value to format
+#' @param pformat numeric or character; Significant digits or fmt to pass to sprintf
+#' @param include_p logical; include the leading P on the output string
+#' @param x numeric; whose sample quantiles are wanted. NA and NaN values are not allowed in numeric vectors unless na.rm is TRUE.
+#' @param format numeric or character; Significant digits or fmt to pass to sprintf
+#' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
+#' @param names logical; if true, the result has a names attribute. Set to FALSE for speedup with many probs.
+#' @param type integer; specify algorithm to use in constructing quantile. See quantile for more information.
+#' @param msd logical; compute an msd attribute containing mean and standard deviation
+#' @param quant numeric; The quantiles to display. Should be an odd length vector, since the center value is highlighted.
+#' @param numerator numeric; The value of the numerator
+#' @param denominator numeric; The value of the denominator
+#' @param f The value of the f-statistic
+#' @param df1 1st dimension degrees of freedom
+#' @param df2 2nd dimension degrees of freedom
+#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
+#' @param chi2 The value of the X^2 statistic
+#' @param df degrees of freedom
+#' @param S The value of the spearman statistic
+#' @param rho The rho value of the test
+#' @param V The value of the Wilcoxon statistic
+#' @return A formatted string or cell as appropriate
+#' @rdname hmisc_cell
+#' 
+#' @seealso \code{\link{hmisc}}
+#' 
+#' @section \code{hmisc_p}:
 #' Given a style in number of digits or a sprintf style specifier it renders
 #' the p-value and checks to see if it's all zeros, then switches the
 #' output to a less than.
 #'
-#' @param p numeric; p-value to format
-#' @param pformat numeric or character; Significant digits or fmt to pass to sprintf
-#' @param include_p include the leading P on the output string
-#' @return A formatted string of the p-value
 #' @export
 #' @examples
 #' hmisc_p(1e-6)
@@ -49,20 +76,10 @@ hmisc_p <- function(p, pformat="%1.3f", include_p=TRUE)
   }
 }
 
-#' Create a interquartile range cell object of the given data
+#' @section \code{hmisc_iqr}:
+#' Construct a cell which has the interquartile ranges specified.
 #'
-#' Construct a cell which has the 3 interquartile ranges specified.
-#'
-#' @param x numeric vector whose sample quantiles are wanted. NA and NaN values are not allowed in numeric vectors unless na.rm is TRUE.
-#' @param format numeric or character; Significant digits or fmt to pass to sprintf
-#' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
-#' @param names logical; if true, the result has a names attribute. Set to FALSE for speedup with many probs.
-#' @param type integer; specify algorithm to use in constructing quantile. See quantile for more information.
-#' @param msd logical; compute an msd attribute containing mean and standard deviation
-#' @param quant numeric; The quantiles to display. Should be an odd length vector, since the center value is highlighted.
-#' @param ... additional arguments to constructing cell
-#'
-#' @return A cell_quantile object.
+#' @rdname hmisc_cell
 #' @export
 #' @importFrom stats quantile
 #' @importFrom stats sd
@@ -99,15 +116,11 @@ hmisc_iqr <- function(x,
   cell(ql, ...)
 }
 
-#' Create an cell_fraction (S3) object of the given statistic
+#' @section \code{hmisc_fraction}:
+#' Construct a cell which has the fraction specified in an hmisc format
 #'
-#' A hmisc_fraction object contains a statistical result of a fraction/percentage.
-#'
-#' @param numerator numeric; The value of the numerator
-#' @param denominator numeric; The value of the denominator
-#' @param format numeric or character; a string formatting directive
-#' @param ... optional extra information to attach
-#' @return A cell_fraction object.
+#' @rdname hmisc_cell
+#' 
 #' @export
 #' @examples
 #' hmisc_fraction(1, 4, 3)
@@ -120,17 +133,11 @@ hmisc_fraction <- function(numerator, denominator, format=3, ...)
   cell(paste0(ratio, " \\frac{",str_pad(numerator, nchar(as.character(denominator))),"}{",denominator,"}"), ...)
 }
 
-#' Create an hmisc_fstat (S3) object of the given statistic
+
+#' @section \code{hmisc_fstat}:
+#' Construct a cell which has the fstat specified in an hmisc format.
 #'
-#' A hmisc_fstat object contains a statistical result of an F-test.
-#'
-#' @param f The value of the f-statistic
-#' @param df1 1st dimension degrees of freedom
-#' @param df2 2nd dimension degrees of freedom
-#' @param p The p-value of the resulting test
-#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
-#' @param ... optional extra information to attach
-#' @return A cell_fstat object.
+#' @rdname hmisc_cell
 #' @export
 #' @examples
 #' hmisc_fstat(4.0, 10, 20, 0.004039541)
@@ -140,16 +147,11 @@ hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
   cell(paste0("F~", df1, ",", df2, "~=", f, ", ", p, "^1^"), ..., class=c(class, "statistics"))
 }
 
-#' Create an hmisc_chi2 (S3) object of the given statistic
+
+#' @section \code{hmisc_chi2}:
+#' Construct a cell which has the chi^2 specified in an hmisc format
 #'
-#' A hmisc_chi2 object contains a statistical result of an X^2-test.
-#'
-#' @param chi2 The value of the X^2 statistic
-#' @param df degrees of freedom
-#' @param p p-value of resulting test
-#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
-#' @param ... optional extra information to attach
-#' @return A cell_chi2 object.
+#' @rdname hmisc_cell
 #' @export
 #' @examples
 #' hmisc_chi2(5.33, 6, 0.2)
@@ -161,16 +163,10 @@ hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
        ...)
 }
 
-#' Create an hmisc_spearman (S3) object of the given statistic
+#' @section \code{hmisc_spearman}:
+#' Construct a cell which has the spearman specified in an hmisc format
 #'
-#' A hmisc_spearman object contains a statistical result of an spearman-test.
-#'
-#' @param S The value of the spearman statistic
-#' @param rho The rho value of the test
-#' @param p p-value of resulting test
-#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
-#' @param ... optional extra information to attach
-#' @return A cell_spearman object.
+#' @rdname hmisc_cell
 #' @export
 #' @examples
 #' hmisc_spearman(20, 0.2, 0.05)
@@ -180,15 +176,11 @@ hmisc_spearman <- function(S, rho, p, class=NULL, ...)
   cell(paste0(p, "^3^"), class=c(class, "statistics"), ...)
 }
 
-#' Create an hmisc_wilcox (S3) object of the given statistic
+
+#' @section \code{hmisc_wilcox}:
+#' Construct a cell which has the Wilcoxon specified in an hmisc format
 #'
-#' A hmisc_wilcox object contains a statistical result of an Wilcoxon-test.
-#'
-#' @param V The value of the Wilcoxon statistic
-#' @param p p-value of resulting test
-#' @param class character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)
-#' @param ... optional extra information to attach
-#' @return A cell_spearman object.
+#' @rdname hmisc_cell
 #' @export
 #' @examples
 #' hmisc_wilcox(20, 0.2)
@@ -198,15 +190,23 @@ hmisc_wilcox <- function(V, p, class=NULL, ...)
   cell(paste0(p, "^3^"), class=c(class, "statistics"), ...)
 }
 
-#' Cell Generation functions for hmisc default
-#'
-#' Each function here is called when a cell is generated. Overriding these in a formula call will allows
-#' one to customize exactly how each cell's contents are generated.
-#'
-#' While this serves as the base template for transforms, it is by no means required if one develops their
-#' own bundle of data transforms. One can create ay number of cell level styling choices.
-#'
+#' @section \code{hmisc_cell}:
+#' List of data transforms for a cell of a table.
+#' 
+#' \preformatted{
+#' hmisc_cell <- list(
+#'   n        = cell_n,
+#'   iqr      = hmisc_iqr,
+#'   fraction = hmisc_fraction,
+#'   fstat    = hmisc_fstat,
+#'   chi2     = hmisc_chi2,
+#'   spearman = hmisc_spearman,
+#'   wilcox   = hmisc_wilcox,
+#'   p        = hmisc_p
+#' )}
+#' 
 #' @include compile-cell.R
+#' @rdname hmisc_cell
 #' @keywords data
 #' @export
 hmisc_cell <- list(

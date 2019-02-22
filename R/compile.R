@@ -255,6 +255,13 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' rendering. Can create tables from summary.rms(), anova.rms(), and other rms object info to create a
 #' single pretty table of model results. The rms and Hmisc packages are required.
 #'
+#' Note that additional arguments are passed to any subsequent transform. This means that a lot
+#' of possible arguments are not documented here but in the transform applied.
+#' Examine their documentations for additional possible arguments if needed.
+#' 
+#' @seealso Possible transforms are (see \code{\link{hmisc}}) (*default*),
+#' \code{\link{nejm}} and \code{\link{lancet}}.
+#' 
 #' @param x object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows, an rms.model
 #' @param id character; A unique charcter id used to identify this table over multiple runs. No spaces.
 #' @param caption character; A string with the desired caption

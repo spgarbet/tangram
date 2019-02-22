@@ -14,23 +14,40 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#' Create a summarization for a numerical row X categorical column
+#' Style Bundle for Hmisc defaults
 #'
-#' Given a row and column object from the parser apply a Kruskal test and output
-#' the results horizontally. 1 X (n + no. categories + test statistic)
-#'
+#' List of lists, should contain a "Type" entry with a function to determine type of vector passed in.
+#' Next entries are keyed off returned types from function, and represent the type of a row.
+#' The returned list should contain the same list of types, and represents the type of a column. Thus it now returns
+#' a function to process the intersection of those two types.
+#' There are additionally a list of cell tranforms that can be overridden and a default
+#' footnote if none is specified.
+#' 
+#' 
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
 #' @param cell_style list; cell styling functions
+#' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall logical; Include overall summary statistics for a categorical column
+#' @param row_percents logical; use denominator across rows instead of columns.
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
+#' 
+#' @rdname hmisc
+#' 
+#' @seealso \code{\link{hmisc_data_type}}, \code{\link{tangram}}, \code{\link{hmisc_cell}}
+#'
+#' @section \code{summarize_kruskal_horz}:
+#' Given a row and column object apply a Kruskal test and output
+#' the results horizontally. 1 X (n + no. categories + test statistic)
+#' 
 #' @export
+#' 
 #' @importFrom magrittr "%>%"
 #' @include hmisc-biVar.R
 #' @include compile.R
@@ -111,23 +128,12 @@ summarize_kruskal_horz <- function(table,
   tbl
 }
 
-
-
-#' Create a summarization for a categorical row versus X numerical column
-#'
+#' @section \code{summarize_kruskal_vert}:
 #' Given a row and column object from the parser apply a Kruskal test and output
 #' the results vertically (#Categories+1) X (N, Summary, Statistic)
+#' 
+#' @rdname hmisc
 #'
-#' @param table The table object to modify
-#' @param row The row variable object to use (categorical)
-#' @param column The column variable to use (numerical)
-#' @param cell_style list; cell styling functions
-#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
-#' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
-#' @param test logical; include statistical test results
-#' @param msd logical; include msd in summary
-#' @param ... absorbs additional arugments. Unused at present.
-#' @return The modified table object
 #' @export
 summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, msd=FALSE, test=FALSE, ...)
 {
@@ -189,22 +195,12 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
   tbl
 }
 
-#' Create a summarization for a categorical row versus a categorical column
-#'
+
+#' @section \code{summarize_chisq}:
 #' Given a row and column object from the parser apply a chi^2 test and output
 #' the results
-#'
-#' @param table The table object to modify
-#' @param row The row variable object to use (categorical)
-#' @param column The column variable to use (categorical)
-#' @param cell_style list; cell styling functions
-#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
-#' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
-#' @param overall logical; Include the overall summary column
-#' @param test logical; include statistical test results
-#' @param row_percents logical; use denominator across rows instead of columns.
-#' @param ... absorbs extra parameters. Currently unused.
-#' @return The modified table object
+#' 
+#' @rdname hmisc
 #' @export
 summarize_chisq <- function(table,
                             row,
@@ -325,19 +321,11 @@ summarize_chisq <- function(table,
   table
 }
 
-#' Create a summarization for a numerical row versus a numerical column
-#'
+#' @section \code{summarize_spearman}:
 #' Given a row and column object from the parser apply a Spearman test and output
 #' the results in a 1X3 format.
-#'
-#' @param table The table object to modify
-#' @param row The row variable object to use (numerical)
-#' @param column The column variable to use (numerical)
-#' @param cell_style list; cell styling functions
-#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
-#' @param test logical; include statistical test results
-#' @param ... absorbs additional arguments. Unused at present.
-#' @return The modified table object
+#' 
+#' @rdname hmisc
 #' @export
 summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=FALSE, ...)
 {
@@ -376,6 +364,8 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 #'
 #' @return One of the following strings: Binomial, Categorical, or Numerical.
 #' @export
+#' 
+#' @seealso \code{\link{hmisc}}
 #'
 #' @examples
 #'
@@ -392,16 +382,25 @@ hmisc_data_type <- function(x, category_threshold=NA)
   stop(paste("Unsupported class/type - ",class(x), typeof(x)))
 }
 
-#' Style Bundle for Hmisc defaults.
-#'
-#' List of lists, should contain a "Type" entry with a function to determine type of vector passed in.
-#' Next entries are keyed off returned types from function, and represent the type of a row.
-#' The returned list should contain the same list of types, and represents the type of a column. Thus it now returns
-#' a function to process the intersection of those two types.
-#'
-#' @keywords data
+
+#' @section \code{hmisc}:
+#' \preformatted{hmisc <- list(
+#'  Type        = hmisc_data_type,
+#'  Numerical   = list(
+#'    Numerical   = summarize_spearman,
+#'    Categorical = summarize_kruskal_horz
+#'  ),
+#'  Categorical = list(
+#'    Numerical   = summarize_kruskal_vert,
+#'    Categorical = summarize_chisq
+#'  ),
+#'  Cell        = hmisc_cell,
+#'  Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
+#' )}
+#' 
 #' @export
-#'
+#' @rdname hmisc
+#' @keywords data
 hmisc <- list(
   Type        = hmisc_data_type,
   Numerical   = list(
