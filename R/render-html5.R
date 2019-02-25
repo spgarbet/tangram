@@ -29,7 +29,7 @@ htmlsub_table <-list(
   c("(^|[^\\\\])~((\\\\.|[^~\\\\])+)~",                   "\\1<sub>\\2</sub>"),        # Subscript
   c("(^|[^\\\\])\\^((\\\\.|[^\\^\\\\])+)\\^",             "\\1<sup>\\2</sup>"),        # Superscript
 
-  c("(^|[^\\\\])\\\\frac{([^}]*)}{([^}]*)}",              "\\1<span class=\"fraction\"><span class=\"numerator\">\\1</span><span class=\"denominator\">\\2</span></span>"),# Make fractions
+  c("(^|[^\\\\])\\\\frac{([^}]*)}{([^}]*)}",              "\\1&nbsp;<span class=\"fraction\"><span class=\"numerator\">\\2</span>/<span class=\"denominator\">\\3</span></span>"),# Make fractions
   c("\\\\(.)",                                            "\\1")         # convert escaped characters
 )
 
