@@ -101,7 +101,9 @@ smd_fraction <- function(num, den, format, ...)
 #' @param cell_style list; cell styling functions
 #' @param style character; chosen styling to final table
 #' @param smdformat numeric, character or function; A formatting directive to be applied to smd
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param weight numeric; Vector of weights to apply to data when computing SMD
+#' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -116,7 +118,9 @@ smd_compare <- function(table,
                         cell_style,
                         style,
                         smdformat=NULL,
+                        pformat=NULL,
                         weight=NULL,
+                        test=FALSE,
                         ...)
 {
   datar      <- as.numeric(row$data)
@@ -126,6 +130,14 @@ smd_compare <- function(table,
 
   if(length(categories) != 2) stop("SMD Comparison must be between exactly 2 groups")
 
+  # Wilcox rank sum test versus zero
+  tst  <- suppressWarnings(spearman2(c(datac), c(datar), na.action=na.retain))
+  stat <- cell_style[['fstat']](
+      f         = render_f(tst['F'], "%.2f"),
+      df1       = tst['df1'],
+      df2       = tst['df2'],
+      p         = cell_style[['p']](tst['P'], pformat))
+
   cat1   <- categories[1]
   cat2   <- categories[2]
   datar1 <- datar[datac == cat1]
@@ -134,14 +146,27 @@ smd_compare <- function(table,
   # Compute N values for each category
   subN <- c(sum(!is.na(datar1)), sum(!is.na(datar2)))
 
-  col_header(table, "N", categories, "SMD")  %>%
-  col_header("", cell_style[['n']](subN[1], subcol=cat, hdr=TRUE),
-             cell_style[['n']](subN[2], subcol=cat, hdr=TRUE), "") %>%
+  table <- if(test) col_header(table, "N", categories, "SMD", "Test Statistic") else
+                    col_header(table, "N", categories, "SMD")
+  table <- if(test)
+    col_header(table, "", cell_style[['n']](subN[1], subcol=cat, hdr=TRUE),
+               cell_style[['n']](subN[2], subcol=cat, hdr=TRUE), "", "")  else
+    col_header(table, "", cell_style[['n']](subN[1], subcol=cat, hdr=TRUE),
+               cell_style[['n']](subN[2], subcol=cat, hdr=TRUE), "")
+
+  table <- table %>%
   row_header(derive_label(row)) %>%
   add_col(cell_style[['n']](sum(!is.na(datar)))) %>%
   add_col(cell_style[['meansd']](datar1, format, subcol=cat1)) %>%
   add_col(cell_style[['meansd']](datar2, format, subcol=cat2)) %>%
   add_col(cell_style[['smd']](datar, datac, smdformat, weight))
+
+  if(test)
+  {
+    table <- add_col(table, stat)
+  }
+
+  table
 }
 
 #' Create a contingency table with SMD given a row column of a formula
@@ -154,8 +179,10 @@ smd_compare <- function(table,
 #' @param cell_style A list of all individual cell stylings to apply
 #' @param style The global style to apply.
 #' @param smdformat The format command to apply to smd
+#' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param collapse_single Should single factor variables be collapsed
 #' @param weight Any weighting to apply to data for computation of SMD
+#' @param test logical; include statistical test results
 #' @param ... Additional arguments to provide cell generation functions
 #' @return The resulting sub table constructed
 #' @export
@@ -168,6 +195,8 @@ smd_contingency <- function(table,
                             smdformat = NULL,
                             collapse_single = TRUE,
                             weight=NULL,
+                            test=FALSE,
+                            pformat=NULL,
                             ...)
 {
   grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
@@ -175,6 +204,11 @@ smd_contingency <- function(table,
   nrow          <- dim(grid)[1]
   denominators  <- matrix(rep(colSums(grid), nrow), ncol=ncol, byrow=TRUE)
   rowlabels     <- rownames(grid)
+
+  validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
+  validrow      <- which(!apply(grid,1,FUN = function(x){all(x == 0)}))
+  stat          <- if(length(validrow) < 2 || length(validcol) < 2) NA else suppressWarnings(chisq.test(grid[validrow,validcol], correct=FALSE))
+
 
   # Compute overall N values for each category
   # length(datac[datac == cat & !is.na(datac)])
@@ -208,9 +242,10 @@ smd_contingency <- function(table,
   }
 
   # Column Headers
-  table <- col_header(table, "N", colnames(grid), "SMD")
-  table <- col_header(table, "", subN, "")
-
+  table <- if(test) col_header(table, "N", colnames(grid), "SMD", "Test Statistic") else
+                    col_header(table, "N", colnames(grid), "SMD")
+  table <- if(test) col_header(table, "", subN, "", "") else
+                    col_header(table, "", subN, "")
   # Row Headers
   if(nrow > 1) table <- row_header(table, derive_label(row)) # Deal with single
   for(nm in rownames(grid)) table <- row_header(table, nm)
@@ -241,9 +276,22 @@ smd_contingency <- function(table,
              weight,
              ...))
 
+  # Finally add the stats
+  if(test)
+  {
+    test_result <- if(any(is.na(stat))) cell(NA) else
+      cell_style[['chi2']](
+        render_f(stat$statistic, 2),
+        stat$parameter,
+        cell_style[['p']](stat$p.value, pformat)
+      )
+    table <- new_col(table)
+    table <- write_cell(table, test_result)
+  }
 
   # Fill in blank cells in stats column
   if(nrow > 1) table <- add_row(table, rep("", nrow))
+
 
   table
 }
@@ -263,7 +311,11 @@ smd_cell <- list(
   n          = cell_n,
   meansd     = smd_meansd,
   smd        = smd_dist,
-  fraction   = smd_fraction
+  fraction   = smd_fraction,
+
+  fstat      = hmisc_fstat,
+  chi2       = hmisc_chi2,
+  p          = hmisc_p
 )
 
 #'
@@ -287,7 +339,7 @@ smd <- list(
                   Categorical = smd_contingency
             ),
   Cell        = smd_cell,
-  Footnote    = "Numerical summary is mean (sd). Categorical is N(%)"
+  Footnote    = "Numerical summary is mean (sd). Categorical is N(%). ^1^Kruskal-Wallis. ^2^Pearson."
 )
 
 

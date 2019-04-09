@@ -5,7 +5,8 @@
 \title{Create a contingency table with SMD given a row column of a formula}
 \usage{
 smd_contingency(table, row, column, cell_style, style, smdformat = NULL,
-  collapse_single = TRUE, weight = NULL, ...)
+  collapse_single = TRUE, weight = NULL, test = FALSE,
+  pformat = NULL, ...)
 }
 \arguments{
 \item{table}{The tablebuilder object}
@@ -23,6 +24,10 @@ smd_contingency(table, row, column, cell_style, style, smdformat = NULL,
 \item{collapse_single}{Should single factor variables be collapsed}
 
 \item{weight}{Any weighting to apply to data for computation of SMD}
+
+\item{test}{logical; include statistical test results}
+
+\item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
 
 \item{...}{Additional arguments to provide cell generation functions}
 }

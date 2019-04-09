@@ -5,7 +5,7 @@
 \title{Create a SMD for a categorical set of column versus a numerical row}
 \usage{
 smd_compare(table, row, column, cell_style, style, smdformat = NULL,
-  weight = NULL, ...)
+  pformat = NULL, weight = NULL, test = FALSE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -20,7 +20,11 @@ smd_compare(table, row, column, cell_style, style, smdformat = NULL,
 
 \item{smdformat}{numeric, character or function; A formatting directive to be applied to smd}
 
+\item{pformat}{numeric, character or function; A formatting directive to be applied to p-values}
+
 \item{weight}{numeric; Vector of weights to apply to data when computing SMD}
+
+\item{test}{logical; include statistical test results}
 
 \item{...}{absorbs additional arugments. Unused at present.}
 }
