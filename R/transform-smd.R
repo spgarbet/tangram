@@ -275,6 +275,7 @@ smd_contingency <- function(table,
              smdformat,
              weight,
              ...))
+  if(nrow > 1) table <- add_row(table, rep("", nrow))
 
   # Finally add the stats
   if(test)
@@ -285,13 +286,9 @@ smd_contingency <- function(table,
         stat$parameter,
         cell_style[['p']](stat$p.value, pformat)
       )
-    table <- new_col(table)
-    table <- write_cell(table, test_result)
+    table <- home(table) %>% new_col() %>% add_row(test_result)
+    if(nrow > 1) table <- add_row(table, rep("", nrow))
   }
-
-  # Fill in blank cells in stats column
-  if(nrow > 1) table <- add_row(table, rep("", nrow))
-
 
   table
 }
