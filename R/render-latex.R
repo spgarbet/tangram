@@ -178,8 +178,8 @@ latex.tangram <- function(object,
   for(i in names(defaults))
   {
     assign(i,
-           if(i %in% names(obj.args))  { obj.args[[i]]  } else
            if(i %in% names(call.args)) { call.args[[i]] } else
+           if(i %in% names(obj.args))  { obj.args[[i]]  } else
                                        { defaults[[i]]  }
           )
   }
