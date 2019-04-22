@@ -164,6 +164,7 @@ latex.tangram <- function(object,
   pct_width    <- NULL
   placement    <- NULL
   style        <- NULL
+  render_style <- NULL # An override
   defaults <- list(
     na.blank=TRUE,
     cgroup.just=NULL,
@@ -174,7 +175,9 @@ latex.tangram <- function(object,
   )
   obj.args  <- attr(object, "args")
   obj.args[["style"]] <- attr(object, "style") # And yet another special case
+  if("render_style" %in% names(obj.args)) obj.args[["style"]] <- obj.args[["render_style"]]
   call.args <- list(...)
+  if("render_style" %in% names(call.args)) warning("`render_style` argument ignored in direct latex call. Use `style` instead.")
   for(i in names(defaults))
   {
     assign(i,
