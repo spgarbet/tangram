@@ -22,8 +22,8 @@
 #' a function to process the intersection of those two types.
 #' There are additionally a list of cell tranforms that can be overridden and a default
 #' footnote if none is specified.
-#' 
-#' 
+#'
+#'
 #' @param table The table object to modify
 #' @param row The row variable object to use (numerical)
 #' @param column The column variable to use (categorical)
@@ -37,17 +37,17 @@
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
-#' 
+#'
 #' @rdname hmisc
-#' 
+#'
 #' @seealso \code{\link{hmisc_data_type}}, \code{\link{tangram}}, \code{\link{hmisc_cell}}
 #'
 #' @section \code{summarize_kruskal_horz}:
 #' Given a row and column object apply a Kruskal test and output
 #' the results horizontally. 1 X (n + no. categories + test statistic)
-#' 
+#'
 #' @export
-#' 
+#'
 #' @importFrom magrittr "%>%"
 #' @include hmisc-biVar.R
 #' @include compile.R
@@ -131,7 +131,7 @@ summarize_kruskal_horz <- function(table,
 #' @section \code{summarize_kruskal_vert}:
 #' Given a row and column object from the parser apply a Kruskal test and output
 #' the results vertically (#Categories+1) X (N, Summary, Statistic)
-#' 
+#'
 #' @rdname hmisc
 #'
 #' @export
@@ -199,7 +199,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
 #' @section \code{summarize_chisq}:
 #' Given a row and column object from the parser apply a chi^2 test and output
 #' the results
-#' 
+#'
 #' @rdname hmisc
 #' @export
 summarize_chisq <- function(table,
@@ -243,7 +243,7 @@ summarize_chisq <- function(table,
   }
 
   # Collapse to a single line when requested for 2 binomial factors
-  if(collapse_single && dim(grid)[1]==2)
+  if(collapse_single && dim(grid)[1]<=2)
   {
     # Why is this so difficult?
 
@@ -254,12 +254,14 @@ summarize_chisq <- function(table,
           if(!is.null(l2)) {name<-l2}
     })
 
+    pos <- dim(grid)[1]
+
     # Select part of grid table, then do all the munging to get it back in form
-    x <- matrix(grid[2,], nrow=1)
+    x <- matrix(grid[pos,], nrow=1)
     colnames(x) <- colnames(grid)
-    rownames(x) <- paste(name,":", rownames(grid)[2])
+    rownames(x) <- paste(name,":", rownames(grid)[pos])
     grid <- x
-    denominators <- matrix(denominators[2,], nrow=1)
+    denominators <- matrix(denominators[pos,], nrow=1)
     nrow <- 1
   }
   else # Give a good indent otherwise
@@ -324,7 +326,7 @@ summarize_chisq <- function(table,
 #' @section \code{summarize_spearman}:
 #' Given a row and column object from the parser apply a Spearman test and output
 #' the results in a 1X3 format.
-#' 
+#'
 #' @rdname hmisc
 #' @export
 summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, test=FALSE, ...)
@@ -364,7 +366,7 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 #'
 #' @return One of the following strings: Binomial, Categorical, or Numerical.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{hmisc}}
 #'
 #' @examples
@@ -397,7 +399,7 @@ hmisc_data_type <- function(x, category_threshold=NA)
 #'  Cell        = hmisc_cell,
 #'  Footnote    = "N is the number of non-missing value. ^1^Kruskal-Wallis. ^2^Pearson. ^3^Wilcoxon."
 #' )}
-#' 
+#'
 #' @export
 #' @rdname hmisc
 #' @keywords data
