@@ -4,7 +4,7 @@
 \alias{cell_n}
 \title{Create an cell_n (S3) object of the given statistic}
 \usage{
-cell_n(n, class = NULL, hdr = FALSE, ...)
+cell_n(n, class = NULL, hdr = FALSE, possible = NULL, ...)
 }
 \arguments{
 \item{n}{The numerical value}
@@ -12,6 +12,8 @@ cell_n(n, class = NULL, hdr = FALSE, ...)
 \item{class}{character; An optional field for additional S3 classes (e.g. could be used in html rendering for CSS)}
 
 \item{hdr}{logical; Construct an n value for a header (defaults to FALSE)}
+
+\item{possible}{numerical; The total N that was possible}
 
 \item{...}{optional extra information to attach}
 }

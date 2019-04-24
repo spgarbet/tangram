@@ -81,10 +81,11 @@ summarize_kruskal_horz <- function(table,
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
-    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat, hdr=TRUE)
+    cell_style[['n']](length(datac[datac == cat & !is.na(datac)]), subcol=cat, hdr=TRUE, possible=length(datac), ...)
   })
 
-  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)), hdr=TRUE, subcol="Overall")
+  if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)),
+                                           hdr=TRUE, subcol="Overall", possible=length(column$data), ...)
 
   # Wilcox rank sum test versus zero
   stat <- if(length(categories) == 1)
@@ -111,7 +112,7 @@ summarize_kruskal_horz <- function(table,
 
   tbl <- row_header(tbl, derive_label(row, ...))
 
-  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)))) %>%
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)), possible=length(datar), ...)) %>%
   table_apply(categories, function(tbl, category) {
      x  <- if(category == overall_label) datar else datar[datac == category]
 
@@ -151,7 +152,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
                       df2 = stat['df2'],
                       p   = cell_style[['p']](stat['P'], pformat))
 
-  N <- cell_style[['n']](sum(!is.na(datac)))
+  N <- cell_style[['n']](sum(!is.na(datac)), hdr=TRUE, possible=length(datac), ...)
 
   tbl <- if(test)
   {
@@ -163,7 +164,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
   tbl <- if(collapse)
   {
     row_header(tbl, derive_label(row, ...)) %>%
-    add_col(cell(sum(!is.na(datac)), subcol=categories[1]))           %>%
+    add_col(cell_style[['n']](sum(!is.na(datac)), subcol=categories[1], possible=length(datac), ...))           %>%
     add_col(cell_style[['iqr']](datac, column$format, na.rm=TRUE, msd=msd, subrow=categories[1]))
   } else if(collapse_single && length(categories) == 2)
   {
@@ -171,7 +172,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
     x <- datac[datar == category]
 
     row_header(tbl, paste(derive_label(row, ...), ":", category) )    %>%
-    add_col(cell(sum(!is.na(datac)), subcol=category))           %>%
+    add_col(cell_style[['n']](sum(!is.na(datac)), possible=length(datac), subcol=category, ...))           %>%
     add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd))
   } else
   {
@@ -183,7 +184,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
       x <- datac[datar == category]
       tbl                                                  %>%
       row_header(paste0("  ", category))                   %>%
-      add_col(cell(length(x), subcol=category))            %>%
+      add_col(cell_style[['n']](length(x), possible=length(datac), subcol=category, ...))            %>%
       add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd)) %>%
       new_line()
     })                                                                %>%
@@ -230,7 +231,7 @@ summarize_chisq <- function(table,
   # Compute overall N values for each category
   # length(datac[datac == cat & !is.na(datac)])
   subN <- lapply(colnames(grid), FUN=function(cat)
-    cell_style[['n']](sum(column$data == cat, na.rm=TRUE), subcol=cat, hdr=TRUE)
+    cell_style[['n']](sum(column$data == cat, na.rm=TRUE), subcol=cat, possible=length(column$data), hdr=TRUE, ...)
   )
 
   if(!is.null(overall))
@@ -238,7 +239,7 @@ summarize_chisq <- function(table,
     denominators <- cbind(denominators, rep(sum(grid), nrow))
     grid         <- cbind(grid,         rowSums(grid))
     colnames(grid)[ncol+1] <- if(is.character(overall)) overall else "Overall"
-    subN[[ncol+1]] <- cell_style[['n']]( sum(!is.na(column$data)), subcol="Overall", hdr=TRUE)
+    subN[[ncol+1]] <- cell_style[['n']]( sum(!is.na(column$data)), possible=length(column$data), subcol="Overall", hdr=TRUE, ...)
     ncol         <- ncol + 1
   }
 
@@ -283,7 +284,7 @@ summarize_chisq <- function(table,
   for(nm in rownames(grid)) table <- row_header(table, nm)
 
   # The N value
-  table <- add_col(table, sum(!is.na(row$data)))
+  table <- add_col(table, cell_style[['n']](sum(!is.na(row$data)), possible=length(row$data), ...))
 
   # Now loop the grid into the table as a fraction
   for(j in 1:ncol)
@@ -338,7 +339,7 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 
   tbl     <- row_header(table, derive_label(row, ...))
 
-  N <- cell_style[['n']](sum(!is.na(datac)), hdr=TRUE)
+  N <- cell_style[['n']](sum(!is.na(datac)), possible=length(datac), hdr=TRUE, ...)
 
   tbl <- if(test)
   {
@@ -347,7 +348,7 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
     col_header(tbl, "N", derive_label(column, ...)) %>% col_header("", N)
   }
 
-  tbl <- add_col(tbl, sum(!is.na(datar) & !is.na(datac)))
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar) & !is.na(datac)),possible=length(datar), ...))
   tbl <- add_col(tbl, paste0("\u03c1=", render_f(unname(stat$estimate), row$format)))
 
   if(test) tbl <- add_col(tbl, cell_style[['spearman']](
