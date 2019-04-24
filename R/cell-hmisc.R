@@ -44,9 +44,9 @@
 #' @param V The value of the Wilcoxon statistic
 #' @return A formatted string or cell as appropriate
 #' @rdname hmisc_cell
-#' 
+#'
 #' @seealso \code{\link{hmisc}}
-#' 
+#'
 #' @section \code{hmisc_p}:
 #' Given a style in number of digits or a sprintf style specifier it renders
 #' the p-value and checks to see if it's all zeros, then switches the
@@ -120,7 +120,7 @@ hmisc_iqr <- function(x,
 #' Construct a cell which has the fraction specified in an hmisc format
 #'
 #' @rdname hmisc_cell
-#' 
+#'
 #' @export
 #' @examples
 #' hmisc_fraction(1, 4, 3)
@@ -144,7 +144,8 @@ hmisc_fraction <- function(numerator, denominator, format=3, ...)
 hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 {
   if(is.na(f)) return("")
-  cell(paste0("F~", df1, ",", df2, "~=", f, ", ", p, "^1^"), ..., class=c(class, "statistics"))
+  ref <- if(df1 == 1) "^3^" else "^1^"
+  cell(paste0("F~", df1, ",", df2, "~=", f, ", ", p, ref), ..., class=c(class, "statistics"))
 }
 
 
@@ -192,7 +193,7 @@ hmisc_wilcox <- function(V, p, class=NULL, ...)
 
 #' @section \code{hmisc_cell}:
 #' List of data transforms for a cell of a table.
-#' 
+#'
 #' \preformatted{
 #' hmisc_cell <- list(
 #'   n        = cell_n,
@@ -204,7 +205,7 @@ hmisc_wilcox <- function(V, p, class=NULL, ...)
 #'   wilcox   = hmisc_wilcox,
 #'   p        = hmisc_p
 #' )}
-#' 
+#'
 #' @include compile-cell.R
 #' @rdname hmisc_cell
 #' @keywords data
