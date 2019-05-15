@@ -273,7 +273,9 @@ latex.tangram <- function(object,
 
   if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
 
-  result <- paste0(result, "{\\renewcommand{\\arraystretch}{", arraystretch, "}")
+# Pandoc above 2.3 breaks this!!!
+#  result <- paste0(result, "{\\def\\arraystretch{", arraystretch, "}")
+
   result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
               paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{Table \\thetable{}: ",caption,"} \\\\\n\\hline\n")
@@ -293,7 +295,9 @@ latex.tangram <- function(object,
   if(style=="nejm")   result <- paste0(result, "\\hline\n")
   if(style=="lancet") result <- paste0(result, "\n")
 
-  result <- paste0(result, "\\end{tabular}}\n")
+  # Other side of pandoc breakage.
+  #result <- paste0(result, "\\end{tabular}}\n")
+  result <- paste0(result, "\\end{tabular}\n")
 
   if(pct_width != 1.0) result <- paste0(result, "}\n")
 
