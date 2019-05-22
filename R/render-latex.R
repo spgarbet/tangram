@@ -62,7 +62,8 @@ latex <- function(object, ...)
 # https://stackoverflow.com/questions/33107908/how-to-tell-if-code-is-executed-within-a-knitr-rmarkdown-context
 isKnitr <- function()
 {
-  length(knitr::opts_current$get()) > 0
+  ("knitr" %in% .packages()) &&
+  (isTRUE(getOption('knitr.in.progress')))
 }
 
 #' @rdname latex
