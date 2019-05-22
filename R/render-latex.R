@@ -57,6 +57,14 @@ latex <- function(object, ...)
   UseMethod("latex", object)
 }
 
+# Helper function to see if in knitr context
+# Not perfect, a bit of a hack
+# https://stackoverflow.com/questions/33107908/how-to-tell-if-code-is-executed-within-a-knitr-rmarkdown-context
+isKnitr <- function()
+{
+  length(knitr::opts_current$get()) > 0
+}
+
 #' @rdname latex
 #' @export
 latex.default <- function(object, ...)
@@ -197,11 +205,19 @@ latex.tangram <- function(object,
   caption <- if(is.null(caption)) "" else latexify(caption)
 
   result <- ""
-  if(!fragment) result <- paste(result,
-                                "\\documentclass{report}",
-                                "\\usepackage{geometry}",
-                                "\\begin{document}",
-                                sep="\n")
+  if(!fragment)
+  {
+    result <- paste(result,
+                    "\\documentclass{report}",
+                    "\\usepackage{geometry}",
+                    "\\begin{document}",
+                    sep="\n")
+  }
+  else if(isKnitr())
+  {
+    result <- paste0(result, "\n```{=latex}\n")
+  }
+
   if(style=="nejm") result <- paste0(result,
                                     "\\definecolor{nejm-yellow}{RGB}{255,251,237}\n",
                                     "\\definecolor{nejm-header}{RGB}{247,244,239}\n")
@@ -303,7 +319,13 @@ latex.tangram <- function(object,
 
   result <- paste0(result, "\\end{table}\n")
 
-  if(!fragment) result <- paste0(result, "\\end{document}\n")
+  if(!fragment)
+  {
+    result <- paste0(result, "\\end{document}\n")
+  } else(isKnitr())
+  {
+    result <- paste0(result, "```\n\n")
+  }
 
   result <- gsub("$\\s*$", "", result)
 
