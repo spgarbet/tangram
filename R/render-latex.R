@@ -173,6 +173,7 @@ latex.tangram <- function(object,
   pct_width    <- NULL
   placement    <- NULL
   style        <- NULL
+  pandoc_md    <- NULL
   render_style <- NULL # An override
   defaults <- list(
     na.blank=TRUE,
@@ -180,7 +181,8 @@ latex.tangram <- function(object,
     arraystretch=1.2,
     pct_width=1.0,
     placement="H",
-    style="hmisc"
+    style="hmisc",
+    pandoc_md=FALSE
   )
   obj.args  <- attr(object, "args")
   obj.args[["style"]] <- attr(object, "style") # And yet another special case
@@ -214,7 +216,7 @@ latex.tangram <- function(object,
                     "\\begin{document}",
                     sep="\n")
   }
-  else if(isKnitr())
+  else if(pandoc_md ||isKnitr())
   {
     result <- paste0(result, "\n```{=latex}\n")
   }
@@ -323,7 +325,7 @@ latex.tangram <- function(object,
   if(!fragment)
   {
     result <- paste0(result, "\\end{document}\n")
-  } else(isKnitr())
+  } else if(pandoc_md || isKnitr())
   {
     result <- paste0(result, "```\n\n")
   }
