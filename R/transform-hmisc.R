@@ -32,7 +32,7 @@
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
-#' @param overall logical; Include overall summary statistics for a categorical column
+#' @param overall logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param row_percents logical; use denominator across rows instead of columns.
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
@@ -234,7 +234,7 @@ summarize_chisq <- function(table,
     cell_style[['n']](sum(column$data == cat, na.rm=TRUE), subcol=cat, possible=length(column$data), hdr=TRUE, ...)
   )
 
-  if(!is.null(overall))
+  if(!is.null(overall) && (!is.logical(overall) || overall))
   {
     denominators <- cbind(denominators, rep(sum(grid), nrow))
     grid         <- cbind(grid,         rowSums(grid))
