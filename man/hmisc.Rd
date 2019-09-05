@@ -42,7 +42,7 @@ hmisc
 
 \item{quant}{numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.}
 
-\item{overall}{logical; Include overall summary statistics for a categorical column}
+\item{overall}{logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.}
 
 \item{test}{logical; include statistical test results}
 

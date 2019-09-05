@@ -68,7 +68,7 @@ vars <- c("age","sex","race","edu","income","ninsclas","cat1","das2d3pc","dnr1",
 
 formula <- paste0("swang1~", paste0(vars, collapse="+"))
 
-tangram(formula, rhc, "unmatched", smd, "Unmatched", style="nejm", pct_width=0.5)
+tangram(formula, rhc, "unmatched", smd, "Unmatched", style="nejm", pct_width=0.5, test=TRUE)
 ```
 
 ## Propensity Score Matching

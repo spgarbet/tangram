@@ -27,7 +27,7 @@
 #' @param pformat numeric, character or function; A formatting directive to be applied to p-values
 #' @param msd logical; Include mean and standard deviation with quantile statistics
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
-#' @param overall logical; Include overall summary statistics for a categorical column
+#' @param overall  logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param test logical; include statistical test results
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
