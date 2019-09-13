@@ -115,7 +115,7 @@ latex.cell_label <- function(object, ...)
   if(is.null(attr(object, 'units')))
     label
   else
-    paste0(label, " {\\textit{\\scriptsize ", latexify(attr(object, 'units')), "}}")
+    paste0(label, " {\\textit{\\relsize{-1} ", latexify(attr(object, 'units')), "}}")
 }
 
 #' @rdname latex
@@ -150,7 +150,7 @@ latex.cell_subheader <- function(object, ...)
 
   class(object) <- cls[3:length(cls)]
 
-  paste0("{\\scriptsize ",  latex(object, ...), "}")
+  paste0("{\\relsize{-1} ",  latex(object, ...), "}")
 }
 
 #' @rdname latex
@@ -171,6 +171,7 @@ latex.tangram <- function(object,
   cgroup.just  <- NULL
   arraystretch <- NULL
   pct_width    <- NULL
+  relsize      <- NULL
   placement    <- NULL
   style        <- NULL
   pandoc_md    <- NULL
@@ -180,6 +181,7 @@ latex.tangram <- function(object,
     cgroup.just=NULL,
     arraystretch=1.2,
     pct_width=1.0,
+    relsize=0,
     placement="H",
     style="hmisc",
     pandoc_md=FALSE
@@ -198,6 +200,7 @@ latex.tangram <- function(object,
           )
   }
 
+  if(pct_width != 1.0) stop("tangram now uses longtable and width scaling is no longer supported try relsize=-2")
 
   # Find footnote
   footnote <- attr(object, "footnote")
@@ -228,12 +231,13 @@ latex.tangram <- function(object,
   if(style=="lancet") result <- paste0(result, "\\definecolor{lancet-red}{RGB}{245,224,220}\n")
 
   result <- paste0(result, "\\begin{table}[",placement,"]\n\\centering\n")
-  result <- paste0(result, "\\caption{",latexify(caption),"}\n")
+  result <- paste0(result, "\\caption{",latexify(caption),"} \n")
 
 
   if(style %in% c("nejm", "lancet")) result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
-  if(pct_width != 1.0) result <- paste0(result, "\\scalebox{", pct_width, "}{\n")
+  #if(pct_width != 1.0) result <- paste0(result, "\\scalebox{", pct_width, "}{\n")
+  if(relsize != 0) result <- paste0(result, "{\\relsize{",relsize,"}\n")
 
   nrows <- rows(object)
   ncols <- cols(object)
@@ -292,8 +296,8 @@ latex.tangram <- function(object,
 
   if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
 
-  result <- paste0(result, "{\\renewcommand{\\arraystretch}{", arraystretch, "}")
-  result <- paste0(result, "\\begin{tabular}{",cgroup.just,"}\n")
+  result <- paste0(result, "\\renewcommand*{\\arraystretch}{", arraystretch, "}")
+  result <- paste0(result, "\\begin{longtable}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
               paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{Table \\thetable{}: ",caption,"} \\\\\n\\hline\n")
             } else if(style=="hmisc") {
@@ -312,9 +316,11 @@ latex.tangram <- function(object,
   if(style=="nejm")   result <- paste0(result, "\\hline\n")
   if(style=="lancet") result <- paste0(result, "\n")
 
-  result <- paste0(result, "\\end{tabular}}\n")
+  result <- paste0(result, "\\end{longtable}\n")
 
-  if(pct_width != 1.0) result <- paste0(result, "}\n")
+  #if(pct_width != 1.0) result <- paste0(result, "}\n")
+  if(relsize != 0) result <- paste0(result, "}\n")
+
 
   if(style %in% c("nejm","lancet")) result <- paste0(result, "}\n")
 

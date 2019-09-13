@@ -3,7 +3,8 @@ title: "Tangram Examples"
 author: "Shawn Garbett, MS"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: null
+  pdf_document:
+    keep_tex: yes
   html_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}
@@ -15,6 +16,8 @@ header-includes:
 - \usepackage{multirow}
 - \usepackage{colortbl}
 - \usepackage{hhline}
+- \usepackage{longtable}
+- \usepackage{relsize}
 - \pdfminorversion=5
 - \pdfcompresslevel=9
 - \pdfobjcompresslevel=2
@@ -71,6 +74,7 @@ Notice that stage in the formula wasn't stored as a factor, i.e. Categorical var
 It also supports HTML5, with styling fragments.
 
 ### Rmd Direct Example
+
 ```{r tbl2}
 x <- tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
@@ -90,22 +94,26 @@ tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         quant=seq(0, 1, 0.25),
         style="hmisc",
         caption = "Table Hmisc Style",
-        pct_width=0.6,
+        #pct_width=0.6,
+        relsize=-3,
         capture_units=TRUE
   )
 ```
 
 ### NEJM Style Example
+
 Fragments can have localized style sheets specified by given id. Notice the specification of 2 digits for bilirubin in the formula. 
 
 ```{r tbl4}
 tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders", pbc,
         style="nejm", caption = "Table NEJM Style",
-        pct_width=0.8,
+        #pct_width=0.8,
+        relsize=-2,
         capture_units=TRUE)
 ```
 
 ### Lancet Style Example
+
 Fragments can have localized style sheets specified by given id. Specifications of digit output can also be c specifiers if enclosed in quotes.
 
 ```{r tbl5}
@@ -114,7 +122,8 @@ tangram('drug~bili["%4.03f"]+albumin+stage::Categorical[1]+protime+sex[1]+age+sp
         pformat = 5,
         style="lancet",
         caption = "Table Lancet Style",
-        pct_width = 0.8,
+        #pct_width = 0.8,
+        relsize=-2,
         capture_units=TRUE
        )
 ```
@@ -179,21 +188,20 @@ The library is designed to be extensible, in the hopes that more useful summary 
 
 This example shows how to create a function that given a row and column, to construct summary entries for a table.
 
-```{r extension}
-
-### Make up some data, which has events nested within an id
+```{r tangram-extension}
+# Make up some data, which has events nested within an id
 n  <- 1000
 df <- data.frame(id = sample(1:250, n*3, replace=TRUE), event = as.factor(rep(c("A", "B","C"), n)))
 attr(df$id, "label") <- "ID"
 
-### Now create custom function for counting events with a category
+# Now create custom function for counting events with a category
 summarize_count <- function(table, row, column, ...)
 {
-  ### Getting Data for row column ast nodes, assuming no factors
+  # Getting Data for row column ast nodes, assuming no factors
   datar <- row$data
   datac <- column$data
 
-  ### Grabbing categories
+  # Grabbing categories
   col_categories <- levels(datac)
 
   n_labels <- lapply(col_categories, FUN=function(cat_name){
@@ -233,4 +241,6 @@ summarize_count <- function(table, row, column, ...)
 tangram(event ~ id["%1.0f"], df, id="tbl7", transforms=summarize_count)
 ```
 
+
 And that concludes the basic demonstration of formula capabilities and writing one's own simple transform bundle.
+
