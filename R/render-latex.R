@@ -322,7 +322,7 @@ latex.tangram <- function(object,
   if(style=="lancet") result <- paste0(result, "\n")
 
   if(nchar(footnote) > 0 && style=="nejm") result <- paste0(result, "\\rowcolor{white}")
-  if(nchar(footnote) > 0) result <- paste0(result, "\\multicolumn{",ncols,"}{l}{\\begin{minipage}[t]{\\columnwidth}", footnote,"\\end{minipage}}\n")
+  if(nchar(footnote) > 0) result <- paste0(result, "\\multicolumn{",ncols,"}{p{0.7\\columnwidth}}{", footnote,"}\n")
 
   result <- paste0(result, "\\end{longtable}\n")
 

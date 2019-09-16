@@ -82,7 +82,7 @@ x <- tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         quant=seq(0, 1, 0.25),
         style="hmisc",
         caption = "Table Rmd Style",
-        pct_width=0.6)
+        relsize=-3)
 rmd(x)
 ```
 
@@ -94,7 +94,6 @@ tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         quant=seq(0, 1, 0.25),
         style="hmisc",
         caption = "Table Hmisc Style",
-        #pct_width=0.6,
         relsize=-3,
         capture_units=TRUE
   )
@@ -107,7 +106,6 @@ Fragments can have localized style sheets specified by given id. Notice the spec
 ```{r tbl4}
 tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders", pbc,
         style="nejm", caption = "Table NEJM Style",
-        #pct_width=0.8,
         relsize=-2,
         capture_units=TRUE)
 ```
@@ -122,7 +120,6 @@ tangram('drug~bili["%4.03f"]+albumin+stage::Categorical[1]+protime+sex[1]+age+sp
         pformat = 5,
         style="lancet",
         caption = "Table Lancet Style",
-        #pct_width = 0.8,
         relsize=-2,
         capture_units=TRUE
        )
