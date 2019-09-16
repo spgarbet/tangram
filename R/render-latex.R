@@ -230,14 +230,12 @@ latex.tangram <- function(object,
 
   if(style=="lancet") result <- paste0(result, "\\definecolor{lancet-red}{RGB}{245,224,220}\n")
 
-  result <- paste0(result, "\\begin{table}[",placement,"]\n\\centering\n")
-  if(caption != "") result <- paste0(result, "\\caption{",latexify(caption),"} \n")
-
-
+  if(relsize != 0) result <- paste0(result, "{\\relsize{",relsize,"}\n")
   if(style %in% c("nejm", "lancet")) result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
 
+
   #if(pct_width != 1.0) result <- paste0(result, "\\scalebox{", pct_width, "}{\n")
-  if(relsize != 0) result <- paste0(result, "{\\relsize{",relsize,"}\n")
+
 
   nrows <- rows(object)
   ncols <- cols(object)
@@ -294,10 +292,14 @@ latex.tangram <- function(object,
     if(style=="lancet") cgroup.just <- paste0("!{\\color{lancet-red}\\vrule width 4pt}", cgroup.just, "!{\\color{lancet-red}\\vrule width 4pt}")
   }
 
+  result <- paste0(result, "\\renewcommand*{\\arraystretch}{", arraystretch, "}\n")
   if(style=="nejm") result <- paste0(result, "\\rowcolors{2}{nejm-yellow}{white}\n")
 
-  result <- paste0(result, "\\renewcommand*{\\arraystretch}{", arraystretch, "}")
-  result <- paste0(result, "\\begin{longtable}{",cgroup.just,"}\n")
+  result <- paste0(result, "\\begin{longtable}[",placement,"]{",cgroup.just,"}\n")
+
+  if(caption != "") result <- paste0(result, "\\caption{",caption,"} \\\\ \n")
+
+
   result <- if(style=="nejm"){
               if(caption=="")
                 paste0(result, "\\hline\\hline\n") else
@@ -318,6 +320,12 @@ latex.tangram <- function(object,
   if(style=="nejm")   result <- paste0(result, "\\hline\n")
   if(style=="lancet") result <- paste0(result, "\n")
 
+
+  #result <- paste0(result, "\\end{longtable}\n")
+
+
+  if(nchar(footnote) > 0) result <- paste0(result, "\n\n\\footnotetext{",footnote,"}\n")
+
   result <- paste0(result, "\\end{longtable}\n")
 
   #if(pct_width != 1.0) result <- paste0(result, "}\n")
@@ -325,10 +333,6 @@ latex.tangram <- function(object,
 
 
   if(style %in% c("nejm","lancet")) result <- paste0(result, "}\n")
-
-  if(nchar(footnote) > 0) result <- paste0(result, "\n\n\\vspace{0.2cm}\n\\raggedright{\\begin{footnotesize}",footnote,"\\end{footnotesize}}\n")
-
-  result <- paste0(result, "\\end{table}\n")
 
   if(!fragment)
   {
