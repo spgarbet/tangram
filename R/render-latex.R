@@ -316,15 +316,13 @@ latex.tangram <- function(object,
 
   result <- paste0(result, paste0(as.vector(pasty)[(last_header_row+1):nrows], collapse=''))
 
+
   if(style=="hmisc")  result <- paste0(result, "\\hline\\hline\n")
   if(style=="nejm")   result <- paste0(result, "\\hline\n")
   if(style=="lancet") result <- paste0(result, "\n")
 
-
-  #result <- paste0(result, "\\end{longtable}\n")
-
-
-  if(nchar(footnote) > 0) result <- paste0(result, "\n\n\\footnotetext{",footnote,"}\n")
+  if(nchar(footnote) > 0 && style=="nejm") result <- paste0(result, "\\rowcolor{white}")
+  if(nchar(footnote) > 0) result <- paste0(result, "\\multicolumn{",ncols,"}{l}{\\begin{minipage}[t]{\\columnwidth}", footnote,"\\end{minipage}}\n")
 
   result <- paste0(result, "\\end{longtable}\n")
 
