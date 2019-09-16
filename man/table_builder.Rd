@@ -18,6 +18,10 @@
 \alias{table_apply}
 \alias{add_col}
 \alias{add_row}
+\alias{set_footnote}
+\alias{set_id}
+\alias{set_caption}
+\alias{set_style}
 \title{A set of magrittr operators for tangram tables}
 \usage{
 col_header(table, ..., sub = TRUE)
@@ -53,6 +57,14 @@ table_apply(table, X, FUN, ...)
 add_col(table, ...)
 
 add_row(table, ...)
+
+set_footnote(table, footnote)
+
+set_id(table, id)
+
+set_caption(table, caption)
+
+set_style(table, style)
 }
 \description{
 A set of magrittr operators for tangram tables

@@ -286,6 +286,42 @@ add_row <- function(table, ...)
   })
 }
 
+#' @rdname table_builder
+#' @export
+set_footnote <- function(table, footnote)
+{
+  attr(table, "footnote") <- footnote
+
+  table
+}
+
+#' @rdname table_builder
+#' @export
+set_id <- function(table, id)
+{
+  attr(table, "id") <- id
+
+  table
+}
+
+#' @rdname table_builder
+#' @export
+set_caption <- function(table, caption)
+{
+  attr(table, "caption") <- caption
+
+  table
+}
+
+#' @rdname table_builder
+#' @export
+set_style <- function(table, style)
+{
+  attr(table, "style") <- style
+
+  table
+}
+
 #' A cbind for generated table tangram objects.
 #'
 #' Execute the equivalent of an cbind for generated tables
