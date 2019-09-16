@@ -38,11 +38,11 @@ cell_transform <- function(FUN, ...)
   }
 }
 
-#' Delete a given column from a table
+#' Delete given column(s) from a table
 #'
 #' Given a table, remove the specified column
 #' @param table the table to modify
-#' @param col the number of the column to drop
+#' @param col vector containing column(s) to drop
 #' @return the modified table
 #' @export
 del_col <- function(table, col)
@@ -57,11 +57,11 @@ del_col <- function(table, col)
   table
 }
 
-#' Delete a given row from a table
+#' Delete a row(s) from a table
 #'
 #' Given a table, remove the specified row
 #' @param table the table to modify
-#' @param row the number of the row to drop
+#' @param row vector with row numbers to drop
 #' @return the modified table
 #' @export
 del_row <- function(table, row)
@@ -72,6 +72,40 @@ del_row <- function(table, row)
     table[[rows]] <<- NULL
   })
   table
+}
+
+#' Select given column(s) from a table
+#'
+#' Given a table, select the specified column(s)
+#' @param table the table to modify
+#' @param col vector containing column(s) to select
+#' @return the modified table
+#' @export
+select_col <- function(table, col)
+{
+  if(length(table) == 0) return(table)
+
+  icol <- 1:length(table[[1]])
+  icol <- icol[!icol %in% col]
+
+  del_col(table, icol)
+}
+
+#' Select given row(s) from a table
+#'
+#' Given a table, select the specified rows
+#' @param table the table to modify
+#' @param row vector with row numbers to select
+#' @return the modified table
+#' @export
+select_row <- function(table, row)
+{
+  if(length(table) == 0) return(table)
+
+  irow <- 1:length(table)
+  irow <- irow[!irow %in% row]
+
+  del_row(table, irow)
 }
 
 #' Insert a row into a tangram table

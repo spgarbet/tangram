@@ -2,14 +2,14 @@
 % Please edit documentation in R/compile-post.R
 \name{del_col}
 \alias{del_col}
-\title{Delete a given column from a table}
+\title{Delete given column(s) from a table}
 \usage{
 del_col(table, col)
 }
 \arguments{
 \item{table}{the table to modify}
 
-\item{col}{the number of the column to drop}
+\item{col}{vector containing column(s) to drop}
 }
 \value{
 the modified table

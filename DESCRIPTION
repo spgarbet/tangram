@@ -38,6 +38,7 @@ Collate:
     'cell-hmisc.R'
     'cell-lancet.R'
     'cell-nejm.R'
+    'compile-clmm2.R'
     'compile-operators.R'
     'compile-post.R'
     'parser.R'
