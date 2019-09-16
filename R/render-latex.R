@@ -208,7 +208,7 @@ latex.tangram <- function(object,
 
   # Find caption
   caption <- attr(object, "caption")
-  caption <- if(is.null(caption)) "" else latexify(caption)
+  caption <- if(is.null(caption) || is.na(caption)) "" else latexify(caption)
 
   result <- ""
   if(!fragment)
@@ -231,7 +231,7 @@ latex.tangram <- function(object,
   if(style=="lancet") result <- paste0(result, "\\definecolor{lancet-red}{RGB}{245,224,220}\n")
 
   result <- paste0(result, "\\begin{table}[",placement,"]\n\\centering\n")
-  result <- paste0(result, "\\caption{",latexify(caption),"} \n")
+  if(caption != "") result <- paste0(result, "\\caption{",latexify(caption),"} \n")
 
 
   if(style %in% c("nejm", "lancet")) result <- paste0(result, "{\\fontfamily{cmss}\\selectfont\n")
@@ -299,7 +299,9 @@ latex.tangram <- function(object,
   result <- paste0(result, "\\renewcommand*{\\arraystretch}{", arraystretch, "}")
   result <- paste0(result, "\\begin{longtable}{",cgroup.just,"}\n")
   result <- if(style=="nejm"){
-              paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{Table \\thetable{}: ",caption,"} \\\\\n\\hline\n")
+              if(caption=="")
+                paste0(result, "\\hline\\hline\n") else
+                paste0(result, "\\hline\n\\rowcolor{nejm-header}\\multicolumn{",ncols,"}{|l|}{Table \\thetable{}: ",caption,"} \\\\\n\\hline\n")
             } else if(style=="hmisc") {
               paste0(result, "\\hline\\hline\n")
             } else {
