@@ -29,7 +29,7 @@ table_flatten <- function(table)
 {
   if(is.null(attr(table, "row_header")) &&
      is.null(attr(table, "col_header")) &&
-     !any(sapply(table, function(y) sapply(y, function(z) inherits(z, "tangram"))))
+     !any(sapply(table, function(y) any(sapply(y, function(z) inherits(z, "tangram")))))
     )
   {
     # Nothing to flatten
