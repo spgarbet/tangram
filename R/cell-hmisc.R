@@ -62,7 +62,7 @@ hmisc_p <- function(p, pformat="%1.3f", include_p=TRUE)
 {
   if(inherits(pformat,"function")) pformat(p)
 
-  if(is.na(p) || is.nan(p) || p <0 || p>1) return("NA")
+  if(is.na(p) || is.nan(p) || p <0 || p>1) return("\u2014")
 
   y <- render_f(p, pformat)
 
