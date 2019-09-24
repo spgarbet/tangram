@@ -87,21 +87,19 @@ summarize_kruskal_horz <- function(table,
   if(overall) subN[[length(subN)+1]] <- cell_style[['n']]( sum(!is.na(column$data)),
                                            hdr=TRUE, subcol="Overall", possible=length(column$data), ...)
 
-  # Wilcox rank sum test versus zero
-  stat <- if(length(categories) == 1)
+  if(inherits(test, "function"))
   {
-    #tst <- suppressWarnings(wilcox.test(c(datar)))
-    #cell_style[['wilcox']](test$statistic, cell_style[['p']](tst$p.value, pformat))
-    ""
-  }
-  else # Kruskal-Wallis via F-distribution
+    stat <- test(row, column, cell_style, ...)
+    test <- TRUE
+  } else if(length(categories) == 1) stat <- "" else
+  # Kruskal-Wallis via F-distribution
   {
     tst  <- suppressWarnings(spearman2(c(datac), c(datar), na.action=na.retain))
-    cell_style[['fstat']](
-      f         = render_f(tst['F'], "%.2f"),
-      df1       = tst['df1'],
-      df2       = tst['df2'],
-      p         = cell_style[['p']](tst['P'], pformat))
+    stat <- cell_style[['fstat']](
+        f         = render_f(tst['F'], "%.2f"),
+        df1       = tst['df1'],
+        df2       = tst['df2'],
+        p         = cell_style[['p']](tst['P'], pformat))
   }
 
   tbl <- if(test) {
@@ -144,13 +142,19 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
   collapse   <- length(categories) == 1
 
   # Kruskal-Wallis via F-distribution
-  stat  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
-  fstat <- if(collapse) "" else
-             cell_style[['fstat']](
+  if(inherits(test, "function"))
+  {
+    stat <- test(row, column, cell_style, ...)
+    test <- TRUE
+  } else {
+    stat  <- suppressWarnings(spearman2(datar, datac, na.action=na.retain))
+    stat  <- if(collapse) "" else
+               cell_style[['fstat']](
                       f   = render_f(stat['F'], "%.2f"),
                       df1 = stat['df1'],
                       df2 = stat['df2'],
                       p   = cell_style[['p']](stat['P'], pformat))
+  }
 
   N <- cell_style[['n']](sum(!is.na(datac)), hdr=TRUE, possible=length(datac), ...)
 
@@ -191,7 +195,7 @@ summarize_kruskal_vert <- function(table, row, column, cell_style, collapse_sing
     cursor_pos(1, 3)
   }
 
-  if(test) tbl <- add_col(tbl, fstat)
+  if(test) tbl <- add_col(tbl, stat)
 
   tbl
 }
@@ -270,6 +274,21 @@ summarize_chisq <- function(table,
     rownames(grid)   <- lapply(rownames(grid), FUN=function(x) paste("  ", x))
   }
 
+  # compute the stats if needed
+  if(inherits(test, "function"))
+  {
+    test_result <- test(row, column, cell_style, ...)
+    test <- TRUE
+  } else if(test)
+  {
+    test_result <- if(any(is.na(stat))) cell("NA") else
+      cell_style[['chi2']](
+        render_f(stat$statistic, 2),
+        stat$parameter,
+        cell_style[['p']](stat$p.value, pformat)
+      )
+  }
+
   # Column Headers
   if(test) {
     table <- col_header(table, "N", colnames(grid), "Test Statistic")
@@ -306,15 +325,8 @@ summarize_chisq <- function(table,
     table <- new_col(table)
   }
 
-  # Finally add the stats
   if(test)
   {
-    test_result <- if(any(is.na(stat))) cell("NA") else
-      cell_style[['chi2']](
-        render_f(stat$statistic, 2),
-        stat$parameter,
-        cell_style[['p']](stat$p.value, pformat)
-      )
     table <- add_row(table, test_result)
 
     # Fill in blank cells in stats column
@@ -335,8 +347,6 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
   datar   <- row$data
   datac   <- column$data
 
-  stat    <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
-
   tbl     <- row_header(table, derive_label(row, ...))
 
   N <- cell_style[['n']](sum(!is.na(datac)), possible=length(datac), hdr=TRUE, ...)
@@ -351,11 +361,21 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar) & !is.na(datac)),possible=length(datar), ...))
   tbl <- add_col(tbl, paste0("\u03c1=", render_f(unname(stat$estimate), row$format)))
 
-  if(test) tbl <- add_col(tbl, cell_style[['spearman']](
-    stat$statistic,
-    render_f(stat$estimate, row$format),
-    cell_style[['p']](stat$p.value, pformat)
-  ))
+  if(inherits(test, "function"))
+  {
+    stat <- test(row, column, cell_style, ...)
+    test <- TRUE
+  } else if(test)
+  {
+    stat <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
+    stat <- cell_style[['spearman']](
+      stat$statistic,
+      render_f(stat$estimate, row$format),
+      cell_style[['p']](stat$p.value, pformat)
+    )
+  }
+
+  if(test) tbl <- add_col(tbl, stat)
 
   tbl
 }
