@@ -351,16 +351,7 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
 
   N <- cell_style[['n']](sum(!is.na(datac)), possible=length(datac), hdr=TRUE, ...)
 
-  tbl <- if(test)
-  {
-    col_header(tbl, "N", derive_label(column, ...), "Test Statistic") %>% col_header("", N, "")
-  } else {
-    col_header(tbl, "N", derive_label(column, ...)) %>% col_header("", N)
-  }
-
-  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar) & !is.na(datac)),possible=length(datar), ...))
-  tbl <- add_col(tbl, paste0("\u03c1=", render_f(unname(stat$estimate), row$format)))
-
+  estimate <- unname(suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))$estimate)
   if(inherits(test, "function"))
   {
     stat <- test(row, column, cell_style, ...)
@@ -369,11 +360,21 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
   {
     stat <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
     stat <- cell_style[['spearman']](
-      stat$statistic,
-      render_f(stat$estimate, row$format),
+      test$statistic,
+      render_f(estimate, row$format),
       cell_style[['p']](stat$p.value, pformat)
     )
   }
+  
+  tbl <- if(test)
+  {
+    col_header(tbl, "N", derive_label(column, ...), "Test Statistic") %>% col_header("", N, "")
+  } else {
+    col_header(tbl, "N", derive_label(column, ...)) %>% col_header("", N)
+  }
+
+  tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar) & !is.na(datac)),possible=length(datar), ...))
+  tbl <- add_col(tbl, paste0("\u03c1=", render_f(estimate, row$format)))
 
   if(test) tbl <- add_col(tbl, stat)
 
