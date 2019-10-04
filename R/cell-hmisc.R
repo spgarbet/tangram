@@ -158,7 +158,7 @@ hmisc_fstat <- function(f, df1, df2, p, class=NULL, ...)
 #' hmisc_chi2(5.33, 6, 0.2)
 hmisc_chi2 <- function(chi2, df, p, class=NULL, ...)
 {
-  if(is.na(chi2)) return("")
+  if(is.na(chi2)) return("\u2014")
   cell(paste0("\u03a7^2^~", df, "~=", chi2,", ", p, "^2^"),
        class="statistics",
        ...)
