@@ -44,7 +44,7 @@ tangram(x, ...)
 \method{tangram}{character}(x, ...)
 
 \method{tangram}{table}(x, id = NULL, percents = FALSE, digits = 1,
-  ...)
+  test = FALSE, footnote = NULL, ...)
 
 \method{tangram}{ftable}(x, id = NULL, ...)
 

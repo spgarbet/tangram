@@ -476,16 +476,54 @@ tangram.character <- function(x, ...)
 #' @rdname tangram
 #' @param percents logical; Display percents when rendering a table object. Defaults to FALSE
 #' @export
-tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
+tangram.table <- function(
+  x,
+  id       = NULL,
+  percents = FALSE,
+  digits   = 1,
+  test     = FALSE,
+  footnote = NULL,
+  ...)
 {
-  tbl <- tangram(1,1, id=id, ...)
+  dimension <- if(is.null(dim(x))) 1 else length(dim(x))
 
-  if(is.null(dim(x)) || length(dim(x)) == 1)
+  if(is.function(test))
+  {
+    stat <- test(x)
+    test <- TRUE
+  } else if(test)
+  {
+    if(dimension <= 2)
+    {
+      result <- chisq.test(x)
+      stat   <- hmisc_chi2(render_f(result$statistic, digits),
+                           result$parameter,
+                           hmisc_p(result$p.value))
+      if(is.null(footnote)) footnote <- "^2^\u03a7^2^ Contingency table test"
+    } else if (dimension <= 4)
+    {
+      result <- mantelhaen.test(x)
+      stat  <- if(!is.na(result$statistic))
+      {
+         cell(paste0("M^2^=", render_f(result$statistic, digits),
+                     ", df=", result$parameter,
+                     ", ",    hmisc_p(result$p.value), "^1^"),
+              class="statistics",
+              ...)
+      } else cell("\u2014", ...)
+
+      if(is.null(footnote)) footnote <- "^1^Cochran-Mantel-Haenszel test"
+    }
+  }
+
+  tbl <- tangram(1,1, id=id, footnote=footnote, ...)
+
+  if(dimension == 1)
   {
     cols <- if(is.null(names(x))) paste("Level", 1:length(x)) else names(x)
     tbl[[1]] <- lapply(cols, cell_header, USE.NAMES=FALSE)
     tbl[[2]] <- lapply(x, cell)
-  } else if(length(dim(x)) == 2)
+  } else if(dimension == 2)
   {
     rows     <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else dimnames(x)[[1]]
     rows     <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
@@ -505,28 +543,28 @@ tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
       }
       tbl[[i+1]][[1]] <- cell_header(rows[i])
     }
-  } else if(length(dim(x)) == 3)
+  } else if(dimension == 3)
   {
     rows <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else dimnames(x)[[1]]
     rows <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
-    tbl  <- tangram(x[1,,], id=id, percents=percents, digits=digits, ...) %>%
+    tbl  <- tangram(x[1,,], id=id, percents=percents, digits=digits, test=FALSE, ...) %>%
             insert_column(0, cell_header(""), rows[1])
     for(i in 2:(dim(x)[1]))
     {
-      tmp <- tangram(x[i,,], id=id, percents=percents, digits=digits, ...) %>%
+      tmp <- tangram(x[i,,], id=id, percents=percents, digits=digits, test=FALSE, ...) %>%
              insert_column(0, cell_header(""), rows[i]) %>%
              del_row(1)
       tbl <- rbind(tbl, tmp)
     }
-  } else if(length(dim(x)) == 4)
+  } else if(dimension == 4)
   {
     rows <- if(is.null(rownames(x))) paste("Level", 1:dim(x)[1]) else paste0("**", dimnames(x)[[1]], "**")
     rows <- sapply(rows, function(y) cell_header(y), USE.NAMES=FALSE)
-    tbl  <- tangram(x[1,,,], id=id, percents=percents, digits=digits, ...) %>%
+    tbl  <- tangram(x[1,,,], id=id, percents=percents, digits=digits, test=FALSE, ...) %>%
             insert_column(0, "", rows[1], class="cell_header")
     for(i in 2:(dim(x)[1]))
     {
-      tmp <- tangram(x[i,,,], id=id, percents=percents, digits=digits, ...) %>%
+      tmp <- tangram(x[i,,,], id=id, percents=percents, digits=digits, test=FALSE, ...) %>%
              insert_column(0, "", rows[i], class="cell_header") %>%
              del_row(1)
       tbl <- rbind(tbl, tmp)
@@ -535,6 +573,16 @@ tangram.table <- function(x, id=NULL, percents=FALSE, digits = 1, ...)
   {
     stop("tangram table conversion above 4 dimensions not supported")
   }
+
+  if(test)
+  {
+    tbl <- new_col(tbl)
+    for(i in 1:length(tbl)) tbl <- add_row(tbl, "")
+    tbl[[1]][[length(tbl[[1]])]] <- cell_header("Test")
+    tbl[[2]][[length(tbl[[1]])]] <- stat
+  }
+
+  attr(tbl, "footnote") <- footnote
 
   tbl
 }
