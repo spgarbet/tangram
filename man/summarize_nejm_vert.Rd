@@ -26,6 +26,8 @@ summarize_nejm_vert(table, row, column, cell_style,
 \item{test}{logical; include statistical test results}
 
 \item{...}{absorbs additional arugments. Unused at present.}
+
+\item{quant}{numeric; vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.}
 }
 \value{
 The modified table object

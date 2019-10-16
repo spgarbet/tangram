@@ -95,6 +95,8 @@ summarize_nejm_horz <-    function(table,
          row_header("   Median (interquartile range)") %>%
          row_header("   Range")
 
+  if(msd) tbl <- tbl %>% row_header("   Mean\u00b1SD")
+
   tbl <- if(test) {
     col_header(tbl, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
   } else {
@@ -103,11 +105,21 @@ summarize_nejm_horz <-    function(table,
   tbl <- add_col(tbl, cell_style[['n']](sum(!is.na(datar)),name=NULL,possible=length(datar),...))
   tbl <- table_apply(tbl, categories, function(tbl, category) {
     x   <- if(category == overall_label) datar else datar[datac == category]
-    tbl               %>%
+    tbl <- tbl        %>%
     add_row(cell("")) %>%
-    add_row(cell_style[['iqr']](x, row$format, subcol=category))   %>%
-    add_row(cell_style[['range']](x, row$format, subcol=category)) %>%
-    new_col()
+    add_row(cell_style[['iqr']](x, row$format, subcol=category,  na.rm=TRUE, msd=FALSE, quant=quant))   %>%
+    add_row(cell_style[['range']](x, row$format, subcol=category))
+
+    if(msd)
+    {
+      tbl <- add_row(tbl, cell(paste0(
+        render_f(mean(x, na.rm=TRUE), row$format),
+        "\u00b1",
+        render_f(sd(x, na.rm=TRUE), row$format)))
+      )
+    }
+
+    tbl %>% new_col()
   })
   tbl <- home(tbl) %>% cursor_right(length(categories)+1)
   if(test) tbl <- add_col(tbl, stat)
@@ -129,6 +141,7 @@ summarize_nejm_horz <-    function(table,
 #' @param collapse_single logical; default TRUE. Categorical variables with a two values collapse to single row.
 #' @param test logical; include statistical test results
 #' @param msd logical; include msd in summary
+#' @param quant numeric; vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -161,7 +174,7 @@ summarize_nejm_vert <- function(table, row, column, cell_style, collapse_single=
   {
     row_header(tbl, derive_label(row)) %>%
     add_col(cell_style[['n']](sum(!is.na(datac)), subcol=categories[1], possible=length(datac), ...))           %>%
-    add_col(cell_style[['iqr']](datac, column$format, na.rm=TRUE, msd=msd, subrow=categories[1]))
+    add_col(cell_style[['iqr']](datac, column$format, na.rm=TRUE, msd=FALSE, subrow=categories[1], quant=quant))
   } else if(collapse_single && length(categories) == 2)
   {
     category <- categories[2]
@@ -169,7 +182,7 @@ summarize_nejm_vert <- function(table, row, column, cell_style, collapse_single=
 
     row_header(tbl, paste(derive_label(row), ":", category) )    %>%
     add_col(cell_style[['n']](sum(!is.na(datac)), subcol=category, possible=length(datac), ...)) %>%
-    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd))
+    add_col(cell_style[['iqr']](x, column$format, na.rm=TRUE, subrow=category, msd=msd, quant=quant))
   } else
   {
 
