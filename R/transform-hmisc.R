@@ -360,12 +360,12 @@ summarize_spearman <- function(table, row, column, cell_style, pformat=NULL, tes
   {
     stat <- suppressWarnings(cor.test(datar, datac, alternate="two.sided", method="spearman", na.action=na.omit, exact=FALSE))
     stat <- cell_style[['spearman']](
-      test$statistic,
+      stat$statistic,
       render_f(estimate, row$format),
       cell_style[['p']](stat$p.value, pformat)
     )
   }
-  
+
   tbl <- if(test)
   {
     col_header(tbl, "N", derive_label(column, ...), "Test Statistic") %>% col_header("", N, "")
