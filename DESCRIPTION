@@ -67,3 +67,5 @@ Collate:
     'transform-smd.R'
 NeedsCompilation: no
 Packaged: 2017-04-25 20:16:25 UTC; garbetsp
+URL: https://github.com/spgarbet/tangram
+BugReports: https://github.com/spgarbet/tangram/issues
