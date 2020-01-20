@@ -227,7 +227,10 @@ summarize_chisq <- function(table,
   }
 
   grid          <- if(missing)
-                     table(as.categorical(row$data), as.categorical(column$data), useNA="always")
+                   {
+                     g <- table(as.categorical(row$data), as.categorical(column$data), useNA="always")
+                     g[,1:(ncol(g)-1)]
+                   }
                    else
                      table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
