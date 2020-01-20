@@ -27,7 +27,7 @@ summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
 
 \item{test}{logical; include statistical test results}
 
-\item{missing}{logical; Show missing counts. defaults to FALSE}
+\item{missing}{logical or format; Show missing counts. defaults to FALSE}
 
 \item{...}{absorbs additional arugments. Unused at present.}
 }

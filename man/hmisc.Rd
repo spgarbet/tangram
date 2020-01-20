@@ -52,7 +52,7 @@ hmisc
 
 \item{row_percents}{logical; use denominator across rows instead of columns.}
 
-\item{missing}{logical; Always include NA totals in percentages; default=FALSE}
+\item{missing}{logical or format; Always include NA totals in percentages; default=FALSE}
 }
 \value{
 The modified table object

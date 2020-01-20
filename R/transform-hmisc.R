@@ -35,7 +35,7 @@
 #' @param overall logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param row_percents logical; use denominator across rows instead of columns.
 #' @param test logical; include statistical test results
-#' @param missing logical; Always include NA totals in percentages; default=FALSE
+#' @param missing logical or format; Always include NA totals in percentages; default=FALSE
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #'
@@ -220,6 +220,12 @@ summarize_chisq <- function(table,
                             missing=FALSE,
                             ...)
 {
+  if(is.character(missing) || is.numeric(missing))
+  {
+    missing_format <- missing
+    missing <- TRUE
+  }
+
   grid          <- if(missing)
                      table(as.categorical(row$data), as.categorical(column$data), useNA="always")
                    else

@@ -29,7 +29,7 @@
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall  logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param test logical; include statistical test results
-#' @param missing logical; Show missing counts. defaults to FALSE
+#' @param missing logical or format; Show missing counts. defaults to FALSE
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -57,6 +57,15 @@ summarize_nejm_horz <-    function(table,
                                    missing=FALSE,
                                    ...)
 {
+  if(is.character(missing) || is.numeric(missing))
+  {
+    missing_format <- missing
+    missing <- TRUE
+  } else
+  {
+    missing_format <- 2
+  }
+
   # Treat overall as a label if it's character
   overall_label <- if(is.character(overall)) overall else "Overall"
   overall       <- column$value != "1" && (isTRUE(overall) || is.character(overall))
@@ -126,7 +135,7 @@ summarize_nejm_horz <-    function(table,
     {
       tbl <- add_row(tbl, cell_style[['fraction']](
                                 sum(is.na(x)), length(x),
-                                format=3,
+                                format=missing_format,
                                 subcol=category)
       )
     }
