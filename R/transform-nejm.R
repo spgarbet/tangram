@@ -29,6 +29,7 @@
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall  logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param test logical; include statistical test results
+#' @param missing logical; Show missing counts. defaults to FALSE
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -53,6 +54,7 @@ summarize_nejm_horz <-    function(table,
                                    quant=c(0.25, 0.5, 0.75),
                                    overall=NULL,
                                    test=FALSE,
+                                   missing=FALSE,
                                    ...)
 {
   # Treat overall as a label if it's character
@@ -95,7 +97,8 @@ summarize_nejm_horz <-    function(table,
          row_header("   Median (interquartile range)") %>%
          row_header("   Range")
 
-  if(msd) tbl <- tbl %>% row_header("   Mean\u00b1SD")
+  if(msd)     tbl <- tbl %>% row_header("   Mean\u00b1SD")
+  if(missing) tbl <- tbl %>% row_header("   Missing (%)")
 
   tbl <- if(test) {
     col_header(tbl, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
@@ -119,6 +122,14 @@ summarize_nejm_horz <-    function(table,
       )
     }
 
+    if(missing)
+    {
+      tbl <- add_row(tbl, cell_style[['fraction']](
+                                sum(is.na(x)), length(x),
+                                format=3,
+                                subcol=category)
+      )
+    }
     tbl %>% new_col()
   })
   tbl <- home(tbl) %>% cursor_right(length(categories)+1)

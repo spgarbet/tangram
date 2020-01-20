@@ -35,6 +35,7 @@
 #' @param overall logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param row_percents logical; use denominator across rows instead of columns.
 #' @param test logical; include statistical test results
+#' @param missing logical; Always include NA totals in percentages; default=FALSE
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #'
@@ -216,9 +217,13 @@ summarize_chisq <- function(table,
                             overall=NULL,
                             test=FALSE,
                             row_percents=FALSE,
+                            missing=FALSE,
                             ...)
 {
-  grid          <- table(as.categorical(row$data), as.categorical(column$data), useNA="no")
+  grid          <- if(missing)
+                     table(as.categorical(row$data), as.categorical(column$data), useNA="always")
+                   else
+                     table(as.categorical(row$data), as.categorical(column$data), useNA="no")
   validcol      <- which(!apply(grid,2,FUN = function(x){all(x == 0)}))
   validrow      <- which(!apply(grid,1,FUN = function(x){all(x == 0)}))
   stat          <- if(length(validrow) < 2 || length(validcol) < 2) NA else suppressWarnings(chisq.test(grid[validrow,validcol], correct=FALSE))
@@ -272,6 +277,10 @@ summarize_chisq <- function(table,
   else # Give a good indent otherwise
   {
     rownames(grid)   <- lapply(rownames(grid), FUN=function(x) paste("  ", x))
+    if(missing)
+    {
+      rownames(grid)[nrow(grid)] <- "   Missing (%)"
+    }
   }
 
   # compute the stats if needed

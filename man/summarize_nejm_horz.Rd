@@ -6,7 +6,7 @@
 \usage{
 summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
   msd = FALSE, quant = c(0.25, 0.5, 0.75), overall = NULL,
-  test = FALSE, ...)
+  test = FALSE, missing = FALSE, ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -26,6 +26,8 @@ summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
 \item{overall}{logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.}
 
 \item{test}{logical; include statistical test results}
+
+\item{missing}{logical; Show missing counts. defaults to FALSE}
 
 \item{...}{absorbs additional arugments. Unused at present.}
 }

@@ -20,7 +20,7 @@ summarize_kruskal_vert(table, row, column, cell_style,
 
 summarize_chisq(table, row, column, cell_style, pformat = NULL,
   collapse_single = TRUE, overall = NULL, test = FALSE,
-  row_percents = FALSE, ...)
+  row_percents = FALSE, missing = FALSE, ...)
 
 summarize_spearman(table, row, column, cell_style, pformat = NULL,
   test = FALSE, ...)
@@ -51,6 +51,8 @@ hmisc
 \item{collapse_single}{logical; default TRUE. Categorical variables with a two values collapse to single row.}
 
 \item{row_percents}{logical; use denominator across rows instead of columns.}
+
+\item{missing}{logical; Always include NA totals in percentages; default=FALSE}
 }
 \value{
 The modified table object
