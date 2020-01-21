@@ -20,7 +20,7 @@ summarize_kruskal_vert(table, row, column, cell_style,
 
 summarize_chisq(table, row, column, cell_style, pformat = NULL,
   collapse_single = TRUE, overall = NULL, test = FALSE,
-  row_percents = FALSE, missing = FALSE, ...)
+  row_percents = FALSE, useNA = "no", ...)
 
 summarize_spearman(table, row, column, cell_style, pformat = NULL,
   test = FALSE, ...)
@@ -52,7 +52,7 @@ hmisc
 
 \item{row_percents}{logical; use denominator across rows instead of columns.}
 
-\item{missing}{logical or format; Always include NA totals in percentages; default=FALSE}
+\item{useNA}{character; Specifies whether to include NA counts in the table. The allowed values correspond to never "no" (Default), only if the count is positive "ifany" and even for zero counts "always". An NA column is always excluded.}
 }
 \value{
 The modified table object

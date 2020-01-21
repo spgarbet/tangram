@@ -6,7 +6,7 @@
 \usage{
 summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
   msd = FALSE, quant = c(0.25, 0.5, 0.75), overall = NULL,
-  test = FALSE, missing = FALSE, ...)
+  test = FALSE, useNA = "no", ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -27,7 +27,7 @@ summarize_nejm_horz(table, row, column, cell_style, pformat = NULL,
 
 \item{test}{logical; include statistical test results}
 
-\item{missing}{logical or format; Show missing counts. defaults to FALSE}
+\item{useNA}{character; Specifies whether to include NA counts in the table. The allowed values correspond to never "no" (Default), only if the count is positive "ifany" and even for zero counts "always". An NA column is always excluded.}
 
 \item{...}{absorbs additional arugments. Unused at present.}
 }

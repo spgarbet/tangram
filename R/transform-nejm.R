@@ -29,7 +29,7 @@
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall  logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param test logical; include statistical test results
-#' @param missing logical or format; Show missing counts. defaults to FALSE
+#' @param useNA character; Specifies whether to include NA counts in the table. The allowed values correspond to never "no" (Default), only if the count is positive "ifany" and even for zero counts "always". An NA column is always excluded.
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
@@ -54,18 +54,9 @@ summarize_nejm_horz <-    function(table,
                                    quant=c(0.25, 0.5, 0.75),
                                    overall=NULL,
                                    test=FALSE,
-                                   missing=FALSE,
+                                   useNA="no",
                                    ...)
 {
-  if(is.character(missing) || is.numeric(missing))
-  {
-    missing_format <- missing
-    missing <- TRUE
-  } else
-  {
-    missing_format <- 2
-  }
-
   # Treat overall as a label if it's character
   overall_label <- if(is.character(overall)) overall else "Overall"
   overall       <- column$value != "1" && (isTRUE(overall) || is.character(overall))
@@ -74,6 +65,8 @@ summarize_nejm_horz <-    function(table,
   categories    <- if(overall) c(levels(datac), overall_label) else levels(datac)
   categories    <- if(length(categories) == 1) overall_label else categories
   format        <- ifelse(is.na(row$format), format_guess(datar), row$format)
+
+  useNA         <- useNA=="always" || (sum(is.na(datar)) > 0 && useNA=="ifany")
 
   # Compute N values for each category
   subN <- lapply(levels(datac), FUN=function(cat){
@@ -106,8 +99,8 @@ summarize_nejm_horz <-    function(table,
          row_header("   Median (interquartile range)") %>%
          row_header("   Range")
 
-  if(msd)     tbl <- tbl %>% row_header("   Mean\u00b1SD")
-  if(missing) tbl <- tbl %>% row_header("   Missing (%)")
+  if(msd)   tbl <- tbl %>% row_header("   Mean\u00b1SD")
+  if(useNA) tbl <- tbl %>% row_header("   Missing (%)")
 
   tbl <- if(test) {
     col_header(tbl, "N", categories, "Test Statistic")  %>% col_header("", subN, "")
@@ -131,11 +124,11 @@ summarize_nejm_horz <-    function(table,
       )
     }
 
-    if(missing)
+    if(useNA)
     {
       tbl <- add_row(tbl, cell_style[['fraction']](
                                 sum(is.na(x)), length(x),
-                                format=missing_format,
+                                format=row$format,
                                 subcol=category)
       )
     }
