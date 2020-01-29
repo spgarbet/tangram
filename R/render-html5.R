@@ -33,6 +33,17 @@ htmlsub_table <-list(
   c("\\\\(.)",                                            "\\1")         # convert escaped characters
 )
 
+# Convert a td string to th
+th <- function(x, fixed_thead)
+{
+  print(str(x))
+  x <- gsub("</td>", "</th>", x)
+  if(fixed_thead)
+    gsub("<td", "<th style=\"position:sticky;top:0;\"", x)
+  else
+    gsub("<td", "<th", x)
+}
+
 #' @include iify.R
 #' @importFrom htmltools htmlEscape
 htmlify <- function(x)
@@ -184,20 +195,23 @@ html5.logical <- function(object, id, ..., class=NA)
 #' @param fragment A boolean flag that determines whether a fragment or a complete HTML5 document is generatedf
 #' @param style A string containing a style filename to include as inline CSS. It first searches the drive for the file, if that fails it looks inside the package for a matching css file.
 #' @param footnote Any footnotes to include under the table.
+#' @param fixed_thead logical; fixes the header using position sticky in CSS defaults to FALSE
 #' @param inline DEPRECATED
 #' @param ... additional arguments to renderer. Unused
 #' @return A text string rendering of the given table in HTML5
 #' @export
-html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NULL, footnote=NULL, inline=NULL, ...)
+html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NULL, footnote=NULL, inline=NULL, fixed_thead=NULL, ...)
 {
   # Unused at present
   #if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
-  if(is.null(id))       id       <- attr(object, "id")
-  if(is.null(fragment)) fragment <- attr(object, "fragment")
-  if(is.null(fragment)) fragment <- TRUE
-  if(is.null(caption))  caption  <- attr(object, "caption")
-  if(is.null(style))    style    <- attr(object, "style")
+  if(is.null(id))          id       <- attr(object, "id")
+  if(is.null(fragment))    fragment <- attr(object, "fragment")
+  if(is.null(fragment))    fragment <- TRUE
+  if(is.null(caption))     caption  <- attr(object, "caption")
+  if(is.null(style))       style    <- attr(object, "style")
+  if(is.null(fixed_thead)) fixed_thead <- attr(object, "fixed_thead")
+  if(is.null(fixed_thead)) fixed_thead <- FALSE
 
   if(!is.null(inline))
   {
@@ -278,10 +292,10 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   {
     tableHdr <- "<thead>"
     sapply(1:last_header_row,
-           FUN=function(row) {
-             if(row < 2) tableHdr <<- paste(tableHdr, "<tr>", pasty[row], "</tr>", sep='')
-             else        tableHdr <<- paste(tableHdr, "<tr class=\"subheaderrow\">", pasty[row], "</tr>", sep='')
-           }
+      FUN=function(row) {
+        if(row < 2) tableHdr <<- paste(tableHdr, "<tr>", th(pasty[row], fixed_thead), "</tr>", sep='')
+        else        tableHdr <<- paste(tableHdr, "<tr class=\"subheaderrow\">", th(pasty[row], FALSE), "</tr>", sep='')
+      }
     )
     tableHdr <- paste(tableHdr, "</thead>", sep='')
   }

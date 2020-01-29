@@ -43,7 +43,7 @@ table_flatten <- function(table)
   {
     x <- tangram(1, 1)
     x[[1]][[1]] <- table
-    for(i in c("id", "caption", "style", "footnote", "args"))
+    for(i in c("id", "caption", "style", "footnote", "args", "fixed_thead"))
       attr(x, i) <- attr(table, i)
 
     table <- x
@@ -194,7 +194,7 @@ table_flatten <- function(table)
     output_row <<- output_row + length(table[[row]][[1]])
   })
 
-  for(i in c("id", "caption", "style", "footnote", "args"))
+  for(i in c("id", "caption", "style", "footnote", "args","fixed_thead"))
     attr(new_tbl, i) <- attr(table, i)
 
   new_tbl %>% home()
@@ -300,7 +300,7 @@ tangram <- function(x, ...)
 
 #' @rdname tangram
 #' @export
-tangram.numeric <- function(x, cols, id=NULL, caption=NULL, style="hmisc", footnote=NULL, ...)
+tangram.numeric <- function(x, cols, id=NULL, caption=NULL, style="hmisc", footnote=NULL, fixed_thead=NULL, ...)
 {
   # A list of lists
   result <- lapply(1:x, function(x) {lapply(1:cols, function(y) cell("", ...)) })
@@ -311,6 +311,7 @@ tangram.numeric <- function(x, cols, id=NULL, caption=NULL, style="hmisc", footn
   attr(result, "style")    <- style
   attr(result, "footnote") <- footnote
   attr(result, "args")     <- list(...)
+  attr(result, "fixed_thead") <- fixed_thead
   attr(result, "row")      <- 1
   attr(result, "col")      <- 1
 
@@ -319,7 +320,7 @@ tangram.numeric <- function(x, cols, id=NULL, caption=NULL, style="hmisc", footn
 
 #' @rdname tangram
 #' @export
-tangram.anova.lme <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=NULL, digits=NULL, ...)
+tangram.anova.lme <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=NULL, digits=NULL, fixed_thead=NULL, ...)
 {
   y <- x
   y$call <- NULL
@@ -330,12 +331,12 @@ tangram.anova.lme <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=
 
   y$Model <- x$Model
 
-  tangram.data.frame(y, id, caption=caption, footnote=footnote, style=style, as.character=TRUE, ...)
+  tangram.data.frame(y, id, caption=caption, footnote=footnote, style=style, as.character=TRUE, fixed_thead=fixed_thead, ...)
 }
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, ...)
+tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, fixed_thead=NULL, ...)
 {
   cls <- sapply(names(x), function(y) class(x[1,y]))
 
@@ -347,7 +348,7 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
   if(!as.character)
   {
     nms <- names(cls)[cls %in% c("integer", "factor", "numeric")]
-    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, id=id, caption=caption, style=style, footnote=footnote, after=after, quant=quant, msd=msd, ...))
+    return(tangram(paste0("1~", paste0(nms, collapse='+')), x, id=id, caption=caption, style=style, footnote=footnote, after=after, quant=quant, msd=msd, fixed_thead=fixed_thead, ...))
   }
 
   width   <- length(colnames(x)) + 1
@@ -394,6 +395,7 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
   attr(tbl, "style")    <- style
   attr(tbl, "footnote") <- footnote
   attr(tbl, "args")     <- list(...)
+  attr(tbl, "fixed_thead") <- fixed_thead
   attr(tbl, "row")      <- 1
   attr(tbl, "col")      <- 1
 
@@ -407,7 +409,7 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, ...)
+tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, fixed_thead=NULL, ...)
 {
   if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) data <- as.data.frame(data)
   if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) stop("data must be supplied as data frame")
@@ -455,6 +457,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   attr(tbl, "style")    <- style
   attr(tbl, "footnote") <- if(is.null(footnote)) attr(tbl, "footnote") else footnote
   attr(tbl, "args")     <- list(...)
+  attr(tbl, "fixed_thead") <- fixed_thead
   attr(tbl, "row")      <- 1
   attr(tbl, "col")      <- 1
 

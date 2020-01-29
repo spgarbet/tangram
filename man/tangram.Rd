@@ -28,18 +28,21 @@
 tangram(x, ...)
 
 \method{tangram}{numeric}(x, cols, id = NULL, caption = NULL,
-  style = "hmisc", footnote = NULL, ...)
+  style = "hmisc", footnote = NULL, fixed_thead = NULL, ...)
 
 \method{tangram}{anova.lme}(x, id = NULL, style = "hmisc",
-  caption = NULL, footnote = NULL, digits = NULL, ...)
+  caption = NULL, footnote = NULL, digits = NULL,
+  fixed_thead = NULL, ...)
 
 \method{tangram}{data.frame}(x, id = NULL, colheader = NA,
   caption = NULL, style = "hmisc", footnote = NULL, after = NA,
-  quant = seq(0, 1, 0.25), msd = TRUE, as.character = NULL, ...)
+  quant = seq(0, 1, 0.25), msd = TRUE, as.character = NULL,
+  fixed_thead = NULL, ...)
 
 \method{tangram}{formula}(x, data = NULL, id = NULL,
   transforms = NULL, caption = NULL, style = "hmisc",
-  footnote = NULL, after = NA, digits = NA, ...)
+  footnote = NULL, after = NA, digits = NA, fixed_thead = NULL,
+  ...)
 
 \method{tangram}{character}(x, ...)
 

@@ -6,7 +6,7 @@
 \usage{
 \method{html5}{tangram}(object, id = NULL, caption = NULL,
   fragment = NULL, style = NULL, footnote = NULL, inline = NULL,
-  ...)
+  fixed_thead = NULL, ...)
 }
 \arguments{
 \item{object}{The cell table to render to HTML5}
@@ -22,6 +22,8 @@
 \item{footnote}{Any footnotes to include under the table.}
 
 \item{inline}{DEPRECATED}
+
+\item{fixed_thead}{logical; fixes the header using position sticky in CSS defaults to FALSE}
 
 \item{...}{additional arguments to renderer. Unused}
 }
