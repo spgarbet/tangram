@@ -427,7 +427,7 @@ tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
   {
-    if(length(methods::formalArgs(transforms)) == 2)
+    if(length(formals(transforms)) == 2)
     {
       f <- transforms
       transforms <- function(table, row, column, cell_style, ...) {
