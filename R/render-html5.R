@@ -36,10 +36,9 @@ htmlsub_table <-list(
 # Convert a td string to th
 th <- function(x, fixed_thead)
 {
-  print(str(x))
   x <- gsub("</td>", "</th>", x)
   if(fixed_thead)
-    gsub("<td", "<th style=\"position:sticky;top:0;\"", x)
+    gsub("<td", "<th style=\"position:sticky;top:0;background-color: #FFFFFF;\"", x)
   else
     gsub("<td", "<th", x)
 }
@@ -205,11 +204,11 @@ html5.tangram <- function(object, id=NULL, caption=NULL, fragment=NULL, style=NU
   # Unused at present
   #if(!is.na(css)) css <- paste("<link rel=\"stylesheet\" type=\"text/css\" href=\"", css, "\"/>", sep='')
 
-  if(is.null(id))          id       <- attr(object, "id")
-  if(is.null(fragment))    fragment <- attr(object, "fragment")
-  if(is.null(fragment))    fragment <- TRUE
-  if(is.null(caption))     caption  <- attr(object, "caption")
-  if(is.null(style))       style    <- attr(object, "style")
+  if(is.null(id))          id          <- attr(object, "id")
+  if(is.null(fragment))    fragment    <- attr(object, "fragment")
+  if(is.null(fragment))    fragment    <- TRUE
+  if(is.null(caption))     caption     <- attr(object, "caption")
+  if(is.null(style))       style       <- attr(object, "style")
   if(is.null(fixed_thead)) fixed_thead <- attr(object, "fixed_thead")
   if(is.null(fixed_thead)) fixed_thead <- FALSE
 
