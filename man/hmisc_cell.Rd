@@ -51,6 +51,8 @@ hmisc_cell
 
 \item{quant}{numeric; The quantiles to display. Should be an odd length vector, since the center value is highlighted.}
 
+\item{...}{additional arguments passed}
+
 \item{numerator}{numeric; The value of the numerator}
 
 \item{denominator}{numeric; The value of the denominator}

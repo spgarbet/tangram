@@ -25,7 +25,7 @@ Author: Shawn Garbett [aut, cre],
   Frank Harrell [ctb],
   Ahra Kim [ctb]
 Maintainer: Shawn Garbett <Shawn.Garbett@vumc.org>
-Depends: R (>= 3.2.3), R6, magrittr, knitr
+Depends: R (>= 3.5.0), R6, magrittr, knitr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

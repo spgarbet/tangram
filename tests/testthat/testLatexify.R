@@ -7,7 +7,7 @@ test_that("Escaped hash",        expect_true(latexify("\\#")  == "\\#"))
 #test_that("Escaped asterisk",    expect_true(latexify("\\*")  == "\\ast{}"))
 #test_that("Escaped backslash",   expect_true(latexify("\\\\") == "\\textbackslash{}"))
 test_that("Escaped caret",       expect_true(latexify("\\^")  == "\\textasciicircum{}"))
-test_that("Escaped underscore",  expect_true(latexify("\\_")  == "\\_"))
+test_that("Escaped underscore",  expect_true(latexify("_")    == "\\_"))
 test_that("Escaped backtick",    expect_true(latexify("\\`")  == "\\textasciigrave{}"))
 test_that("Escaped tilde",       expect_true(latexify("\\~")  == "\\textasciitilde{}"))
 

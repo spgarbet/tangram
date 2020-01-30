@@ -6,6 +6,7 @@ tangram.clmm2 <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=NULL
 }
 
 #' @rdname tangram
+#' @importFrom stats naprint
 #' @export
 tangram.summary.clmm2 <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=NULL, digits=NULL, pformat="%1.3f", include_p=FALSE, ...)
 {

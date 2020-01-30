@@ -142,6 +142,18 @@ new_header <- function(table, attribute, sub, ...)
 #' A set of magrittr operators for tangram tables
 #'
 #' @rdname table_builder
+#' @param caption character; caption of table
+#' @param id character; id of table
+#' @param footnote character; footnote to add
+#' @param FUN function; function to apply
+#' @param n numeric; number of times to perform operation
+#' @param ncol numeric; number of columns
+#' @param nrow numeric; number of rows
+#' @param style character; styling in compiling table and in rendering
+#' @param sub logical; Is this a subheader
+#' @param table tangram; The tangram table being built
+#' @param x object of focus in operation
+#' @param ... additional argument passed
 #' @export
 col_header <- function(table, ..., sub=TRUE) new_header(table, "col_header", sub, ...)
 
@@ -255,9 +267,9 @@ new_col <- function(table)
 
 #' @rdname table_builder
 #' @export
-table_apply <- function(table, X, FUN, ...)
+table_apply <- function(table, x, FUN, ...)
 {
-  sapply(X, FUN=function(x) table <<- FUN(table, x, ...))
+  sapply(x, FUN=function(y) table <<- FUN(table, y, ...))
   table
 }
 

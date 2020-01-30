@@ -158,7 +158,7 @@ summarize_nejm_horz <-    function(table,
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object
 #' @export
-summarize_nejm_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, msd=FALSE, test=FALSE, ...)
+summarize_nejm_vert <- function(table, row, column, cell_style, collapse_single=TRUE, pformat=NULL, msd=FALSE, test=FALSE, quant=c(0.25, 0.5, 0.75), ...)
 {
   datar      <- as.categorical(row$data)
   datac      <- column$data

@@ -33,6 +33,8 @@ latex(object, ...)
 
 \item{...}{additional arguments}
 
+\item{na.blank}{logical; Dispaly NAs as blanks.}
+
 \item{fragment}{logical; Is this a complete LaTeX document or just the table fragment}
 
 \item{filename}{character; filename to write LaTex into}

@@ -54,7 +54,7 @@ test_that("Subscript and Superscript",  expect_true(
 
 test_that("Fraction",  expect_true(
   htmlify("\\frac{1 234}{5 678}")  ==
-          "<span class=\"fraction\"><span class=\"numerator\"></span><span class=\"denominator\">1 234</span></span>"
+          "&nbsp;<span class=\"fraction\"><span class=\"numerator\">1 234</span>/<span class=\"denominator\">5 678</span></span>"
 ))
 
 test_that("Escapes Less Than", expect_true(

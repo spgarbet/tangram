@@ -78,7 +78,13 @@ tangram(x, ...)
 
 \item{...}{addition models or data supplied to table construction routines}
 
+\item{pformat}{function or character; A function to format p values}
+
+\item{include_p}{logical; Include p-value when printing statistic}
+
 \item{cols}{numeric; An integer of the number of cols to create}
+
+\item{fixed_thead}{logical; On conversion to HTML5 should headers be treated as fixed?}
 
 \item{colheader}{character; Use as column headers in final table}
 
@@ -96,15 +102,21 @@ tangram(x, ...)
 
 \item{percents}{logical; Display percents when rendering a table object. Defaults to FALSE}
 
+\item{test}{logical or function; Perform default test or a statistical function that will return a test result when passed a row and column}
+
+\item{format}{numeric or character; Format to apply to statistic}
+
+\item{tformat}{numeric or character; format to apply to t-value}
+
 \item{short.labels}{numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").}
 
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
 
-\item{row}{numeric; Current row being edited. Think of it as current cursor position}
-
 \item{col}{numeric; Current col being edited Think of it as current cursor position}
+
+\item{row}{numeric; Current row being edited. Think of it as current cursor position}
 }
 \value{
 A tangram object (a table).

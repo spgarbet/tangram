@@ -42,6 +42,7 @@
 #' @param S The value of the spearman statistic
 #' @param rho The rho value of the test
 #' @param V The value of the Wilcoxon statistic
+#' @param ... additional arguments passed
 #' @return A formatted string or cell as appropriate
 #' @rdname hmisc_cell
 #'

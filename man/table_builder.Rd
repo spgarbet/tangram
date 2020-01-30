@@ -52,7 +52,7 @@ new_row(table)
 
 new_col(table)
 
-table_apply(table, X, FUN, ...)
+table_apply(table, x, FUN, ...)
 
 add_col(table, ...)
 
@@ -65,6 +65,31 @@ set_id(table, id)
 set_caption(table, caption)
 
 set_style(table, style)
+}
+\arguments{
+\item{table}{tangram; The tangram table being built}
+
+\item{...}{additional argument passed}
+
+\item{sub}{logical; Is this a subheader}
+
+\item{x}{object of focus in operation}
+
+\item{n}{numeric; number of times to perform operation}
+
+\item{nrow}{numeric; number of rows}
+
+\item{ncol}{numeric; number of columns}
+
+\item{FUN}{function; function to apply}
+
+\item{footnote}{character; footnote to add}
+
+\item{id}{character; id of table}
+
+\item{caption}{character; caption of table}
+
+\item{style}{character; styling in compiling table and in rendering}
 }
 \description{
 A set of magrittr operators for tangram tables

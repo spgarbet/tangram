@@ -6,7 +6,7 @@
 \usage{
 summarize_nejm_vert(table, row, column, cell_style,
   collapse_single = TRUE, pformat = NULL, msd = FALSE,
-  test = FALSE, ...)
+  test = FALSE, quant = c(0.25, 0.5, 0.75), ...)
 }
 \arguments{
 \item{table}{The table object to modify}
@@ -25,9 +25,9 @@ summarize_nejm_vert(table, row, column, cell_style,
 
 \item{test}{logical; include statistical test results}
 
-\item{...}{absorbs additional arugments. Unused at present.}
-
 \item{quant}{numeric; vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.}
+
+\item{...}{absorbs additional arugments. Unused at present.}
 }
 \value{
 The modified table object

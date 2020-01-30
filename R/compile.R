@@ -270,16 +270,22 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' @param after function or list of functions; one or more functions to further process an abstract table
 #' @param as.character logical; if true data.frames all variables are passed through as.character and no numerical summary is provided.
 #' @param colheader character; Use as column headers in final table
+#' @param col numeric; Current col being edited Think of it as current cursor position
 #' @param cols numeric; An integer of the number of cols to create
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
-#' @param row numeric; Current row being edited. Think of it as current cursor position
-#' @param col numeric; Current col being edited Think of it as current cursor position
+#' @param fixed_thead logical; On conversion to HTML5 should headers be treated as fixed?
+#' @param format numeric or character; Format to apply to statistic
+#' @param include_p logical; Include p-value when printing statistic
 #' @param quant numeric; A vector of quantiles to use for summaries
 #' @param msd logical; Include mean and standard deviation in numeric summary
+#' @param pformat function or character; A function to format p values
+#' @param test logical or function; Perform default test or a statistical function that will return a test result when passed a row and column
 #' @param transforms list of lists of functions; that contain the transformation to apply for summarization
+#' @param tformat numeric or character; format to apply to t-value
 #' @param rnd.digits numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.
 #' @param rnd.stats numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.
+#' @param row numeric; Current row being edited. Think of it as current cursor position
 #' @param short.labels numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").
 #' @param ... addition models or data supplied to table construction routines
 #'
@@ -477,6 +483,7 @@ tangram.character <- function(x, ...)
 }
 
 #' @rdname tangram
+#' @importFrom stats mantelhaen.test
 #' @param percents logical; Display percents when rendering a table object. Defaults to FALSE
 #' @export
 tangram.table <- function(

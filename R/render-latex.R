@@ -38,6 +38,7 @@
 #' @param fragment logical; Is this a complete LaTeX document or just the table fragment
 #' @param filename character; filename to write LaTex into
 #' @param append logical; Should the write be an append operation or overwrite
+#' @param na.blank logical; Dispaly NAs as blanks.
 #' @param ... additional arguments
 #' @return the LaTeX rendering
 #' @include compile-cell.R
