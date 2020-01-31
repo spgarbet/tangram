@@ -113,10 +113,6 @@ tangram(x, ...)
 \item{rnd.digits}{numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.}
 
 \item{rnd.stats}{numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.}
-
-\item{col}{numeric; Current col being edited Think of it as current cursor position}
-
-\item{row}{numeric; Current row being edited. Think of it as current cursor position}
 }
 \value{
 A tangram object (a table).

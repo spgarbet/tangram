@@ -270,7 +270,6 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' @param after function or list of functions; one or more functions to further process an abstract table
 #' @param as.character logical; if true data.frames all variables are passed through as.character and no numerical summary is provided.
 #' @param colheader character; Use as column headers in final table
-#' @param col numeric; Current col being edited Think of it as current cursor position
 #' @param cols numeric; An integer of the number of cols to create
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
@@ -285,7 +284,6 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' @param tformat numeric or character; format to apply to t-value
 #' @param rnd.digits numeric; Digits to round reference, comparison, result and CI values to. Defaults to 2.
 #' @param rnd.stats numeric; Digits to round model LR, R2, etc to. Defaults to rnd.digits.
-#' @param row numeric; Current row being edited. Think of it as current cursor position
 #' @param short.labels numeric; Named vector of variable labels to replace in interaction rows. Must be in format c("variable name" = "shortened label").
 #' @param ... addition models or data supplied to table construction routines
 #'
