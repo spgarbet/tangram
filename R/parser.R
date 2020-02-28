@@ -513,13 +513,15 @@ Parser <- R6Class("Parser",
       #   or underline characters and starts with a letter or the dot not
       #   followed by a number.
       match <- str_match(substr(self$input,self$pos-1,self$len),
-                         "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*")
+        "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*|^\`([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._ ]*\`")
       if(is.na(match[1,1]))
       {
         stop(paste("Unparseable input starting at",substr(self$input,self$pos-1,self$pos+10),sep=""))
       }
 
       self$pos <- self$pos + nchar(match[1,1]) - 1
+
+      if(substr(match[1,1], 1, 1) == "`") match[1,1] <- substr(match[1,1], 2, nchar(match[1,1])-1)
 
       return(Token$new("IDENTIFIER", match[1,1]))
     },
