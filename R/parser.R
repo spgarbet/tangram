@@ -639,8 +639,8 @@ Parser <- R6Class("Parser",
     {
       if(inherits(x,"formula"))
       {
-        y <- as.character(x)
-        x <- paste(x[2], x[1], x[3])
+        x <- as.character(x)
+        x <- paste0(c(x[2], x[1], x[3]), collapse='')
       }
       self$input <- x
       self$pos   <- 1

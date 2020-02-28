@@ -94,3 +94,14 @@ test_that("2x2X6 contingency table is correctly rendered",
   expect_true(length(x[[1]]) == 8)
 })
 
+test_that("handles columns with spaces",
+{
+  df <- data.frame(z=1:3, x=4:6)
+  names(df) <- c("foo bar", "x")
+
+  tbl1 <- tangram(x ~ `foo bar`, df)
+
+  expect_true(inherits(tbl1, "tangram"))
+})
+
+

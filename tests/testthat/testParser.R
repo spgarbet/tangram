@@ -126,3 +126,4 @@ test_that("reduction via data works",
   expect_equal(reducto$right$data, df[,"x"])
 })
 
+
