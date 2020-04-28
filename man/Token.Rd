@@ -4,26 +4,65 @@
 \name{Token}
 \alias{Token}
 \title{A token in the formula grammar}
-\format{\code{\link{R6Class}} object.}
-\usage{
-Token
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
 A token in the formula grammar
-}
-\section{Fields}{
 
+A token in the formula grammar
+}
+\keyword{data}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{id}}{The token identifier, E.g. "LPAREN"}
 
 \item{\code{name}}{Information about the token, useful with IDENTIFIERs.}
-}}
-
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{Token$new()}}
+\item \href{#method-clone}{\code{Token$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Construct a lexical token
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Token$new(id, name = "")}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
-  \item{\code{new(id, name="")}}{Create a new token in the grammar.}
+\item{\code{id}}{(character) The lexical id of the token}
+
+\item{\code{name}}{(character) Additional token information if needed}
 }
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Token$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
-\keyword{data}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -4,31 +4,116 @@
 \name{ASTNode}
 \alias{ASTNode}
 \title{A Node in an Abstract Syntax Tree (AST)}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
-\usage{
-ASTNode
-}
 \description{
+A Node in an Abstract Syntax Tree (AST)
+
+A Node in an Abstract Syntax Tree (AST)
+}
+\details{
 This is the root R6 class of any term of the AST which is created
 when parsing a table formula. This should only be used as a base class
 as the class information carries the semantic meaning of a given node.
 }
-\section{Fields}{
-
+\keyword{data}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{symbol}}{A string which tells what this node in the AST represents.}
+\item{\code{format}}{Any formatting directive passed to this node.}
 
 \item{\code{value}}{A string of addtional information contained by the node.}
-}}
-
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-terms}{\code{ASTNode$terms()}}
+\item \href{#method-distribute}{\code{ASTNode$distribute()}}
+\item \href{#method-string}{\code{ASTNode$string()}}
+\item \href{#method-reduce}{\code{ASTNode$reduce()}}
+\item \href{#method-set_format}{\code{ASTNode$set_format()}}
+\item \href{#method-clone}{\code{ASTNode$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-terms"></a>}}
+\if{latex}{\out{\hypertarget{method-terms}{}}}
+\subsection{Method \code{terms()}}{
+Returns this node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTNode$terms()}\if{html}{\out{</div>}}
+}
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-distribute"></a>}}
+\if{latex}{\out{\hypertarget{method-distribute}{}}}
+\subsection{Method \code{distribute()}}{
+Distributes data across multiplications and rearranges nodes
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTNode$distribute()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-string"></a>}}
+\if{latex}{\out{\hypertarget{method-string}{}}}
+\subsection{Method \code{string()}}{
+Returns string representation of node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTNode$string()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\subsection{Method \code{reduce()}}{
+Given a set of data, associates it with AST nodes
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTNode$reduce(data)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
-  \item{\code{terms()}}{Returns the node itself}
-  \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
-  \item{\code{string()}}{Returns the string formula of the node}
-  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
+\item{\code{data}}{(data.frame) data to associate across nodes}
 }
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_format"></a>}}
+\if{latex}{\out{\hypertarget{method-set_format}{}}}
+\subsection{Method \code{set_format()}}{
+Override the formatting directive for this node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTNode$set_format(x)}\if{html}{\out{</div>}}
 }
 
-\keyword{data}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{(numeric,character) the formatting directive}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTNode$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -11,12 +11,22 @@
 \alias{hmisc_wilcox}
 \alias{hmisc_cell}
 \title{Cell Generation functions for hmisc default}
-\format{An object of class \code{list} of length 8.}
+\format{
+An object of class \code{list} of length 8.
+}
 \usage{
 hmisc_p(p, pformat = "\%1.3f", include_p = TRUE)
 
-hmisc_iqr(x, format = NA, na.rm = TRUE, names = FALSE, type = 8,
-  msd = FALSE, quant = c(0.25, 0.5, 0.75), ...)
+hmisc_iqr(
+  x,
+  format = NA,
+  na.rm = TRUE,
+  names = FALSE,
+  type = 8,
+  msd = FALSE,
+  quant = c(0.25, 0.5, 0.75),
+  ...
+)
 
 hmisc_fraction(numerator, denominator, format = 3, ...)
 

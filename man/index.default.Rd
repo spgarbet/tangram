@@ -4,8 +4,7 @@
 \alias{index.default}
 \title{Generate an index from a cell object}
 \usage{
-\method{index}{default}(object, id = "tangram", name = NULL,
-  key.len = 4, ...)
+\method{index}{default}(object, id = "tangram", name = NULL, key.len = 4, ...)
 }
 \arguments{
 \item{object}{cell; The cell for indexing}

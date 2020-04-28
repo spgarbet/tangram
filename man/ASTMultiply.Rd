@@ -4,35 +4,116 @@
 \name{ASTMultiply}
 \alias{ASTMultiply}
 \title{The multiplication of two terms, as an ASTNode.}
-\format{\code{\link{R6Class}} object.}
-\usage{
-ASTMultiply
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
 The multiplication of two terms, as an ASTNode.
+
+The multiplication of two terms, as an ASTNode.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{left}}{The AST tree to the left.}
-
-\item{\code{right}}{The AST tree to the right.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-  \item{\code{terms()}}{Returns the node as a term vector}
-  \item{\code{factors()}}{Returns all terminal nodes under this as a list}
-  \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
-  \item{\code{string()}}{Returns the string formula of the node}
-  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
-}
-}
-
 \examples{
 ASTMultiply$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 
 }
 \keyword{data}
+\section{Super classes}{
+\code{\link[tangram:ASTNode]{tangram::ASTNode}} -> \code{\link[tangram:ASTBranch]{tangram::ASTBranch}} -> \code{ASTMultiply}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{left}}{The AST tree to the left.}
+
+\item{\code{right}}{The AST tree to the right.}
+
+\item{\code{type}}{The specified type of this node}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{ASTMultiply$new()}}
+\item \href{#method-distribute}{\code{ASTMultiply$distribute()}}
+\item \href{#method-factors}{\code{ASTMultiply$factors()}}
+\item \href{#method-string}{\code{ASTMultiply$string()}}
+\item \href{#method-clone}{\code{ASTMultiply$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="reduce">}\href{../../tangram/html/ASTBranch.html#method-reduce}{\code{tangram::ASTBranch$reduce()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Construct a multiplication node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTMultiply$new(left, right)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{left}}{(ASTNode) nodes to the left of the multiplication}
+
+\item{\code{right}}{(ASTNode) nodes to the right of the multiplication}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-distribute"></a>}}
+\if{latex}{\out{\hypertarget{method-distribute}{}}}
+\subsection{Method \code{distribute()}}{
+Rearrange nodes distribution multiplication across parenthesis
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTMultiply$distribute()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-factors"></a>}}
+\if{latex}{\out{\hypertarget{method-factors}{}}}
+\subsection{Method \code{factors()}}{
+return all terminal nodes on left and right
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTMultiply$factors()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-string"></a>}}
+\if{latex}{\out{\hypertarget{method-string}{}}}
+\subsection{Method \code{string()}}{
+Return a re-parseable string
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTMultiply$string()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTMultiply$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

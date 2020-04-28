@@ -4,9 +4,17 @@
 \alias{html5.tangram}
 \title{Convert a tangram class into an HTML5 string}
 \usage{
-\method{html5}{tangram}(object, id = NULL, caption = NULL,
-  fragment = NULL, style = NULL, footnote = NULL, inline = NULL,
-  fixed_thead = NULL, ...)
+\method{html5}{tangram}(
+  object,
+  id = NULL,
+  caption = NULL,
+  fragment = NULL,
+  style = NULL,
+  footnote = NULL,
+  inline = NULL,
+  fixed_thead = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{The cell table to render to HTML5}

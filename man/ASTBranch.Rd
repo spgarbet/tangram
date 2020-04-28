@@ -6,31 +6,90 @@
 \title{A left/right branch in an Abstract Syntrax Tree. This inherits from ASTNode, and
 is intended to be a base class as well. Should never be instantiated directly
 as once again the semantic information is contained in the class name.}
-\format{\code{\link{R6Class}} object.}
-\usage{
-ASTBranch
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
 A left/right branch in an Abstract Syntrax Tree. This inherits from ASTNode, and
 is intended to be a base class as well. Should never be instantiated directly
 as once again the semantic information is contained in the class name.
-}
-\section{Fields}{
 
+A left/right branch in an Abstract Syntrax Tree. This inherits from ASTNode, and
+is intended to be a base class as well. Should never be instantiated directly
+as once again the semantic information is contained in the class name.
+}
+\keyword{data}
+\section{Super class}{
+\code{\link[tangram:ASTNode]{tangram::ASTNode}} -> \code{ASTBranch}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{left}}{A pointer to the left node below this one}
 
 \item{\code{right}}{A pointer to the right node below this one}
-}}
-
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-distribute}{\code{ASTBranch$distribute()}}
+\item \href{#method-reduce}{\code{ASTBranch$reduce()}}
+\item \href{#method-clone}{\code{ASTBranch$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="string">}\href{../../tangram/html/ASTNode.html#method-string}{\code{tangram::ASTNode$string()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-distribute"></a>}}
+\if{latex}{\out{\hypertarget{method-distribute}{}}}
+\subsection{Method \code{distribute()}}{
+Call to distribute multiplication nodes, just recursively calls left and right node distribute functions
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTBranch$distribute()}\if{html}{\out{</div>}}
+}
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\subsection{Method \code{reduce()}}{
+Attached data to nodes by processing data.frame appropriatly. Recursively calls left and right nodes to reduces on data.frame
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTBranch$reduce(df)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
-  \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
-  \item{\code{terms()}}{Returns the node}
-  \item{\code{string()}}{Returns the string formula of the node}
-  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
+\item{\code{df}}{(data.frame) Data frame to reduce over}
 }
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTBranch$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
-\keyword{data}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

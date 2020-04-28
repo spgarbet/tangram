@@ -25,8 +25,7 @@ latex(object, ...)
 
 \method{latex}{cell_subheader}(object, ...)
 
-\method{latex}{tangram}(object, fragment = TRUE, filename = NULL,
-  append = FALSE, ...)
+\method{latex}{tangram}(object, fragment = TRUE, filename = NULL, append = FALSE, ...)
 }
 \arguments{
 \item{object}{object; the item to render to latex}

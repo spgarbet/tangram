@@ -3,9 +3,9 @@ title: "Tangram Examples"
 author: "Shawn Garbett, MS"
 date: '`r Sys.Date()`'
 output:
+  html_document: null
   pdf_document:
     keep_tex: yes
-  html_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}
 - \usepackage[utf8]{inputenc}
@@ -92,10 +92,12 @@ tangram("drug~bili[2]+albumin+stage::Categorical+protime+sex+age+spiders",
         pbc,
         msd=TRUE,
         quant=seq(0, 1, 0.25),
-        style="hmisc",
+        #style="hmisc",
         caption = "Table Hmisc Style",
         relsize=-3,
-        capture_units=TRUE
+        capture_units=TRUE,
+        fixed_thead=TRUE,
+        missing=TRUE
   )
 ```
 

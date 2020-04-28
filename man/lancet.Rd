@@ -4,7 +4,9 @@
 \name{lancet}
 \alias{lancet}
 \title{Style Bundle for Lancet style}
-\format{An object of class \code{list} of length 5.}
+\format{
+An object of class \code{list} of length 5.
+}
 \usage{
 lancet
 }

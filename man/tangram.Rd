@@ -18,36 +18,92 @@
 \alias{tangram.rms}
 \title{Table creation methods}
 \usage{
-\method{tangram}{clmm2}(x, id = NULL, style = "hmisc",
-  caption = NULL, footnote = NULL, digits = NULL, ...)
+\method{tangram}{clmm2}(
+  x,
+  id = NULL,
+  style = "hmisc",
+  caption = NULL,
+  footnote = NULL,
+  digits = NULL,
+  ...
+)
 
-\method{tangram}{summary.clmm2}(x, id = NULL, style = "hmisc",
-  caption = NULL, footnote = NULL, digits = NULL,
-  pformat = "\%1.3f", include_p = FALSE, ...)
+\method{tangram}{summary.clmm2}(
+  x,
+  id = NULL,
+  style = "hmisc",
+  caption = NULL,
+  footnote = NULL,
+  digits = NULL,
+  pformat = "\%1.3f",
+  include_p = FALSE,
+  ...
+)
 
 tangram(x, ...)
 
-\method{tangram}{numeric}(x, cols, id = NULL, caption = NULL,
-  style = "hmisc", footnote = NULL, fixed_thead = NULL, ...)
+\method{tangram}{numeric}(
+  x,
+  cols,
+  id = NULL,
+  caption = NULL,
+  style = "hmisc",
+  footnote = NULL,
+  fixed_thead = NULL,
+  ...
+)
 
-\method{tangram}{anova.lme}(x, id = NULL, style = "hmisc",
-  caption = NULL, footnote = NULL, digits = NULL,
-  fixed_thead = NULL, ...)
+\method{tangram}{anova.lme}(
+  x,
+  id = NULL,
+  style = "hmisc",
+  caption = NULL,
+  footnote = NULL,
+  digits = NULL,
+  fixed_thead = NULL,
+  ...
+)
 
-\method{tangram}{data.frame}(x, id = NULL, colheader = NA,
-  caption = NULL, style = "hmisc", footnote = NULL, after = NA,
-  quant = seq(0, 1, 0.25), msd = TRUE, as.character = NULL,
-  fixed_thead = NULL, ...)
+\method{tangram}{data.frame}(
+  x,
+  id = NULL,
+  colheader = NA,
+  caption = NULL,
+  style = "hmisc",
+  footnote = NULL,
+  after = NA,
+  quant = seq(0, 1, 0.25),
+  msd = TRUE,
+  as.character = NULL,
+  fixed_thead = NULL,
+  ...
+)
 
-\method{tangram}{formula}(x, data = NULL, id = NULL,
-  transforms = NULL, caption = NULL, style = "hmisc",
-  footnote = NULL, after = NA, digits = NA, fixed_thead = NULL,
-  ...)
+\method{tangram}{formula}(
+  x,
+  data = NULL,
+  id = NULL,
+  transforms = NULL,
+  caption = NULL,
+  style = "hmisc",
+  footnote = NULL,
+  after = NA,
+  digits = NA,
+  fixed_thead = NULL,
+  ...
+)
 
 \method{tangram}{character}(x, ...)
 
-\method{tangram}{table}(x, id = NULL, percents = FALSE, digits = 1,
-  test = FALSE, footnote = NULL, ...)
+\method{tangram}{table}(
+  x,
+  id = NULL,
+  percents = FALSE,
+  digits = 1,
+  test = FALSE,
+  footnote = NULL,
+  ...
+)
 
 \method{tangram}{ftable}(x, id = NULL, ...)
 
@@ -57,11 +113,17 @@ tangram(x, ...)
 
 \method{tangram}{lm}(x, ...)
 
-\method{tangram}{summary.lm}(x, id = NULL, format = NULL,
-  pformat = NULL, tformat = NULL, ...)
+\method{tangram}{summary.lm}(x, id = NULL, format = NULL, pformat = NULL, tformat = NULL, ...)
 
-\method{tangram}{rms}(x, data = NULL, short.labels = NULL,
-  footnote = NULL, rnd.digits = 2, rnd.stats = rnd.digits, ...)
+\method{tangram}{rms}(
+  x,
+  data = NULL,
+  short.labels = NULL,
+  footnote = NULL,
+  rnd.digits = 2,
+  rnd.stats = rnd.digits,
+  ...
+)
 }
 \arguments{
 \item{x}{object; depends on S3 type, could be rows, formula, string of a formula, data.frame or numerical rows, an rms.model}

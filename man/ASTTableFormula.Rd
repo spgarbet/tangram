@@ -4,34 +4,103 @@
 \name{ASTTableFormula}
 \alias{ASTTableFormula}
 \title{The root ASTNode of a formula.}
-\format{\code{\link{R6Class}} object.}
-\usage{
-ASTTableFormula
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
 The root ASTNode of a formula.
+
+The root ASTNode of a formula.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{left}}{The AST tree for the columns.}
-
-\item{\code{right}}{The AST tree for the rows.}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-  \item{\code{terms()}}{Returns the a list of the left hand terms and right hand terms}
-  \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
-  \item{\code{string()}}{Returns the string representation of the formula}
-  \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the entire AST.}
-}
-}
-
 \examples{
 ASTTableFormula$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 
 }
 \keyword{data}
+\section{Super classes}{
+\code{\link[tangram:ASTNode]{tangram::ASTNode}} -> \code{\link[tangram:ASTBranch]{tangram::ASTBranch}} -> \code{ASTTableFormula}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{left}}{The AST tree for the columns.}
+
+\item{\code{right}}{The AST tree for the rows.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{ASTTableFormula$new()}}
+\item \href{#method-terms}{\code{ASTTableFormula$terms()}}
+\item \href{#method-string}{\code{ASTTableFormula$string()}}
+\item \href{#method-clone}{\code{ASTTableFormula$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="distribute">}\href{../../tangram/html/ASTBranch.html#method-distribute}{\code{tangram::ASTBranch$distribute()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="reduce">}\href{../../tangram/html/ASTBranch.html#method-reduce}{\code{tangram::ASTBranch$reduce()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a new formula node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTTableFormula$new(left, right)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{left}}{The left side of the "~" as an AST}
+
+\item{\code{right}}{The right side of the "~" as an AST}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-terms"></a>}}
+\if{latex}{\out{\hypertarget{method-terms}{}}}
+\subsection{Method \code{terms()}}{
+Returns all terminal nodes from left and right
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTTableFormula$terms()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-string"></a>}}
+\if{latex}{\out{\hypertarget{method-string}{}}}
+\subsection{Method \code{string()}}{
+A re-parseable string representing the AST
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTTableFormula$string()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTTableFormula$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

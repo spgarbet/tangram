@@ -4,41 +4,14 @@
 \name{Parser}
 \alias{Parser}
 \title{The parser class for generating abstract syntax trees for given table formulas.}
-\format{\code{\link{R6Class}} object.}
-\usage{
-Parser
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
 The parser class for generating abstract syntax trees for given table formulas.
+
+The parser class for generating abstract syntax trees for given table formulas.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{input}}{Storage for input string of a formula}
-
-\item{\code{pos}}{The current parsing position}
-
-\item{\code{len}}{The length of the input}
-}}
-
-\section{Methods}{
-
-\describe{
-  \item{\code{new()}}{Create a parser.}
-  \item{\code{expect(id)}}{Require the next token parsed to have the specified id and consume it.}
-  \item{\code{peek()}}{Return the next token parsed without consuming it.}
-  \item{\code{eat_whitespace()}}{Consume any spaces or tabs in input. }
-  \item{\code{next_token()}}{Return the next token parsed and consume it.}
-  \item{\code{format()}}{ Parse a format class and return it's string.}
-  \item{\code{r_expression()}}{Parse an R expression class and return it's string. }
-  \item{\code{factor()}}{Parse a factor class and return it's AST Node.}
-  \item{\code{term()}}{Parse a term class and return it's AST Node.}
-  \item{\code{expression()}}{Parse an expression class and return it's AST Node.}
-  \item{\code{table_formula()}}{Parse a table formula class and return it's AST Node.}
-  \item{\code{run(input)}}{Run the parser on the given input, and return an AST}
-}
-}
-
 \section{References}{
 
 \describe{
@@ -51,3 +24,184 @@ Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")
 
 }
 \keyword{data}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{input}}{Storage for input string of a formula}
+
+\item{\code{pos}}{The current parsing position}
+
+\item{\code{len}}{The length of the input}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{Parser$new()}}
+\item \href{#method-expect}{\code{Parser$expect()}}
+\item \href{#method-peek}{\code{Parser$peek()}}
+\item \href{#method-eat_whitespace}{\code{Parser$eat_whitespace()}}
+\item \href{#method-next_token}{\code{Parser$next_token()}}
+\item \href{#method-format}{\code{Parser$format()}}
+\item \href{#method-r_expression}{\code{Parser$r_expression()}}
+\item \href{#method-factor}{\code{Parser$factor()}}
+\item \href{#method-term}{\code{Parser$term()}}
+\item \href{#method-expression}{\code{Parser$expression()}}
+\item \href{#method-table_formula}{\code{Parser$table_formula()}}
+\item \href{#method-run}{\code{Parser$run()}}
+\item \href{#method-clone}{\code{Parser$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Create a parser
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$new()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-expect"></a>}}
+\if{latex}{\out{\hypertarget{method-expect}{}}}
+\subsection{Method \code{expect()}}{
+Specify expectation of next token from lexer
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$expect(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{The token id expected in stream, otherwise it's an error}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-peek"></a>}}
+\if{latex}{\out{\hypertarget{method-peek}{}}}
+\subsection{Method \code{peek()}}{
+Peek at the next token from parser
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$peek()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-eat_whitespace"></a>}}
+\if{latex}{\out{\hypertarget{method-eat_whitespace}{}}}
+\subsection{Method \code{eat_whitespace()}}{
+Remove white space to find start of next token
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$eat_whitespace()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-next_token"></a>}}
+\if{latex}{\out{\hypertarget{method-next_token}{}}}
+\subsection{Method \code{next_token()}}{
+Returns next lexical token
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$next_token()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-format"></a>}}
+\if{latex}{\out{\hypertarget{method-format}{}}}
+\subsection{Method \code{format()}}{
+Return format string as token from lexical stream
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$format()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-r_expression"></a>}}
+\if{latex}{\out{\hypertarget{method-r_expression}{}}}
+\subsection{Method \code{r_expression()}}{
+Return R expression as token from lexical stream
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$r_expression()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-factor"></a>}}
+\if{latex}{\out{\hypertarget{method-factor}{}}}
+\subsection{Method \code{factor()}}{
+Return next factor as token.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$factor()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-term"></a>}}
+\if{latex}{\out{\hypertarget{method-term}{}}}
+\subsection{Method \code{term()}}{
+Parse and return next term in stream
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$term()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-expression"></a>}}
+\if{latex}{\out{\hypertarget{method-expression}{}}}
+\subsection{Method \code{expression()}}{
+Parse and return next expression in stream
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$expression()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-table_formula"></a>}}
+\if{latex}{\out{\hypertarget{method-table_formula}{}}}
+\subsection{Method \code{table_formula()}}{
+Parse and return table formula from stream
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$table_formula()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-run"></a>}}
+\if{latex}{\out{\hypertarget{method-run}{}}}
+\subsection{Method \code{run()}}{
+Run the parser
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$run(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{(character,formula) The table specification to parse}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Parser$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

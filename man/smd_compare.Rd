@@ -4,8 +4,18 @@
 \alias{smd_compare}
 \title{Create a SMD for a categorical set of column versus a numerical row}
 \usage{
-smd_compare(table, row, column, cell_style, style, smdformat = NULL,
-  pformat = NULL, weight = NULL, test = FALSE, ...)
+smd_compare(
+  table,
+  row,
+  column,
+  cell_style,
+  style,
+  smdformat = NULL,
+  pformat = NULL,
+  weight = NULL,
+  test = FALSE,
+  ...
+)
 }
 \arguments{
 \item{table}{The table object to modify}

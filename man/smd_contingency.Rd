@@ -4,9 +4,19 @@
 \alias{smd_contingency}
 \title{Create a contingency table with SMD given a row column of a formula}
 \usage{
-smd_contingency(table, row, column, cell_style, style, smdformat = NULL,
-  collapse_single = TRUE, weight = NULL, test = FALSE,
-  pformat = NULL, ...)
+smd_contingency(
+  table,
+  row,
+  column,
+  cell_style,
+  style,
+  smdformat = NULL,
+  collapse_single = TRUE,
+  weight = NULL,
+  test = FALSE,
+  pformat = NULL,
+  ...
+)
 }
 \arguments{
 \item{table}{The tablebuilder object}

@@ -4,9 +4,18 @@
 \alias{rtf.tangram}
 \title{Convert a tangram into an RTF string or file}
 \usage{
-\method{rtf}{tangram}(object, id = NA, caption = NA,
-  fragment = FALSE, widths = NA, footnote = NA, filename = NA,
-  append = FALSE, point = 9, ...)
+\method{rtf}{tangram}(
+  object,
+  id = NA,
+  caption = NA,
+  fragment = FALSE,
+  widths = NA,
+  footnote = NA,
+  filename = NA,
+  append = FALSE,
+  point = 9,
+  ...
+)
 }
 \arguments{
 \item{object}{The cell table to render to RTF}

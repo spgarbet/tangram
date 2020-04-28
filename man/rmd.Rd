@@ -16,8 +16,7 @@ rmd(object, key = FALSE, ...)
 
 \method{rmd}{cell_n}(object, key = FALSE, ...)
 
-\method{rmd}{tangram}(object, key = NULL, append = FALSE, pad = 10,
-  ...)
+\method{rmd}{tangram}(object, key = NULL, append = FALSE, pad = 10, ...)
 }
 \arguments{
 \item{object}{The cell_fstat for indexing}

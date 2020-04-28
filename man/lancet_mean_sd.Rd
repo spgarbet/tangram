@@ -4,8 +4,16 @@
 \alias{lancet_mean_sd}
 \title{Create a mean/sd cell object of the given data in Lancet style}
 \usage{
-lancet_mean_sd(x, format = NA, na.rm = TRUE, names = FALSE,
-  type = 8, msd = FALSE, quant = c(0.25, 0.5, 0.75), ...)
+lancet_mean_sd(
+  x,
+  format = NA,
+  na.rm = TRUE,
+  names = FALSE,
+  type = 8,
+  msd = FALSE,
+  quant = c(0.25, 0.5, 0.75),
+  ...
+)
 }
 \arguments{
 \item{x}{numeric vector whose sample quantiles are wanted. NA and NaN values are not allowed in numeric vectors unless na.rm is TRUE.}

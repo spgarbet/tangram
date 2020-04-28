@@ -4,9 +4,18 @@
 \alias{summarize_nejm_vert}
 \title{Create a summarization for a categorical row versus X numerical column}
 \usage{
-summarize_nejm_vert(table, row, column, cell_style,
-  collapse_single = TRUE, pformat = NULL, msd = FALSE,
-  test = FALSE, quant = c(0.25, 0.5, 0.75), ...)
+summarize_nejm_vert(
+  table,
+  row,
+  column,
+  cell_style,
+  collapse_single = TRUE,
+  pformat = NULL,
+  msd = FALSE,
+  test = FALSE,
+  quant = c(0.25, 0.5, 0.75),
+  ...
+)
 }
 \arguments{
 \item{table}{The table object to modify}

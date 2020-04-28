@@ -4,7 +4,9 @@
 \name{pbc}
 \alias{pbc}
 \title{Mayo Clinic Primary Biliary Cirrhosis Data}
-\format{An object of class \code{data.frame} with 418 rows and 19 columns.}
+\format{
+An object of class \code{data.frame} with 418 rows and 19 columns.
+}
 \usage{
 pbc
 }

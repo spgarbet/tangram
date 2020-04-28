@@ -8,22 +8,58 @@
 \alias{summarize_spearman}
 \alias{hmisc}
 \title{Style Bundle for Hmisc defaults}
-\format{An object of class \code{list} of length 5.}
+\format{
+An object of class \code{list} of length 5.
+}
 \usage{
-summarize_kruskal_horz(table, row, column, cell_style, pformat = NULL,
-  msd = FALSE, quant = c(0.25, 0.5, 0.75), overall = NULL,
-  test = FALSE, ...)
+summarize_kruskal_horz(
+  table,
+  row,
+  column,
+  cell_style,
+  pformat = NULL,
+  msd = FALSE,
+  quant = c(0.25, 0.5, 0.75),
+  overall = NULL,
+  test = FALSE,
+  ...
+)
 
-summarize_kruskal_vert(table, row, column, cell_style,
-  collapse_single = TRUE, pformat = NULL, msd = FALSE,
-  test = FALSE, ...)
+summarize_kruskal_vert(
+  table,
+  row,
+  column,
+  cell_style,
+  collapse_single = TRUE,
+  pformat = NULL,
+  msd = FALSE,
+  test = FALSE,
+  ...
+)
 
-summarize_chisq(table, row, column, cell_style, pformat = NULL,
-  collapse_single = TRUE, overall = NULL, test = FALSE,
-  row_percents = FALSE, useNA = "no", ...)
+summarize_chisq(
+  table,
+  row,
+  column,
+  cell_style,
+  pformat = NULL,
+  collapse_single = TRUE,
+  overall = NULL,
+  test = FALSE,
+  row_percents = FALSE,
+  useNA = "no",
+  ...
+)
 
-summarize_spearman(table, row, column, cell_style, pformat = NULL,
-  test = FALSE, ...)
+summarize_spearman(
+  table,
+  row,
+  column,
+  cell_style,
+  pformat = NULL,
+  test = FALSE,
+  ...
+)
 
 hmisc
 }

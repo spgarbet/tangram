@@ -4,8 +4,16 @@
 \alias{nejm_iqr}
 \title{Create a interquartile range cell object of the given data NEJM style}
 \usage{
-nejm_iqr(x, format = NA, na.rm = TRUE, names = FALSE, type = 8,
-  msd = FALSE, quant = c(0.25, 0.5, 0.75), ...)
+nejm_iqr(
+  x,
+  format = NA,
+  na.rm = TRUE,
+  names = FALSE,
+  type = 8,
+  msd = FALSE,
+  quant = c(0.25, 0.5, 0.75),
+  ...
+)
 }
 \arguments{
 \item{x}{numeric vector whose sample quantiles are wanted. NA and NaN values are not allowed in numeric vectors unless na.rm is TRUE.}

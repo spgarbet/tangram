@@ -4,29 +4,23 @@
 \name{ASTVariable}
 \alias{ASTVariable}
 \title{A Variable in an Abstract Syntax Tree (AST)}
-\format{\code{\link{R6Class}} object.}
-\usage{
-ASTVariable
+\format{
+\code{\link{R6Class}} object.
 }
 \description{
+A Variable in an Abstract Syntax Tree (AST)
+
+A Variable in an Abstract Syntax Tree (AST)
+}
+\details{
 This node represents a variable of interest in the AST. A variable's name
 is recorded in the value field, and must conform to the rules of identifiers
 in R. This class inherits from \code{\link{ASTNode}}.
 }
-\section{Fields}{
-
-\describe{
-\item{\code{value}}{A string containing the variable identifier}
-
-\item{\code{format}}{A format string that is either a string containing a number representing significant digits for output, or a C-style printf string.}
-
-\item{\code{type}}{A string that represents the type specifier for that variable}
-}}
-
 \section{Methods}{
 
 \describe{
-  \item{\code{new(identifier, format=NA, type=NA)}}{This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.}
+  \item{\code{new(identifier, format=NA, type=NA)}}{}
   \item{\code{terms()}}{Returns the node}
   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
   \item{\code{string()}}{Returns the string formula of the node}
@@ -40,3 +34,121 @@ ASTVariable$new("x", "2", "Continuous")$string()
 
 }
 \keyword{data}
+\section{Super class}{
+\code{\link[tangram:ASTNode]{tangram::ASTNode}} -> \code{ASTVariable}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{data}}{The associated data post reduction}
+
+\item{\code{type}}{The identified type of this node (defaults: Categorical, Numeric)}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{ASTVariable$new()}}
+\item \href{#method-factors}{\code{ASTVariable$factors()}}
+\item \href{#method-name}{\code{ASTVariable$name()}}
+\item \href{#method-string}{\code{ASTVariable$string()}}
+\item \href{#method-reduce}{\code{ASTVariable$reduce()}}
+\item \href{#method-clone}{\code{ASTVariable$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="distribute">}\href{../../tangram/html/ASTNode.html#method-distribute}{\code{tangram::ASTNode$distribute()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTVariable$new(identifier, format = NA, type = NA)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{identifier}}{(character) Variable name}
+
+\item{\code{format}}{(character, numeric) Formatting directive}
+
+\item{\code{type}}{(character) any additional type information}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-factors"></a>}}
+\if{latex}{\out{\hypertarget{method-factors}{}}}
+\subsection{Method \code{factors()}}{
+Returns all terminal nodes under this. Since this is a terminal node, returns self
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTVariable$factors()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-name"></a>}}
+\if{latex}{\out{\hypertarget{method-name}{}}}
+\subsection{Method \code{name()}}{
+Returns the text name of this node. For an intercept, returns "All"
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTVariable$name()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-string"></a>}}
+\if{latex}{\out{\hypertarget{method-string}{}}}
+\subsection{Method \code{string()}}{
+Returns name of variable with optional format and type information
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTVariable$string()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\subsection{Method \code{reduce()}}{
+Given a data.frame, associates correct variable with this node
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTVariable$reduce(d)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{d}}{(data.frame) data.frame to reduce}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ASTVariable$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

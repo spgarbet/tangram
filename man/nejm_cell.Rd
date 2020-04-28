@@ -4,7 +4,9 @@
 \name{nejm_cell}
 \alias{nejm_cell}
 \title{Cell Generation functions for nejm default}
-\format{An object of class \code{list} of length 9.}
+\format{
+An object of class \code{list} of length 9.
+}
 \usage{
 nejm_cell
 }

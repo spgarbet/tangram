@@ -4,7 +4,9 @@
 \name{lancet_cell}
 \alias{lancet_cell}
 \title{Cell Generation functions for Lancet styling}
-\format{An object of class \code{list} of length 8.}
+\format{
+An object of class \code{list} of length 8.
+}
 \usage{
 lancet_cell
 }

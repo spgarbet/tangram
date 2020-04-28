@@ -7,7 +7,9 @@
 Next entries are keyed off returned types from function, and represent the type of a row.
 The returned list should contain the same list of types, and represents the type of a column. Thus it now returns
 a function to process the intersection of those two types.}
-\format{An object of class \code{list} of length 5.}
+\format{
+An object of class \code{list} of length 5.
+}
 \usage{
 smd
 }

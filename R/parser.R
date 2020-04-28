@@ -25,24 +25,24 @@
 #' @importFrom R6 R6Class
 #' @keywords data
 #'
-#' @field symbol A string which tells what this node in the AST represents.
+#' @field format Any formatting directive passed to this node.
 #' @field value  A string of addtional information contained by the node.
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{terms()}}{Returns the node itself}
-#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
-#'   \item{\code{string()}}{Returns the string formula of the node}
-#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
-#' }
 ASTNode <- R6Class("ASTNode",
   public = list(
     value      = "character",
     format     = "character",
+    #' @description Returns this node
     terms      = function()     { return(c(self))    },
+    #' @description Distributes data across multiplications and rearranges nodes
     distribute = function()     { return(self)       },
+    #' @description Returns string representation of node
     string     = function()     { return(self$value) },
+    #' @description Given a set of data, associates it with AST nodes
+    #' @param data (data.frame) data to associate across nodes
     reduce     = function(data) { return(self)       },
+    #' @description Override the formatting directive for this node
+    #' @param x (numeric,character) the formatting directive
     set_format = function(x)    { self$format <- x   }
   )
 )
@@ -62,13 +62,12 @@ ASTNode <- R6Class("ASTNode",
 #' @examples
 #' ASTVariable$new("x", "2", "Continuous")$string()
 #'
-#' @field value  A string containing the variable identifier
-#' @field format A format string that is either a string containing a number representing significant digits for output, or a C-style printf string.
-#' @field type A string that represents the type specifier for that variable
+#' @field data The associated data post reduction
+#' @field type The identified type of this node (defaults: Categorical, Numeric)
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{new(identifier, format=NA, type=NA)}}{This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.}
+#'   \item{\code{new(identifier, format=NA, type=NA)}}{}
 #'   \item{\code{terms()}}{Returns the node}
 #'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
 #'   \item{\code{string()}}{Returns the string formula of the node}
@@ -80,6 +79,11 @@ ASTVariable <- R6Class("ASTVariable",
   public  = list(
     type   = "character",
     data   = NULL,
+
+    #' @description This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.
+    #' @param identifier (character) Variable name
+    #' @param format (character, numeric) Formatting directive
+    #' @param type (character) any additional type information
     initialize = function(identifier, format=NA, type=NA)
     {
       self$value  <- identifier
@@ -87,7 +91,9 @@ ASTVariable <- R6Class("ASTVariable",
       self$type   <- type
       self$data   <- NULL
     },
+    #' @description Returns all terminal nodes under this. Since this is a terminal node, returns self
     factors  = function()     { return(c(self))    },
+    #' @description Returns the text name of this node. For an intercept, returns "All"
     name     = function()
     {
       if(self$value=="1") "All" else {
@@ -98,6 +104,7 @@ ASTVariable <- R6Class("ASTVariable",
         if(is.null(x)) self$value else x
       }
     },
+    #' @description Returns name of variable with optional format and type information
     string   = function()
     {
       fmt <- ""
@@ -106,6 +113,8 @@ ASTVariable <- R6Class("ASTVariable",
       if(!is.na(self$type))   {typ <- paste("::",self$type,sep='')}
       paste(self$value, fmt, typ, sep="")
     },
+    #' @description Given a data.frame, associates correct variable with this node
+    #' @param d (data.frame) data.frame to reduce
     reduce   = function(d)
     {
       if(!(self$value=="1") && (is.null(d) || !(self$value %in% names(d))))
@@ -139,18 +148,12 @@ ASTVariable <- R6Class("ASTVariable",
 #' @field left A pointer to the left node below this one
 #' @field right A pointer to the right node below this one
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{distribute()}}{Depth first application of distribute() to left and right nodes, then modifies left and right and returns self.}
-#'   \item{\code{terms()}}{Returns the node}
-#'   \item{\code{string()}}{Returns the string formula of the node}
-#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
-#' }
 ASTBranch <- R6Class("ASTBranch",
   inherit = ASTNode,
   public = list(
     left  = "ASTNode",
     right = "ASTNode",
+    #' @description Call to distribute multiplication nodes, just recursively calls left and right node distribute functions
     distribute = function()
     {
       if(inherits(self$left,  "ASTNode"))
@@ -164,6 +167,8 @@ ASTBranch <- R6Class("ASTBranch",
 
       return(self)
     },
+    #' @description Attached data to nodes by processing data.frame appropriatly. Recursively calls left and right nodes to reduces on data.frame
+    #' @param df (data.frame) Data frame to reduce over
     reduce = function(df)
     {
       self$left  <- self$left$reduce(df)
@@ -182,34 +187,33 @@ ASTBranch <- R6Class("ASTBranch",
 #' @export
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field value  The name of the function.
 #' @field r_expr A string containing the raw r expression from inside the parenthesis
+#' @field data Data stored as a result of reduction
 #'
 #' @examples
 #' ASTFunction$new("log", "x+2")$string()
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{new(value, r_expr)}}{Create one with the given value and r_expr}
-#'   \item{\code{terms()}}{Returns the node}
-#'   \item{\code{factors()}}{Returns self as a factor}
-#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
-#'   \item{\code{string()}}{Returns the string formula of the node}
-#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
-#' }
 ASTFunction <- R6Class("ASTFunction",
   inherit = ASTNode,
   public   = list(
     r_expr = "character",
     data   = NULL,
+    #' @description Construct a node representing a function call
+    #' @param value (character) The name of the function call
+    #' @param r_expr Any r expression to be evaluated inside the call
     initialize = function(value, r_expr)
     {
       self$value  <- value
       self$r_expr <- r_expr
     },
+    #' @description Returns all terminal nodes, this is a terminal node so returns self
     factors    = function()     { return(c(self))    },
+    #' @description Returns the function call as character
     name       = function()     { paste(self$value, "(", self$r_expr, ")", sep="") },
+    #' @description Returns a re-parsable representation of the node
     string     = function()     { paste(self$value, "(", self$r_expr, ")", sep="") },
+    #' @description Given a data.frame execute the function in that environment and associate the result as data.
+    #' @param data (data.frame) The data.frame to use as the enviroment for the function execution
     reduce = function(data)
     {
       expr <- paste(self$value,"(",self$r_expr,")", sep='')
@@ -240,36 +244,34 @@ ASTFunction <- R6Class("ASTFunction",
 #' @export
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field left  The AST tree to the left.
-#' @field right The AST tree to the right.
+#' @field data Just returns the R6 name 'ASTPlus'
+#' @field left The node to the left of this node
+#' @field right The node to the right of this node
 #'
 #' @examples
 #' ASTPlus$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-#'   \item{\code{terms()}}{Returns the left and right branches terms}
-#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node.}
-#'   \item{\code{string()}}{Returns the string formula of the node}
-#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
-#' }
 ASTPlus <- R6Class("ASTPlus",
   inherit = ASTBranch,
   public  = list (
     left   = "ASTNode",
     right  = "ASTNode",
     data   = "ASTPlus",
+    #' @description Construct a new node that represents addition
+    #' @param left (ASTNode) Node on the left side of the addition
+    #' @param right (ASTNode) Node on the right side of the addition
     initialize = function(left, right)
     {
       self$left   <- left
       self$right  <- right
       self$value  <- ""
     },
+    #' @description Returns a vector of the left and right terms
     terms = function()
     {
       return(c(self$left$terms(), self$right$terms()))
     },
+    #' @description A reparsable string representation of this node.
     string = function()
     {
       paste(self$left$string(), "+", self$right$string(), sep="")
@@ -287,25 +289,20 @@ ASTPlus <- R6Class("ASTPlus",
 #'
 #' @field left  The AST tree to the left.
 #' @field right The AST tree to the right.
+#' @field type The specified type of this node
 #'
 #' @examples
 #' ASTMultiply$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-#'   \item{\code{terms()}}{Returns the node as a term vector}
-#'   \item{\code{factors()}}{Returns all terminal nodes under this as a list}
-#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
-#'   \item{\code{string()}}{Returns the string formula of the node}
-#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the current node.}
-#' }
 ASTMultiply <- R6Class("ASTMultiply",
   inherit = ASTBranch,
   public = list (
     left  = "ASTNode",
     right = "ASTNode",
     type   = "character",
+    #' @description Construct a multiplication node
+    #' @param left (ASTNode) nodes to the left of the multiplication
+    #' @param right (ASTNode) nodes to the right of the multiplication
     initialize = function(left, right)
     {
       self$left   <- left
@@ -313,6 +310,7 @@ ASTMultiply <- R6Class("ASTMultiply",
       self$type   <- "ASTMultiply"
       self$value  <- ""
     },
+    #' @description Rearrange nodes distribution multiplication across parenthesis
     distribute = function()
     {
       super$distribute()
@@ -332,10 +330,12 @@ ASTMultiply <- R6Class("ASTMultiply",
       }
       return(self)
     },
+    #' @description return all terminal nodes on left and right
     factors = function()
     {
       return(c(self$left$terms(), self$right$terms()))
     },
+    #' @description Return a re-parseable string
     string = function()
     {
       paste(self$left$string(), "*", self$right$string(), sep="")
@@ -357,29 +357,26 @@ ASTMultiply <- R6Class("ASTMultiply",
 #' @examples
 #' ASTTableFormula$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{new(left, right)}}{Create addition node of given left and right node.}
-#'   \item{\code{terms()}}{Returns the a list of the left hand terms and right hand terms}
-#'   \item{\code{distribute()}}{Applies the distributive property to the node, and returns the resulting node. This is the actual workhorse of the disributing multiplication across the tree.}
-#'   \item{\code{string()}}{Returns the string representation of the formula}
-#'   \item{\code{reduce(data)}}{Given a set of data, perform the logical reduction of the entire AST.}
-#' }
 ASTTableFormula <- R6Class("ASTTableFormula",
   inherit = ASTBranch,
   public = list(
     left  = "ASTNode",
     right = "ASTNode",
+    #' @description Create a new formula node
+    #' @param left The left side of the "~" as an AST
+    #' @param right The right side of the "~" as an AST
     initialize = function(left, right)
     {
       self$left   <- left
       self$right  <- right
       self$value  <- NA
     },
+    #' @description Returns all terminal nodes from left and right
     terms = function()
     {
       list(self$left$terms(), self$right$terms())
     },
+    #' @description A re-parseable string representing the AST
     string = function()
     {
       paste(self$left$string(), " ~ ", self$right$string(), sep="")
@@ -397,14 +394,13 @@ ASTTableFormula <- R6Class("ASTTableFormula",
 #' @field id    The token identifier, E.g. "LPAREN"
 #' @field name  Information about the token, useful with IDENTIFIERs.
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{new(id, name="")}}{Create a new token in the grammar.}
-#' }
 Token <- R6Class("Token",
   public = list(
     id         = "character",
     name       = "character",
+    #' @description Construct a lexical token
+    #' @param id (character) The lexical id of the token
+    #' @param name (character) Additional token information if needed
     initialize = function(id, name="")
     {
       self$id   <- id
@@ -428,21 +424,6 @@ Token <- R6Class("Token",
 #' @examples
 #' Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{new()}}{Create a parser.}
-#'   \item{\code{expect(id)}}{Require the next token parsed to have the specified id and consume it.}
-#'   \item{\code{peek()}}{Return the next token parsed without consuming it.}
-#'   \item{\code{eat_whitespace()}}{Consume any spaces or tabs in input. }
-#'   \item{\code{next_token()}}{Return the next token parsed and consume it.}
-#'   \item{\code{format()}}{ Parse a format class and return it's string.}
-#'   \item{\code{r_expression()}}{Parse an R expression class and return it's string. }
-#'   \item{\code{factor()}}{Parse a factor class and return it's AST Node.}
-#'   \item{\code{term()}}{Parse a term class and return it's AST Node.}
-#'   \item{\code{expression()}}{Parse an expression class and return it's AST Node.}
-#'   \item{\code{table_formula()}}{Parse a table formula class and return it's AST Node.}
-#'   \item{\code{run(input)}}{Run the parser on the given input, and return an AST}
-#' }
 #' @section References:
 #' \describe{
 #'      Aho, A. V., Lam, M. S., Sethi, R., and Ullman, J. D. (2006) \emph{Compilers: Principles, Techniques, and Tools}, 2nd edition. Addison Wesley.
@@ -452,9 +433,12 @@ Parser <- R6Class("Parser",
     input = "character",
     pos   = "numeric",
     len   = "numeric",
+    #' @description Create a parser
     initialize = function()
     {
     },
+    #' @description Specify expectation of next token from lexer
+    #' @param id The token id expected in stream, otherwise it's an error
     expect = function(id)
     {
       t <- self$next_token()
@@ -465,6 +449,7 @@ Parser <- R6Class("Parser",
 
       t
     },
+    #' @description Peek at the next token from parser
     peek = function()
     {
 #cat("peeking at...")
@@ -472,6 +457,7 @@ Parser <- R6Class("Parser",
        self$pos <- self$pos - nchar(nt$name) # Push the token back
        return(nt$id)
     },
+    #' @description Remove white space to find start of next token
     eat_whitespace = function()
     {
       while(substr(self$input, self$pos, self$pos) %in% c(" ","\t","\n","\r") &&
@@ -480,6 +466,7 @@ Parser <- R6Class("Parser",
         self$pos = self$pos + 1
       }
     },
+    #' @description Returns next lexical token
     next_token = function()
     {
       self$eat_whitespace()
@@ -525,6 +512,7 @@ Parser <- R6Class("Parser",
 
       return(Token$new("IDENTIFIER", match[1,1]))
     },
+    #' @description Return format string as token from lexical stream
     format = function()
     {
       match <- str_match(substr(self$input, self$pos, self$len), "\"?([^\\]\"]*)\"?")
@@ -533,6 +521,7 @@ Parser <- R6Class("Parser",
 
       return(match[1,2])
     },
+    #' @description Return R expression as token from lexical stream
     r_expression = function()
     {
       match <- str_match(substr(self$input, self$pos, self$len), "^[^\\(\\)]*")
@@ -551,6 +540,7 @@ Parser <- R6Class("Parser",
 
       return(substr(self$input, starting, self$pos-1))
     },
+    #' @description Return next factor as token.
     factor = function()
     {
       nt <- self$next_token()
@@ -603,6 +593,7 @@ Parser <- R6Class("Parser",
       return(ASTVariable$new(nt$name, format, type_override))
 
     },
+    #' @description Parse and return next term in stream
     term = function()
     {
       l_term <- self$factor()
@@ -615,6 +606,7 @@ Parser <- R6Class("Parser",
 
       return(l_term)
     },
+    #' @description Parse and return next expression in stream
     expression = function()
     {
       l_expr  <- self$term()
@@ -627,6 +619,7 @@ Parser <- R6Class("Parser",
 
       return(l_expr)
     },
+    #' @description Parse and return table formula from stream
     table_formula = function()
     {
       cs <- self$expression()
@@ -635,6 +628,8 @@ Parser <- R6Class("Parser",
 
       return(ASTTableFormula$new(cs, rs))
     },
+    #' @description Run the parser
+    #' @param x (character,formula) The table specification to parse
     run       = function(x)
     {
       if(inherits(x,"formula"))
