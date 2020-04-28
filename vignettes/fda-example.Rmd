@@ -3,7 +3,6 @@ title: "FDA Work Example"
 author: "Shawn Garbett"
 date: '`r Sys.Date()`'
 output:
-  html_document: null
   pdf_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}

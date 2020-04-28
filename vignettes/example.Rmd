@@ -3,9 +3,7 @@ title: "Tangram Examples"
 author: "Shawn Garbett, MS"
 date: '`r Sys.Date()`'
 output:
-  html_document: null
-  pdf_document:
-    keep_tex: yes
+  pdf_document: null
 header-includes:
 - \usepackage[LGR,T1]{fontenc}
 - \usepackage[utf8]{inputenc}
