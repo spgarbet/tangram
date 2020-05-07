@@ -614,7 +614,7 @@ tangram.matrix <- function(x, digits=NULL, ...)
 #' @export
 tangram.tbl_df <- function(x, ...)
 {
-  tangram(as.data.frame(x), as.character=TRUE, ...)
+  tangram(as.data.frame(x), as.character=TRUE, colheader=colnames(x), ...)
 }
 
 #' @rdname tangram
