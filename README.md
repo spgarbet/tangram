@@ -2,6 +2,12 @@
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Tangram_set_00.jpg" width="100px"/>
 
+*Quick* show me some really impressive results in Rmarkdown! See [example.html](http://htmlpreview.github.io/?https://raw.githubusercontent.com/spgarbet/tangram-vignettes/master/example.html) or see the equivalent in LaTeX [example.pdf](https://github.com/spgarbet/tangram-vignettes/raw/master/example.pdf)
+
+## Version 0.7.x: longtable
+
+Tables are now all longtables in LaTeX. Vignettes are split to another project: [tangram-vignettes](https://github.com/spgarbet/tangram-vignettes).
+
 
 ## NOTICE: Major Refactor
 
