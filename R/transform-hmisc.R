@@ -95,7 +95,7 @@ summarize_kruskal_horz <- function(table,
   } else if(length(categories) == 1) stat <- "" else
   # Kruskal-Wallis via F-distribution
   {
-    tst  <- suppressWarnings(spearman2(c(datac), c(datar), na.action=na.retain))
+    tst  <- suppressWarnings(spearman2(datac, datar, na.action=na.retain))
     stat <- cell_style[['fstat']](
         f         = render_f(tst['F'], "%.2f"),
         df1       = tst['df1'],
