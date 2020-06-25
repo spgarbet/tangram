@@ -76,6 +76,7 @@ tangram(x, ...)
   msd = TRUE,
   as.character = NULL,
   fixed_thead = NULL,
+  exclude = NULL,
   ...
 )
 
@@ -90,6 +91,7 @@ tangram(x, ...)
   after = NA,
   digits = NA,
   fixed_thead = NULL,
+  exclude = NULL,
   ...
 )
 
@@ -157,6 +159,8 @@ tangram(x, ...)
 \item{msd}{logical; Include mean and standard deviation in numeric summary}
 
 \item{as.character}{logical; if true data.frames all variables are passed through as.character and no numerical summary is provided.}
+
+\item{exclude}{vector or list; When x is a data.frame this exclusion criteria is applied to the data. If this is a list then each list pair is the (column name, criteria). It is preferred to use a list to be specific.}
 
 \item{data}{data.frame; data to use for rendering tangram object}
 

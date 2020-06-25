@@ -244,6 +244,37 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
   flat
 }
 
+# Internal for excluding data.
+exclude_data <- function(df, criteria)
+{
+  thatsafactjack <- Filter(function(a) is.factor(df[,a]), colnames(df))
+
+  sel            <- rep(TRUE, nrow(df))
+  if(is.list(criteria))
+  {
+    for(a in names(criteria)) sel <- sel & (match(df[,a], criteria[[a]], nomatch=0L)==0)
+  } else
+  {
+    for(a in colnames(df)) sel <- sel & (match(df[,a], criteria, nomatch=0L)==0)
+  }
+
+  df             <- df[sel,,drop=FALSE]
+
+  for(a in thatsafactjack)
+  {
+    if(is.list(criteria))
+    {
+      if(a %in% names(criteria) && !is.na(criteria[[a]]))
+        df[,a] <- factor(df[,a], exclude=criteria[[a]])
+    } else if(!is.na(a))
+    {
+      df[,a] <- factor(df[,a], exclude=criteria)
+    }
+  }
+
+  df
+}
+
 #' Table creation methods
 #'
 #' The tangram method is the principal method to create tables. It uses
@@ -273,6 +304,7 @@ cell_create_table <- function(ast, transforms, digits, style, ...)
 #' @param cols numeric; An integer of the number of cols to create
 #' @param data data.frame; data to use for rendering tangram object
 #' @param digits numeric; default number of digits to use for display of numerics
+#' @param exclude vector or list; When x is a data.frame this exclusion criteria is applied to the data. If this is a list then each list pair is the (column name, criteria). It is preferred to use a list to be specific.
 #' @param fixed_thead logical; On conversion to HTML5 should headers be treated as fixed?
 #' @param format numeric or character; Format to apply to statistic
 #' @param include_p logical; Include p-value when printing statistic
@@ -340,8 +372,21 @@ tangram.anova.lme <- function(x, id=NULL, style="hmisc", caption=NULL, footnote=
 
 #' @rdname tangram
 #' @export
-tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hmisc", footnote=NULL, after=NA, quant=seq(0,1,0.25), msd=TRUE, as.character=NULL, fixed_thead=NULL, ...)
+tangram.data.frame <- function(x,
+  id=NULL,
+  colheader=NA,
+  caption=NULL,
+  style="hmisc",
+  footnote=NULL,
+  after=NA,
+  quant=seq(0,1,0.25),
+  msd=TRUE,
+  as.character=NULL,
+  fixed_thead=NULL,
+  exclude=NULL,
+  ...)
 {
+  if(!is.null(exclude)) x <- exclude_data(x, exclude)
   cls <- sapply(names(x), function(y) class(x[1,y]))
 
   if(is.null(id) && "knitr" %in% .packages()) id <- knitr::opts_current$get("label")
@@ -413,13 +458,27 @@ tangram.data.frame <- function(x, id=NULL, colheader=NA, caption=NULL, style="hm
 
 #' @rdname tangram
 #' @export
-tangram.formula <- function(x, data=NULL, id=NULL, transforms=NULL, caption=NULL, style="hmisc", footnote=NULL, after=NA, digits=NA, fixed_thead=NULL, ...)
+tangram.formula <- function(x,
+  data=NULL,
+  id=NULL,
+  transforms=NULL,
+  caption=NULL,
+  style="hmisc",
+  footnote=NULL,
+  after=NA,
+  digits=NA,
+  fixed_thead=NULL,
+  exclude=NULL,
+  ...)
 {
   if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) data <- as.data.frame(data)
   if(!is.null(data) && (length(class(data)) > 1 || !inherits(data,"data.frame"))) stop("data must be supplied as data frame")
   if(is.null(id) && "knitr" %in% .packages()) id <- knitr::opts_current$get("label")
   if(is.null(id)) warning("tangram() will require unique id to be specified in the future")
   if(is.null(transforms)) transforms <- tryCatch(get(style, envir=globalenv()), error = getAnywhere(style))
+
+  if(!is.null(exclude)) data <- exclude_data(data, exclude)
+
 
   # Helper function for single transform function
   if(!inherits(transforms, "list"))
