@@ -97,22 +97,26 @@ hmisc_iqr <- function(x,
                       ...
                           )
 {
-  if(length(quant) %% 2 == 0) stop("hmisc_iqr quant argument must be an odd length")
+  if(!is.null(quant) && length(quant) %% 2 == 0)
+    stop("hmisc_iqr quant argument must be an odd length")
 
-  m <- median(1:length(quant))
+  if(is.null(quant)) ql <- "" else
+  {
+    m <- median(1:length(quant))
+    y <- quantile(x, quant, na.rm, names, type)
 
-  y <- quantile(x, quant, na.rm, names, type)
-
-  if(is.na(format)) format <- format_guess(y)
-  ql <- sapply(y, function(x) render_f(x, format))
-  ql[m] <- paste0("**", ql[m], "**")
-  ql <- paste0(ql, collapse=' ')
+    if(is.na(format)) format <- format_guess(y)
+    ql <- sapply(y, function(x) render_f(x, format))
+    ql[m] <- paste0("**", ql[m], "**")
+    ql <- paste0(ql, collapse=' ')
+  }
 
   if(msd) ql <- paste0(ql, "\u00A0\u00A0",
-    render_f(mean(x, na.rm=TRUE), format),
-    "\u00b1",
-    render_f(sd(x, na.rm=TRUE), format)
+      render_f(mean(x, na.rm=TRUE), format),
+      "\u00b1",
+      render_f(sd(x, na.rm=TRUE), format)
     )
+
 
   cell(ql, ...)
 }
