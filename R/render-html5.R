@@ -30,6 +30,7 @@ htmlsub_table <-list(
   c("(^|[^\\\\])\\^((\\\\.|[^\\^\\\\])+)\\^",             "\\1<sup>\\2</sup>"),        # Superscript
 
   c("(^|[^\\\\])\\\\frac{([^}]*)}{([^}]*)}",              "\\1&nbsp;<span class=\"fraction\"><span class=\"numerator\">\\2</span>/<span class=\"denominator\">\\3</span></span>"),# Make fractions
+  c("\\n", "<br/>"),
   c("\\\\(.)",                                            "\\1")         # convert escaped characters
 )
 
