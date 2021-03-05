@@ -202,6 +202,12 @@ table_flatten <- function(table)
 
 cell_create_table <- function(ast, transforms, digits, style, ...)
 {
+  if(find("add_row")[1] != "package:tangram")
+    warning(paste0("add_row is masked by ", find("add_row"), ". This can cause user transforms to fail.\nUse tangram::add_row if that is the intent or change package load order."))
+
+  if(find("add_col")[1] != "package:tangram")
+    warning(paste0("add_col is masked by ", find("add_col"), ". This can cause user transforms to fail.\nUse tangram::add_col if that is the intent or change package load order."))
+
   elements <- ast$terms()
 
   width  <- length(elements[[1]])
