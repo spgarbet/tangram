@@ -34,7 +34,7 @@
 #' @param quant numeric; Vector of quantiles to include. Should be an odd number since the middle value is highlighted on display.
 #' @param overall logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.
 #' @param row_percents logical; use denominator across rows instead of columns.
-#' @param test logical; include statistical test results
+#' @param test logical or function; include statistical test results. Function signature must be function(row, col, cell_style, ...)
 #' @param useNA character; Specifies whether to include NA counts in the table. The allowed values correspond to never "no" (Default), only if the count is positive "ifany" and even for zero counts "always". An NA column is always excluded.
 #' @param ... absorbs additional arugments. Unused at present.
 #' @return The modified table object

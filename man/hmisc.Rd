@@ -80,7 +80,7 @@ hmisc
 
 \item{overall}{logical or character; Include overall summary statistics for a categorical column. Character values are assumed to be true and used as column header.}
 
-\item{test}{logical; include statistical test results}
+\item{test}{logical or function; include statistical test results. Function signature must be function(row, col, cell_style, ...)}
 
 \item{...}{absorbs additional arugments. Unused at present.}
 
