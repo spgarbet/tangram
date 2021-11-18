@@ -675,7 +675,12 @@ tangram.ftable <- function(x, id=NULL, ...)
 tangram.matrix <- function(x, digits=NULL, ...)
 {
   if(!is.null(digits)) x <- round(x, digits)
-  tangram(as.data.frame(x), as.character=TRUE, ...)
+  x <- tangram(as.data.frame(x), as.character=TRUE, ...)
+  for(i in 1:length(x))
+  {
+    x[[i]][[1]] <- cell(as.character(x[[i]][[1]]))
+  }
+  x
 }
 
 #' @rdname tangram

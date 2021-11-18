@@ -1,6 +1,6 @@
 Package: tangram
 Title: The Grammar of Tables
-Version: 0.7.10
+Version: 0.7.11
 Authors@R: c(person("Shawn",    "Garbett",  email = "Shawn.Garbett@vumc.org",        role = c("aut", "cre")),
              person("Thomas",   "Stewart",  email = "Thomas.Stewart@Vanderbilt.edu", role = c("ctb")),
              person("Jennifer", "Thompson", email = "Jennifer.L.Thompson@vumc.org",  role = c("ctb")),

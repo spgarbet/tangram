@@ -334,6 +334,24 @@ set_style <- function(table, style)
   table
 }
 
+#' @rdname table_builder
+#' @export
+set_colspan <- function(table, span)
+{
+  attr(table[[attr(table,"row")]][[attr(table,"col")]], "colspan") <- span
+
+  table
+}
+
+#' @rdname table_builder
+#' @export
+set_rowspan <- function(table, span)
+{
+  attr(table[[attr(table,"row")]][[attr(table,"col")]], "rowspan") <- span
+
+  table
+}
+
 #' A cbind for generated table tangram objects.
 #'
 #' Execute the equivalent of an cbind for generated tables
