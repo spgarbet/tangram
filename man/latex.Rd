@@ -58,7 +58,7 @@ they are as follows
 
 * style character; can be null or "nejm" for different table styling
 
-* pct_width numeric; a scaling to be applied to the entire table
+* rel_size numeric; a scaling to be applied to the entire table, e.g. rel_size=-2
 
 * placement character; placement directive, defaults to "H"
 }

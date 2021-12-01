@@ -1,0 +1,92 @@
+\documentclass[10pt]{article}
+
+\usepackage[table]{xcolor}
+\usepackage{sansmathfonts}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{titlesec}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{relsize}
+\usepackage{grffile}
+\usepackage{float}
+\usepackage[utf8x]{inputenc}
+\usepackage[pdftex]{lscape} 
+\usepackage{fancyhdr}
+\usepackage{pdfpages}
+\usepackage{textcomp}
+\usepackage{framed}
+\usepackage{caption}
+\captionsetup[table]{labelformat=empty,textformat=empty}
+
+$if(draft)$\usepackage{draftwatermark}$endif$
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+
+\rhead{$title$}
+\chead{}
+\lhead{\textcolor{red}{\textsc{$category$}}}
+\pagestyle{fancy}
+
+\setcounter{tocdepth}{2} % Only index to subsection
+\setlist[itemize]{noitemsep,topsep=0pt} % Control itemize formatting
+\setlength{\parindent}{0cm} % No paragraph indent
+\setlength{\parskip}{0.5em}
+\def\labelitemi{-}
+
+$if(draft)$
+\SetWatermarkText{DRAFT}
+\SetWatermarkScale{4}
+$endif$
+
+\begin{document}
+
+\begin{titlepage}
+  \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+  \center
+
+  \HRule \\[2cm]
+  
+  \textsc{\bf \LARGE $title$}\\[0.5cm]
+  \textsc{\small $subtitle$}\\[1.5cm]
+  \textsc{\bf \Large $board$}\\[0.5cm]
+  \textsc{\bf \Large $acronym$}\\[0.5cm]
+  \bf{\Large \today}\\[1cm]
+  \LARGE{\textcolor{red}{\textsc{$category$}}}\\[2cm]
+  {\normalsize Grant: $grant$}\\[1cm]
+  $if(description)${\normalsize $description$}\\[1cm]$endif$
+  \HRule \\[2cm]
+\end{titlepage}
+
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\newcommand{\sectionbreak}{\clearpage} %Every section is a new page
+
+%Section numbers are suppressed (complicated)
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{}
+\renewcommand{\thesubsubsection}{}
+\makeatletter
+\def\@seccntformat#1{\csname #1ignore\expandafter\endcsname\csname the#1\endcsname\quad}
+\let\sectionignore\@gobbletwo
+\let\subsectionignore\@gobbletwo
+\let\subsubsectionignore\@gobbletwo
+\let\latex@numberline\numberline
+\def\numberline#1{\if\relax#1\relax\else\latex@numberline{#1}\fi}
+\makeatother
+
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
+\titleformat*{\subsubsection}{\bfseries\scshape}
+
+$body$
+
+\end{document}
