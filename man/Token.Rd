@@ -25,13 +25,13 @@ A token in the formula grammar
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Token$new()}}
-\item \href{#method-clone}{\code{Token$clone()}}
+\item \href{#method-Token-new}{\code{Token$new()}}
+\item \href{#method-Token-clone}{\code{Token$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Token-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Token-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a lexical token
 \subsection{Usage}{
@@ -49,8 +49,8 @@ Construct a lexical token
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Token-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Token-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

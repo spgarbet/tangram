@@ -32,26 +32,26 @@ ASTFunction$new("log", "x+2")$string()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ASTFunction$new()}}
-\item \href{#method-factors}{\code{ASTFunction$factors()}}
-\item \href{#method-name}{\code{ASTFunction$name()}}
-\item \href{#method-string}{\code{ASTFunction$string()}}
-\item \href{#method-reduce}{\code{ASTFunction$reduce()}}
-\item \href{#method-clone}{\code{ASTFunction$clone()}}
+\item \href{#method-ASTFunction-new}{\code{ASTFunction$new()}}
+\item \href{#method-ASTFunction-factors}{\code{ASTFunction$factors()}}
+\item \href{#method-ASTFunction-name}{\code{ASTFunction$name()}}
+\item \href{#method-ASTFunction-string}{\code{ASTFunction$string()}}
+\item \href{#method-ASTFunction-reduce}{\code{ASTFunction$reduce()}}
+\item \href{#method-ASTFunction-clone}{\code{ASTFunction$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="distribute">}\href{../../tangram/html/ASTNode.html#method-distribute}{\code{tangram::ASTNode$distribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="distribute"><a href='../../tangram/html/ASTNode.html#method-ASTNode-distribute'><code>tangram::ASTNode$distribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format"><a href='../../tangram/html/ASTNode.html#method-ASTNode-set_format'><code>tangram::ASTNode$set_format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms"><a href='../../tangram/html/ASTNode.html#method-ASTNode-terms'><code>tangram::ASTNode$terms()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ASTFunction-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTFunction-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a node representing a function call
 \subsection{Usage}{
@@ -69,8 +69,8 @@ Construct a node representing a function call
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-factors"></a>}}
-\if{latex}{\out{\hypertarget{method-factors}{}}}
+\if{html}{\out{<a id="method-ASTFunction-factors"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTFunction-factors}{}}}
 \subsection{Method \code{factors()}}{
 Returns all terminal nodes, this is a terminal node so returns self
 \subsection{Usage}{
@@ -79,8 +79,8 @@ Returns all terminal nodes, this is a terminal node so returns self
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-name"></a>}}
-\if{latex}{\out{\hypertarget{method-name}{}}}
+\if{html}{\out{<a id="method-ASTFunction-name"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTFunction-name}{}}}
 \subsection{Method \code{name()}}{
 Returns the function call as character
 \subsection{Usage}{
@@ -89,8 +89,8 @@ Returns the function call as character
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-string"></a>}}
-\if{latex}{\out{\hypertarget{method-string}{}}}
+\if{html}{\out{<a id="method-ASTFunction-string"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTFunction-string}{}}}
 \subsection{Method \code{string()}}{
 Returns a re-parsable representation of the node
 \subsection{Usage}{
@@ -99,8 +99,8 @@ Returns a re-parsable representation of the node
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reduce"></a>}}
-\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\if{html}{\out{<a id="method-ASTFunction-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTFunction-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Given a data.frame execute the function in that environment and associate the result as data.
 \subsection{Usage}{
@@ -116,8 +116,8 @@ Given a data.frame execute the function in that environment and associate the re
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ASTFunction-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTFunction-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

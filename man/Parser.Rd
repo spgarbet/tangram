@@ -38,24 +38,24 @@ Parser$new()$run("col1 + col2 + col3 ~ drug*age+spiders")
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Parser$new()}}
-\item \href{#method-expect}{\code{Parser$expect()}}
-\item \href{#method-peek}{\code{Parser$peek()}}
-\item \href{#method-eat_whitespace}{\code{Parser$eat_whitespace()}}
-\item \href{#method-next_token}{\code{Parser$next_token()}}
-\item \href{#method-format}{\code{Parser$format()}}
-\item \href{#method-r_expression}{\code{Parser$r_expression()}}
-\item \href{#method-factor}{\code{Parser$factor()}}
-\item \href{#method-term}{\code{Parser$term()}}
-\item \href{#method-expression}{\code{Parser$expression()}}
-\item \href{#method-table_formula}{\code{Parser$table_formula()}}
-\item \href{#method-run}{\code{Parser$run()}}
-\item \href{#method-clone}{\code{Parser$clone()}}
+\item \href{#method-Parser-new}{\code{Parser$new()}}
+\item \href{#method-Parser-expect}{\code{Parser$expect()}}
+\item \href{#method-Parser-peek}{\code{Parser$peek()}}
+\item \href{#method-Parser-eat_whitespace}{\code{Parser$eat_whitespace()}}
+\item \href{#method-Parser-next_token}{\code{Parser$next_token()}}
+\item \href{#method-Parser-format}{\code{Parser$format()}}
+\item \href{#method-Parser-r_expression}{\code{Parser$r_expression()}}
+\item \href{#method-Parser-factor}{\code{Parser$factor()}}
+\item \href{#method-Parser-term}{\code{Parser$term()}}
+\item \href{#method-Parser-expression}{\code{Parser$expression()}}
+\item \href{#method-Parser-table_formula}{\code{Parser$table_formula()}}
+\item \href{#method-Parser-run}{\code{Parser$run()}}
+\item \href{#method-Parser-clone}{\code{Parser$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Parser-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-new}{}}}
 \subsection{Method \code{new()}}{
 Create a parser
 \subsection{Usage}{
@@ -64,8 +64,8 @@ Create a parser
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-expect"></a>}}
-\if{latex}{\out{\hypertarget{method-expect}{}}}
+\if{html}{\out{<a id="method-Parser-expect"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-expect}{}}}
 \subsection{Method \code{expect()}}{
 Specify expectation of next token from lexer
 \subsection{Usage}{
@@ -81,8 +81,8 @@ Specify expectation of next token from lexer
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-peek"></a>}}
-\if{latex}{\out{\hypertarget{method-peek}{}}}
+\if{html}{\out{<a id="method-Parser-peek"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-peek}{}}}
 \subsection{Method \code{peek()}}{
 Peek at the next token from parser
 \subsection{Usage}{
@@ -91,8 +91,8 @@ Peek at the next token from parser
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-eat_whitespace"></a>}}
-\if{latex}{\out{\hypertarget{method-eat_whitespace}{}}}
+\if{html}{\out{<a id="method-Parser-eat_whitespace"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-eat_whitespace}{}}}
 \subsection{Method \code{eat_whitespace()}}{
 Remove white space to find start of next token
 \subsection{Usage}{
@@ -101,8 +101,8 @@ Remove white space to find start of next token
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-next_token"></a>}}
-\if{latex}{\out{\hypertarget{method-next_token}{}}}
+\if{html}{\out{<a id="method-Parser-next_token"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-next_token}{}}}
 \subsection{Method \code{next_token()}}{
 Returns next lexical token
 \subsection{Usage}{
@@ -111,8 +111,8 @@ Returns next lexical token
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-format"></a>}}
-\if{latex}{\out{\hypertarget{method-format}{}}}
+\if{html}{\out{<a id="method-Parser-format"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-format}{}}}
 \subsection{Method \code{format()}}{
 Return format string as token from lexical stream
 \subsection{Usage}{
@@ -121,8 +121,8 @@ Return format string as token from lexical stream
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-r_expression"></a>}}
-\if{latex}{\out{\hypertarget{method-r_expression}{}}}
+\if{html}{\out{<a id="method-Parser-r_expression"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-r_expression}{}}}
 \subsection{Method \code{r_expression()}}{
 Return R expression as token from lexical stream
 \subsection{Usage}{
@@ -131,8 +131,8 @@ Return R expression as token from lexical stream
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-factor"></a>}}
-\if{latex}{\out{\hypertarget{method-factor}{}}}
+\if{html}{\out{<a id="method-Parser-factor"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-factor}{}}}
 \subsection{Method \code{factor()}}{
 Return next factor as token.
 \subsection{Usage}{
@@ -141,8 +141,8 @@ Return next factor as token.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-term"></a>}}
-\if{latex}{\out{\hypertarget{method-term}{}}}
+\if{html}{\out{<a id="method-Parser-term"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-term}{}}}
 \subsection{Method \code{term()}}{
 Parse and return next term in stream
 \subsection{Usage}{
@@ -151,8 +151,8 @@ Parse and return next term in stream
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-expression"></a>}}
-\if{latex}{\out{\hypertarget{method-expression}{}}}
+\if{html}{\out{<a id="method-Parser-expression"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-expression}{}}}
 \subsection{Method \code{expression()}}{
 Parse and return next expression in stream
 \subsection{Usage}{
@@ -161,8 +161,8 @@ Parse and return next expression in stream
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-table_formula"></a>}}
-\if{latex}{\out{\hypertarget{method-table_formula}{}}}
+\if{html}{\out{<a id="method-Parser-table_formula"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-table_formula}{}}}
 \subsection{Method \code{table_formula()}}{
 Parse and return table formula from stream
 \subsection{Usage}{
@@ -171,8 +171,8 @@ Parse and return table formula from stream
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-Parser-run"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-run}{}}}
 \subsection{Method \code{run()}}{
 Run the parser
 \subsection{Usage}{
@@ -188,8 +188,8 @@ Run the parser
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Parser-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Parser-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

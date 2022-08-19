@@ -34,25 +34,25 @@ ASTMultiply$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ASTMultiply$new()}}
-\item \href{#method-distribute}{\code{ASTMultiply$distribute()}}
-\item \href{#method-factors}{\code{ASTMultiply$factors()}}
-\item \href{#method-string}{\code{ASTMultiply$string()}}
-\item \href{#method-clone}{\code{ASTMultiply$clone()}}
+\item \href{#method-ASTMultiply-new}{\code{ASTMultiply$new()}}
+\item \href{#method-ASTMultiply-distribute}{\code{ASTMultiply$distribute()}}
+\item \href{#method-ASTMultiply-factors}{\code{ASTMultiply$factors()}}
+\item \href{#method-ASTMultiply-string}{\code{ASTMultiply$string()}}
+\item \href{#method-ASTMultiply-clone}{\code{ASTMultiply$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="reduce">}\href{../../tangram/html/ASTBranch.html#method-reduce}{\code{tangram::ASTBranch$reduce()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format"><a href='../../tangram/html/ASTNode.html#method-ASTNode-set_format'><code>tangram::ASTNode$set_format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms"><a href='../../tangram/html/ASTNode.html#method-ASTNode-terms'><code>tangram::ASTNode$terms()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="reduce"><a href='../../tangram/html/ASTBranch.html#method-ASTBranch-reduce'><code>tangram::ASTBranch$reduce()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ASTMultiply-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTMultiply-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a multiplication node
 \subsection{Usage}{
@@ -70,8 +70,8 @@ Construct a multiplication node
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-distribute"></a>}}
-\if{latex}{\out{\hypertarget{method-distribute}{}}}
+\if{html}{\out{<a id="method-ASTMultiply-distribute"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTMultiply-distribute}{}}}
 \subsection{Method \code{distribute()}}{
 Rearrange nodes distribution multiplication across parenthesis
 \subsection{Usage}{
@@ -80,8 +80,8 @@ Rearrange nodes distribution multiplication across parenthesis
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-factors"></a>}}
-\if{latex}{\out{\hypertarget{method-factors}{}}}
+\if{html}{\out{<a id="method-ASTMultiply-factors"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTMultiply-factors}{}}}
 \subsection{Method \code{factors()}}{
 return all terminal nodes on left and right
 \subsection{Usage}{
@@ -90,8 +90,8 @@ return all terminal nodes on left and right
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-string"></a>}}
-\if{latex}{\out{\hypertarget{method-string}{}}}
+\if{html}{\out{<a id="method-ASTMultiply-string"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTMultiply-string}{}}}
 \subsection{Method \code{string()}}{
 Return a re-parseable string
 \subsection{Usage}{
@@ -100,8 +100,8 @@ Return a re-parseable string
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ASTMultiply-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTMultiply-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

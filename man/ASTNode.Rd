@@ -27,17 +27,17 @@ as the class information carries the semantic meaning of a given node.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-terms}{\code{ASTNode$terms()}}
-\item \href{#method-distribute}{\code{ASTNode$distribute()}}
-\item \href{#method-string}{\code{ASTNode$string()}}
-\item \href{#method-reduce}{\code{ASTNode$reduce()}}
-\item \href{#method-set_format}{\code{ASTNode$set_format()}}
-\item \href{#method-clone}{\code{ASTNode$clone()}}
+\item \href{#method-ASTNode-terms}{\code{ASTNode$terms()}}
+\item \href{#method-ASTNode-distribute}{\code{ASTNode$distribute()}}
+\item \href{#method-ASTNode-string}{\code{ASTNode$string()}}
+\item \href{#method-ASTNode-reduce}{\code{ASTNode$reduce()}}
+\item \href{#method-ASTNode-set_format}{\code{ASTNode$set_format()}}
+\item \href{#method-ASTNode-clone}{\code{ASTNode$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-terms"></a>}}
-\if{latex}{\out{\hypertarget{method-terms}{}}}
+\if{html}{\out{<a id="method-ASTNode-terms"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTNode-terms}{}}}
 \subsection{Method \code{terms()}}{
 Returns this node
 \subsection{Usage}{
@@ -46,8 +46,8 @@ Returns this node
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-distribute"></a>}}
-\if{latex}{\out{\hypertarget{method-distribute}{}}}
+\if{html}{\out{<a id="method-ASTNode-distribute"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTNode-distribute}{}}}
 \subsection{Method \code{distribute()}}{
 Distributes data across multiplications and rearranges nodes
 \subsection{Usage}{
@@ -56,8 +56,8 @@ Distributes data across multiplications and rearranges nodes
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-string"></a>}}
-\if{latex}{\out{\hypertarget{method-string}{}}}
+\if{html}{\out{<a id="method-ASTNode-string"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTNode-string}{}}}
 \subsection{Method \code{string()}}{
 Returns string representation of node
 \subsection{Usage}{
@@ -66,8 +66,8 @@ Returns string representation of node
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reduce"></a>}}
-\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\if{html}{\out{<a id="method-ASTNode-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTNode-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Given a set of data, associates it with AST nodes
 \subsection{Usage}{
@@ -83,8 +83,8 @@ Given a set of data, associates it with AST nodes
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_format"></a>}}
-\if{latex}{\out{\hypertarget{method-set_format}{}}}
+\if{html}{\out{<a id="method-ASTNode-set_format"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTNode-set_format}{}}}
 \subsection{Method \code{set_format()}}{
 Override the formatting directive for this node
 \subsection{Usage}{
@@ -100,8 +100,8 @@ Override the formatting directive for this node
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ASTNode-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTNode-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -260,11 +260,14 @@ exclude_data <- function(df, criteria)
 
   df             <- df[sel,,drop=FALSE]
 
+  browser()
   for(a in thatsafactjack)
   {
     if(is.list(criteria))
     {
-      if(a %in% names(criteria) && !is.na(criteria[[a]]))
+      if(a %in% names(criteria) &&
+         (length(criteria[[a]]) > 1 || !is.na(criteria[[a]]))
+        )
         df[,a] <- factor(df[,a], exclude=criteria[[a]])
     } else if(!is.na(a))
     {
@@ -320,6 +323,9 @@ exclude_data <- function(df, criteria)
 #' @param ... addition models or data supplied to table construction routines
 #'
 #' @return A tangram object (a table).
+#'
+#' @importFrom utils find
+#' @importFrom utils getAnywhere
 #'
 #' @rdname tangram
 #' @export

@@ -150,6 +150,7 @@ new_header <- function(table, attribute, sub, ...)
 #' @param ncol numeric; number of columns
 #' @param nrow numeric; number of rows
 #' @param style character; styling in compiling table and in rendering
+#' @param span numeric; number of rows or columns to span
 #' @param sub logical; Is this a subheader
 #' @param table tangram; The tangram table being built
 #' @param x object of focus in operation

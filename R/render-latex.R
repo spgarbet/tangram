@@ -372,6 +372,9 @@ latex.tangram <- function(object,
 #'
 #' @return filename of LaTeX template
 #' @export
-#' @example latex_template()
+#' @example tangram::latex_template()
 #'
-latex_template <- function() file.path(system.file(package="tangram"), "extdata", "tex", "tangram.template")
+latex_template <- function()
+{
+  file.path(system.file(package="tangram"), "extdata", "tex", "tangram.template")
+}

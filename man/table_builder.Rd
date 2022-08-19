@@ -96,6 +96,8 @@ set_rowspan(table, span)
 \item{caption}{character; caption of table}
 
 \item{style}{character; styling in compiling table and in rendering}
+
+\item{span}{numeric; number of rows or columns to span}
 }
 \description{
 A set of magrittr operators for tangram tables

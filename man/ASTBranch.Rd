@@ -34,23 +34,23 @@ as once again the semantic information is contained in the class name.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-distribute}{\code{ASTBranch$distribute()}}
-\item \href{#method-reduce}{\code{ASTBranch$reduce()}}
-\item \href{#method-clone}{\code{ASTBranch$clone()}}
+\item \href{#method-ASTBranch-distribute}{\code{ASTBranch$distribute()}}
+\item \href{#method-ASTBranch-reduce}{\code{ASTBranch$reduce()}}
+\item \href{#method-ASTBranch-clone}{\code{ASTBranch$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="string">}\href{../../tangram/html/ASTNode.html#method-string}{\code{tangram::ASTNode$string()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format"><a href='../../tangram/html/ASTNode.html#method-ASTNode-set_format'><code>tangram::ASTNode$set_format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="string"><a href='../../tangram/html/ASTNode.html#method-ASTNode-string'><code>tangram::ASTNode$string()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms"><a href='../../tangram/html/ASTNode.html#method-ASTNode-terms'><code>tangram::ASTNode$terms()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-distribute"></a>}}
-\if{latex}{\out{\hypertarget{method-distribute}{}}}
+\if{html}{\out{<a id="method-ASTBranch-distribute"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTBranch-distribute}{}}}
 \subsection{Method \code{distribute()}}{
 Call to distribute multiplication nodes, just recursively calls left and right node distribute functions
 \subsection{Usage}{
@@ -59,8 +59,8 @@ Call to distribute multiplication nodes, just recursively calls left and right n
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reduce"></a>}}
-\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\if{html}{\out{<a id="method-ASTBranch-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTBranch-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Attached data to nodes by processing data.frame appropriatly. Recursively calls left and right nodes to reduces on data.frame
 \subsection{Usage}{
@@ -76,8 +76,8 @@ Attached data to nodes by processing data.frame appropriatly. Recursively calls 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ASTBranch-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTBranch-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -49,26 +49,26 @@ ASTVariable$new("x", "2", "Continuous")$string()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ASTVariable$new()}}
-\item \href{#method-factors}{\code{ASTVariable$factors()}}
-\item \href{#method-name}{\code{ASTVariable$name()}}
-\item \href{#method-string}{\code{ASTVariable$string()}}
-\item \href{#method-reduce}{\code{ASTVariable$reduce()}}
-\item \href{#method-clone}{\code{ASTVariable$clone()}}
+\item \href{#method-ASTVariable-new}{\code{ASTVariable$new()}}
+\item \href{#method-ASTVariable-factors}{\code{ASTVariable$factors()}}
+\item \href{#method-ASTVariable-name}{\code{ASTVariable$name()}}
+\item \href{#method-ASTVariable-string}{\code{ASTVariable$string()}}
+\item \href{#method-ASTVariable-reduce}{\code{ASTVariable$reduce()}}
+\item \href{#method-ASTVariable-clone}{\code{ASTVariable$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="distribute">}\href{../../tangram/html/ASTNode.html#method-distribute}{\code{tangram::ASTNode$distribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms">}\href{../../tangram/html/ASTNode.html#method-terms}{\code{tangram::ASTNode$terms()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="distribute"><a href='../../tangram/html/ASTNode.html#method-ASTNode-distribute'><code>tangram::ASTNode$distribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format"><a href='../../tangram/html/ASTNode.html#method-ASTNode-set_format'><code>tangram::ASTNode$set_format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="terms"><a href='../../tangram/html/ASTNode.html#method-ASTNode-terms'><code>tangram::ASTNode$terms()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ASTVariable-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTVariable-new}{}}}
 \subsection{Method \code{new()}}{
 This method creates an AST node representing a variable of a given identifier. An optional format consisting of a string of a number or a c-style printf string. An option type denoting a forced type cast of that variable.
 \subsection{Usage}{
@@ -88,8 +88,8 @@ This method creates an AST node representing a variable of a given identifier. A
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-factors"></a>}}
-\if{latex}{\out{\hypertarget{method-factors}{}}}
+\if{html}{\out{<a id="method-ASTVariable-factors"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTVariable-factors}{}}}
 \subsection{Method \code{factors()}}{
 Returns all terminal nodes under this. Since this is a terminal node, returns self
 \subsection{Usage}{
@@ -98,8 +98,8 @@ Returns all terminal nodes under this. Since this is a terminal node, returns se
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-name"></a>}}
-\if{latex}{\out{\hypertarget{method-name}{}}}
+\if{html}{\out{<a id="method-ASTVariable-name"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTVariable-name}{}}}
 \subsection{Method \code{name()}}{
 Returns the text name of this node. For an intercept, returns "All"
 \subsection{Usage}{
@@ -108,8 +108,8 @@ Returns the text name of this node. For an intercept, returns "All"
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-string"></a>}}
-\if{latex}{\out{\hypertarget{method-string}{}}}
+\if{html}{\out{<a id="method-ASTVariable-string"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTVariable-string}{}}}
 \subsection{Method \code{string()}}{
 Returns name of variable with optional format and type information
 \subsection{Usage}{
@@ -118,8 +118,8 @@ Returns name of variable with optional format and type information
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reduce"></a>}}
-\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\if{html}{\out{<a id="method-ASTVariable-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTVariable-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Given a data.frame, associates correct variable with this node
 \subsection{Usage}{
@@ -135,8 +135,8 @@ Given a data.frame, associates correct variable with this node
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ASTVariable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTVariable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

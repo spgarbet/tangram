@@ -34,24 +34,24 @@ ASTPlus$new(ASTVariable$new("x"), ASTVariable$new("y"))$string()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ASTPlus$new()}}
-\item \href{#method-terms}{\code{ASTPlus$terms()}}
-\item \href{#method-string}{\code{ASTPlus$string()}}
-\item \href{#method-clone}{\code{ASTPlus$clone()}}
+\item \href{#method-ASTPlus-new}{\code{ASTPlus$new()}}
+\item \href{#method-ASTPlus-terms}{\code{ASTPlus$terms()}}
+\item \href{#method-ASTPlus-string}{\code{ASTPlus$string()}}
+\item \href{#method-ASTPlus-clone}{\code{ASTPlus$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format">}\href{../../tangram/html/ASTNode.html#method-set_format}{\code{tangram::ASTNode$set_format()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="distribute">}\href{../../tangram/html/ASTBranch.html#method-distribute}{\code{tangram::ASTBranch$distribute()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="reduce">}\href{../../tangram/html/ASTBranch.html#method-reduce}{\code{tangram::ASTBranch$reduce()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTNode" data-id="set_format"><a href='../../tangram/html/ASTNode.html#method-ASTNode-set_format'><code>tangram::ASTNode$set_format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="distribute"><a href='../../tangram/html/ASTBranch.html#method-ASTBranch-distribute'><code>tangram::ASTBranch$distribute()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="tangram" data-topic="ASTBranch" data-id="reduce"><a href='../../tangram/html/ASTBranch.html#method-ASTBranch-reduce'><code>tangram::ASTBranch$reduce()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ASTPlus-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTPlus-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new node that represents addition
 \subsection{Usage}{
@@ -69,8 +69,8 @@ Construct a new node that represents addition
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-terms"></a>}}
-\if{latex}{\out{\hypertarget{method-terms}{}}}
+\if{html}{\out{<a id="method-ASTPlus-terms"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTPlus-terms}{}}}
 \subsection{Method \code{terms()}}{
 Returns a vector of the left and right terms
 \subsection{Usage}{
@@ -79,8 +79,8 @@ Returns a vector of the left and right terms
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-string"></a>}}
-\if{latex}{\out{\hypertarget{method-string}{}}}
+\if{html}{\out{<a id="method-ASTPlus-string"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTPlus-string}{}}}
 \subsection{Method \code{string()}}{
 A reparsable string representation of this node.
 \subsection{Usage}{
@@ -89,8 +89,8 @@ A reparsable string representation of this node.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ASTPlus-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ASTPlus-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
