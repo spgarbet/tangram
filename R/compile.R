@@ -260,7 +260,6 @@ exclude_data <- function(df, criteria)
 
   df             <- df[sel,,drop=FALSE]
 
-  browser()
   for(a in thatsafactjack)
   {
     if(is.list(criteria))
