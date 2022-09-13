@@ -498,11 +498,12 @@ Parser <- R6Class("Parser",
       # Scan for Name
       #   A syntactically valid name consists of letters, numbers and the dot
       #   or underline characters and starts with a letter or the dot not
-      #   followed by a number.
+      #   followed by a number, or is contained within backticks.
       match <- str_match(substr(self$input,self$pos-1,self$len),
-        "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*|^\`([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._ ]*\`")
+        "^([a-zA-Z]|\\.[a-zA-Z_])[a-zA-Z0-9\\._]*|^\\`[^\\`]+\\`")
       if(is.na(match[1,1]))
       {
+        browser()
         stop(paste("Unparseable input starting at",substr(self$input,self$pos-1,self$pos+10),sep=""))
       }
 

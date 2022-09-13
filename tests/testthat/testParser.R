@@ -136,3 +136,12 @@ test_that("reduction via data works with spaces in variable name",
   expect_equal(reducto$right$data, df[,"a b c"])
 })
 
+
+test_that("reduction via data works with minus in variable name",
+{
+  df <- data.frame(`x-y`=rnorm(20), y=1:20, check.names=FALSE)
+  reducto <- Parser$new()$run("y ~ `x-y`")$reduce(df)
+
+  expect_equal(reducto$left$data,  df[,"y"])
+  expect_equal(reducto$right$data, df[,"x-y"])
+})
