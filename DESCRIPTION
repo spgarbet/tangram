@@ -31,7 +31,7 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat, rms, rmarkdown, Hmisc, sandwich, dplyr, Matching, epitools
 Imports: stringi, stringr, base64enc, digest, htmltools
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Collate: 
     'compile-cell.R'
     'cell-hmisc.R'

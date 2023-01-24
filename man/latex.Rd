@@ -63,11 +63,9 @@ they are as follows
 * placement character; placement directive, defaults to "H"
 }
 \examples{
-\dontrun{
 latex(cell_label("123"))
 latex(hmisc_iqr(rnorm(20)))
 latex(hmisc_fraction(45, 137))
 tbl <- tangram(drug~bili, pbc, "tbl")
 latex(tbl)
-}
 }

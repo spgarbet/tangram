@@ -44,13 +44,11 @@
 #' @include compile-cell.R
 #' @include render-latex-map.R
 #' @examples
-#' \dontrun{
 #' latex(cell_label("123"))
 #' latex(hmisc_iqr(rnorm(20)))
 #' latex(hmisc_fraction(45, 137))
 #' tbl <- tangram(drug~bili, pbc, "tbl")
 #' latex(tbl)
-#' }
 #' @rdname latex
 #' @export
 latex <- function(object, ...)
