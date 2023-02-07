@@ -98,10 +98,7 @@ rtf.cell_header <- function(object, id, ...)
 
   class(object) <- cls[2:length(cls)]
 
-  if(inherits(object, "cell_n"))
-    paste0("{\\b N=", rtf.cell_n(object, id, ...), "}")
-  else # Peel down to cell_label
-    paste0("{\\b ", rtf(object, id, ...), "}")
+  paste0("{\\b ", rtf(object, id, ...), "}")
 }
 
 #' Convert an abstract cell_subheader object into an RTF string
@@ -123,10 +120,7 @@ rtf.cell_subheader <- function(object, id, ..., point=9)
 
   fontsize <- paste0("\\fs", round(point*1.6), " ")
 
-  if(inherits(object, "cell_n"))
-    paste0("{", fontsize, " N=", rtf.cell_n(object, id, ...), "}")
-  else # Peel down to cell_label
-    paste0("{", fontsize, rtf(object, id, ...), "}")
+  paste0("{", fontsize, rtf(object, id, ...), "}")
 }
 
 #' Convert an abstract cell_iqr object into an RTF string
@@ -340,11 +334,7 @@ rtf.tangram <- function(
   point    = 9,
   ...)
 {
-  if(is.na(id))
-  {
-    warning("No id specified for later traceability of table elements")
-    id <- ""
-  }
+  if(is.na(id)) id <- ""
 
   # Scale by inverse of conway's constant
   widths <- round((point/9)^(0.7671241)*1440*cumsum(if(is.na(widths)) est_column_widths(object) else widths))

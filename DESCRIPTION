@@ -8,17 +8,19 @@ Authors@R: c(person("Shawn",    "Garbett",  email = "Shawn.Garbett@vumc.org",   
              person("Ahra",     "Kim",      email = "Ahra.Kim@vumc.org",             role = c("ctb"))
              )
 Description: Provides an extensible formula system to quickly and easily create
-    production quality tables. The steps of the process are formula parser,
-    statistical content generation from data, to rendering. Each step of the process
-    is separate and user definable thus creating a set of building blocks for
-    highly extensible table generation. A user is not limited by any of the 
+    production quality tables. The processing steps are a formula parser,
+    statistical content generation from data as defined by formula, followed by
+    rendering into a table. Each step of the processing is separate and user
+    definable thus creating a set of composable building blocks for
+    highly customizable table generation. A user is not limited by any of the 
     choices of the package creator other than the formula grammar. For example,
     one could chose to add a different S3 rendering function and output a format
-    not provided in the default package. Or possibly one would rather have Gini
-    coefficients for their statistical content. Routines to achieve New England
-    Journal of Medicine style, Lancet style and Hmisc::summaryM() statistics are
-    provided. The package contains rendering for HTML5, Rmarkdown and an indexing
-    format for use in tracing and tracking are provided.
+    not provided in the default package, or possibly one would rather have Gini
+    coefficients for their statistical content in a resulting table. Routines to
+    achieve New England Journal of Medicine style, Lancet style and
+    Hmisc::summaryM() statistics are provided. The package contains rendering
+    for HTML5, Rmarkdown and an indexing format for use in tracing and tracking
+    are provided.
 Author: Shawn Garbett [aut, cre],
   Thomas Stewart [ctb],
   Jennifer Thompson [ctb],
@@ -31,7 +33,7 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat, rms, rmarkdown, Hmisc, sandwich, dplyr, Matching, epitools
 Imports: stringi, stringr, base64enc, digest, htmltools
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.4
 Collate: 
     'compile-cell.R'
     'cell-hmisc.R'
@@ -65,6 +67,5 @@ Collate:
     'transform-proc-tab.R'
     'transform-smd.R'
 NeedsCompilation: no
-Packaged: 2017-04-25 20:16:25 UTC; garbetsp
 URL: https://github.com/spgarbet/tangram
 BugReports: https://github.com/spgarbet/tangram/issues
