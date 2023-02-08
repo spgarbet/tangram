@@ -14,10 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-rtf_escape <- function(object)
-{
-  gsub("\\^(.)\\^", "{\\\\super \\1}", object, fixed=FALSE)
-}
+rtfsub_table <- list(
+  c("\\*\\*([^\\*]+)\\*\\*",  "{\\\\b \\1}"), # Bold
+  c("__([^_]+)__",            "{\\\\b \\1}"),
+  c("\\*([^\\*]+)\\*",        "{\\\\i \\1}"), # Italic
+  c("_([^_]+)_",              "{\\\\i \\1}"),
+  c("`([^`]+)`",              "{\\\\f1 \\1}"),  # Inline Code
+  c("~~([^~]+)~~",            "{\\\\strike \\1}"),  # Strikethrough
+  c("~([^~]+)~",              "{\\\\sub \\1}"),           # Subscript
+  c("\u00A0",                 "\\\\~"),             # no-break space (NBSP) must be handled after subscripting
+  c("\\^([^\\^]+)\\^",        "{\\\\super \\1}")
+)
+rtfify <- function(x) iify(x, rtfsub_table)
+#
+# rtf_escape <- function(object)
+# {
+#   gsub("\\^(.)\\^", "{\\\\super \\1}", object, fixed=FALSE)
+# }
 
 #' Default conversion to RTF for an abstract table element
 #'
@@ -36,245 +49,7 @@ rtf.default <- function(object, id, ...)
 }
 
 #' @export
-rtf.character <- function(object, id, ...) object
-
-#'
-#' Given a cell_label class create an RTF representation.
-#'
-#' @param object The cell label to render to RTF
-#' @param id A unique identifier for traceability
-#' @param point size of main font for cell label
-#' @param ... additional arguments to renderer. Unused
-#' @return An RTF text string rendering of the given label.
-#'
-rtf.cell_label <- function(object, id, ..., point=18)
-{
-  # Turn leading spaces into a set of non breaking html space
-  label <- gsub("^\\s+", "    ", object)
-  # Turn "*" for interaction terms into a break
-  label <- gsub("\\*", "X\n  ", label)
-
-  if(is.null(attr(object, "units")))
-      rtf_escape(label)
-  else
-      paste0(rtf_escape(label),
-            " {\\fs", round(point*1.6),
-            "\\i\\b0 ",
-            attr(object, "units"),
-            "}"
-            )
-}
-
-#' Convert an abstract cell_n object into an RTF string
-#'
-#' Given a cell_n class create an RTF representation.
-#'
-#' @param object The cell n to render to RTF
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @return An RTF string rendering of the given n.
-#' @export
-#'
-rtf.cell_n <- function(object, id, ...)
-{
-  idx <- index(object, id)
-
-  as.character(object)
-}
-
-#' Convert an abstract cell_header object into an RTF string
-#'
-#' Given a cell_header class create an RTF representation.
-#'
-#' @param object The cell header to render to RTF
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @return An RTF string rendering of the given header
-#' @export
-#'
-rtf.cell_header <- function(object, id, ...)
-{
-  cls <- class(object)
-
-  class(object) <- cls[2:length(cls)]
-
-  paste0("{\\b ", rtf(object, id, ...), "}")
-}
-
-#' Convert an abstract cell_subheader object into an RTF string
-#'
-#' Given a cell_subheader class create an RTF representation.
-#'
-#' @param object The cell header to render to RTF
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @param point numeric; The font point size to use in display
-#' @return An RTF string rendering of the given header
-#' @export
-#'
-rtf.cell_subheader <- function(object, id, ..., point=9)
-{
-  cls <- class(object)
-
-  class(object) <- cls[3:length(cls)]
-
-  fontsize <- paste0("\\fs", round(point*1.6), " ")
-
-  paste0("{", fontsize, rtf(object, id, ...), "}")
-}
-
-#' Convert an abstract cell_iqr object into an RTF string
-#'
-#' Given a cell_quantile class create an RTF representation.
-#'
-#' @param object The cell quantile to render to RTF
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @param point numeric; The font point size to use in display
-#' @return An RTF string rendering of the given quantile.
-#' @export
-#'
-rtf.cell_iqr <- function(object, id, ..., point=9)
-{
-  idx <- index(object, id)
-
-  small <- paste0("\\fs", round(point*1.6), " ")
-  large <- paste0("\\fs", round(point*2.0), " ")
-
-  mid   <- floor(length(object)/2) + 1
-  # Hmisc style
-  # paste0("{",
-  #                small, paste0(object[1:(mid-1)], collapse=''),
-  #        " \\b", large, paste0(object[mid], collapse=''),
-  #        " \\b0",small, paste0(object[(mid+1):length(object)], collapse=''),
-  #        "}")
-  paste0(
-    paste0(object[mid], collapse=''),
-    " [",
-    paste0(object[1:(mid-1)], collapse=''),
-    ", ",
-    paste0(object[(mid+1):length(object)], collapse=''),
-    "]"
-  )
-}
-
-
-
-dttm_datetime <- function()
-{
-  date  <- as.POSIXlt(Sys.time())
-  value <- date$wday
-  value <- bitwShiftL(value, 9)
-  value <- value + date$year
-  value <- bitwShiftL(value, 4)
-  value <- value + date$mon + 1
-  value <- bitwShiftL(value, 5)
-  value <- value + date$mday
-  value <- bitwShiftL(value, 5)
-  value <- value + date$hour
-  value <- bitwShiftL(value, 6)
-  value <- value + date$min
-
-  value
-}
-
-comments <- function(object, id)
-{
-  idx <- index(object, id)
-  atntime <- format(Sys.time(), "\\yr%Y\\mo%m\\dy%d\\hr%H\\min%M\\sec%S")
-  i <- idx
-#  sapply(idx, function(i){
-    paste0(
-    "{",
-      "{\\*\\atrfend 1}",
-      "{",
-        "{\\*\\atnid ", i['key'], "}",
-        "{\\*\\atnauthor ", Sys.getenv("USER"), "}",
-        "\\chatn{\\*\\annotation",
-          "{\\*\\atnref 1}",
-          "{\\*\\atndate ", dttm_datetime(), "}",
-          "{", i['key'], " tangram ", i['src'], "}",
-        "}",
-      "}",
-    "}"
-    )
-#  })
-}
-
-#' Convert an abstract cell_fstat object into an RTF string
-#'
-#' Given a cell_fstat class create an RTF representation.
-#'
-#' @param object The cell fstat to render to RTF
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @return A text string rendering of the given fstat as a <td> with several <span>'s.
-#' @export
-#'
-rtf.cell_fstat <- function(object, id, ...)
-{
-  reference <- attr(object, "reference")
-  ref <- if(is.null(reference)) "" else paste0("{\\super ", reference, "}")
-  idx <- comments(object, id)
-
-  paste0(
-    "{",
-      "{\\*\\atrfstart 1}",
-      "F{\\sub ",
-      object[2],",",object[3], "}=",object[1],
-      ", P=", object[4],
-    "}",
-    idx,
-    ref
-  )
-}
-
-#' Convert an abstract cell_chi2 object into an rtf string
-#'
-#' Given a cell_chi2 class create an rtf representation.
-#'
-#' @param object The cell chi2 to render to HTML5
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @return A text string rendering of the given chi2 in rtf
-#' @export
-#'
-rtf.cell_chi2 <- function(object, id, ...)
-{
-  idx <- index(object, id)
-
-  reference <- attr(object, "reference")
-  ref <- if(is.null(reference)) "" else paste0("{\\super ", reference, "}")
-  idx <- comments(object, id)
-
-  paste0(
-    "{",
-      "{\\*\\atrfstart 1}",
-      "X{\\sub ",
-      object[2], "}=",object[1],
-      ", P=", object[3],
-    "}",
-    idx,
-    ref
-  )
-}
-
-#' Given a cell class create an RTF representation.
-#'
-#' @param object The cell to render to RTF
-#' @param id A unique identifier for traceability
-#' @param ... additional arguments to renderer. Unused
-#' @return An RTF string rendering of the given cell.
-#' @export
-#'
-rtf.cell <- function(object, id, ...) paste(object, collapse=' ')
-
-
-#' @export
-rtf.cell_fraction <- function(object, id, ...)
-{
-  paste0(object[4], "% (", object[1], ")")
-}
+rtf.character <- function(object, id, ...) rtfify(object)
 
 est_column_widths <- function(object)
 {
@@ -344,6 +119,7 @@ rtf.tangram <- function(
       "{\\rtf1 \\ansi \\deff0",
       "{\\fonttbl",
       "  {\\f0\\froman\\fprq2\\fcharset0 Liberation Serif{\\*\\falt Times New Roman};}",
+      "  {\\f1 Courier;}",
       "}",
       "\\paperw",min(round(tail(widths,1)*1440)+720, 15840),
       "\\paperh12240",
@@ -352,7 +128,7 @@ rtf.tangram <- function(
     )
 
   caption <- if(is.na(caption)) "" else
-    paste0("{\\pard\\b\\fs",round(point*2.4)," ",caption,"\\par}\n")
+    paste0("{\\pard\\b\\fs",round(point*2.4)," ",rtfify(caption),"\\par}\n")
 
   # Construct row open and close text
   celldecl <-
@@ -408,3 +184,5 @@ rtf.tangram <- function(
 
   invisible(result)
 }
+
+

@@ -25,3 +25,7 @@ title: "A Document Full of Beautiful Tables"
     "`r tangram::latex_template()`"
 ---
 }
+\examples{
+ latex_template()
+
+}

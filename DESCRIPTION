@@ -1,7 +1,7 @@
 Package: tangram
 Title: The Grammar of Tables
 Version: 0.8.2
-Authors@R: c(person("Shawn",    "Garbett",  email = "Shawn.Garbett@vumc.org",        role = c("aut", "cre")),
+Authors@R: c(person("Shawn",    "Garbett",  email = "Shawn.Garbett@vumc.org",        role = c("aut", "cre"),   comment = c(ORCID="0000-0003-4079-5621")),
              person("Thomas",   "Stewart",  email = "Thomas.Stewart@Vanderbilt.edu", role = c("ctb")),
              person("Jennifer", "Thompson", email = "Jennifer.L.Thompson@vumc.org",  role = c("ctb")),
              person("Frank",    "Harrell",  email = "F.Harrell@Vanderbilt.edu",      role = c("ctb")),
@@ -33,7 +33,7 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat, rms, rmarkdown, Hmisc, sandwich, dplyr, Matching, epitools
 Imports: stringi, stringr, base64enc, digest, htmltools
-RoxygenNote: 7.2.4
+RoxygenNote: 7.2.3
 Collate: 
     'compile-cell.R'
     'cell-hmisc.R'

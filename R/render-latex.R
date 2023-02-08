@@ -370,7 +370,8 @@ latex.tangram <- function(object,
 #'
 #' @return filename of LaTeX template
 #' @export
-#' @example tangram::latex_template()
+#' @examples
+#'  latex_template()
 #'
 latex_template <- function()
 {
