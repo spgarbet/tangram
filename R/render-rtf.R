@@ -14,6 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# From: https://github.com/rstudio/gt/issues/227
+utf8Tortf <- function(x){
+
+  stopifnot(length(x) == 1 & "character" %in% class(x) )
+
+  x_char <- unlist(strsplit(x, ""))
+  x_int <- utf8ToInt(x)
+  x_rtf <- ifelse(x_int <= 255, x_char,
+                  ifelse(x_int <= 32768, paste0("\\uc1\\u", x_int,"?"),
+                         paste0("\\uc1\\u-", x_int - 65536, "?") ) )
+
+  paste0(x_rtf, collapse = "")
+}
+
 rtfsub_table <- list(
   c("\\*\\*([^\\*]+)\\*\\*",  "{\\\\b \\1}"), # Bold
   c("__([^_]+)__",            "{\\\\b \\1}"),
@@ -25,12 +39,8 @@ rtfsub_table <- list(
   c("\u00A0",                 "\\\\~"),             # no-break space (NBSP) must be handled after subscripting
   c("\\^([^\\^]+)\\^",        "{\\\\super \\1}")
 )
-rtfify <- function(x) iify(x, rtfsub_table)
-#
-# rtf_escape <- function(object)
-# {
-#   gsub("\\^(.)\\^", "{\\\\super \\1}", object, fixed=FALSE)
-# }
+rtfify <- function(x) utf8Tortf(iify(x, rtfsub_table))
+
 
 #' Default conversion to RTF for an abstract table element
 #'
