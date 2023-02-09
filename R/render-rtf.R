@@ -38,7 +38,11 @@ rtfsub_table <- list(
   c("~~([^~]+)~~",            "{\\\\strike \\1}"),  # Strikethrough
   c("~([^~]+)~",              "{\\\\sub \\1}"),           # Subscript
   c("\u00A0",                 "\\\\~"),             # no-break space (NBSP) must be handled after subscripting
-  c("\\^([^\\^]+)\\^",        "{\\\\super \\1}")
+  c("\\^([^\\^]+)\\^",        "{\\\\super \\1}"),
+
+  # And deal with pesky fraction
+  c("\\\\frac\u007B(.*)\u007D\u007B(.*)\u007D", " \\1/\\2")
+
 )
 rtfify <- function(x) utf8Tortf(iify(x, rtfsub_table))
 
@@ -156,30 +160,33 @@ rtf.tangram <- function(
   rowopen      <- paste0(rowopen, paste0("\\cellx", tail(widths,-1), collapse=''), '\n')
 
   # Construct cell open and close text
-  cellopen  <- paste0("\\pard\\qc\\intbl\\fs", round(point*2), " ")
-  cellclose <- "\\cell\n"
+  cellopen    <- paste0("\\pard\\qc\\intbl\\fs", round(point*2), " ")
+  hdrcellopen <- paste0("\\pard\\ql\\intbl\\fs", round(point*2), " ")
+  cellclose   <- "\\cell\n"
 
   trailer <- if(fragment) "" else "}"
 
   nrows <- rows(object)
   ncols <- cols(object)
-  text <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
+  text  <- matrix(data=rep("", nrows*ncols), nrow=nrows, ncol=ncols)
 
   # Render it all
   last_header_row <- 0 # Current Header Row
-  sapply(1:nrows, FUN=function(row) {
-    sapply(1:ncols, FUN=function(col) {
-      if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
-      text[row,col] <<- rtf(object[[row]][[col]], id=id, point=point)
+  sapply(1:nrows, FUN=function(row)
+  {
+    if(last_header_row == 0 && any(sapply(object[[row]], function(x) !inherits(x, "cell_header")))) last_header_row <<- row - 1
+    sapply(1:ncols, FUN=function(col)
+    {
+      #if(last_header_row == 0 && !inherits(object[[row]][[col]], "cell_header")) last_header_row <<- row - 1
+      text[row,col]  <<- paste0(if(inherits(object[[row]][[col]], "cell_header") && last_header_row != 0) hdrcellopen else cellopen,
+                                rtf(object[[row]][[col]], id=id, point=point),
+                                cellclose)
       if(!is.null(attr(object[[row]][[col]], "colspan"))) warning("colspan not supported for rtf tangram rendering")
       if(!is.null(attr(object[[row]][[col]], "rowspan"))) warning("rowspan not supported for rtf tangram rendering")
     })
   })
-  rowtext <- paste0(
-    paste0("\\pard\\ql\\intbl\\fs", round(point*2), " "), # FIXME: This should be header class dependent.
-    apply(text, 1, function(x) paste(x, collapse=paste(cellclose, cellopen, sep=''))),
-    cellclose
-  )
+  rowtext <- apply(text, 1, function(x) paste(x, collapse=''))
+
   fullrows <- sapply(1:nrows, function(row) {
     hdropen <- if(row == 1)                { firstrowopen } else
                if(row == last_header_row)  { lasthdropen  } else
