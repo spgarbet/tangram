@@ -20,9 +20,10 @@ utf8Tortf <- function(x){
   stopifnot(length(x) == 1 & "character" %in% class(x) )
 
   x_char <- unlist(strsplit(x, ""))
-  x_int <- utf8ToInt(x)
-  x_rtf <- ifelse(x_int <= 255, x_char,
-                  ifelse(x_int <= 32768, paste0("\\uc1\\u", x_int,"?"),
+  x_int  <- utf8ToInt(x)
+  x_rtf  <- ifelse(x_int <= 255,
+                   ifelse(x_int <= 127, x_char, paste0("\\'",as.hexmode(x_int))),
+                   ifelse(x_int <= 32768, paste0("\\uc1\\u", x_int,"?"),
                          paste0("\\uc1\\u-", x_int - 65536, "?") ) )
 
   paste0(x_rtf, collapse = "")
