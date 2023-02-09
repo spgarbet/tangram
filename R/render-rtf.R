@@ -176,7 +176,7 @@ rtf.tangram <- function(
     })
   })
   rowtext <- paste0(
-    cellopen,
+    paste0("\\pard\\ql\\intbl\\fs", round(point*2), " "), # FIXME: This should be header class dependent.
     apply(text, 1, function(x) paste(x, collapse=paste(cellclose, cellopen, sep=''))),
     cellclose
   )
